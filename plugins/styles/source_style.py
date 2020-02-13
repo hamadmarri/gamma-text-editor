@@ -21,4 +21,3 @@ class Plugin():
 		
 	def key_bindings(self, event, keyval_name, ctrl, alt, shift):
 		pass
-#		print("this is source_style keybinding")

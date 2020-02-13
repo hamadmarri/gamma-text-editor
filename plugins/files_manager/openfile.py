@@ -1,7 +1,6 @@
 import gi
 gi.require_version('Gtk', '3.0')
-gi.require_version('GtkSource', '4')
-from gi.repository import Gtk, Gdk, GtkSource
+from gi.repository import Gtk, Gdk
 
 class Plugin():
 	
@@ -10,9 +9,9 @@ class Plugin():
 		self.app = app
 		self.builder = app.builder
 		self.source_view = self.builder.get_object("view")
-		self.buffer = self.source_view.get_buffer()
-		self.current_file = ""
+#		self.buffer = self.source_view.get_buffer()
 		self.commands = []
+		self.files_manager = None
 		
 		
 	def activate(self):
@@ -22,31 +21,20 @@ class Plugin():
 	def key_bindings(self, event, keyval_name, ctrl, alt, shift):
 		if ctrl and keyval_name == "o":
 			self.openfile()
-		elif ctrl and keyval_name == "s":
-			text = self.buffer.get_text(self.buffer.get_start_iter(), self.buffer.get_end_iter(), True)
-			try:
-				open(self.current_file, 'w').write(text)
-			except SomeError as err:
-				print('Could not save %s: %s' % (filename, err))
-			
 			
 			
 			
 	def openfile(self):
+		# get files_manager
+		if not self.files_manager:
+			self.files_manager = self.app.plugins_manager.get_plugin("files_manager")
+		
 		filename = self.choosefile()
 		if not filename:
 			return
 		
-		self.current_file = filename
-		
-#		print("start load file")
-		f = open(filename, "r")
-		source_view = self.builder.get_object("view")
-		source_view.get_buffer().set_text(f.read())
-		f.close()
-#		print("end load file")
+		self.files_manager.open_file(filename)
 
-		self.set_language(f.name)
 	
 	
 
@@ -88,15 +76,4 @@ class Plugin():
 		filter_any.set_name("Any files")
 		filter_any.add_pattern("*")
 		dialog.add_filter(filter_any)
-			
-			
-			
-	def set_language(self, filename):
-		lm = GtkSource.LanguageManager.get_default()
-		lan = lm.guess_language(filename)
-		if lan:
-			self.buffer.set_highlight_syntax(True)
-			self.buffer.set_language(lan)
-		else:
-			print('No language found for file "cen"')
-			self.buffer.set_highlight_syntax(False)
+		

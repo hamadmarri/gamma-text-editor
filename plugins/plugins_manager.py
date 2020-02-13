@@ -3,6 +3,8 @@ plugin_list = [
 	"styles.source_style", 
 	"window_ctrl.window_ctrl",
 	"files_manager.openfile",
+	"files_manager.savefile",
+	"files_manager.files_manager",
 	"commander.commander",
 	"simple_completion.simple_completion",
 ]
@@ -28,5 +30,6 @@ class PluginsManager():
 			
 			
 	def get_plugin(self, plugin_name):
-		for p in plugin_list:
-			print(p)
+		for p in self.plugins:
+			if p.name == plugin_name:
+				return p
