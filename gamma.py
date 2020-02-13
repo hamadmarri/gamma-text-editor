@@ -1,0 +1,66 @@
+import sys
+
+import gi
+gi.require_version('Gtk', '3.0')
+gi.require_version('GtkSource', '4')
+from gi.repository import GLib, Gio, Gtk, Gdk, GtkSource, GObject
+
+import importlib
+import config
+from plugins.signal_handler.signal_handler import SignalHandler
+
+class Application(Gtk.Application):
+
+	def __init__(self, *args, **kwargs):
+		super().__init__(*args, application_id="com.editor.gamma", flags=Gio.ApplicationFlags.FLAGS_NONE, **kwargs)
+		GObject.type_register(GtkSource.View)
+		self.window = None
+		self.plugins = []
+		self.config = config.config_paths_and_settings
+		
+		self.load_builder()
+		self.handler = SignalHandler(self)
+		
+		
+		self.source_view = self.builder.get_object("view")
+		self.sourcemap = self.builder.get_object("sourcemap")
+		self.sourcemap.set_view(self.source_view)
+		
+
+	def load_builder(self):
+		self.builder = Gtk.Builder()
+		self.builder.add_from_file(self.config["ui-path"])
+
+
+	def set_handlers(self):	
+		self.builder.connect_signals(self.handler.handlers)
+
+
+	def load_plugins(self):
+		plugin_list_module = importlib.import_module('.plugin_list', package='plugins')
+		
+		for p in plugin_list_module.plugin_list:
+			plugin = importlib.import_module('.' + p, package='plugins')
+			module = plugin.Plugin(self)
+			module.activate()
+			self.plugins.append(module)
+
+		
+
+	def do_startup(self):
+		Gtk.Application.do_startup(self)
+
+	def do_activate(self):
+		if not self.window:
+			self.window = self.builder.get_object("window")
+			self.window.props.application = self
+			self.load_plugins()
+			self.set_handlers()
+
+		self.window.show_all()
+
+
+if __name__ == "__main__":
+	app = Application()
+	app.run()
+

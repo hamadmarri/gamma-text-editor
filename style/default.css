@@ -1,0 +1,114 @@
+
+
+#window {
+    background-color: transparent;
+}
+
+/* decoration {
+    border-top-left-radius: 50px;
+    border-top-right-radius: 50px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+} */
+
+
+
+.titlebar, headerbar {
+    min-height: 0px;
+    /* padding: 0px; */
+    margin: 0px;
+}
+
+
+/********** HEADER *************/
+#headerPaned, #headerbarMain, #headerbarSide {    
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+}
+
+#headerPaned > separator {
+	background: rgba(253, 253, 253, 0.87);
+}
+
+
+#headerbarMain, #headerbarMain * {
+	background: #fdfdfd;
+	color: #827082;
+	border:none;
+}
+
+/********** HEADER LEFT SIDE *************/
+#headerbarSide {
+	background: rgba(253, 253, 253, 0.87);
+	border:none;
+}
+
+#headerbarSide * {
+	color: #827082;
+}
+
+#logo {
+    background: rgba(253, 253, 253, 915); 
+    color: #00B5FF;
+}
+
+/********** BODY *************/
+#bodyPaned > separator {
+	background:  rgba(253, 253, 253, 0.71);
+}
+
+#toolbar_side {
+    background-color:transparent;
+    min-width: 34px;
+    min-height: 100px;
+}
+
+#toolbar_files {
+    background:  rgba(253, 253, 253, 0.71);
+}
+
+#toolbar_ctrls {
+    background: rgba(253, 253, 253, 0.73);
+    padding-top:10px;
+}
+
+
+#scrolledwindow {
+	border:none;
+}
+
+#view {
+    font-family: monospace;
+    font-size: 20px;
+}
+
+
+#closeBtn {
+    background: #FF1946;
+    border-radius: 100%;
+}
+
+
+
+
+#maximizeBtn {
+    background: #0DD100;
+    border-radius: 100%;
+}
+
+#minimizeBtn {
+    background: #FCE94F;
+    border-radius: 100%;
+}
+
+
+#ok_btn {
+    background-color: rgba(65, 100, 218, 0.5);
+    margin-top: 50px;
+}
+
+
+#ok_btn:hover, 
+#ok_btn:focus {
+  box-shadow: 0px 0px 0px 0px rgba(255,255,255,0.0);
+}
