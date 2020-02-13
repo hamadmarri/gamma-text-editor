@@ -8,8 +8,6 @@ class Plugin():
 		self.name = "openfile"
 		self.app = app
 		self.builder = app.builder
-		self.source_view = self.builder.get_object("view")
-#		self.buffer = self.source_view.get_buffer()
 		self.commands = []
 		self.files_manager = None
 		

@@ -6,6 +6,7 @@ gi.require_version('GtkSource', '4')
 from gi.repository import GLib, Gio, Gtk, Gdk, GtkSource, GObject
 
 import config
+import sourceview_manager
 from plugins.plugins_manager import PluginsManager
 from plugins.signal_handler.signal_handler import SignalHandler
 
@@ -18,13 +19,9 @@ class Application(Gtk.Application):
 		self.config = config.config_paths_and_settings
 		
 		self.load_builder()
+		self.sourceview_manager = sourceview_manager.SourceViewManager(self)
 		self.plugins_manager = PluginsManager(self)
 		self.handler = SignalHandler(self)
-		
-		
-		self.source_view = self.builder.get_object("view")
-		self.sourcemap = self.builder.get_object("sourcemap")
-		self.sourcemap.set_view(self.source_view)
 		
 
 	def load_builder(self):

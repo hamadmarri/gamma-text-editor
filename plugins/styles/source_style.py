@@ -8,12 +8,15 @@ class Plugin():
 	def __init__(self, app):
 		self.name = "source_style"
 		self.app = app
-		self.builder = app.builder
 		self.commands = []
 	
 	def activate(self):
-		source_view = self.builder.get_object("view")
+		source_view = self.app.sourceview_manager.source_view
 		buffer = source_view.get_buffer()
+		self.set_source_style(buffer)
+		
+		
+	def set_source_style(self, buffer):
 		manager = GtkSource.StyleSchemeManager.get_default()
 		style = manager.get_scheme(self.app.config["style-scheme"])
 		buffer.set_style_scheme(style)

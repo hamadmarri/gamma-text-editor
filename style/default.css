@@ -67,6 +67,10 @@
     background:  rgba(253, 253, 253, 0.71);
 }
 
+#list_files {
+	background: transparent;
+}
+
 #toolbar_ctrls {
     background: rgba(253, 253, 253, 0.73);
     padding-top:10px;
@@ -77,8 +81,13 @@
 	border:none;
 }
 
-#view {
-    font-family: monospace;
+/*#view {*/
+/*    font-family: monospace;*/
+/*    font-size: 20px;*/
+/*}*/
+
+.sourceviewclass {
+	font-family: monospace;
     font-size: 20px;
 }
 

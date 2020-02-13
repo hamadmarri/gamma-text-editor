@@ -9,7 +9,6 @@ class Plugin():
 		self.name = "savefile"
 		self.app = app
 		self.builder = app.builder
-		self.source_view = self.builder.get_object("view")
 		self.commands = []
 		self.files_manager = None
 		
@@ -28,7 +27,7 @@ class Plugin():
 			current_file = self.files_manager.current_file
 			
 			# get current buffer
-			buffer = self.source_view.get_buffer()
+			buffer = current_file.source_view.get_buffer()
 			
 			# TODO: buffer is cached in files_manager
 			text = buffer.get_text(buffer.get_start_iter(), buffer.get_end_iter(), False)

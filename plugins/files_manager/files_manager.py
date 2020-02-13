@@ -7,9 +7,9 @@ from . import commands
 
 
 class File():
-	def __init__(self, filename, buffer_text):
+	def __init__(self, filename, source_view):
 		self.filename = filename
-		self.buffer_text = buffer_text
+		self.source_view = source_view
 	
 
 class Plugin():
@@ -18,11 +18,12 @@ class Plugin():
 		self.name = "files_manager"
 		self.app = app
 		self.builder = app.builder
-		self.source_view = self.builder.get_object("view")
+		self.sourceview_manager = self.app.sourceview_manager
+		self.scrolledwindow = app.builder.get_object("scrolledwindow")
 		self.commands = []
 		commands.set_commands(self)
 		self.files = []
-		self.current_file = None
+		self.current_file = File("empty", app.sourceview_manager.source_view)
 		
 	
 	def activate(self):
@@ -33,14 +34,7 @@ class Plugin():
 			for f in self.files:
 				print(f.filename)
 		
-		
-	
-	def save_current_file_state(self):
-		if self.current_file:
-			buffer = self.source_view.get_buffer()
-			self.current_file.buffer_text = buffer.get_text(buffer.get_start_iter(), buffer.get_end_iter(), False)
-		
-	
+			
 	
 	def open_file(self, filename):
 		# check if file is already opened
@@ -50,23 +44,26 @@ class Plugin():
 			self.switch_to_file(file_index)
 			return
 		
-		# save the state of current file buffer
-		self.save_current_file_state()
 		
 #		print("start load file")
 		f = open(filename, "r")
-		source_view = self.builder.get_object("view")
-		source_view.get_buffer().set_text(f.read())
+		
+		newsource = self.sourceview_manager.get_new_sourceview()
+		self.scrolledwindow.remove(self.current_file.source_view)
+		self.scrolledwindow.add(newsource)
+		self.sourceview_manager.update_sourcemap(newsource)
+
+		newfile = File(filename, newsource)
+		self.files.append(newfile)
+		self.current_file = newfile
+		self.current_file.source_view.get_buffer().set_text(f.read())
 		f.close()
 #		print("end load file")
 
 		# get current buffer
-		buffer = self.source_view.get_buffer()
-		self.set_language(filename, buffer)
+		buffer = self.current_file.source_view.get_buffer()
+		self.sourceview_manager.set_language(filename, buffer)
 		
-		f = File(filename, buffer.get_text(buffer.get_start_iter(), buffer.get_end_iter(), False))
-		self.files.append(f)
-		self.current_file = f
 		print("file_opened")
 		
 		
@@ -75,13 +72,12 @@ class Plugin():
 		# check if it is the current_file
 		if self.current_file == self.files[file_index]:
 			return
-		
-		# save the state of current file buffer
-		self.save_current_file_state()
 				
 		f = self.files[file_index]
-		self.source_view.get_buffer().set_text(f.buffer_text)
-		self.set_language(f.filename, self.source_view.get_buffer())
+		
+		self.scrolledwindow.remove(self.current_file.source_view)
+		self.scrolledwindow.add(f.source_view)
+		self.sourceview_manager.update_sourcemap(f.source_view)
 		
 		# reposition file in files list
 		del self.files[file_index]
@@ -97,13 +93,3 @@ class Plugin():
 				return i	
 		return -1
 		
-	
-	def set_language(self, filename, buffer):
-		lm = GtkSource.LanguageManager.get_default()
-		lan = lm.guess_language(filename)
-		if lan:
-			buffer.set_highlight_syntax(True)
-			buffer.set_language(lan)
-		else:
-			print('No language found for file "cen"')
-			buffer.set_highlight_syntax(False)

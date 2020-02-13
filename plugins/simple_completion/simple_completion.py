@@ -79,9 +79,9 @@ class Plugin():
 #		1)
 #		Set up a provider that get words from what has already been entered
 #		in the gtkSource.Buffer that is tied to the GtkSourceView
-		self.view_completion = self.app.source_view.get_completion()						
+		self.view_completion = self.app.sourceview_manager.source_view.get_completion()						
 		self.view_autocomplete = GtkSource.CompletionWords.new('main')
-		self.view_autocomplete.register(self.app.source_view.get_buffer())
+		self.view_autocomplete.register(self.app.sourceview_manager.source_view.get_buffer())
 		self.view_completion.add_provider(self.view_autocomplete)
 		
 		# 2) Make a new buffer, add a str to it, make a provider, add it to the view_autocomplete
