@@ -66,7 +66,7 @@ class CustomCompletionProvider(GObject.GObject, GtkSource.CompletionProvider):
 class Plugin():
 	
 	def __init__(self, app):
-		self.name = "template"
+		self.name = "simple_completion"
 		self.app = app
 		self.commands = []
 #		self.keywords = """ 
@@ -97,6 +97,12 @@ class Plugin():
 #		custom_completion_provider = CustomCompletionProvider()
 #		self.view_completion.add_provider(custom_completion_provider)
 #		self.custom_completion_provider = custom_completion_provider
+		
+		
+	def update_completion(self, source_view):
+		self.view_completion = source_view.get_completion()						
+		self.view_autocomplete.register(source_view.get_buffer())
+		self.view_completion.add_provider(self.view_autocomplete)
 		
 		
 	def key_bindings(self, event, keyval_name, ctrl, alt, shift):

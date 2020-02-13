@@ -9,12 +9,17 @@ class SourceViewManager():
 		self.sourcemap = self.app.builder.get_object("sourcemap")
 		self.sourcemap.set_view(self.source_view)
 		self.source_style = None
+		self.simple_completion = None
 		
 	
 	def get_new_sourceview(self):
 		# get source_style
 		if not self.source_style:
 			self.source_style = self.app.plugins_manager.get_plugin("source_style")
+			
+		# get simple_completion
+		if not self.simple_completion:
+			self.simple_completion = self.app.plugins_manager.get_plugin("simple_completion")
 			
 		newsource = GtkSource.View.new()
 		
@@ -37,6 +42,10 @@ class SourceViewManager():
 		newsource.get_style_context().add_class("sourceviewclass")
 		
 		newsource.show()
+		
+		
+		self.simple_completion.update_completion(newsource)
+		
 		return newsource
 		
 		
