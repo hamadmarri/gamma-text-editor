@@ -5,8 +5,8 @@ gi.require_version('Gtk', '3.0')
 gi.require_version('GtkSource', '4')
 from gi.repository import GLib, Gio, Gtk, Gdk, GtkSource, GObject
 
-import importlib
 import config
+from plugins.plugins_manager import PluginsManager
 from plugins.signal_handler.signal_handler import SignalHandler
 
 class Application(Gtk.Application):
@@ -15,10 +15,10 @@ class Application(Gtk.Application):
 		super().__init__(*args, application_id="com.editor.gamma", flags=Gio.ApplicationFlags.FLAGS_NONE, **kwargs)
 		GObject.type_register(GtkSource.View)
 		self.window = None
-		self.plugins = []
 		self.config = config.config_paths_and_settings
 		
 		self.load_builder()
+		self.plugins_manager = PluginsManager(self)
 		self.handler = SignalHandler(self)
 		
 		
@@ -34,17 +34,6 @@ class Application(Gtk.Application):
 
 	def set_handlers(self):	
 		self.builder.connect_signals(self.handler.handlers)
-
-
-	def load_plugins(self):
-		plugin_list_module = importlib.import_module('.plugin_list', package='plugins')
-		
-		for p in plugin_list_module.plugin_list:
-			plugin = importlib.import_module('.' + p, package='plugins')
-			module = plugin.Plugin(self)
-			module.activate()
-			self.plugins.append(module)
-
 		
 
 	def do_startup(self):
@@ -54,7 +43,7 @@ class Application(Gtk.Application):
 		if not self.window:
 			self.window = self.builder.get_object("window")
 			self.window.props.application = self
-			self.load_plugins()
+			self.plugins_manager.load_plugins()
 			self.set_handlers()
 
 		self.window.show_all()
@@ -63,4 +52,3 @@ class Application(Gtk.Application):
 if __name__ == "__main__":
 	app = Application()
 	app.run()
-

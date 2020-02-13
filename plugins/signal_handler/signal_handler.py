@@ -12,7 +12,7 @@ class SignalHandler:
 	def __init__(self, app):
 		self.app = app
 		self.builder = app.builder
-		self.plugins = app.plugins
+		self.plugins = app.plugins_manager.plugins
 		self.handlers = Handlers()
 		self.set_handlers()
 		

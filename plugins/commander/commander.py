@@ -7,7 +7,7 @@ class Plugin():
 	def __init__(self, app):
 		self.name = "commander"
 		self.app = app
-		self.plugins = app.plugins
+		self.plugins = app.plugins_manager.plugins
 		self.handlers = app.handler.handlers
 		self.commands = []
 		self.only_alt = False

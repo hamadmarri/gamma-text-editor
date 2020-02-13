@@ -28,9 +28,6 @@ class Plugin():
 				open(self.current_file, 'w').write(text)
 			except SomeError as err:
 				print('Could not save %s: %s' % (filename, err))
-				# hi
-			
-			
 			
 			
 			
@@ -62,7 +59,7 @@ class Plugin():
 
 
 		self.add_filters(dialog)
-		dialog.set_current_folder("/home/hamad/dev/pygtk")
+		dialog.set_current_folder("/home/hamad/dev/pygtk/gamma")
 		
 		response = dialog.run()
 		if response == Gtk.ResponseType.OK:
