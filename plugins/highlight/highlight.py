@@ -1,3 +1,25 @@
+#
+#
+#	This program is free software: you can redistribute it and/or modify
+#	it under the terms of the GNU General Public License as published by
+#	the Free Software Foundation, either version 3 of the License, or
+#	(at your option) any later version.
+#
+#	This program is distributed in the hope that it will be useful,
+#	but WITHOUT ANY WARRANTY; without even the implied warranty of
+#	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#	GNU General Public License for more details.
+#
+#	You should have received a copy of the GNU General Public License
+#	along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+#
+# #
+# highlight: is responsible for highlighting the selected text by user. It
+# highlights all occurrences of selected text. The highlight_signal functions
+# is connected with mark-set signal in sourceview_manager.py
+#
+
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk
@@ -13,7 +35,6 @@ class Plugin():
 		self.commands = []
 		self.files_manager = None
 		self.tag_name = "search-match"
-#		self.tag = None
 
 		
 	def activate(self):
@@ -30,6 +51,8 @@ class Plugin():
 		
 	
 	def highlight_signal(self, buffer, location, mark):
+		# insert is the mark when user change
+		# the cursor or select text
 		if mark.get_name() == "insert":
 			iters = buffer.get_selection_bounds()
 
@@ -66,10 +89,7 @@ class Plugin():
 		
 		
 		
-	def remove_highlight(self):
-#		if not self.tag:
-#			return
-			
+	def remove_highlight(self):			
 		self.get_plugins_refs()
 		buffer = self.files_manager.current_file.source_view.get_buffer()
 		tag_table = buffer.get_tag_table();

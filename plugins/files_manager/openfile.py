@@ -27,17 +27,17 @@ class Plugin():
 		if not self.files_manager:
 			self.files_manager = self.app.plugins_manager.get_plugin("files_manager")
 		
-		filename = self.choosefile()
-		if not filename:
+		filenames = self.choosefile()
+		if not filenames:
 			return
 		
-		self.files_manager.open_file(filename)
+		self.files_manager.open_files(filenames)
 
 	
 	
 
 	def choosefile(self):
-		filename = None
+		filenames = None
 		dialog = Gtk.FileChooserDialog("Open File", None,
 										Gtk.FileChooserAction.OPEN,
 										(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
@@ -46,17 +46,19 @@ class Plugin():
 
 		self.add_filters(dialog)
 		dialog.set_current_folder("/home/hamad/dev/pygtk/gamma")
+		dialog.set_select_multiple(True)
 		
 		response = dialog.run()
 		if response == Gtk.ResponseType.OK:
 			print("Open clicked")
-			print("File selected: " + dialog.get_filename())
-			filename = dialog.get_filename()
+			print("File selected:")
+			print(dialog.get_filenames())
+			filenames = dialog.get_filenames()
 		elif response == Gtk.ResponseType.CANCEL:
 			print("Cancel clicked")
 
 		dialog.destroy()
-		return filename
+		return filenames
 
 
 	def add_filters(self, dialog):

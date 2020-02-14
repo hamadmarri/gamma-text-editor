@@ -65,7 +65,11 @@ class Plugin():
 		del self.files[file_index]
 			
 			
+	def open_files(self, filenames):
+		for f in filenames:
+			self.open_file(f)
 			
+		
 	def open_file(self, filename):
 		# check if file is already opened
 		file_index = self.is_already_openned(filename)
