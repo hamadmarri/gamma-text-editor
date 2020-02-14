@@ -29,6 +29,7 @@ class Application(Gtk.Application):
 		self.builder.add_from_file(self.config["ui-path"])
 
 
+
 	def set_handlers(self):	
 		self.builder.connect_signals(self.handler.handlers)
 		
