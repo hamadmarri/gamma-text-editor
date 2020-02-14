@@ -40,10 +40,12 @@ class Application(Gtk.Application):
 		if not self.window:
 			self.window = self.builder.get_object("window")
 			self.window.props.application = self
-			self.plugins_manager.load_plugins()
-			self.set_handlers()
-
+		
+		
+		self.plugins_manager.load_plugins()
+		self.set_handlers()
 		self.window.show_all()
+
 
 
 if __name__ == "__main__":
