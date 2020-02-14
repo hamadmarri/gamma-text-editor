@@ -1,10 +1,4 @@
-import gi
-gi.require_version('Gtk', '3.0')
-gi.require_version('GtkSource', '4')
-from gi.repository import Gtk, Gdk, GtkSource
-
 from . import commands
-
 
 class File():
 	def __init__(self, filename, source_view):
@@ -30,32 +24,37 @@ class Plugin():
 	def activate(self):
 		pass
 		
+		
 	def key_bindings(self, event, keyval_name, ctrl, alt, shift):
 		if ctrl and keyval_name == "f":
 			for f in self.files:
 				print(f.filename)
 		elif ctrl and keyval_name == "w":
 			# close current_file
-			
-			# if length > 2
-			if len(self.files) > 1:
-				self.switch_to_file(len(self.files) - 2)
-				self.files[len(self.files) - 2].source_view.destroy()
-				del self.files[len(self.files) - 2]
-			else:
-				# if signle file openned
-				newsource = self.sourceview_manager.get_new_sourceview()
-				self.replace_sourceview_widget(newsource)
-				self.current_file = File("empty", newsource)
-				self.files[0].source_view.destroy()
-				del self.files[0]
-				self.files.append(self.current_file)
-				
+			self.close_current_file()	
 			
 			
+	def close_current_file(self):
+		# if length > 2
+		if len(self.files) > 1:
+			self.switch_to_file(len(self.files) - 2)
+			self.files[len(self.files) - 2].source_view.destroy()
+			del self.files[len(self.files) - 2]
 		
+		# if empty file only there, do nothing
+		elif len(self.files) == 1 and self.files[0].filename == "empty":
+			return
+		else:
+			# if signle file openned
+			newsource = self.sourceview_manager.get_new_sourceview()
+			self.replace_sourceview_widget(newsource)
+			self.current_file = File("empty", newsource)
+			self.files[0].source_view.destroy()
+			del self.files[0]
+			self.files.append(self.current_file)
 			
-	
+			
+			
 	def open_file(self, filename):
 		# check if file is already opened
 		file_index = self.is_already_openned(filename)

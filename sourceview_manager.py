@@ -30,6 +30,7 @@ class SourceViewManager():
 		newsource.set_left_margin(self.source_view.get_left_margin())
 		newsource.set_right_margin(self.source_view.get_right_margin())
 		newsource.set_bottom_margin(self.source_view.get_bottom_margin())
+		newsource.set_top_margin(self.source_view.get_top_margin())
 		newsource.set_monospace(self.source_view.get_monospace())
 		newsource.set_show_line_numbers(self.source_view.get_show_line_numbers())
 		newsource.set_show_line_marks(self.source_view.get_show_line_marks())
