@@ -80,7 +80,7 @@
 
 #toolbar_files {
     background:  rgba(253, 253, 253, 0.71);
-    padding-left:24px;
+    padding-left:11px;
     padding-top:11px;
 }
 
@@ -92,8 +92,14 @@
 #toolbar_ctrls {
     background: rgba(253, 253, 253, 0.73);
     padding-top:10px;
+    padding-bottom:10px;
 }
 
+.menu {
+	background:transparent;
+	border:none;
+	color:#6A636A;
+}
 
 #scrolledwindow {
 	border:none;

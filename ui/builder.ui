@@ -184,6 +184,130 @@
                     <property name="position">2</property>
                   </packing>
                 </child>
+                <child>
+                  <object class="GtkBox" id="logo_box1">
+                    <property name="name">logo_box</property>
+                    <property name="width_request">34</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="baseline_position">bottom</property>
+                    <child>
+                      <object class="GtkLabel" id="logo1">
+                        <property name="name">open_menu</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">O</property>
+                        <style>
+                          <class name="menu"/>
+                        </style>
+                      </object>
+                      <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="pack_type">end</property>
+                    <property name="position">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox" id="logo_box2">
+                    <property name="name">logo_box</property>
+                    <property name="width_request">34</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="baseline_position">bottom</property>
+                    <child>
+                      <object class="GtkLabel" id="logo2">
+                        <property name="name">save_menu</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">S</property>
+                        <style>
+                          <class name="menu"/>
+                        </style>
+                      </object>
+                      <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="pack_type">end</property>
+                    <property name="position">4</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox" id="logo_box3">
+                    <property name="name">logo_box</property>
+                    <property name="width_request">34</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="baseline_position">bottom</property>
+                    <child>
+                      <object class="GtkLabel" id="logo3">
+                        <property name="name">new_menu</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">N</property>
+                        <style>
+                          <class name="menu"/>
+                        </style>
+                      </object>
+                      <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="pack_type">end</property>
+                    <property name="position">5</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox" id="logo_box4">
+                    <property name="name">logo_box</property>
+                    <property name="width_request">34</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="baseline_position">bottom</property>
+                    <child>
+                      <object class="GtkLabel" id="logo4">
+                        <property name="name">find_menu</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">F</property>
+                        <style>
+                          <class name="menu"/>
+                        </style>
+                      </object>
+                      <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="pack_type">end</property>
+                    <property name="position">6</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
