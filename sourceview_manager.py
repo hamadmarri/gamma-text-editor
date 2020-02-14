@@ -1,3 +1,25 @@
+#
+#
+#	This program is free software: you can redistribute it and/or modify
+#	it under the terms of the GNU General Public License as published by
+#	the Free Software Foundation, either version 3 of the License, or
+#	(at your option) any later version.
+#
+#	This program is distributed in the hope that it will be useful,
+#	but WITHOUT ANY WARRANTY; without even the implied warranty of
+#	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#	GNU General Public License for more details.
+#
+#	You should have received a copy of the GNU General Public License
+#	along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+#
+# #
+# SourceViewManager is responsible for sourceview related functions
+# - get new source view
+# - detect the language of the just openned file and set the langauge (i.e. C,Python,C++ ..)
+#
+
 import gi
 gi.require_version('GtkSource', '4')
 from gi.repository import GtkSource
@@ -10,9 +32,11 @@ class SourceViewManager():
 		self.sourcemap.set_view(self.source_view)
 		self.source_style = None
 		self.simple_completion = None
+		self.highlight = None
 		
 	
-	def get_new_sourceview(self):
+	
+	def get_plugins_refs(self):
 		# get source_style
 		if not self.source_style:
 			self.source_style = self.app.plugins_manager.get_plugin("source_style")
@@ -21,8 +45,16 @@ class SourceViewManager():
 		if not self.simple_completion:
 			self.simple_completion = self.app.plugins_manager.get_plugin("simple_completion")
 			
+		# get highlight
+		if not self.highlight:
+			self.highlight = self.app.plugins_manager.get_plugin("highlight")
+			
+	
+	
+	def get_new_sourceview(self):
+		self.get_plugins_refs()
+			
 		newsource = GtkSource.View.new()
-		
 		newsource.set_visible(self.source_view.get_visible())
 		newsource.set_can_focus(self.source_view.get_can_focus())
 		newsource.set_pixels_above_lines(self.source_view.get_pixels_above_lines())
@@ -38,9 +70,13 @@ class SourceViewManager():
 		newsource.set_auto_indent(self.source_view.get_auto_indent())
 		newsource.set_highlight_current_line(self.source_view.get_highlight_current_line())
 		newsource.set_background_pattern(self.source_view.get_background_pattern())
+		newsource.set_smart_home_end(self.source_view.get_smart_home_end())
 				    
 		self.source_style.set_source_style(newsource.get_buffer())
 		newsource.get_style_context().add_class("sourceviewclass")
+		
+		
+		newsource.get_buffer().connect("mark-set", self.highlight.highlight_signal)
 		
 		newsource.show()
 		
@@ -60,6 +96,8 @@ class SourceViewManager():
 			print('No language found for file "cen"')
 			buffer.set_highlight_syntax(False)
 			
+			
+	
 	def update_sourcemap(self, source_view):
 		self.sourcemap.set_view(source_view)
 

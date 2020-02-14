@@ -37,7 +37,7 @@ class Plugin():
 				print(f.filename)
 		elif ctrl and keyval_name == "w":
 			# close current_file
-			self.close_current_file()	
+			self.close_current_file()
 			
 			
 	def close_current_file(self):
