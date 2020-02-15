@@ -44,3 +44,5 @@ class Plugin():
 	def cancel(self):
 		if self.timer:
 			self.timer.cancel()
+		
+		self.clear_message()

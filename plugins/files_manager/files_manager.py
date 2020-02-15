@@ -80,6 +80,8 @@ class Plugin():
 			self.current_file = File("empty", newsource)
 			self.destroy_file(0)
 			self.files.append(self.current_file)
+			self.headerbar.set_title("Gamma")
+			self.message_notify.cancel()
 			
 	
 	
