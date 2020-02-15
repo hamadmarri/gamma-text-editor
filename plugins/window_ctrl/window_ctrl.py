@@ -25,6 +25,7 @@ class Plugin():
 	def __init__(self, app):
 		self.name = "window_ctrl"
 		self.app = app
+		self.builder = app.builder
 		self.window = app.window
 		self.handlers = app.handler.handlers
 		self.is_maximized = None
@@ -32,6 +33,7 @@ class Plugin():
 		commands.set_commands(self)
 		self.set_handlers()
 		self.message_notify = None
+		self.openfile = None
 		
 	
 	
@@ -45,6 +47,10 @@ class Plugin():
 		self.handlers.on_maximizeBtn_release_event = self.on_maximizeBtn_release_event
 		self.handlers.on_minimizeBtn_release_event = self.on_minimizeBtn_release_event
 		self.handlers.on_closeBtn_hover_event = self.on_closeBtn_hover_event
+		self.handlers.on_open_menu_button_press_event = self.on_open_menu_button_press_event
+		self.handlers.on_open_menue_enter_notify_event = self.on_open_menue_enter_notify_event
+		self.handlers.on_open_menue_leave_notify_event = self.on_open_menue_leave_notify_event
+	
 	
 	
 	
@@ -55,6 +61,10 @@ class Plugin():
 		# get message_notify
 		if not self.message_notify:
 			self.message_notify = self.app.plugins_manager.get_plugin("message_notify")
+		
+		# get message_notify
+		if not self.openfile:
+			self.openfile = self.app.plugins_manager.get_plugin("openfile")
 			
 	
 	# this method got called by SignalHandler. Use it wisely
@@ -103,3 +113,21 @@ class Plugin():
 	def on_minimizeBtn_release_event(self, widget, event):
 		self.minimize()
 		
+	def on_open_menu_button_press_event(self, widget, event):
+		self.get_plugins_refs()
+		self.openfile.openfile()
+		
+		
+	
+	# TODO: must cache open_menu
+	def on_open_menue_enter_notify_event(self, widget, event):
+		open_menu = self.builder.get_object("open_menu")
+		open_menu.get_style_context().add_class("menu_hover")
+		
+	
+	# TODO: must cache open_menu
+	def on_open_menue_leave_notify_event(self, widget, event):
+		open_menu = self.builder.get_object("open_menu")
+		open_menu.get_style_context().remove_class("menu_hover")
+		
+	

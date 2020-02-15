@@ -156,6 +156,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="events">GDK_ENTER_NOTIFY_MASK | GDK_STRUCTURE_MASK</property>
+                    <property name="tooltip_text" translatable="yes">Exit</property>
                     <signal name="button-release-event" handler="on_closeBtn_release_event" swapped="no"/>
                     <signal name="enter-notify-event" handler="on_closeBtn_hover_event" swapped="no"/>
                     <child>
@@ -182,6 +183,7 @@
                   <object class="GtkEventBox">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="tooltip_text" translatable="yes">Maximize Window</property>
                     <signal name="button-release-event" handler="on_maximizeBtn_release_event" swapped="no"/>
                     <child>
                       <object class="GtkImage" id="maximizeBtn">
@@ -207,6 +209,7 @@
                   <object class="GtkEventBox">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="tooltip_text" translatable="yes">Minimize Window</property>
                     <signal name="button-release-event" handler="on_minimizeBtn_release_event" swapped="no"/>
                     <child>
                       <object class="GtkImage" id="minimizeBtn">
@@ -229,71 +232,12 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkBox" id="open_menu_box">
-                    <property name="name">logo_box</property>
-                    <property name="width_request">34</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="baseline_position">bottom</property>
-                    <child>
-                      <object class="GtkLabel" id="open_menu">
-                        <property name="name">open_menu</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">O</property>
-                        <style>
-                          <class name="menu"/>
-                        </style>
-                      </object>
-                      <packing>
-                        <property name="expand">True</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">3</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkBox" id="save_menu_box">
-                    <property name="name">logo_box</property>
-                    <property name="width_request">34</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="baseline_position">bottom</property>
-                    <child>
-                      <object class="GtkLabel" id="save_menu">
-                        <property name="name">save_menu</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">S</property>
-                        <style>
-                          <class name="menu"/>
-                        </style>
-                      </object>
-                      <packing>
-                        <property name="expand">True</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">4</property>
-                  </packing>
-                </child>
-                <child>
                   <object class="GtkBox" id="new_menu_box">
                     <property name="name">logo_box</property>
                     <property name="width_request">34</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="tooltip_text" translatable="yes">New File</property>
                     <property name="baseline_position">bottom</property>
                     <child>
                       <object class="GtkLabel" id="new_menu">
@@ -315,7 +259,122 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
+                    <property name="position">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox" id="open_menu_box">
+                    <property name="name">logo_box</property>
+                    <property name="width_request">34</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="tooltip_text" translatable="yes">Open File(s)</property>
+                    <property name="baseline_position">bottom</property>
+                    <child>
+                      <object class="GtkEventBox">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <signal name="button-press-event" handler="on_open_menu_button_press_event" swapped="no"/>
+                        <signal name="enter-notify-event" handler="on_open_menue_enter_notify_event" swapped="no"/>
+                        <signal name="leave-notify-event" handler="on_open_menue_leave_notify_event" swapped="no"/>
+                        <child>
+                          <object class="GtkLabel" id="open_menu">
+                            <property name="name">open_menu</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label" translatable="yes">O</property>
+                            <style>
+                              <class name="menu"/>
+                            </style>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">4</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox" id="open_menu_box1">
+                    <property name="name">logo_box</property>
+                    <property name="width_request">34</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="tooltip_text" translatable="yes">Open Project</property>
+                    <property name="baseline_position">bottom</property>
+                    <child>
+                      <object class="GtkEventBox">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <child>
+                          <object class="GtkLabel" id="open_menu1">
+                            <property name="name">open_menu</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label" translatable="yes">P</property>
+                            <style>
+                              <class name="menu"/>
+                            </style>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
                     <property name="position">5</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox" id="save_menu_box">
+                    <property name="name">logo_box</property>
+                    <property name="width_request">34</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="tooltip_text" translatable="yes">Save All</property>
+                    <property name="baseline_position">bottom</property>
+                    <child>
+                      <object class="GtkEventBox">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <child>
+                          <object class="GtkLabel" id="save_menu">
+                            <property name="name">save_menu</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="tooltip_text" translatable="yes">Save All</property>
+                            <property name="label" translatable="yes">S</property>
+                            <style>
+                              <class name="menu"/>
+                            </style>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">6</property>
                   </packing>
                 </child>
                 <child>
@@ -324,6 +383,7 @@
                     <property name="width_request">34</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="tooltip_text" translatable="yes">Find</property>
                     <property name="baseline_position">bottom</property>
                     <child>
                       <object class="GtkLabel" id="find_menu">
@@ -345,7 +405,155 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">6</property>
+                    <property name="position">7</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox" id="open_menu_box2">
+                    <property name="name">logo_box</property>
+                    <property name="width_request">34</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="tooltip_text" translatable="yes">Find and Replace</property>
+                    <property name="baseline_position">bottom</property>
+                    <child>
+                      <object class="GtkEventBox">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <child>
+                          <object class="GtkLabel" id="open_menu2">
+                            <property name="name">open_menu</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label" translatable="yes">R</property>
+                            <style>
+                              <class name="menu"/>
+                            </style>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">8</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox" id="open_menu_box3">
+                    <property name="name">logo_box</property>
+                    <property name="width_request">34</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="tooltip_text" translatable="yes">Welcome Screen</property>
+                    <property name="baseline_position">bottom</property>
+                    <child>
+                      <object class="GtkEventBox">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <child>
+                          <object class="GtkLabel" id="open_menu3">
+                            <property name="name">open_menu</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label" translatable="yes">W</property>
+                            <style>
+                              <class name="menu"/>
+                            </style>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">9</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox" id="open_menu_box4">
+                    <property name="name">logo_box</property>
+                    <property name="width_request">34</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="tooltip_text" translatable="yes">Help</property>
+                    <property name="baseline_position">bottom</property>
+                    <child>
+                      <object class="GtkEventBox">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <child>
+                          <object class="GtkLabel" id="open_menu4">
+                            <property name="name">open_menu</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label" translatable="yes">H</property>
+                            <style>
+                              <class name="menu"/>
+                            </style>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">10</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox" id="open_menu_box5">
+                    <property name="name">logo_box</property>
+                    <property name="width_request">34</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="tooltip_text" translatable="yes">About</property>
+                    <property name="baseline_position">bottom</property>
+                    <child>
+                      <object class="GtkEventBox">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <child>
+                          <object class="GtkLabel" id="open_menu5">
+                            <property name="name">open_menu</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label" translatable="yes">A</property>
+                            <style>
+                              <class name="menu"/>
+                            </style>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">11</property>
                   </packing>
                 </child>
               </object>
