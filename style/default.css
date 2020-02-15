@@ -39,8 +39,29 @@
 
 #headerbarMain, #headerbarMain * {
 	background: #fdfdfd;
-	color: #827082;
+	color: rgba(130, 112, 130, 0.77);
 	border:none;
+}
+
+#headerbarMain {
+	padding: 0px;
+}
+
+#headerbarMain .title {
+	color: #827082;
+}
+
+
+#searchEntry {
+	margin:0 0 0 10px;
+	padding:0;
+	background: #fdfdfd;
+	font-size: 20px;
+}
+
+
+#headerbarMain *:focus {
+	color:#0DD100;
 }
 
 /********** HEADER LEFT SIDE *************/
