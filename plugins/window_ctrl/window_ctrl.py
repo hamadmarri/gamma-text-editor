@@ -1,8 +1,23 @@
-import gi
-gi.require_version('Gtk', '3.0')
-gi.require_version('GtkSource', '4')
-from gi.repository import Gtk, Gdk, GtkSource
-
+#
+#
+#	This program is free software: you can redistribute it and/or modify
+#	it under the terms of the GNU General Public License as published by
+#	the Free Software Foundation, either version 3 of the License, or
+#	(at your option) any later version.
+#
+#	This program is distributed in the hope that it will be useful,
+#	but WITHOUT ANY WARRANTY; without even the implied warranty of
+#	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#	GNU General Public License for more details.
+#
+#	You should have received a copy of the GNU General Public License
+#	along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+#
+#
+# window_ctrl: is responsible for handling basic window operations
+# - Maximize, minimize, quit
+#
 from . import commands
 
 class Plugin():
@@ -12,15 +27,19 @@ class Plugin():
 		self.app = app
 		self.window = app.window
 		self.handlers = app.handler.handlers
-		self.is_maximized = self.window.is_maximized()
+		self.is_maximized = None
 		self.commands = []
 		commands.set_commands(self)
 		self.set_handlers()
 		self.message_notify = None
 		
+	
+	
 	def activate(self):
 		pass
 	
+	
+	# setting handlers, see SignalHandler
 	def set_handlers(self):
 		self.handlers.on_closeBtn_release_event = self.on_closeBtn_release_event
 		self.handlers.on_maximizeBtn_release_event = self.on_maximizeBtn_release_event
@@ -29,13 +48,18 @@ class Plugin():
 	
 	
 	
-	
+	# to use other plugins, need to get
+	# the reference of the plugin by its name
+	# need to cache the reference 
 	def get_plugins_refs(self):
 		# get message_notify
 		if not self.message_notify:
 			self.message_notify = self.app.plugins_manager.get_plugin("message_notify")
 			
-			
+	
+	# this method got called by SignalHandler. Use it wisely
+	# if your plugin spend much time in this method it will delay
+	# other plugins when calling their key_bindings method
 	def key_bindings(self, event, keyval_name, ctrl, alt, shift):
 		if alt and ctrl and keyval_name == "m":
 			self.minimize()
@@ -54,13 +78,13 @@ class Plugin():
 		
 		
 	def toggle_maximize(self):
-		if self.is_maximized:
+		if self.window.is_maximized():
 			self.window.unmaximize()
 		else:
 			self.window.maximize()
 			
-		self.is_maximized = not self.is_maximized
-
+			
+			
 		
 	def quit(self):
 		self.app.quit()
