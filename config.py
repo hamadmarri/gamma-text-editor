@@ -29,7 +29,7 @@ gamma_path = home_path + "/dev/pygtk/gamma"
 ui_file = "builder.ui"
 
 # default css style file
-style_file = "default.css"
+style_file = "icecream-solid.css"
 
 # style scheme for srource view style
 # usually sourceview style files are in 
