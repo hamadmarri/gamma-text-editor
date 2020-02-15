@@ -18,6 +18,7 @@
 # SourceViewManager is responsible for sourceview related functions
 # - get new source view
 # - detect the language of the just openned file and set the langauge (i.e. C,Python,C++ ..)
+# - update source map (mini map) to connect to a sourceview
 #
 
 import gi
@@ -51,10 +52,19 @@ class SourceViewManager():
 			
 	
 	
+	# opening new file needs new sourceview object
+	#  here where the new sourceview object is created
+	# - it copies the default sourceview properties
+	# - sets the source style
+	# - connects signal mark-set event which is when user select text
+	# - updates the world completion to include new source buffer
 	def get_new_sourceview(self):
 		self.get_plugins_refs()
 			
+		# get new sourceview object
 		newsource = GtkSource.View.new()
+		
+		# copy the default sourceview properties
 		newsource.set_visible(self.source_view.get_visible())
 		newsource.set_can_focus(self.source_view.get_can_focus())
 		newsource.set_pixels_above_lines(self.source_view.get_pixels_above_lines())
@@ -71,25 +81,37 @@ class SourceViewManager():
 		newsource.set_highlight_current_line(self.source_view.get_highlight_current_line())
 		newsource.set_background_pattern(self.source_view.get_background_pattern())
 		newsource.set_smart_home_end(self.source_view.get_smart_home_end())
-				    
+
+		# set the source style
 		self.source_style.set_source_style(newsource.get_buffer())
+		
+		# add "sourceviewclass" css class
 		newsource.get_style_context().add_class("sourceviewclass")
 		
-		
+		# connect signal mark-set event which is when user select text
+		# user clicks to unselect text is also connected
+		# see highlight.highlight_signal function for handling 
+		# mark-set event
 		newsource.get_buffer().connect("mark-set", self.highlight.highlight_signal)
 		
+		# show the gtk widget
 		newsource.show()
 		
-		
+		# update the world completion to include new source buffer
 		self.simple_completion.update_completion(newsource)
 		
 		return newsource
 		
-		
+	
+	# detect the language of the just openned file 
+	# and set the langauge (i.e. C,Python,C++ ..)
 	def set_language(self, filename, buffer):
 		lm = GtkSource.LanguageManager.get_default()
+		
+		# guess the language of the filename
 		lan = lm.guess_language(filename)
 		if lan:
+			# set the highlight of buffer
 			buffer.set_highlight_syntax(True)
 			buffer.set_language(lan)
 		else:
@@ -97,7 +119,7 @@ class SourceViewManager():
 			buffer.set_highlight_syntax(False)
 			
 			
-	
+	# update source map (mini map) to connect to a sourceview
 	def update_sourcemap(self, source_view):
 		self.sourcemap.set_view(source_view)
 

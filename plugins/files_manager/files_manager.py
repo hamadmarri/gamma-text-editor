@@ -1,3 +1,22 @@
+#
+#
+#	This program is free software: you can redistribute it and/or modify
+#	it under the terms of the GNU General Public License as published by
+#	the Free Software Foundation, either version 3 of the License, or
+#	(at your option) any later version.
+#
+#	This program is distributed in the hope that it will be useful,
+#	but WITHOUT ANY WARRANTY; without even the implied warranty of
+#	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#	GNU General Public License for more details.
+#
+#	You should have received a copy of the GNU General Public License
+#	along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+#
+#
+
+
 import os
 import gi
 gi.require_version('Gtk', '3.0')
@@ -18,17 +37,19 @@ class Plugin():
 		self.name = "files_manager"
 		self.app = app
 		self.builder = app.builder
-		self.sourceview_manager = self.app.sourceview_manager
-		self.scrolledwindow = app.builder.get_object("scrolledwindow")
+		self.sourceview_manager = app.sourceview_manager
+		self.scrolledwindow = None
 		self.commands = []
 		commands.set_commands(self)
 		self.files = []
-		self.current_file = File("empty", app.sourceview_manager.source_view)
-		self.files.append(self.current_file)
+		self.current_file = None
+
 		
 	
 	def activate(self):
-		pass
+		self.scrolledwindow = self.builder.get_object("scrolledwindow")
+		self.current_file = File("empty", self.sourceview_manager.source_view)
+		self.files.append(self.current_file)
 		
 		
 	def key_bindings(self, event, keyval_name, ctrl, alt, shift):
