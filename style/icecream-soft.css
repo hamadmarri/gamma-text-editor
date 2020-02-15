@@ -97,6 +97,10 @@
     min-height: 100px;
 }
 
+#viewport {
+	background:transparent;
+}
+
 #toolbar_files {
     background:  rgba(253, 253, 253, 0.84);
     padding-left:15px;
@@ -128,7 +132,11 @@
 }
 
 .openned_file:hover label  {
-	text-decoration: underline;
+	text-decoration: none;
+}
+
+.openned_file:hover  {
+	background: rgba(253, 253, 253, 0.22);
 }
 
 .openned_file label { 
@@ -167,7 +175,7 @@
 }
 
 
-#scrolledwindow {
+.scrolledwindow {
 	border:none;
 }
 
