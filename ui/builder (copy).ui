@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.22.1 -->
+<!--
+#	This program is free software: you can redistribute it and/or modify
+#	it under the terms of the GNU General Public License as published by
+#	the Free Software Foundation, either version 3 of the License, or
+#	(at your option) any later version.
+#
+#	This program is distributed in the hope that it will be useful,
+#	but WITHOUT ANY WARRANTY; without even the implied warranty of
+#	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#	GNU General Public License for more details.
+#
+#	You should have received a copy of the GNU General Public License
+#	along with this program.  If not, see <https://www.gnu.org/licenses/>.
+-->
 <interface>
   <requires lib="gtk+" version="3.20"/>
   <requires lib="gtksourceview" version="4.0"/>
@@ -184,6 +198,130 @@
                     <property name="position">2</property>
                   </packing>
                 </child>
+                <child>
+                  <object class="GtkBox" id="logo_box1">
+                    <property name="name">logo_box</property>
+                    <property name="width_request">34</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="baseline_position">bottom</property>
+                    <child>
+                      <object class="GtkLabel" id="logo1">
+                        <property name="name">open_menu</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">O</property>
+                        <style>
+                          <class name="menu"/>
+                        </style>
+                      </object>
+                      <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="pack_type">end</property>
+                    <property name="position">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox" id="logo_box2">
+                    <property name="name">logo_box</property>
+                    <property name="width_request">34</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="baseline_position">bottom</property>
+                    <child>
+                      <object class="GtkLabel" id="logo2">
+                        <property name="name">save_menu</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">S</property>
+                        <style>
+                          <class name="menu"/>
+                        </style>
+                      </object>
+                      <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="pack_type">end</property>
+                    <property name="position">4</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox" id="logo_box3">
+                    <property name="name">logo_box</property>
+                    <property name="width_request">34</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="baseline_position">bottom</property>
+                    <child>
+                      <object class="GtkLabel" id="logo3">
+                        <property name="name">new_menu</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">N</property>
+                        <style>
+                          <class name="menu"/>
+                        </style>
+                      </object>
+                      <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="pack_type">end</property>
+                    <property name="position">5</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox" id="logo_box4">
+                    <property name="name">logo_box</property>
+                    <property name="width_request">34</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="baseline_position">bottom</property>
+                    <child>
+                      <object class="GtkLabel" id="logo4">
+                        <property name="name">find_menu</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">F</property>
+                        <style>
+                          <class name="menu"/>
+                        </style>
+                      </object>
+                      <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="pack_type">end</property>
+                    <property name="position">6</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -234,14 +372,19 @@
                     <property name="pixels_below_lines">2</property>
                     <property name="left_margin">2</property>
                     <property name="right_margin">2</property>
+                    <property name="top_margin">2</property>
                     <property name="bottom_margin">800</property>
                     <property name="monospace">True</property>
                     <property name="show_line_numbers">True</property>
                     <property name="show_line_marks">True</property>
                     <property name="tab_width">4</property>
                     <property name="auto_indent">True</property>
+                    <property name="smart_home_end">before</property>
                     <property name="highlight_current_line">True</property>
                     <property name="background_pattern">grid</property>
+                    <style>
+                      <class name="sourceviewclass"/>
+                    </style>
                   </object>
                 </child>
               </object>

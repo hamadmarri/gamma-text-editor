@@ -121,56 +121,8 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="orientation">vertical</property>
-                <property name="spacing">10</property>
+                <property name="spacing">15</property>
                 <property name="baseline_position">top</property>
-                <child>
-                  <object class="GtkEventBox">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <signal name="button-release-event" handler="on_minimizeBtn_release_event" swapped="no"/>
-                    <child>
-                      <object class="GtkImage" id="minimizeBtn">
-                        <property name="name">minimizeBtn</property>
-                        <property name="width_request">13</property>
-                        <property name="height_request">13</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="halign">center</property>
-                        <property name="valign">center</property>
-                        <property name="icon_size">0</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkEventBox">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <signal name="button-release-event" handler="on_maximizeBtn_release_event" swapped="no"/>
-                    <child>
-                      <object class="GtkImage" id="maximizeBtn">
-                        <property name="name">maximizeBtn</property>
-                        <property name="width_request">13</property>
-                        <property name="height_request">13</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="halign">center</property>
-                        <property name="valign">center</property>
-                        <property name="icon_size">0</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
                 <child>
                   <object class="GtkEventBox" id="closeBtnEventBox">
                     <property name="name">closeBtnEventBox</property>
@@ -195,18 +147,69 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">False</property>
+                    <property name="pack_type">end</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEventBox">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <signal name="button-release-event" handler="on_maximizeBtn_release_event" swapped="no"/>
+                    <child>
+                      <object class="GtkImage" id="maximizeBtn">
+                        <property name="name">maximizeBtn</property>
+                        <property name="width_request">13</property>
+                        <property name="height_request">13</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="halign">center</property>
+                        <property name="valign">center</property>
+                        <property name="icon_size">0</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="pack_type">end</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEventBox">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <signal name="button-release-event" handler="on_minimizeBtn_release_event" swapped="no"/>
+                    <child>
+                      <object class="GtkImage" id="minimizeBtn">
+                        <property name="name">minimizeBtn</property>
+                        <property name="width_request">13</property>
+                        <property name="height_request">13</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="halign">center</property>
+                        <property name="valign">center</property>
+                        <property name="icon_size">0</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="pack_type">end</property>
                     <property name="position">2</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkBox" id="logo_box1">
+                  <object class="GtkBox" id="open_menu_box">
                     <property name="name">logo_box</property>
                     <property name="width_request">34</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="baseline_position">bottom</property>
                     <child>
-                      <object class="GtkLabel" id="logo1">
+                      <object class="GtkLabel" id="open_menu">
                         <property name="name">open_menu</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
@@ -225,19 +228,18 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="pack_type">end</property>
                     <property name="position">3</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkBox" id="logo_box2">
+                  <object class="GtkBox" id="save_menu_box">
                     <property name="name">logo_box</property>
                     <property name="width_request">34</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="baseline_position">bottom</property>
                     <child>
-                      <object class="GtkLabel" id="logo2">
+                      <object class="GtkLabel" id="save_menu">
                         <property name="name">save_menu</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
@@ -256,19 +258,18 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="pack_type">end</property>
                     <property name="position">4</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkBox" id="logo_box3">
+                  <object class="GtkBox" id="new_menu_box">
                     <property name="name">logo_box</property>
                     <property name="width_request">34</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="baseline_position">bottom</property>
                     <child>
-                      <object class="GtkLabel" id="logo3">
+                      <object class="GtkLabel" id="new_menu">
                         <property name="name">new_menu</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
@@ -287,19 +288,18 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="pack_type">end</property>
                     <property name="position">5</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkBox" id="logo_box4">
+                  <object class="GtkBox" id="find_menu_box">
                     <property name="name">logo_box</property>
                     <property name="width_request">34</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="baseline_position">bottom</property>
                     <child>
-                      <object class="GtkLabel" id="logo4">
+                      <object class="GtkLabel" id="find_menu">
                         <property name="name">find_menu</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
@@ -318,7 +318,6 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="pack_type">end</property>
                     <property name="position">6</property>
                   </packing>
                 </child>

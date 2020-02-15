@@ -14,6 +14,22 @@
 */
 
 
+.openned_file, .close_file { 
+	background:transparent;
+	border:none;
+	margin-top:8px;
+}
+
+.openned_file:hover label  {
+	text-decoration: underline;
+}
+
+.openned_file label { 
+	color: #827082;
+    font-size: 1.1em;
+	font-weight: normal;
+}
+
 
 #window {
     background-color: transparent;
@@ -71,73 +87,27 @@
 
 #toolbar_files {
     background:  rgba(253, 253, 253, 0.84);
-    padding-left:15px;
-	padding-right:15px;
-    padding-top:0px;
+    padding-left:11px;
+    padding-top:11px;
 }
 
+
+#list_files {
+	background: transparent;
+}
 
 #toolbar_ctrls {
     background: rgba(253, 253, 253, 0.815);
     padding-top:10px;
-    padding-bottom:18px;
+    padding-bottom:10px;
 }
 
-
-
-/********** FILES *************/
-.openned_file, .close_file { 
-	background:transparent;
-	border:none;
-	margin: 0 0 0 0;
-	
-	padding-top: 17px;
-	padding-bottom: 17px;
-
-	border-style: dotted none none none;
-	border-width: 3px;
-	border-color: rgba(130, 112, 130, 0.17);
-}
-
-.openned_file:hover label  {
-	text-decoration: underline;
-}
-
-.openned_file label { 
-	color: #827082;
-    /* font-size: 1.0em; */
-	/* font-weight: normal; */
-}
-
-
-
-
-/********** MENUS *************/
 .menu {
 	background:transparent;
 	border:none;
 	color:#6A636A;
-	margin-top:12px;
+	margin-top:20px;
 }
-
-
-/********** BUTTONS *************/
-#closeBtn {
-    background: #FF1946;
-    border-radius: 100%;
-}
-
-
-#maximizeBtn {
-    background: #0DD100;
-    border-radius: 100%;
-}
-
-#minimizeBtn {
-    background: #FCE94F;
-    border-radius: 100%;
-}
-
 
 #scrolledwindow {
 	border:none;
@@ -149,8 +119,23 @@
 }
 
 
+#closeBtn {
+    background: #FF1946;
+    border-radius: 100%;
+}
 
 
+
+
+#maximizeBtn {
+    background: #0DD100;
+    border-radius: 100%;
+}
+
+#minimizeBtn {
+    background: #FCE94F;
+    border-radius: 100%;
+}
 
 
 #ok_btn {
