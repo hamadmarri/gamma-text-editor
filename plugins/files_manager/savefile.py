@@ -16,6 +16,7 @@
 #
 #
 
+import os
 
 import gi
 gi.require_version('Gtk', '3.0')
@@ -24,6 +25,7 @@ from gi.repository import Gtk, Gdk, GtkSource
 
 
 # TODO: only save when buffer is changed
+# TODO: empty file is saved at home!
 class Plugin():
 	
 	def __init__(self, app):
@@ -32,18 +34,29 @@ class Plugin():
 		self.builder = app.builder
 		self.commands = []
 		self.files_manager = None
+		self.message_notify = None
 		
 		
 	def activate(self):
 		pass
+	
+	
+	
+	def get_plugins_refs(self):
+		# get current_file
+		if not self.files_manager:
+			self.files_manager = self.app.plugins_manager.get_plugin("files_manager")
 		
+		# get message_notify
+		if not self.message_notify:
+			self.message_notify = self.app.plugins_manager.get_plugin("message_notify")
+	
+	
 	
 	def key_bindings(self, event, keyval_name, ctrl, alt, shift):
 		if ctrl and keyval_name == "s":
 			
-			# get current_file
-			if not self.files_manager:
-				self.files_manager = self.app.plugins_manager.get_plugin("files_manager")
+			self.get_plugins_refs()
 			
 			current_file = self.files_manager.current_file
 			
@@ -55,5 +68,8 @@ class Plugin():
 				open(current_file.filename, 'w').write(text)
 			except SomeError as err:
 				print('Could not save %s: %s' % (filename, err))
+			else:
+				basename = os.path.basename(current_file.filename)
+				self.message_notify.show_message(basename + " | Saved")
 			
 

@@ -16,6 +16,7 @@ class Plugin():
 		self.commands = []
 		commands.set_commands(self)
 		self.set_handlers()
+		self.message_notify = None
 		
 	def activate(self):
 		pass
@@ -26,12 +27,23 @@ class Plugin():
 		self.handlers.on_minimizeBtn_release_event = self.on_minimizeBtn_release_event
 		self.handlers.on_closeBtn_hover_event = self.on_closeBtn_hover_event
 	
+	
+	
+	
+	def get_plugins_refs(self):
+		# get message_notify
+		if not self.message_notify:
+			self.message_notify = self.app.plugins_manager.get_plugin("message_notify")
+			
+			
 	def key_bindings(self, event, keyval_name, ctrl, alt, shift):
 		if alt and ctrl and keyval_name == "m":
 			self.minimize()
 		elif alt and keyval_name == "m":
 			self.toggle_maximize()
 		elif ctrl and keyval_name == "q":
+			self.get_plugins_refs()
+			self.message_notify.cancel()
 			self.quit()
 			
 

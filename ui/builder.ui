@@ -91,6 +91,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="title" translatable="yes">Gamma</property>
+            <property name="has_subtitle">False</property>
             <property name="spacing">0</property>
             <child>
               <object class="GtkSearchEntry">
@@ -105,6 +106,18 @@
                 <property name="primary_icon_activatable">False</property>
                 <property name="primary_icon_sensitive">False</property>
               </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="messageLbl">
+                <property name="name">messageLbl</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">/home/hamad/dev/pygtk/gamma/style/default.css</property>
+              </object>
+              <packing>
+                <property name="pack_type">end</property>
+                <property name="position">1</property>
+              </packing>
             </child>
           </object>
           <packing>

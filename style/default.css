@@ -56,6 +56,7 @@
 	margin:0 0 0 10px;
 	padding:0;
 	background: #fdfdfd;
+	font-family: monospace;
 	font-size: 20px;
 }
 
@@ -63,6 +64,12 @@
 #headerbarMain *:focus {
 	color:#0DD100;
 }
+
+#messageLbl {
+	font-family: monospace;
+	margin-right:21px;
+}
+
 
 /********** HEADER LEFT SIDE *************/
 #headerbarSide {

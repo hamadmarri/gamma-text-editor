@@ -43,6 +43,8 @@ class Plugin():
 		commands.set_commands(self)
 		self.files = []
 		self.current_file = None
+		self.headerbar = None
+		self.message_notify = None
 
 		
 	
@@ -50,6 +52,7 @@ class Plugin():
 		self.scrolledwindow = self.builder.get_object("scrolledwindow")
 		self.current_file = File("empty", self.sourceview_manager.source_view)
 		self.files.append(self.current_file)
+		self.headerbar = self.builder.get_object("headerbarMain")
 		
 		
 	def key_bindings(self, event, keyval_name, ctrl, alt, shift):
@@ -129,13 +132,16 @@ class Plugin():
 		toolbar_files = self.builder.get_object("toolbar_files")
 		btn = Gtk.Button()
 		newfile.toolbar_file = btn
-		btn.set_label(os.path.basename(filename))
+		basename = os.path.basename(filename)
+		btn.set_label(basename)
 		btn.connect("clicked", self.side_file_clicked, filename)
 		btn.get_style_context().add_class("openned_file")
 		lbl = btn.get_children()[0]
 		lbl.set_xalign(0)
 		toolbar_files.pack_start(btn, False, False, 0)
 		btn.show()
+		
+		self.update_header(filename)
 		
 		
 	def side_file_clicked(self, btn, filename):
@@ -166,13 +172,25 @@ class Plugin():
 		del self.files[file_index]
 		self.files.append(f)
 		self.current_file = f
+		
+
+		self.update_header(f.filename)
 		print(f"switch_to_file {f.filename}")
 	
-		
-		
+				
 	def is_already_openned(self, filename):
 		for i, f in enumerate(self.files):
 			if filename == f.filename:
 				return i	
 		return -1
 		
+		
+	def update_header(self, filename):
+		# get message_notify
+		if not self.message_notify:
+			self.message_notify = self.app.plugins_manager.get_plugin("message_notify")
+			
+		basename = os.path.basename(filename)
+		self.headerbar.set_title(basename)
+		self.message_notify.show_message(filename)
+	

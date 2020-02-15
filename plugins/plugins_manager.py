@@ -50,6 +50,7 @@ plugin_list = [
 	"commander.commander",
 	"simple_completion.simple_completion",
 	"highlight.highlight",
+	"message_notify.message_notify",
 ]
 
 
