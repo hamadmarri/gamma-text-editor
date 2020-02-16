@@ -22,6 +22,12 @@
 #
 #
 
+
+# if passed args
+# echo $1
+export GAMMA_OPEN_FILE=$1
+
+
 # run gamma with python3
 python3 /home/hamad/dev/pygtk/gamma/gamma.py
 

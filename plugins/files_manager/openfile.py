@@ -20,6 +20,8 @@
 #	to files_manager.open_files method
 #
 
+import os
+
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk
@@ -35,6 +37,20 @@ class Plugin():
 		
 	def activate(self):
 		pass
+		
+		
+	def auto_run(self):
+		open_file = os.getenv('GAMMA_OPEN_FILE')
+		if open_file:
+			# get files_manager
+			if not self.files_manager:
+				print(str(open_file))
+				self.files_manager = self.app.plugins_manager.get_plugin("files_manager")
+				self.files_manager.open_file(str(open_file))
+				
+		else:
+			print("no GAMMA_OPEN_FILE")
+		
 		
 	
 	# key_bindings is called by SignalHandler

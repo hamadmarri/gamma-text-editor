@@ -28,8 +28,6 @@
 # which call activate for each plugin and store plugins references in
 # plugins_manager.plugins
 
-import sys
-
 import gi
 gi.require_version('Gtk', '3.0')
 gi.require_version('GtkSource', '4')
@@ -42,12 +40,13 @@ from plugins.signal_handler.signal_handler import SignalHandler
 
 class Application(Gtk.Application):
 
-	def __init__(self, *args, **kwargs):
-	
+	def __init__(self, *args, **kwargs):	
+		
 		# make the package name as "com.editor.gamma"
 		# FLAGS_NONE means no passing arguments from command line, this
 		# might be changed later to support new window, new file, or open a file
-		super().__init__(*args, application_id="com.editor.gamma", flags=Gio.ApplicationFlags.FLAGS_NONE, **kwargs)
+		super().__init__(*args, application_id="com.editor.gamma", 
+						flags=Gio.ApplicationFlags.FLAGS_NONE, **kwargs)
 		
 		# this line is important to mak gtk object(newer version of pygtk) to
 		# include gtk sourceview.

@@ -46,9 +46,9 @@ plugin_list = [
 	"styles.style",
 	"styles.source_style", 
 	"window_ctrl.window_ctrl",
+	"files_manager.files_manager",
 	"files_manager.openfile",
 	"files_manager.savefile",
-	"files_manager.files_manager",
 	"commander.commander",
 	"simple_completion.simple_completion",
 	"highlight.highlight",
@@ -84,6 +84,11 @@ class PluginsManager():
 			# add a reference of the plugin 
 			# to plugins array
 			self.plugins.append(module)
+		
+		for p in self.plugins:
+			if hasattr(p, "auto_run"):
+				p.auto_run()
+			
 			
 			
 	# loop through plugins array and
