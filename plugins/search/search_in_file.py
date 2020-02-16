@@ -37,11 +37,21 @@ class Plugin():
 		self.commands = []
 		self.highlight = None
 		self.files_manager = None
+		self.message_notify = None
 		self.searchEntry = None
 		self.search = None
 		self.first_match = None
 		self.next_match = None
 		self.is_highlight_done = False
+		self.count = 0
+		self.match_number = 0
+		
+		# for highlight current match
+		self.props = {
+			"weight": 1700,
+		}
+		self.tag = None
+		self.tag_name = "selected_search"
 		
 		# commands.set_commands(self)
 		self.set_handlers()
@@ -66,16 +76,26 @@ class Plugin():
 	
 	def on_search_key_press_event(self, widget, event):
 		keyval_name = Gdk.keyval_name(event.keyval)
+		shift = (event.state & Gdk.ModifierType.SHIFT_MASK)
+				
 		if keyval_name == "Escape":
 			self.clear_search(widget)
-		elif keyval_name == "Return" or keyval_name == "KP_Enter":
+		elif (shift and keyval_name == "Return") or keyval_name == "Up":
+			if not self.is_highlight_done:
+				self.do_highlight(self.searchEntry)
+			self.scroll_prev()	
+		elif keyval_name == "Return" or keyval_name == "KP_Enter" or keyval_name == "Down":
 			if not self.is_highlight_done:
 				self.do_highlight(self.searchEntry)
 			self.scroll_next()
+				
+		
 			
 	
 	def on_search_focus_out_event(self, widget, data):
+		self.get_plugins_refs()
 		self.is_highlight_done = False
+		self.highlight.remove_highlight(self.tag_name)
 		
 			
 	def get_focus(self):
@@ -104,8 +124,6 @@ class Plugin():
 			
 	
 	
-	
-	
 	def get_plugins_refs(self):
 		# get highlight
 		if not self.highlight:
@@ -114,6 +132,10 @@ class Plugin():
 		# get files_manager
 		if not self.files_manager:
 			self.files_manager = self.app.plugins_manager.get_plugin("files_manager")
+		
+		# get message_notify
+		if not self.message_notify:
+			self.message_notify = self.app.plugins_manager.get_plugin("message_notify")
 			
 		
 	
@@ -127,9 +149,16 @@ class Plugin():
 	# (https://developer.gnome.org/gtk3/stable/GtkEntry.html)
 	def do_highlight(self, searchEntry):
 		self.get_plugins_refs()
+		self.highlight.remove_highlight(self.tag_name)
 		self.search = searchEntry.get_text()
-		self.highlight.highlight(self.search)
+		self.count = self.highlight.highlight(self.search)
 		self.is_highlight_done = True
+		
+		# if no results
+		if self.count == 0:
+			self.message_notify.show_message("Search Results | 0")
+			return
+			
 		
 		# scroll to first occurrence of search if not empty
 		if self.search:
@@ -143,6 +172,9 @@ class Plugin():
 		self.sourceview = self.files_manager.current_file.source_view
 		self.buffer = self.sourceview.get_buffer()
 		start_iter = self.buffer.get_start_iter()
+		
+		# TODO: start scroll after cursor location
+		#(start_iter, end_iter) = self.buffer.get_selection_bounds()
 		matches = start_iter.forward_search(self.search, 0, None)
 		
 		self.first_match = matches
@@ -151,7 +183,11 @@ class Plugin():
 			(match_start, match_end) = matches
 			self.sourceview.scroll_to_iter(match_start, 0, True, 0.5, 0.5)
 			
-	
+			self.match_number = 1
+			self.message_notify.show_message("Search Results | " + str(self.match_number) + "/" + str(self.count))
+			self.highlight_scrolled()
+		
+			
 	
 	def scroll_next(self):
 		if not self.next_match:
@@ -159,17 +195,54 @@ class Plugin():
 		
 		(match_start, match_end) = self.next_match
 		self.next_match = match_end.forward_search(self.search, 0, None)
-		
+				
 		if self.next_match != None:
 			(match_start, match_end) = self.next_match
 			self.sourceview.scroll_to_iter(match_end, 0, True, 0.5, 0.5)
+			
+			self.match_number += 1
+			self.message_notify.show_message("Search Results | " + str(self.match_number) + "/" + str(self.count))
+			self.highlight_scrolled()
 		else:
 			# call again scroll to go up
 			self.scroll()
 			
 			
+			
+			
+	def scroll_prev(self):
+		if not self.next_match:
+			return
+		
+		(match_start, match_end) = self.next_match
+		self.next_match = match_start.backward_search(self.search, 0, None)
+		
+		if self.next_match != None:
+			(match_start, match_end) = self.next_match
+			self.sourceview.scroll_to_iter(match_end, 0, True, 0.5, 0.5)
+			
+			self.match_number -= 1
+			self.message_notify.show_message("Search Results | " + str(self.match_number) + "/" + str(self.count))
+			self.highlight_scrolled()
+		else:
+			# scroll from the end
+			self.next_match = (self.buffer.get_end_iter(), self.buffer.get_end_iter())
+			self.match_number = self.count + 1
+			self.scroll_prev()
+			
+	
+	
+	def highlight_scrolled(self):
+		(start_iter, end_iter) = self.next_match
+		self.tag = self.highlight.setup_custom_tag(self.buffer, self.tag_name, self.props)
+		self.highlight.highlight_custom_tag(self.buffer, start_iter, end_iter, self.tag, self.tag_name)
+		
+		
+		
 
 	def clear_search(self, widget):
 		self.get_plugins_refs()
 		self.search = ""
 		widget.set_text(self.search)
+		self.highlight.remove_highlight(self.tag_name)
+	

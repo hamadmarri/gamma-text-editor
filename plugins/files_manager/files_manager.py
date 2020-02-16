@@ -164,21 +164,21 @@ class Plugin():
 		
 		# open the file in reading mode
 		f = open(filename, "r")
-		print(f"{filename} opened")
+		# DEBUG: print(f"{filename} opened")
 		
 		
 		# get new sourceview from sourceview_manager
 		# TODO: must handled by ui manager
 		newsource = self.sourceview_manager.get_new_sourceview()
-		print("newsource")
+		# DEBUG: print("newsource")
 		
 		# replace old sourceview(previously opened) with this new one
 		self.replace_sourceview_widget(self.current_file.source_view, newsource)
-		print("replace_sourceview_widget")
+		# DEBUG: print("replace_sourceview_widget")
 		
 		# new File object
 		newfile = File(filename, newsource)
-		print("newfile")
+		# DEBUG: print("newfile")
 		
 		# if empty file only is currently opened, replace it
 		if len(self.files) == 1 and self.files[0].filename == "empty":
@@ -187,25 +187,25 @@ class Plugin():
 		
 		# add newfile object to "files" array
 		self.files.append(newfile)
-		print("files.append")
+		# DEBUG: print("files.append")
 		
 		# actual reading from the file and populate the new sourceview buffer
 		# with file data
 		text = f.read()
-		print("text is read")
+		# DEBUG: print("text is read")
 				
 		newsource.get_buffer().set_text(text)
 		
 		# close file object
 		f.close()
-		print(f"{filename} closed")
+		# DEBUG: print(f"{filename} closed")
 		
 		
 		# set the language of just openned file 
 		# see sourceview_manager
 		buffer = newsource.get_buffer()
 		self.sourceview_manager.set_language(filename, buffer)
-		print("set_language")
+		# DEBUG: print("set_language")
 		
 		# adds ui button with filename label in toolbar_file
 		# (the left side panel)
@@ -248,7 +248,7 @@ class Plugin():
 		
 		# set headerbar text to the filename
 		self.update_header(filename)
-		print("update_header")
+		# DEBUG: print("update_header")
 		
 		# set current file to this file
 		self.current_file = newfile
@@ -275,20 +275,20 @@ class Plugin():
 	def replace_sourceview_widget(self, previouse_source, newsource):
 	
 		# remove previously displayed sourceview
-		print("scrolledwindow.remove before")
+		# DEBUG: print("scrolledwindow.remove before")
 		prev_child = self.scrolledwindow.get_child()
-		# print(prev_child)
+		# DEBUG: print(prev_child)
 		if prev_child:
 			self.scrolledwindow.remove(prev_child)
-		print("scrolledwindow.remove")
+		# DEBUG: print("scrolledwindow.remove")
 		
 		# add the newsource view
 		self.scrolledwindow.add(newsource)
-		print("scrolledwindow.add")
+		# DEBUG: print("scrolledwindow.add")
 		
 		# need to update the mini map too
 		self.sourceview_manager.update_sourcemap(newsource)
-		print("sourceview_manager.update_sourcemap")
+		# DEBUG: print("sourceview_manager.update_sourcemap")
 
 		
 	

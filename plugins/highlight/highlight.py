@@ -65,7 +65,7 @@ class Plugin():
 			# previously highlighted texts
 			if not iters:
 				# remove highlight
-				self.remove_highlight()
+				self.remove_highlight(self.tag_name)
 			else:
 				# when user selected some text
 				# get the start and end iters
@@ -89,11 +89,10 @@ class Plugin():
 	# or you can copy the "search-match" style from
 	# the style scheme which is set for styling the 
 	# sourceview ins source_style plugin
-	# TODO: show message how manny occurrences is there
 	def highlight(self, search):
 		self.get_plugins_refs()
 			
-		self.remove_highlight()
+		self.remove_highlight(self.tag_name)
 		
 		# if search is empty, exit
 		if not search:
@@ -102,19 +101,12 @@ class Plugin():
 		# get the currently openned/showing buffer
 		buffer = self.files_manager.current_file.source_view.get_buffer()
 		
-		# get the tags table 
-		tag_table = buffer.get_tag_table();
+		tag = self.setup_tag(buffer)
 		
-		# create new tag
-		tag = Gtk.TextTag.new("search-match")
 		
-		# get the style scheme to copy "search-match" styling 
-		style = buffer.get_style_scheme()
-		search_tag = style.get_style("search-match")
-		tag.props.background = search_tag.props.background
 		
-		# add the styled tag to tag_table
-		tag_table.add(tag)
+		# to count occurrences
+		counter = 0
 
 		# need to search for the text needed to be highlighted
 		# and keep searching and taging every occurrence of the 
@@ -128,6 +120,8 @@ class Plugin():
 		
 		# loop while still have matches (occurrences)
 		while matches != None:
+			counter += 1
+			
 			# extract start, end iters from matches
 			(match_start, match_end) = matches
 			
@@ -139,16 +133,66 @@ class Plugin():
 			# beggining of the file again!
 			matches = match_end.forward_search(search, 0, None)
 		
-		
+		return counter
 		
 	
-	def remove_highlight(self):			
+	def setup_tag(self, buffer):
+		# get the tags table 
+		tag_table = buffer.get_tag_table();
+		
+		# create new tag
+		tag = Gtk.TextTag.new(self.tag_name)
+		
+		# get the style scheme to copy "search-match" styling 
+		style = buffer.get_style_scheme()
+		search_tag = style.get_style("search-match")
+		tag.props.background = search_tag.props.background
+		
+		# add the styled tag to tag_table
+		tag_table.add(tag)
+		
+		return tag
+		
+	
+	
+	def highlight_custom_tag(self, buffer, start_iter, end_iter, tag, tag_name):
+		self.get_plugins_refs()
+		self.remove_highlight(tag_name)
+		
+		# get the tags table 
+		tag_table = buffer.get_tag_table();
+		
+		# add the styled tag to tag_table
+		tag_table.add(tag)
+		buffer.apply_tag(tag, start_iter, end_iter)
+		
+
+		
+	# props can have:
+	#	background
+	#	weight
+	def setup_custom_tag(self, buffer, tag_name, props):
+		# create new tag
+		tag = Gtk.TextTag.new(tag_name)
+				
+		if "background" in props:
+			tag.props.background = props["background"]
+		
+		if "weight" in props:
+			tag.props.weight = props["weight"]
+		
+		return tag
+		
+	
+	
+	
+	def remove_highlight(self, tag_name):			
 		self.get_plugins_refs()
 		buffer = self.files_manager.current_file.source_view.get_buffer()
 		tag_table = buffer.get_tag_table();
 		
 		# get the tag by looking up to it is name "search-match"
-		tag = tag_table.lookup(self.tag_name)
+		tag = tag_table.lookup(tag_name)
 		
 		# if no tag with this name then return/done
 		if not tag:
@@ -156,6 +200,6 @@ class Plugin():
 			
 		# must remove tag from both tag table and buffer
 		tag_table.remove(tag)
-		buffer.remove_tag_by_name(self.tag_name, buffer.get_start_iter(), buffer.get_end_iter())
+		buffer.remove_tag_by_name(tag_name, buffer.get_start_iter(), buffer.get_end_iter())
 	
 	
