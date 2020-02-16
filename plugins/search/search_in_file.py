@@ -174,7 +174,8 @@ class Plugin():
 		start_iter = self.buffer.get_start_iter()
 		
 		# TODO: start scroll after cursor location
-		#(start_iter, end_iter) = self.buffer.get_selection_bounds()
+		#mark = self.buffer.get_insert()
+		#start_iter = self.buffer.get_iter_at_mark(mark)
 		matches = start_iter.forward_search(self.search, 0, None)
 		
 		self.first_match = matches
@@ -206,6 +207,9 @@ class Plugin():
 		else:
 			# call again scroll to go up
 			self.scroll()
+			# self.next_match = (self.buffer.get_start_iter(), self.buffer.get_start_iter())
+			# self.match_number = 0
+			# self.scroll_next()
 			
 			
 			

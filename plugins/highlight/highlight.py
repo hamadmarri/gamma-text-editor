@@ -22,6 +22,7 @@
 #	is connected with mark-set signal in sourceview_manager.py
 #
 
+import re # for regex
 
 import gi
 gi.require_version('Gtk', '3.0')
@@ -36,6 +37,7 @@ class Plugin():
 		self.commands = []
 		self.files_manager = None
 		self.tag_name = "search-match"
+		self.spaces_pattern = re.compile("^\s+$")
 
 		
 	def activate(self):
@@ -98,13 +100,20 @@ class Plugin():
 		if not search:
 			return
 		
+		# if select only one letter
+		if len(search) == 1 and search.isalpha():
+			return
+		
+		# if selected is only spaces
+		if self.spaces_pattern.match(search):
+			return
+		
+		
 		# get the currently openned/showing buffer
 		buffer = self.files_manager.current_file.source_view.get_buffer()
 		
 		tag = self.setup_tag(buffer)
-		
-		
-		
+
 		# to count occurrences
 		counter = 0
 
