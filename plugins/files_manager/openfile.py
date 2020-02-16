@@ -52,6 +52,7 @@ class Plugin():
 		
 		# choosefile will display the open dialog
 		filenames = self.choosefile()
+		# DEBUG: print(filenames)
 		
 		# if cancel button is pressed
 		if not filenames:

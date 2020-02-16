@@ -97,7 +97,6 @@ class Plugin():
 		
 		# if search is empty, exit
 		if not search:
-			print("search is empty")
 			return
 		
 		# get the currently openned/showing buffer
@@ -125,7 +124,7 @@ class Plugin():
 		# gets start,end iters or None if no match
 		# first search start from the beggining of the buffer
 		# i.e. start_iter
-		matches = start_iter.forward_search(search, 0, None)
+		matches = start_iter.forward_search(search, 0, None)			
 		
 		# loop while still have matches (occurrences)
 		while matches != None:

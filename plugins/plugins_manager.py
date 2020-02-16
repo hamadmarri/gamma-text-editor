@@ -59,7 +59,6 @@ plugin_list = [
 
 import importlib
 
-
 class PluginsManager():
 
 	def __init__(self, app):

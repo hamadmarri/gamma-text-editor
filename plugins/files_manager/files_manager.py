@@ -62,7 +62,7 @@ class Plugin():
 		# basically, a new opened file has its own sourceview 
 		# and got added to scrolledwindow
 		# previouse sourceview got removed from scrolledwindow
-		self.scrolledwindow = self.builder.get_object("scrolledwindow")
+		self.scrolledwindow = self.builder.get_object("source_scrolledwindow")
 		
 		# default empty file when open editor with no opened files
 		self.current_file = File("empty", self.sourceview_manager.source_view)
@@ -76,17 +76,10 @@ class Plugin():
 		
 	
 	# key_bindings is called by SignalHandler
-	def key_bindings(self, event, keyval_name, ctrl, alt, shift):
-	
-		# dummy command to print currently openned files 
-		# for debugging 
-		if ctrl and keyval_name == "f":
-			for f in self.files:
-				print(f.filename)
-		
+	def key_bindings(self, event, keyval_name, ctrl, alt, shift):		
 		# close current file is bound to "<Ctrl>+w"
 		# TODO: check if need saving before close
-		elif ctrl and keyval_name == "w":
+		if ctrl and keyval_name == "w":
 			# close current_file
 			self.close_current_file()
 			
@@ -136,6 +129,7 @@ class Plugin():
 			self.message_notify.cancel()
 			
 	
+	
 
 	def destroy_file(self, file_index):
 		# destroy the sourceview attached to file 
@@ -146,8 +140,9 @@ class Plugin():
 		
 		# remove from "files" array
 		del self.files[file_index]
-		
-			
+	
+	
+	
 	
 	# open_files is called by openfile plugin 
 	# it loops through all filenames and open each one
@@ -169,17 +164,21 @@ class Plugin():
 		
 		# open the file in reading mode
 		f = open(filename, "r")
+		print(f"{filename} opened")
 		
 		
 		# get new sourceview from sourceview_manager
 		# TODO: must handled by ui manager
 		newsource = self.sourceview_manager.get_new_sourceview()
+		print("newsource")
 		
 		# replace old sourceview(previously opened) with this new one
 		self.replace_sourceview_widget(self.current_file.source_view, newsource)
-
+		print("replace_sourceview_widget")
+		
 		# new File object
 		newfile = File(filename, newsource)
+		print("newfile")
 		
 		# if empty file only is currently opened, replace it
 		if len(self.files) == 1 and self.files[0].filename == "empty":
@@ -188,23 +187,25 @@ class Plugin():
 		
 		# add newfile object to "files" array
 		self.files.append(newfile)
-		
-		# set current file to this file
-		self.current_file = newfile
+		print("files.append")
 		
 		# actual reading from the file and populate the new sourceview buffer
 		# with file data
-		self.current_file.source_view.get_buffer().set_text(f.read())
+		text = f.read()
+		print("text is read")
+				
+		newsource.get_buffer().set_text(text)
 		
 		# close file object
 		f.close()
+		print(f"{filename} closed")
 		
 		
 		# set the language of just openned file 
 		# see sourceview_manager
-		buffer = self.current_file.source_view.get_buffer()
+		buffer = newsource.get_buffer()
 		self.sourceview_manager.set_language(filename, buffer)
-		
+		print("set_language")
 		
 		# adds ui button with filename label in toolbar_file
 		# (the left side panel)
@@ -247,6 +248,10 @@ class Plugin():
 		
 		# set headerbar text to the filename
 		self.update_header(filename)
+		print("update_header")
+		
+		# set current file to this file
+		self.current_file = newfile
 		
 		
 		
@@ -265,17 +270,25 @@ class Plugin():
 	
 		
 	# TODO: must handled by ui manager
+	# TODO: there is a bug here
+	# (gamma.py:12008): Gtk-CRITICAL **: 19:46:38.608: gtk_bin_remove: assertion 'priv->child == child' failed
 	def replace_sourceview_widget(self, previouse_source, newsource):
 	
 		# remove previously displayed sourceview
-		self.scrolledwindow.remove(previouse_source)
+		print("scrolledwindow.remove before")
+		prev_child = self.scrolledwindow.get_child()
+		# print(prev_child)
+		if prev_child:
+			self.scrolledwindow.remove(prev_child)
+		print("scrolledwindow.remove")
 		
 		# add the newsource view
 		self.scrolledwindow.add(newsource)
+		print("scrolledwindow.add")
 		
 		# need to update the mini map too
 		self.sourceview_manager.update_sourcemap(newsource)
-
+		print("sourceview_manager.update_sourcemap")
 
 		
 	

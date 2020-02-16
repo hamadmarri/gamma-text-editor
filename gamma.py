@@ -111,8 +111,8 @@ class Application(Gtk.Application):
 		# in plugins_manager.py, you can comment out plugins in
 		# plugin_list array
 		self.plugins_manager.load_plugins()
-		
 		self.set_handlers()
+		
 		self.window.show_all()
 
 

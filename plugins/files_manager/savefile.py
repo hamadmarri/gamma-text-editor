@@ -20,7 +20,7 @@
 #	it gets current_file from files_manager plugin 
 #	and saves it. Message notify is sent to tell the user
 #	that the file is saved successfully
-#
+# 
 
 import os
 
@@ -74,12 +74,16 @@ class Plugin():
 				# save the file, in other words, copy text 
 				# from buffer and write the file "current_file.filename"
 				# in permenant storage (disk)
-				open(current_file.filename, 'w').write(text)
+				f = open(current_file.filename, 'w')
+				f.write(text)
 			except SomeError as err:
 				print('Could not save %s: %s' % (filename, err))
 			else:
 				# when successfully wrote the file, show successful message
 				basename = os.path.basename(current_file.filename)
 				self.message_notify.show_message(basename + " | Saved")
+			finally:
+				f.close()
+				print(f"{basename} saved and closed")
 			
 

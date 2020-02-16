@@ -125,5 +125,7 @@ class SourceViewManager():
 			
 	# update source map (mini map) to connect to a sourceview
 	def update_sourcemap(self, source_view):
+		# DEBUG: print("sourcemap.set_view before")
 		self.sourcemap.set_view(source_view)
+		# DEBUG: print("sourcemap.set_view after")
 

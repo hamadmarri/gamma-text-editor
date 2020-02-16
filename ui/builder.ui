@@ -23,7 +23,7 @@
     <property name="can_focus">False</property>
     <property name="window_position">center</property>
     <property name="default_width">1400</property>
-    <property name="default_height">800</property>
+    <property name="default_height">700</property>
     <property name="startup_id">org.gtk.example</property>
     <signal name="key-press-event" handler="on_window_key_press_event" swapped="no"/>
     <signal name="key-release-event" handler="on_window_key_release_event" swapped="no"/>
@@ -94,7 +94,7 @@
             <property name="has_subtitle">False</property>
             <property name="spacing">0</property>
             <child>
-              <object class="GtkSearchEntry">
+              <object class="GtkSearchEntry" id="searchEntry">
                 <property name="name">searchEntry</property>
                 <property name="width_request">252</property>
                 <property name="visible">True</property>
@@ -106,6 +106,7 @@
                 <property name="primary_icon_activatable">False</property>
                 <property name="primary_icon_sensitive">False</property>
                 <signal name="changed" handler="on_search_field_changed" swapped="no"/>
+                <signal name="focus-out-event" handler="on_search_focus_out_event" swapped="no"/>
                 <signal name="key-press-event" handler="on_search_key_press_event" swapped="no"/>
               </object>
             </child>
@@ -612,8 +613,8 @@
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
             <child>
-              <object class="GtkScrolledWindow" id="scrolledwindow">
-                <property name="name">scrolledwindow</property>
+              <object class="GtkScrolledWindow" id="source_scrolledwindow">
+                <property name="name">source_scrolledwindow</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="shadow_type">in</property>
