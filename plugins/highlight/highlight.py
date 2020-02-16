@@ -95,6 +95,11 @@ class Plugin():
 			
 		self.remove_highlight()
 		
+		# if search is empty, exit
+		if not search:
+			print("search is empty")
+			return
+		
 		# get the currently openned/showing buffer
 		buffer = self.files_manager.current_file.source_view.get_buffer()
 		

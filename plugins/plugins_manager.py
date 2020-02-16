@@ -53,6 +53,7 @@ plugin_list = [
 	"simple_completion.simple_completion",
 	"highlight.highlight",
 	"message_notify.message_notify",
+	"search.search_in_file",
 ]
 
 

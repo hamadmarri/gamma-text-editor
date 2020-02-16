@@ -57,8 +57,10 @@ class Plugin():
 	def __init__(self, app):
 		self.name = "template"
 		self.app = app
+		self.handlers = app.handler.handlers # optional
 		self.commands = []
 		commands.set_commands(self)
+		self.set_handlers() # optional
 	
 	# do not remove 
 	def activate(self):
@@ -79,6 +81,14 @@ class Plugin():
 		# see SignalHandler
 		pass
 	
+	
+	# optional
+	# setting handlers, see SignalHandler
+	def set_handlers(self):
+		# self.handlers.on_closeBtn_release_event = self.on_closeBtn_release_event
+		pass
+		
+		
 	# optional	
 	def method1(self):
 		pass
