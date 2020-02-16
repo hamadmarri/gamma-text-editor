@@ -34,10 +34,13 @@ from . import commands
 # each openned file is set in File object and
 # appended to "files" array
 class File():
-	def __init__(self, filename, source_view, toolbar_file = None):
+	def __init__(self, filename, source_view, toolbar_file=None,
+					need_save=False, new_file=False):
 		self.filename = filename
 		self.source_view = source_view
 		self.toolbar_file = toolbar_file
+		self.need_save = need_save
+		self.new_file = new_file
 	
 
 class Plugin():
@@ -48,6 +51,7 @@ class Plugin():
 		self.builder = app.builder
 		self.sourceview_manager = app.sourceview_manager
 		self.scrolledwindow = None
+		self.toolbar_files = None
 		self.commands = []
 		commands.set_commands(self)
 		self.files = []
@@ -64,8 +68,11 @@ class Plugin():
 		# previouse sourceview got removed from scrolledwindow
 		self.scrolledwindow = self.builder.get_object("source_scrolledwindow")
 		
+		# get toolbar_files Gtk widget from ui file
+		self.toolbar_files = self.builder.get_object("toolbar_files")
+		
 		# default empty file when open editor with no opened files
-		self.current_file = File("empty", self.sourceview_manager.source_view)
+		self.current_file = File("empty", self.sourceview_manager.source_view, new_file=True)
 		
 		# add empty/current_file to files array
 		self.files.append(self.current_file)
@@ -112,7 +119,7 @@ class Plugin():
 			self.replace_sourceview_widget(self.current_file.source_view, newsource)
 			
 			# current file is now empty
-			self.current_file = File("empty", newsource)
+			self.current_file = File("empty", newsource, new_file=True)
 			
 			# destroy opened file 
 			self.destroy_file(0)
@@ -207,44 +214,7 @@ class Plugin():
 		self.sourceview_manager.set_language(filename, buffer)
 		# DEBUG: print("set_language")
 		
-		# adds ui button with filename label in toolbar_file
-		# (the left side panel)
-		# TODO: move to ui manager plugin
-		
-		# get toolbar_files Gtk widget from ui file
-		toolbar_files = self.builder.get_object("toolbar_files")
-		
-		# create new button
-		btn = Gtk.Button()
-		
-		# associate btn widget to File object
-		newfile.toolbar_file = btn
-		
-		# set the text of button to filename
-		basename = os.path.basename(filename)
-		btn.set_label(basename)
-
-		# connect clicked signal to side_file_clicked method		
-		btn.connect("clicked", self.side_file_clicked, filename)
-		
-		# set the ui/css class to the button (.openned_file)
-		btn.get_style_context().add_class("openned_file")
-		
-		# get the label of the button, and set left padding to 0
-		lbl = btn.get_children()[0]
-		lbl.set_xalign(0)
-		
-		# add button to toolbar_files
-		# (read: https://developer.gnome.org/gtk3/stable/GtkBox.html#gtk-box-pack-start)
-		toolbar_files.pack_start(btn, False, False, 0)
-		
-		# position new opened file's button to top of toolbar_files
-		# (read: https://developer.gnome.org/gtk3/unstable/GtkBox.html#gtk-box-reorder-child)
-		toolbar_files.reorder_child(btn, 0)
-		
-		# show the widget
-		btn.show()
-		
+		self.add_filename_to_ui(newfile)
 		
 		# set headerbar text to the filename
 		self.update_header(filename)
@@ -255,6 +225,51 @@ class Plugin():
 		
 		
 		
+	
+	# adds ui button with filename label in toolbar_file
+	# (the left side panel)
+	# TODO: move to ui manager plugin
+	def add_filename_to_ui(self, newfile):		
+		
+		# create new button
+		btn = Gtk.Button()
+		
+		# associate btn widget to File object
+		newfile.toolbar_file = btn
+		
+		# set the text of button to filename
+		basename = os.path.basename(newfile.filename)
+		btn.set_label(basename)
+
+		# connect clicked signal to side_file_clicked method		
+		btn.connect("clicked", self.side_file_clicked, newfile.filename)
+		
+		# set the ui/css class to the button (.openned_file)
+		btn.get_style_context().add_class("openned_file")
+		
+		# get the label of the button, and set left padding to 0
+		lbl = btn.get_children()[0]
+		lbl.set_xalign(0)
+		
+		# add button to toolbar_files
+		# (read: https://developer.gnome.org/gtk3/stable/GtkBox.html#gtk-box-pack-start)
+		self.toolbar_files.pack_start(btn, False, False, 0)
+		
+		# position new opened file's button to top of toolbar_files
+		# (read: https://developer.gnome.org/gtk3/unstable/GtkBox.html#gtk-box-reorder-child)
+		self.toolbar_files.reorder_child(btn, 0)
+		
+		# show the widget
+		btn.show()
+		
+	
+	
+	def convert_new_empty_file(self, newfile, filename):
+		newfile.filename = filename
+		newfile.new_file = False
+		self.add_filename_to_ui(newfile)
+	
+	
 	
 	# handler of "clicked" event
 	# it switch the view to the filename in clicked button
