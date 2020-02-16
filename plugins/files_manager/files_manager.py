@@ -202,11 +202,13 @@ class Plugin():
 		# DEBUG: print("text is read")
 				
 		newsource.get_buffer().set_text(text)
+				
+		# place cursor at the begining
+		newsource.get_buffer().place_cursor(newsource.get_buffer().get_start_iter())
 		
 		# close file object
 		f.close()
 		# DEBUG: print(f"{filename} closed")
-		
 		
 		# set the language of just openned file 
 		# see sourceview_manager
@@ -300,6 +302,9 @@ class Plugin():
 		# add the newsource view
 		self.scrolledwindow.add(newsource)
 		# DEBUG: print("scrolledwindow.add")
+		
+		# place the cursor in it
+		newsource.grab_focus()
 		
 		# need to update the mini map too
 		self.sourceview_manager.update_sourcemap(newsource)

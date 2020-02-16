@@ -31,6 +31,7 @@ class SourceViewManager():
 	def __init__(self, app):
 		self.app = app
 		self.source_view = self.app.builder.get_object("view")
+		self.source_view.grab_focus()
 		self.sourcemap = self.app.builder.get_object("sourcemap")
 		self.sourcemap.set_view(self.source_view)
 		self.source_style = None
