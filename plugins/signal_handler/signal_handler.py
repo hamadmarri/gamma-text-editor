@@ -1,4 +1,6 @@
 #
+#### Author: Hamad Al Marri <hamad.s.almarri@gmail.com>
+#### Date: Feb 11th, 2020
 #
 #	This program is free software: you can redistribute it and/or modify
 #	it under the terms of the GNU General Public License as published by
@@ -23,8 +25,6 @@
 # connect ui signals to your plugin's methods
 #
 #
-
-import sys
 
 import gi
 from gi.repository import Gdk
@@ -57,7 +57,7 @@ class SignalHandler:
 	# you should not map "on_window_key_press_event" to your plugin.
 	# this function will help you by getting the keyval_name("e", "space", ..)
 	# and other modifiers like ctrl, alt, and shift 
-	# you plugin must have the "key_bindings" method. If your
+	# your plugin must have the "key_bindings" method. If your
 	# plugin does not need key bindings, then just "pass"
 	# if yes, then simply just check what key binding you need such as
 	# if alt and ctrl and keyval_name == "m":

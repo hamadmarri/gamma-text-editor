@@ -1,4 +1,6 @@
 #
+#### Author: Hamad Al Marri <hamad.s.almarri@gmail.com>
+#### Date: Feb 11th, 2020
 #
 #	This program is free software: you can redistribute it and/or modify
 #	it under the terms of the GNU General Public License as published by
@@ -14,14 +16,13 @@
 #	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 #
+#	savefile: saves the current_file openned 
+#	it gets current_file from files_manager plugin 
+#	and saves it. Message notify is sent to tell the user
+#	that the file is saved successfully
 #
 
 import os
-
-import gi
-gi.require_version('Gtk', '3.0')
-gi.require_version('GtkSource', '4')
-from gi.repository import Gtk, Gdk, GtkSource
 
 
 # TODO: only save when buffer is changed
@@ -31,7 +32,6 @@ class Plugin():
 	def __init__(self, app):
 		self.name = "savefile"
 		self.app = app
-		self.builder = app.builder
 		self.commands = []
 		self.files_manager = None
 		self.message_notify = None
@@ -53,22 +53,32 @@ class Plugin():
 	
 	
 	
+	# key_bindings is called by SignalHandler
 	def key_bindings(self, event, keyval_name, ctrl, alt, shift):
+		
+		# save is bound to "<Ctrl>+s"
 		if ctrl and keyval_name == "s":
 			
 			self.get_plugins_refs()
 			
+			# get the current displayed file
 			current_file = self.files_manager.current_file
 			
 			# get current buffer
 			buffer = current_file.source_view.get_buffer()
-			
+
+			# get all buffer text without the hidden markups
+			# (read: https://developer.gnome.org/gtk3/stable/GtkTextBuffer.html#gtk-text-buffer-get-text) 	
 			text = buffer.get_text(buffer.get_start_iter(), buffer.get_end_iter(), False)
 			try:
+				# save the file, in other words, copy text 
+				# from buffer and write the file "current_file.filename"
+				# in permenant storage (disk)
 				open(current_file.filename, 'w').write(text)
 			except SomeError as err:
 				print('Could not save %s: %s' % (filename, err))
 			else:
+				# when successfully wrote the file, show successful message
 				basename = os.path.basename(current_file.filename)
 				self.message_notify.show_message(basename + " | Saved")
 			

@@ -1,11 +1,35 @@
+#
+#### Author: Hamad Al Marri <hamad.s.almarri@gmail.com>
+#### Date: Feb 11th, 2020
+#
+#	This program is free software: you can redistribute it and/or modify
+#	it under the terms of the GNU General Public License as published by
+#	the Free Software Foundation, either version 3 of the License, or
+#	(at your option) any later version.
+#
+#	This program is distributed in the hope that it will be useful,
+#	but WITHOUT ANY WARRANTY; without even the implied warranty of
+#	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#	GNU General Public License for more details.
+#
+#	You should have received a copy of the GNU General Public License
+#	along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+#
+#
+#	message_notify: is a plugin responsible of displaying notification
+#					messages (file saved, opened file, ...)
+#	the default messageLbl is placed on top right corner
+#	
+#	default message_time = 7.5, which is the time of a message being displayed
+#					after this time, the message will be cleared
+#
+#	using thread to unblock the process, thread is calling threading.Timer
+#	and can cancel timed thread by calling cancel method
+#
+
 import threading
 import time
-
-import gi
-gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk, Gdk
-
-from . import commands
 
 
 class Plugin():
@@ -19,7 +43,7 @@ class Plugin():
 		self.message_time = 7.5 # 7.5 seconds
 		self.timer = None
 		
-		
+	
 	def activate(self):
 		self.messageLbl = self.builder.get_object("messageLbl")
 		self.clear_message()
@@ -28,7 +52,10 @@ class Plugin():
 	def key_bindings(self, event, keyval_name, ctrl, alt, shift):
 		pass
 	
-		
+	
+	# show message (m) in messageLbl
+	# set the thread timer to clear this
+	# message after "message_time" seconds
 	def show_message(self, m):
 		self.cancel()
 		
@@ -36,11 +63,14 @@ class Plugin():
 		self.timer = threading.Timer(self.message_time, self.clear_message)
 		self.timer.start()
 	
+	
+	# removes any text in messageLbl
 	def clear_message(self):
 		self.timer = None
 		self.messageLbl.set_text("")
 	
 	
+	# cancel the timer thread and clear messageLbl
 	def cancel(self):
 		if self.timer:
 			self.timer.cancel()

@@ -1,10 +1,12 @@
+# Thanks to Erik Daguerre https://github.com/wolfthefallen/py-GtkSourceCompletion-example/blob/master/main.py
+
+
 import re
 import gi
 gi.require_version('Gtk', '3.0')
 gi.require_version('GtkSource', '4')
 from gi.repository import Gtk, GtkSource, GObject
 
-# Thanks to Erik Daguerre https://github.com/wolfthefallen/py-GtkSourceCompletion-example/blob/master/main.py
 
 class CustomCompletionProvider(GObject.GObject, GtkSource.CompletionProvider):
 	"""
@@ -98,7 +100,15 @@ class Plugin():
 #		self.view_completion.add_provider(custom_completion_provider)
 #		self.custom_completion_provider = custom_completion_provider
 		
-		
+	
+	
+	
+	# to add newly opened file words to autocompletion
+	# update_completion is called when opened new file (if needed)
+	# sometimes we need to avoid adding new words from big files
+	# so it is up to you to call this method when open new file
+	# the default sourceview_manager calls update_completion
+	# for every new sourceview creation (see sourceview_manager)
 	def update_completion(self, source_view):
 		self.view_completion = source_view.get_completion()						
 		self.view_autocomplete.register(source_view.get_buffer())

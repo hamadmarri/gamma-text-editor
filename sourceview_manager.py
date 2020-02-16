@@ -1,4 +1,6 @@
 #
+#### Author: Hamad Al Marri <hamad.s.almarri@gmail.com>
+#### Date: Feb 11th, 2020
 #
 #	This program is free software: you can redistribute it and/or modify
 #	it under the terms of the GNU General Public License as published by
@@ -97,6 +99,8 @@ class SourceViewManager():
 		# show the gtk widget
 		newsource.show()
 		
+		# TODO: move to files_manager, sometimes we don't need to 
+		# update completion based on file type and size!
 		# update the world completion to include new source buffer
 		self.simple_completion.update_completion(newsource)
 		

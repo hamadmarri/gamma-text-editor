@@ -1,4 +1,6 @@
 #
+#### Author: Hamad Al Marri <hamad.s.almarri@gmail.com>
+#### Date: Feb 11th, 2020
 #
 #	This program is free software: you can redistribute it and/or modify
 #	it under the terms of the GNU General Public License as published by
@@ -18,6 +20,7 @@
 # window_ctrl: is responsible for handling basic window operations
 # - Maximize, minimize, quit
 #
+
 from . import commands
 
 class Plugin():
@@ -29,8 +32,12 @@ class Plugin():
 		self.window = app.window
 		self.handlers = app.handler.handlers
 		self.is_maximized = None
+		
+		# commands and set_commands are important for
+		# the commander plugin to know this plugin methods, key bindings, description
 		self.commands = []
 		commands.set_commands(self)
+		
 		self.set_handlers()
 		self.message_notify = None
 		self.openfile = None
@@ -76,15 +83,14 @@ class Plugin():
 		elif alt and keyval_name == "m":
 			self.toggle_maximize()
 		elif ctrl and keyval_name == "q":
-			self.get_plugins_refs()
-			self.message_notify.cancel()
 			self.quit()
 			
 
 	
-	
+	# iconify is the gtk method to minimize window
 	def minimize(self):
 		self.window.iconify()
+		
 		
 		
 	def toggle_maximize(self):
@@ -94,13 +100,16 @@ class Plugin():
 			self.window.maximize()
 			
 			
-			
-		
+	# before quit, need to stop any notify message
+	# because of the thread sleep in message_notify
+	# must cancel the thread		
 	def quit(self):
+		self.get_plugins_refs()
+		self.message_notify.cancel()
 		self.app.quit()
 		
 		
-	
+	# TODO: move to ui manager
 	def on_closeBtn_hover_event(self, widget, event):
 		print("on_closeBtn_hover_event")
 		
@@ -112,7 +121,7 @@ class Plugin():
 	
 	def on_minimizeBtn_release_event(self, widget, event):
 		self.minimize()
-		
+	
 	def on_open_menu_button_press_event(self, widget, event):
 		self.get_plugins_refs()
 		self.openfile.openfile()
@@ -120,12 +129,14 @@ class Plugin():
 		
 	
 	# TODO: must cache open_menu
+	# TODO: move to ui manager
 	def on_open_menue_enter_notify_event(self, widget, event):
 		open_menu = self.builder.get_object("open_menu")
 		open_menu.get_style_context().add_class("menu_hover")
 		
 	
 	# TODO: must cache open_menu
+	# TODO: move to ui manager
 	def on_open_menue_leave_notify_event(self, widget, event):
 		open_menu = self.builder.get_object("open_menu")
 		open_menu.get_style_context().remove_class("menu_hover")

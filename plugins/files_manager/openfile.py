@@ -1,4 +1,6 @@
 #
+#### Author: Hamad Al Marri <hamad.s.almarri@gmail.com>
+#### Date: Feb 11th, 2020
 #
 #	This program is free software: you can redistribute it and/or modify
 #	it under the terms of the GNU General Public License as published by
@@ -14,6 +16,8 @@
 #	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 #
+#	openfile: opens file(s) by showing open dialog and send filenames array
+#	to files_manager.open_files method
 #
 
 import gi
@@ -25,7 +29,6 @@ class Plugin():
 	def __init__(self, app):
 		self.name = "openfile"
 		self.app = app
-		self.builder = app.builder
 		self.commands = []
 		self.files_manager = None
 		
@@ -34,7 +37,9 @@ class Plugin():
 		pass
 		
 	
+	# key_bindings is called by SignalHandler
 	def key_bindings(self, event, keyval_name, ctrl, alt, shift):
+		# open is bound to "<Ctrl>+o"
 		if ctrl and keyval_name == "o":
 			self.openfile()
 			
@@ -45,40 +50,59 @@ class Plugin():
 		if not self.files_manager:
 			self.files_manager = self.app.plugins_manager.get_plugin("files_manager")
 		
+		# choosefile will display the open dialog
 		filenames = self.choosefile()
+		
+		# if cancel button is pressed
 		if not filenames:
 			return
 		
+		# otherwise, let files_manager controll open, read files, and
+		# set new sourceviews to each file.  
 		self.files_manager.open_files(filenames)
 
 	
 	
-
+	
+	# show open dialog
+	# (see: https://developer.gnome.org/gtk3/stable/GtkFileChooserDialog.html)
+	# (see: https://developer.gnome.org/gtk3/stable/GtkFileChooser.html#GtkFileChooserAction)
 	def choosefile(self):
 		filenames = None
+		
+		# initialize file chooser 
 		dialog = Gtk.FileChooserDialog("Open File", None,
 										Gtk.FileChooserAction.OPEN,
 										(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
 										Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
 
-
+		# add files types filters
 		self.add_filters(dialog)
-		dialog.set_current_folder("/home/hamad/dev/pygtk/gamma")
-		dialog.set_select_multiple(True)
 		
-		response = dialog.run()
-		if response == Gtk.ResponseType.OK:
-			print("Open clicked")
-			print("File selected:")
-			print(dialog.get_filenames())
-			filenames = dialog.get_filenames()
-		elif response == Gtk.ResponseType.CANCEL:
-			print("Cancel clicked")
+		# TODO: current folder must be dynamicly change
+		dialog.set_current_folder("/home/hamad/dev/pygtk/gamma")
+		
+		# can select and open multiple files
+		dialog.set_select_multiple(True)
 
+		# show the dialog		
+		response = dialog.run()
+		
+		if response == Gtk.ResponseType.OK:
+			filenames = dialog.get_filenames()
+		# elif response == Gtk.ResponseType.CANCEL:
+		#	print("Cancel clicked")
+
+		# close and destroy dialog object
 		dialog.destroy()
 		return filenames
 
 
+
+	# add files types filters
+	# when user select "Python files" for example,
+	# only python files are displyed
+	# TODO: add more filters
 	def add_filters(self, dialog):
 		filter_text = Gtk.FileFilter()
 		filter_text.set_name("Text files")
