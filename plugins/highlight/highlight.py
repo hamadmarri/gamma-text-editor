@@ -34,6 +34,7 @@ class Plugin():
 	def __init__(self, app):
 		self.name = "highlight"
 		self.app = app
+		self.sourceview_manager = app.sourceview_manager
 		self.plugins = app.plugins_manager.plugins
 		self.commands = []
 		self.tag_name = "search-match"
@@ -41,8 +42,13 @@ class Plugin():
 
 		
 	def activate(self):
-		pass
-				
+		# connect signal mark-set event which is when user select text
+		# user clicks to unselect text is also connected
+		# see highlight.highlight_signal function for handling 
+		# mark-set event
+		self.sourceview_manager.source_view.get_buffer().connect("mark-set", self.highlight_signal)
+		
+		
 	
 	def highlight_signal(self, buffer, location, mark):
 		# insert is the mark when user change

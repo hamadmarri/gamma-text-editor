@@ -61,9 +61,10 @@ class Plugin():
 		
 		# default empty file when open editor with no opened files
 		self.current_file = File("empty", self.sourceview_manager.source_view, new_file=True)
-		
+
 		# add empty/current_file to files array
 		self.files.append(self.current_file)
+		
 		
 				
 	

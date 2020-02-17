@@ -135,7 +135,7 @@ class Plugin():
 	# (see https://developer.gnome.org/gtk3/stable/GtkSearchEntry.html)
 	# (https://developer.gnome.org/gtk3/stable/GtkEntry.html)
 	def do_highlight(self, searchEntry):
-		self.plugins["highlight"].remove_highlight(self.tag_name)
+		self.plugins["highlight.highlight"].remove_highlight(self.tag_name)
 		self.search = searchEntry.get_text()
 		self.count = self.plugins["highlight.highlight"].highlight(self.search)
 		self.is_highlight_done = True

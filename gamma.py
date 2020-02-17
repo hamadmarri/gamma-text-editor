@@ -35,8 +35,8 @@ from gi.repository import GLib, Gio, Gtk, Gdk, GtkSource, GObject
 
 import config
 import sourceview_manager
+import signal_handler
 from plugins.plugins_manager import PluginsManager
-from plugins.signal_handler.signal_handler import SignalHandler
 
 class Application(Gtk.Application):
 
@@ -74,7 +74,7 @@ class Application(Gtk.Application):
 		# process key bindings. It loop through all plugins and 
 		# call key_bindings function passing (event, keyval_name, ctrl, alt, shift)
 		# which is an easy design for plugins to set there key bindings
-		self.signal_handler = SignalHandler(self)
+		self.signal_handler = signal_handler.SignalHandler(self)
 		
 
 	def load_builder(self):
