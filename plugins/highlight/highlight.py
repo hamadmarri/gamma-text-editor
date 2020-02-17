@@ -74,6 +74,20 @@ class Plugin():
 				# (read: https://developer.gnome.org/gtk3/stable/GtkTextBuffer.html#gtk-text-buffer-get-text)
 				search = buffer.get_text(iter_start, iter_end, False)
 				
+				
+				# if select only one letter
+				if len(search) == 1 and search.isalpha():
+					# remove highlight
+					self.remove_highlight(self.tag_name)
+					return
+				
+				# if selected is only spaces
+				if self.spaces_pattern.match(search):
+					# remove highlight
+					self.remove_highlight(self.tag_name)
+					return
+		
+		
 				# highlight text is in seperate method
 				# which help to select any text string 
 				# by other plugins like find or search
@@ -95,15 +109,6 @@ class Plugin():
 		# if search is empty, exit
 		if not search:
 			return
-		
-		# if select only one letter
-		if len(search) == 1 and search.isalpha():
-			return
-		
-		# if selected is only spaces
-		if self.spaces_pattern.match(search):
-			return
-		
 		
 		# get the currently openned/showing buffer
 		buffer = self.plugins["files_manager.files_manager"].current_file.source_view.get_buffer()
