@@ -18,89 +18,6 @@
   <requires lib="gtk+" version="3.20"/>
   <requires lib="gtksourceview" version="4.0"/>
   <!-- interface-css-provider-path default.css -->
-  <object class="GtkWindow" id="commanderWindow">
-    <property name="name">commanderWindow</property>
-    <property name="can_focus">False</property>
-    <property name="window_position">center-on-parent</property>
-    <property name="default_width">600</property>
-    <property name="gravity">center</property>
-    <signal name="key-press-event" handler="on_commanderWindow_key_press_event" swapped="no"/>
-    <signal name="key-release-event" handler="on_commanderWindow_key_release_event" swapped="no"/>
-    <child type="titlebar">
-      <object class="GtkLabel" id="commanderLbl">
-        <property name="name">commanderLbl</property>
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="label" translatable="yes">label</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkBox">
-        <property name="height_request">200</property>
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="orientation">vertical</property>
-        <property name="baseline_position">top</property>
-        <child>
-          <object class="GtkSearchEntry" id="commanderSearchEntry">
-            <property name="name">commanderSearchEntry</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="primary_icon_name">edit-find-symbolic</property>
-            <property name="primary_icon_activatable">False</property>
-            <property name="primary_icon_sensitive">False</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkScrolledWindow">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="shadow_type">in</property>
-            <child>
-              <object class="GtkViewport">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <child>
-                  <object class="GtkListBox" id="commanderList">
-                    <property name="name">commanderList</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="resize_mode">queue</property>
-                  </object>
-                </child>
-              </object>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkActionBar" id="commanderActionbar">
-            <property name="name">commanderActionbar</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <child>
-              <placeholder/>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="pack_type">end</property>
-            <property name="position">2</property>
-          </packing>
-        </child>
-      </object>
-    </child>
-  </object>
   <object class="GtkApplicationWindow" id="window">
     <property name="name">window</property>
     <property name="can_focus">False</property>
@@ -784,6 +701,87 @@
           <packing>
             <property name="resize">True</property>
             <property name="shrink">False</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
+  <object class="GtkWindow" id="commanderWindow">
+    <property name="name">commanderWindow</property>
+    <property name="can_focus">False</property>
+    <property name="window_position">center-on-parent</property>
+    <property name="default_width">600</property>
+    <property name="decorated">False</property>
+    <property name="gravity">center</property>
+    <property name="transient_for">window</property>
+    <signal name="focus-out-event" handler="on_commanderWindow_focus_out_event" swapped="no"/>
+    <signal name="key-press-event" handler="on_commanderWindow_key_press_event" swapped="no"/>
+    <signal name="key-release-event" handler="on_commanderWindow_key_release_event" swapped="no"/>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child>
+      <object class="GtkBox">
+        <property name="height_request">200</property>
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="orientation">vertical</property>
+        <property name="baseline_position">top</property>
+        <child>
+          <object class="GtkSearchEntry" id="commanderSearchEntry">
+            <property name="name">commanderSearchEntry</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="primary_icon_name">edit-find-symbolic</property>
+            <property name="primary_icon_activatable">False</property>
+            <property name="primary_icon_sensitive">False</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkScrolledWindow">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="shadow_type">in</property>
+            <child>
+              <object class="GtkViewport">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <object class="GtkListBox" id="commanderList">
+                    <property name="name">commanderList</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="resize_mode">queue</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkActionBar" id="commanderActionbar">
+            <property name="name">commanderActionbar</property>
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <child>
+              <placeholder/>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="pack_type">end</property>
+            <property name="position">2</property>
           </packing>
         </child>
       </object>

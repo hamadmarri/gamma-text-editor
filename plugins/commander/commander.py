@@ -46,6 +46,7 @@ class Plugin():
 		self.handlers.on_window_key_release_event = self.on_window_key_release_event
 		self.handlers.on_commanderWindow_key_press_event = self.on_window_key_press_event
 		self.handlers.on_commanderWindow_key_release_event = self.on_commanderWindow_key_release_event
+		self.handlers.on_commanderWindow_focus_out_event = self.on_commanderWindow_focus_out_event
 		
 		
 	
@@ -108,3 +109,7 @@ class Plugin():
 		if alt and self.only_alt and keyval_name == "Alt_L":
 			window.hide()
 			
+			
+	
+	def on_commanderWindow_focus_out_event(self, window, d):
+		window.hide()
