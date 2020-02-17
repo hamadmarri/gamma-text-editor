@@ -20,7 +20,6 @@
 #	to files_manager.open_files method
 #
 
-import os
 
 import gi
 gi.require_version('Gtk', '3.0')
@@ -40,10 +39,9 @@ class Plugin():
 		self.signal_handler.key_bindings_to_plugins.append(self)
 		
 		
-	def auto_run(self):
-		open_file = os.getenv('GAMMA_OPEN_FILE')
-		if open_file:
-			filenames = open_file.split()
+	def open_files_from_args(self, args):
+		if args:
+			filenames = args.split()
 			print(filenames)
 			self.plugins["files_manager.files_manager"].open_files(filenames)				
 		else:

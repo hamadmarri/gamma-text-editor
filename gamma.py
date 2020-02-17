@@ -28,6 +28,8 @@
 # which call activate for each plugin and store plugins references in
 # plugins_manager.plugins
 
+import os
+
 import gi
 gi.require_version('Gtk', '3.0')
 gi.require_version('GtkSource', '4')
@@ -112,6 +114,10 @@ class Application(Gtk.Application):
 		self.plugins_manager.load_plugins()
 		self.set_handlers()
 		
+		filenames = os.getenv('GAMMA_OPEN_FILE')
+		self.plugins_manager.plugins["files_manager.openfile"].open_files_from_args(filenames)
+		
+		# self.window.maximize()
 		self.window.show_all()
 
 
