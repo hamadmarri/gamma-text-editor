@@ -53,12 +53,8 @@ class Plugin():
 		self.handlers.on_closeBtn_release_event = self.on_closeBtn_release_event
 		self.handlers.on_maximizeBtn_release_event = self.on_maximizeBtn_release_event
 		self.handlers.on_minimizeBtn_release_event = self.on_minimizeBtn_release_event
-		self.handlers.on_closeBtn_hover_event = self.on_closeBtn_hover_event
 		self.handlers.on_open_menu_button_press_event = self.on_open_menu_button_press_event
-		self.handlers.on_open_menue_enter_notify_event = self.on_open_menue_enter_notify_event
-		self.handlers.on_open_menue_leave_notify_event = self.on_open_menue_leave_notify_event
-	
-	
+		
 	
 	
 	# to use other plugins, need to get
@@ -109,10 +105,6 @@ class Plugin():
 		self.app.quit()
 		
 		
-	# TODO: move to ui manager
-	def on_closeBtn_hover_event(self, widget, event):
-		print("on_closeBtn_hover_event")
-		
 	def on_closeBtn_release_event(self, widget, event):
 		self.quit()
 	
@@ -126,19 +118,3 @@ class Plugin():
 		self.get_plugins_refs()
 		self.openfile.openfile()
 		
-		
-	
-	# TODO: must cache open_menu
-	# TODO: move to ui manager
-	def on_open_menue_enter_notify_event(self, widget, event):
-		open_menu = self.builder.get_object("open_menu")
-		open_menu.get_style_context().add_class("menu_hover")
-		
-	
-	# TODO: must cache open_menu
-	# TODO: move to ui manager
-	def on_open_menue_leave_notify_event(self, widget, event):
-		open_menu = self.builder.get_object("open_menu")
-		open_menu.get_style_context().remove_class("menu_hover")
-		
-	
