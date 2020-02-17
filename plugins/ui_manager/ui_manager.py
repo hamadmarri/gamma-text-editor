@@ -139,7 +139,7 @@ class Plugin():
 		btn = Gtk.Button()
 		
 		# associate btn widget to File object
-		newfile.toolbar_file = btn
+		newfile.ui_ref = btn
 		
 		# set the text of button to filename
 		basename = os.path.basename(newfile.filename)
@@ -172,9 +172,18 @@ class Plugin():
 	# it switch the view to the filename in clicked button
 	def side_file_clicked(self, btn, filename):
 		self.get_plugins_refs()
-	
+		self.set_currently_displayed(btn)	
 		self.files_manager.side_file_clicked(filename)
 		
+		
+		
+	def set_currently_displayed(self, file_ui_ref):
+		# remove current displayed class
+		btns = self.toolbar_files.get_children()
+		for b in btns:
+			b.get_style_context().remove_class("openned_file_current_displayed")
+		
+		file_ui_ref.get_style_context().add_class("openned_file_current_displayed")
 	
 	
 	# updates the headerbar by filename

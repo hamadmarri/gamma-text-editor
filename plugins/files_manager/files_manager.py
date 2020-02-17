@@ -32,11 +32,11 @@ from . import commands
 # each openned file is set in File object and
 # appended to "files" array
 class File():
-	def __init__(self, filename, source_view, toolbar_file=None,
+	def __init__(self, filename, source_view, ui_ref=None,
 					need_save=False, new_file=False):
 		self.filename = filename
 		self.source_view = source_view
-		self.toolbar_file = toolbar_file
+		self.ui_ref = ui_ref
 		self.need_save = need_save
 		self.new_file = new_file
 	
@@ -139,8 +139,8 @@ class Plugin():
 		# destroy the sourceview attached to file 
 		self.files[file_index].source_view.destroy()
 		
-		# destroy the toolbar_file btn attached to file TODO: move to ui manager
-		self.files[file_index].toolbar_file.destroy()
+		# destroy the ui_ref btn attached to file TODO: move to ui manager
+		self.files[file_index].ui_ref.destroy()
 		
 		# remove from "files" array
 		del self.files[file_index]
@@ -157,6 +157,9 @@ class Plugin():
 		
 		# set headerbar text to the filename
 		self.ui_manager.update_header(self.current_file.filename)
+		
+		# update ui, set selected
+		self.ui_manager.set_currently_displayed(self.current_file.ui_ref)
 			
 	
 	# TODO: this method is doing too much, must get seperated
