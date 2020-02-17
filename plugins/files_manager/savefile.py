@@ -36,36 +36,23 @@ class Plugin():
 	def __init__(self, app):
 		self.name = "savefile"
 		self.app = app
+		self.signal_handler = app.signal_handler
+		self.plugins = app.plugins_manager.plugins
 		self.commands = []
-		self.files_manager = None
-		self.message_notify = None
-		
+
 		
 	def activate(self):
-		pass
-	
-	
-	
-	def get_plugins_refs(self):
-		# get current_file
-		if not self.files_manager:
-			self.files_manager = self.app.plugins_manager.get_plugin("files_manager")
+		self.signal_handler.key_bindings_to_plugins.append(self)
 		
-		# get message_notify
-		if not self.message_notify:
-			self.message_notify = self.app.plugins_manager.get_plugin("message_notify")
-	
-	
 	
 	# key_bindings is called by SignalHandler
 	def key_bindings(self, event, keyval_name, ctrl, alt, shift):
 		
 		# save is bound to "<Ctrl>+s"
 		if ctrl and keyval_name == "s":
-			self.get_plugins_refs()
 			
 			# get the current displayed file
-			current_file = self.files_manager.current_file
+			current_file = self.plugins["files_manager.files_manager"].current_file
 			
 			# get current buffer
 			buffer = current_file.source_view.get_buffer()
@@ -79,7 +66,7 @@ class Plugin():
 				new_filename = self.show_save_dialog()
 				if new_filename:
 					self.save_file(new_filename, text)
-					self.files_manager.convert_new_empty_file(current_file, new_filename)
+					self.plugins["files_manager.files_manager"].convert_new_empty_file(current_file, new_filename)
 			else:
 				self.save_file(current_file.filename, text)
 	
@@ -124,7 +111,7 @@ class Plugin():
 		else:
 			# when successfully wrote the file, show successful message
 			basename = os.path.basename(filename)
-			self.message_notify.show_message(basename + " | Saved")
+			self.plugins["message_notify.message_notify"].show_message(basename + " | Saved")
 		finally:
 			f.close()
 			print(f"{basename} saved and closed")

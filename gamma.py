@@ -62,19 +62,19 @@ class Application(Gtk.Application):
 		# be in the gtk objects form 
 		self.load_builder()
 		
-		# sourceview_manager for anything related to sourceview
-		self.sourceview_manager = sourceview_manager.SourceViewManager(self)
-		
 		# plugins_manager for anything related to plugins (eager plugins)
 		self.plugins_manager = PluginsManager(self)
 		
-		# handler is for handling general signals such as
+		# sourceview_manager for anything related to sourceview
+		self.sourceview_manager = sourceview_manager.SourceViewManager(self)
+		
+		# signal_handler is for handling general signals such as
 		# key press, and basic window resizing paned
 		# SignalHandler also makes it easer for other plugins to
 		# process key bindings. It loop through all plugins and 
 		# call key_bindings function passing (event, keyval_name, ctrl, alt, shift)
 		# which is an easy design for plugins to set there key bindings
-		self.handler = SignalHandler(self)
+		self.signal_handler = SignalHandler(self)
 		
 
 	def load_builder(self):
@@ -89,7 +89,7 @@ class Application(Gtk.Application):
 		# this line connects signals in handlers object to 
 		# some functions. "handlers" is set by SignalHandler and
 		# plugins that need to bind signals to functions
-		self.builder.connect_signals(self.handler.handlers)
+		self.builder.connect_signals(self.signal_handler.handlers)
 		
 
 	def do_startup(self):

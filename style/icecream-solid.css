@@ -102,8 +102,8 @@
 
 #toolbar_files {
     background:  #6B5C6B;
-    padding-left:0px;
-	padding-right:0px;
+    padding-left:15px;
+	padding-right:15px;
     padding-top:0px;
 }
 
@@ -146,10 +146,9 @@
 	color: #fdfdfd;
 }
 .openned_file_current_displayed {
-	background: rgba(253, 253, 253, 0.70);
+	background: rgba(253, 253, 253, 0.05);
 }
 .openned_file_current_displayed label {
-	color: #827082;
 	font-weight: bold;
 }
 

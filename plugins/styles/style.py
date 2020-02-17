@@ -41,7 +41,3 @@ class Plugin():
 			Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
 		)
 		
-		
-	
-	def key_bindings(self, event, keyval_name, ctrl, alt, shift):
-		pass

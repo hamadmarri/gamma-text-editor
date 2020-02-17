@@ -44,6 +44,8 @@ class SignalHandler:
 		self.plugins = app.plugins_manager.plugins
 		self.handlers = Handlers()
 		self.set_handlers()
+		self.key_bindings_to_plugins = []
+		self.any_key_press_to_plugins = []
 		
 	
 	# SignalHandler sets the main signals such as key press 
@@ -57,13 +59,20 @@ class SignalHandler:
 	# you should not map "on_window_key_press_event" to your plugin.
 	# this function will help you by getting the keyval_name("e", "space", ..)
 	# and other modifiers like ctrl, alt, and shift 
-	# your plugin must have the "key_bindings" method. If your
-	# plugin does not need key bindings, then just "pass"
-	# if yes, then simply just check what key binding you need such as
+	# Simply uncomment: 
+	# 		self.signal_handler.key_bindings_to_plugins.append(self)   or
+	#		self.signal_handler.any_key_press_to_plugins.append(self)
+	# and then check what key binding you need such as
 	# if alt and ctrl and keyval_name == "m":
 	# 	...
 	# the above "if" is checking whether alt and ctrl are hold when
 	# pressed the "m" key (i.e. <Ctrl><Alt>+m)
+	#
+	# key_bindings_to_plugins vs any_key_press_to_plugins
+	# key_bindings_to_plugins for key bindings only (<Ctrl>+a)
+	# However any_key_press_to_plugins will call your key_bindings
+	# method for any key press! Sometimes is needed but usually
+	# for shortcuts use key_bindings_to_plugins
 	def on_window_key_press_event(self, window, event):
 		keyval_name = Gdk.keyval_name(event.keyval)
 		ctrl = (event.state & Gdk.ModifierType.CONTROL_MASK)
@@ -74,14 +83,15 @@ class SignalHandler:
 		# - pass only key bindings (i.e. when ctrl, alt)
 		# - or when "F" function keys pressed such F1, F2 ..
 		# this if is to condition the exit
-		if not ctrl and not alt:
-			if len(keyval_name) != 2: # not F1, ..
-				return
-		
-		# loop through all plugins and call their key_bindings method
-		for p in self.plugins:
-			p.key_bindings(event, keyval_name, ctrl, alt, shift)
-
+		if (not ctrl and not alt) and len(keyval_name) != 2: # not F1, ..:
+			for p in self.any_key_press_to_plugins:
+				p.key_bindings(event, keyval_name, ctrl, alt, shift)
+		else:
+			# loop through all plugins and call their key_bindings method
+			# only key bindings
+			for p in self.key_bindings_to_plugins:
+				p.key_bindings(event, keyval_name, ctrl, alt, shift)
+			
 
 	
 	# when resize the left panel of the files, need

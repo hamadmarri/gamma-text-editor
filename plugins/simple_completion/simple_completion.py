@@ -115,6 +115,3 @@ class Plugin():
 		self.view_completion.add_provider(self.view_autocomplete)
 		
 		
-	def key_bindings(self, event, keyval_name, ctrl, alt, shift):
-		pass
-		

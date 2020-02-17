@@ -26,8 +26,8 @@
 #									from . import commands
 #									commands.set_commands(self)
 # 			
-#			Currently, activate and key_bindings methods must be implemented.
-#			If no implemention needed for activate and key_bindings then keep
+#			Currently, activate method must be implemented.
+#			If no implemention needed for activate then keep
 #			the "pass"
 #
 #			The usual imports are:
@@ -57,28 +57,35 @@ class Plugin():
 	def __init__(self, app):
 		self.name = "template"
 		self.app = app
-		self.handlers = app.handler.handlers # optional
+		self.handlers = app.signal_handler.handlers # optional
 		self.commands = []
 		commands.set_commands(self)
 		self.set_handlers() # optional
 	
 	# do not remove 
 	def activate(self):
+		# self.signal_handler.key_bindings_to_plugins.append(self) <-- if need key_bindings
 		pass
 	
-	# do not remove 
+	# works with "self.signal_handler.key_bindings_to_plugins.append(self)"
 	def key_bindings(self, event, keyval_name, ctrl, alt, shift):
 		# you should not map "on_window_key_press_event" to your plugin.
 		# this function will help you by getting the keyval_name("e", "space", ..)
 		# and other modifiers like ctrl, alt, and shift 
-		# your plugin must have the "key_bindings" method. If your
-		# plugin does not need key bindings, then just "pass"
-		# if yes, then simply just check what key binding you need such as
+		# Simply uncomment: 
+		# 		self.signal_handler.key_bindings_to_plugins.append(self)   or
+		#		self.signal_handler.any_key_press_to_plugins.append(self)
+		# and then check what key binding you need such as
 		# if alt and ctrl and keyval_name == "m":
 		# 	...
 		# the above "if" is checking whether alt and ctrl are hold when
 		# pressed the "m" key (i.e. <Ctrl><Alt>+m)
-		# see SignalHandler
+		#
+		# key_bindings_to_plugins vs any_key_press_to_plugins
+		# key_bindings_to_plugins for key bindings only (<Ctrl>+a)
+		# However any_key_press_to_plugins will call your key_bindings
+		# method for any key press! Sometimes is needed but usually
+		# for shortcuts use key_bindings_to_plugins
 		pass
 	
 	

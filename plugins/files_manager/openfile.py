@@ -31,24 +31,21 @@ class Plugin():
 	def __init__(self, app):
 		self.name = "openfile"
 		self.app = app
+		self.signal_handler = app.signal_handler
+		self.plugins = app.plugins_manager.plugins
 		self.commands = []
-		self.files_manager = None
 		
 		
 	def activate(self):
-		pass
+		self.signal_handler.key_bindings_to_plugins.append(self)
 		
 		
 	def auto_run(self):
 		open_file = os.getenv('GAMMA_OPEN_FILE')
 		if open_file:
-			# get files_manager
-			if not self.files_manager:
-				filenames = open_file.split()
-				print(filenames)
-				self.files_manager = self.app.plugins_manager.get_plugin("files_manager")
-				self.files_manager.open_files(filenames)
-				
+			filenames = open_file.split()
+			print(filenames)
+			self.plugins["files_manager.files_manager"].open_files(filenames)				
 		else:
 			print("no GAMMA_OPEN_FILE")
 		
@@ -62,11 +59,7 @@ class Plugin():
 			
 			
 			
-	def openfile(self):
-		# get files_manager
-		if not self.files_manager:
-			self.files_manager = self.app.plugins_manager.get_plugin("files_manager")
-		
+	def openfile(self):		
 		# choosefile will display the open dialog
 		filenames = self.choosefile()
 		# DEBUG: print(filenames)
@@ -77,7 +70,7 @@ class Plugin():
 		
 		# otherwise, let files_manager controll open, read files, and
 		# set new sourceviews to each file.  
-		self.files_manager.open_files(filenames)
+		self.plugins["files_manager.files_manager"].open_files(filenames)
 
 	
 	

@@ -30,14 +30,13 @@ class Plugin():
 	def __init__(self, app):
 		self.name = "search_in_file"
 		self.app = app
+		self.signal_handler = app.signal_handler
 		self.builder = app.builder
+		self.handlers = app.signal_handler.handlers
+		self.plugins = app.plugins_manager.plugins
 		self.sourceview = None
 		self.buffer = None
-		self.handlers = app.handler.handlers
 		self.commands = []
-		self.highlight = None
-		self.files_manager = None
-		self.message_notify = None
 		self.searchEntry = None
 		self.search = None
 		self.first_match = None
@@ -58,6 +57,8 @@ class Plugin():
 			
 
 	def activate(self):
+		self.signal_handler.key_bindings_to_plugins.append(self)
+		
 		self.searchEntry = self.builder.get_object("searchEntry")
 	
 
@@ -82,7 +83,7 @@ class Plugin():
 			self.clear_search(widget)
 			
 			# set focus back to sourceview
-			self.files_manager.current_file.source_view.grab_focus()
+			self.plugins["files_manager.files_manager"].current_file.source_view.grab_focus()
 			
 		elif (shift and keyval_name == "Return") or keyval_name == "Up":
 			if not self.is_highlight_done:
@@ -92,21 +93,18 @@ class Plugin():
 		elif keyval_name == "Return" or keyval_name == "KP_Enter" or keyval_name == "Down":
 			if not self.is_highlight_done:
 				self.do_highlight(self.searchEntry)
-			self.scroll_next()
+			else:
+				self.scroll_next()
 				
 		
-			
 	
 	def on_search_focus_out_event(self, widget, data):
-		self.get_plugins_refs()
 		self.is_highlight_done = False
-		self.highlight.remove_highlight(self.tag_name)
+		self.plugins["highlight.highlight"].remove_highlight(self.tag_name)
 		
 			
-	def get_focus(self):
-		self.get_plugins_refs()
-		
-		self.sourceview = self.files_manager.current_file.source_view
+	def get_focus(self):	
+		self.sourceview = self.plugins["files_manager.files_manager"].current_file.source_view
 		self.buffer = self.sourceview.get_buffer()
 		
 		# gets (start, end) iterators of 
@@ -126,23 +124,7 @@ class Plugin():
 
 		# set cursor to searchEntry
 		self.searchEntry.grab_focus()
-			
-	
-	
-	def get_plugins_refs(self):
-		# get highlight
-		if not self.highlight:
-			self.highlight = self.app.plugins_manager.get_plugin("highlight")
-		
-		# get files_manager
-		if not self.files_manager:
-			self.files_manager = self.app.plugins_manager.get_plugin("files_manager")
-		
-		# get message_notify
-		if not self.message_notify:
-			self.message_notify = self.app.plugins_manager.get_plugin("message_notify")
-			
-		
+				
 	
 	# (see https://developer.gnome.org/gtk3/stable/GtkSearchEntry.html)
 	# (https://developer.gnome.org/gtk3/stable/GtkEntry.html)
@@ -153,15 +135,14 @@ class Plugin():
 	# (see https://developer.gnome.org/gtk3/stable/GtkSearchEntry.html)
 	# (https://developer.gnome.org/gtk3/stable/GtkEntry.html)
 	def do_highlight(self, searchEntry):
-		self.get_plugins_refs()
-		self.highlight.remove_highlight(self.tag_name)
+		self.plugins["highlight"].remove_highlight(self.tag_name)
 		self.search = searchEntry.get_text()
-		self.count = self.highlight.highlight(self.search)
+		self.count = self.plugins["highlight.highlight"].highlight(self.search)
 		self.is_highlight_done = True
 		
 		# if no results
 		if self.count == 0:
-			self.message_notify.show_message("Search Results | 0")
+			self.plugins["message_notify.message_notify"].show_message("Search Results | 0")
 			return
 			
 		
@@ -174,7 +155,7 @@ class Plugin():
 	# first search start from the beggining of the buffer
 	# i.e. start_iter
 	def scroll(self):
-		self.sourceview = self.files_manager.current_file.source_view
+		self.sourceview = self.plugins["files_manager.files_manager"].current_file.source_view
 		self.buffer = self.sourceview.get_buffer()
 		start_iter = self.buffer.get_start_iter()
 		
@@ -190,7 +171,7 @@ class Plugin():
 			self.sourceview.scroll_to_iter(match_start, 0, True, 0.5, 0.5)
 			
 			self.match_number = 1
-			self.message_notify.show_message("Search Results | " + str(self.match_number) + "/" + str(self.count))
+			self.plugins["message_notify.message_notify"].show_message("Search Results | " + str(self.match_number) + "/" + str(self.count))
 			self.highlight_scrolled()
 		
 			
@@ -207,7 +188,7 @@ class Plugin():
 			self.sourceview.scroll_to_iter(match_end, 0, True, 0.5, 0.5)
 			
 			self.match_number += 1
-			self.message_notify.show_message("Search Results | " + str(self.match_number) + "/" + str(self.count))
+			self.plugins["message_notify.message_notify"].show_message("Search Results | " + str(self.match_number) + "/" + str(self.count))
 			self.highlight_scrolled()
 		else:
 			# call again scroll to go up
@@ -231,7 +212,8 @@ class Plugin():
 			self.sourceview.scroll_to_iter(match_end, 0, True, 0.5, 0.5)
 			
 			self.match_number -= 1
-			self.message_notify.show_message("Search Results | " + str(self.match_number) + "/" + str(self.count))
+			self.plugins["message_notify.message_notify"].show_message("Search Results | " 
+											+ str(self.match_number) + "/" + str(self.count))
 			self.highlight_scrolled()
 		else:
 			# scroll from the end
@@ -243,15 +225,14 @@ class Plugin():
 	
 	def highlight_scrolled(self):
 		(start_iter, end_iter) = self.next_match
-		self.tag = self.highlight.setup_custom_tag(self.buffer, self.tag_name, self.props)
-		self.highlight.highlight_custom_tag(self.buffer, start_iter, end_iter, self.tag, self.tag_name)
+		self.tag = self.plugins["highlight.highlight"].setup_custom_tag(self.buffer, self.tag_name, self.props)
+		self.plugins["highlight.highlight"].highlight_custom_tag(self.buffer, start_iter, end_iter, self.tag, self.tag_name)
 		
 		
 		
 
 	def clear_search(self, widget):
-		self.get_plugins_refs()
 		self.search = ""
 		widget.set_text(self.search)
-		self.highlight.remove_highlight(self.tag_name)
+		self.plugins["highlight.highlight"].remove_highlight(self.tag_name)
 	

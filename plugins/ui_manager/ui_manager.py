@@ -59,12 +59,12 @@ class Plugin():
 		self.name = "ui_manager"
 		self.app = app
 		self.builder = app.builder
-		self.handlers = app.handler.handlers
+		self.handlers = app.signal_handler.handlers
+		self.plugins = app.plugins_manager.plugins
 		self.sourceview_manager = app.sourceview_manager
 		self.commands = []
 		self.set_handlers()
-		self.files_manager = None
-		self.message_notify = None
+		
 		self.toolbar_files = None
 		self.headerbar = None
 		self.scrolledwindow = None
@@ -84,22 +84,6 @@ class Plugin():
 		# get headerbar widget reference, to show current filename
 		# in headerbar label
 		self.headerbar = self.builder.get_object("headerbarMain")
-	
-	
-	
-	def get_plugins_refs(self):
-		# get files_manager
-		if not self.files_manager:
-			self.files_manager = self.app.plugins_manager.get_plugin("files_manager")
-		
-		# get message_notify
-		if not self.message_notify:
-			self.message_notify = self.app.plugins_manager.get_plugin("message_notify")
-				
-	
-	
-	def key_bindings(self, event, keyval_name, ctrl, alt, shift):
-		pass
 	
 	
 	
@@ -171,9 +155,8 @@ class Plugin():
 	# handler of "clicked" event
 	# it switch the view to the filename in clicked button
 	def side_file_clicked(self, btn, filename):
-		self.get_plugins_refs()
 		self.set_currently_displayed(btn)	
-		self.files_manager.side_file_clicked(filename)
+		self.plugins["files_manager.files_manager"].side_file_clicked(filename)
 		
 		
 		
@@ -193,9 +176,7 @@ class Plugin():
 	
 	
 	# updates the headerbar by filename
-	def update_header(self, filename):
-		self.get_plugins_refs()
-		
+	def update_header(self, filename):		
 		# gets basename of the file, not the full path
 		basename = os.path.basename(filename)
 		
@@ -205,7 +186,7 @@ class Plugin():
 		# show message of the full path of the file 
 		# it is useful to avoid confusion when having 
 		# different files with similar names in different paths
-		self.message_notify.show_message(filename)
+		self.plugins["message_notify.message_notify"].show_message(filename)
 		
 	
 	

@@ -28,14 +28,15 @@ class Plugin():
 		self.name = "commander"
 		self.app = app
 		self.plugins = app.plugins_manager.plugins
-		self.handlers = app.handler.handlers
+		self.signal_handler = app.signal_handler
+		self.handlers = app.signal_handler.handlers
 		self.commands = []
 		self.only_alt = False
 		self.set_handlers()
 		
 		
 	def activate(self):
-		pass
+		self.signal_handler.key_bindings_to_plugins.append(self)
 	
 		
 	def set_handlers(self):

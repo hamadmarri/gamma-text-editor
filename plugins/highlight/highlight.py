@@ -34,30 +34,15 @@ class Plugin():
 	def __init__(self, app):
 		self.name = "highlight"
 		self.app = app
+		self.plugins = app.plugins_manager.plugins
 		self.commands = []
-		self.files_manager = None
-		self.message_notify = None
 		self.tag_name = "search-match"
 		self.spaces_pattern = re.compile("^\s+$")
 
 		
 	def activate(self):
 		pass
-		
-		
-	def get_plugins_refs(self):
-		# get files_manager
-		if not self.files_manager:
-			self.files_manager = self.app.plugins_manager.get_plugin("files_manager")
-			
-		# get message_notify
-		if not self.message_notify:
-			self.message_notify = self.app.plugins_manager.get_plugin("message_notify")
-			
-		
-	def key_bindings(self, event, keyval_name, ctrl, alt, shift):
-		pass
-		
+				
 	
 	def highlight_signal(self, buffer, location, mark):
 		# insert is the mark when user change
@@ -87,7 +72,7 @@ class Plugin():
 				# which help to select any text string 
 				# by other plugins like find or search
 				counter = self.highlight(search)
-				self.message_notify.show_message(f"Highlighted | {counter}")
+				self.plugins["message_notify.message_notify"].show_message(f"Highlighted | {counter}")
 		
 	
 	# "search" is a string text
@@ -98,7 +83,6 @@ class Plugin():
 	# the style scheme which is set for styling the 
 	# sourceview ins source_style plugin
 	def highlight(self, search):
-		self.get_plugins_refs()
 			
 		self.remove_highlight(self.tag_name)
 		
@@ -116,7 +100,7 @@ class Plugin():
 		
 		
 		# get the currently openned/showing buffer
-		buffer = self.files_manager.current_file.source_view.get_buffer()
+		buffer = self.plugins["files_manager.files_manager"].current_file.source_view.get_buffer()
 		
 		tag = self.setup_tag(buffer)
 
@@ -171,7 +155,6 @@ class Plugin():
 	
 	
 	def highlight_custom_tag(self, buffer, start_iter, end_iter, tag, tag_name):
-		self.get_plugins_refs()
 		self.remove_highlight(tag_name)
 		
 		# get the tags table 
@@ -201,9 +184,8 @@ class Plugin():
 	
 	
 	
-	def remove_highlight(self, tag_name):			
-		self.get_plugins_refs()
-		buffer = self.files_manager.current_file.source_view.get_buffer()
+	def remove_highlight(self, tag_name):
+		buffer = self.plugins["files_manager.files_manager"].current_file.source_view.get_buffer()
 		tag_table = buffer.get_tag_table();
 		
 		# get the tag by looking up to it is name "search-match"

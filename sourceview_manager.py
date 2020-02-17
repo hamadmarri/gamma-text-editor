@@ -30,30 +30,12 @@ from gi.repository import GtkSource
 class SourceViewManager():
 	def __init__(self, app):
 		self.app = app
+		self.plugins = app.plugins_manager.plugins
 		self.source_view = self.app.builder.get_object("view")
 		self.source_view.grab_focus()
 		self.sourcemap = self.app.builder.get_object("sourcemap")
 		self.sourcemap.set_view(self.source_view)
-		self.source_style = None
-		self.simple_completion = None
-		self.highlight = None
 		
-	
-	
-	def get_plugins_refs(self):
-		# get source_style
-		if not self.source_style:
-			self.source_style = self.app.plugins_manager.get_plugin("source_style")
-			
-		# get simple_completion
-		if not self.simple_completion:
-			self.simple_completion = self.app.plugins_manager.get_plugin("simple_completion")
-			
-		# get highlight
-		if not self.highlight:
-			self.highlight = self.app.plugins_manager.get_plugin("highlight")
-			
-	
 	
 	# opening new file needs new sourceview object
 	#  here where the new sourceview object is created
@@ -62,7 +44,6 @@ class SourceViewManager():
 	# - connects signal mark-set event which is when user select text
 	# - updates the world completion to include new source buffer
 	def get_new_sourceview(self):
-		self.get_plugins_refs()
 			
 		# get new sourceview object
 		newsource = GtkSource.View.new()
@@ -86,7 +67,7 @@ class SourceViewManager():
 		newsource.set_smart_home_end(self.source_view.get_smart_home_end())
 
 		# set the source style
-		self.source_style.set_source_style(newsource.get_buffer())
+		self.plugins["styles.source_style"].set_source_style(newsource.get_buffer())
 		
 		# add "sourceviewclass" css class
 		newsource.get_style_context().add_class("sourceviewclass")
@@ -95,7 +76,7 @@ class SourceViewManager():
 		# user clicks to unselect text is also connected
 		# see highlight.highlight_signal function for handling 
 		# mark-set event
-		newsource.get_buffer().connect("mark-set", self.highlight.highlight_signal)
+		newsource.get_buffer().connect("mark-set", self.plugins["highlight.highlight"].highlight_signal)
 		
 		# show the gtk widget
 		newsource.show()
@@ -103,7 +84,7 @@ class SourceViewManager():
 		# TODO: move to files_manager, sometimes we don't need to 
 		# update completion based on file type and size!
 		# update the world completion to include new source buffer
-		self.simple_completion.update_completion(newsource)
+		self.plugins["simple_completion.simple_completion"].update_completion(newsource)
 		
 		return newsource
 		

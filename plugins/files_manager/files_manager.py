@@ -46,38 +46,26 @@ class Plugin():
 	def __init__(self, app):
 		self.name = "files_manager"
 		self.app = app
+		self.signal_handler = app.signal_handler
 		self.builder = app.builder
+		self.plugins = app.plugins_manager.plugins
 		self.sourceview_manager = app.sourceview_manager
 		self.commands = []
 		commands.set_commands(self)
 		self.files = []
 		self.current_file = None
-
-		self.message_notify = None
-		self.ui_manager = None
-
 		
 	
-	def activate(self):		
+	def activate(self):
+		self.signal_handler.key_bindings_to_plugins.append(self)
+		
 		# default empty file when open editor with no opened files
 		self.current_file = File("empty", self.sourceview_manager.source_view, new_file=True)
 		
 		# add empty/current_file to files array
 		self.files.append(self.current_file)
 		
-		
-		
-		
-	def get_plugins_refs(self):
-		# get message_notify
-		if not self.message_notify:
-			self.message_notify = self.app.plugins_manager.get_plugin("message_notify")
-		
-		# get ui_manager
-		if not self.ui_manager:
-			self.ui_manager = self.app.plugins_manager.get_plugin("ui_manager")
-		
-		
+				
 	
 	# key_bindings is called by SignalHandler
 	def key_bindings(self, event, keyval_name, ctrl, alt, shift):		
@@ -113,7 +101,7 @@ class Plugin():
 			newsource = self.sourceview_manager.get_new_sourceview()
 			
 			# remove current sourceview and put the new empty sourceview
-			self.ui_manager.replace_sourceview_widget(newsource)
+			self.plugins["ui_manager.ui_manager"].replace_sourceview_widget(newsource)
 			
 			# current file is now empty
 			self.current_file = File("empty", newsource, new_file=True)
@@ -125,12 +113,12 @@ class Plugin():
 			self.files.append(self.current_file)
 			
 			# since it is an empty file, set the headerbar to "Gamma"
-			self.ui_manager.set_header("Gamma")
+			self.plugins["ui_manager.ui_manager"].set_header("Gamma")
 			
 			# cancel and clear message 
 			# why? sometimes user save a file and close it right after,
 			# so no need to keep showing that file is saved
-			self.message_notify.cancel()
+			self.plugins["message_notify.message_notify"].cancel()
 			
 	
 	
@@ -156,10 +144,10 @@ class Plugin():
 			self.open_file(f)
 		
 		# set headerbar text to the filename
-		self.ui_manager.update_header(self.current_file.filename)
+		self.plugins["ui_manager.ui_manager"].update_header(self.current_file.filename)
 		
 		# update ui, set selected
-		self.ui_manager.set_currently_displayed(self.current_file.ui_ref)
+		self.plugins["ui_manager.ui_manager"].set_currently_displayed(self.current_file.ui_ref)
 			
 	
 	# TODO: this method is doing too much, must get seperated
@@ -171,7 +159,6 @@ class Plugin():
 			self.switch_to_file(file_index)
 			return
 		
-		self.get_plugins_refs()
 		
 		# open the file in reading mode
 		f = open(filename, "r")
@@ -184,7 +171,7 @@ class Plugin():
 		# DEBUG: print("newsource")
 		
 		# replace old sourceview(previously opened) with this new one
-		self.ui_manager.replace_sourceview_widget(newsource)
+		self.plugins["ui_manager.ui_manager"].replace_sourceview_widget(newsource)
 		# DEBUG: print("replace_sourceview_widget")
 		
 		# new File object
@@ -220,24 +207,17 @@ class Plugin():
 		self.sourceview_manager.set_language(filename, buffer)
 		# DEBUG: print("set_language")
 		
-		self.ui_manager.add_filename_to_ui(newfile)
-		
-		# set headerbar text to the filename
-		# self.ui_manager.update_header(filename)
-		# DEBUG: print("update_header")
-		
+		self.plugins["ui_manager.ui_manager"].add_filename_to_ui(newfile)
+				
 		# set current file to this file
 		self.current_file = newfile
 		
-		
-		
-	
 	
 	
 	def convert_new_empty_file(self, newfile, filename):
 		newfile.filename = filename
 		newfile.new_file = False
-		self.ui_manager.add_filename_to_ui(newfile)
+		self.plugins["ui_manager.ui_manager"].add_filename_to_ui(newfile)
 	
 	
 	
@@ -263,7 +243,7 @@ class Plugin():
 		f = self.files[file_index]
 		
 		# replace the source view 
-		self.ui_manager.replace_sourceview_widget(f.source_view)
+		self.plugins["ui_manager.ui_manager"].replace_sourceview_widget(f.source_view)
 				
 		# reposition file in files list
 		del self.files[file_index]
@@ -271,7 +251,7 @@ class Plugin():
 		self.current_file = f
 				
 		# update headerbar to filename
-		self.ui_manager.update_header(f.filename)
+		self.plugins["ui_manager.ui_manager"].update_header(f.filename)
 		
 		
 

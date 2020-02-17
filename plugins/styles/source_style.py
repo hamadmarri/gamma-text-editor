@@ -49,7 +49,3 @@ class Plugin():
 		# the style is applied on the buffer
 		buffer.set_style_scheme(style)
 		
-		
-		
-	def key_bindings(self, event, keyval_name, ctrl, alt, shift):
-		pass

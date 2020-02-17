@@ -64,7 +64,7 @@ class PluginsManager():
 
 	def __init__(self, app):
 		self.app = app
-		self.plugins = []
+		self.plugins = {}
 
 
 	# importing all plugins in "plugin_list"
@@ -83,19 +83,16 @@ class PluginsManager():
 			module.activate()
 			
 			# add a reference of the plugin 
-			# to plugins array
-			self.plugins.append(module)
+			# to plugins dictionary
+			self.plugins[p] = module
 		
-		for p in self.plugins:
-			if hasattr(p, "auto_run"):
-				p.auto_run()
+		#for p in self.plugins:
+		#	if hasattr(p, "auto_run"):
+		#		p.auto_run()
 			
 			
+	
+	# get plugin from dictionary that match same name
+	def get(self, plugin_name):
+		return self.plugins[plugin_name]
 			
-	# loop through plugins array and
-	# find plugin matching same name
-	# TODO: implement dictionary for faster access
-	def get_plugin(self, plugin_name):
-		for p in self.plugins:
-			if p.name == plugin_name:
-				return p

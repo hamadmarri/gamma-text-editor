@@ -28,9 +28,11 @@ class Plugin():
 	def __init__(self, app):
 		self.name = "window_ctrl"
 		self.app = app
+		self.signal_handler = app.signal_handler
 		self.builder = app.builder
 		self.window = app.window
-		self.handlers = app.handler.handlers
+		self.plugins = app.plugins_manager.plugins
+		self.handlers = app.signal_handler.handlers
 		self.is_maximized = None
 		
 		# commands and set_commands are important for
@@ -45,7 +47,7 @@ class Plugin():
 	
 	
 	def activate(self):
-		pass
+		self.signal_handler.key_bindings_to_plugins.append(self)
 	
 	
 	# setting handlers, see SignalHandler
@@ -54,21 +56,7 @@ class Plugin():
 		self.handlers.on_maximizeBtn_release_event = self.on_maximizeBtn_release_event
 		self.handlers.on_minimizeBtn_release_event = self.on_minimizeBtn_release_event
 		self.handlers.on_open_menu_button_press_event = self.on_open_menu_button_press_event
-		
-	
-	
-	# to use other plugins, need to get
-	# the reference of the plugin by its name
-	# need to cache the reference 
-	def get_plugins_refs(self):
-		# get message_notify
-		if not self.message_notify:
-			self.message_notify = self.app.plugins_manager.get_plugin("message_notify")
-		
-		# get message_notify
-		if not self.openfile:
-			self.openfile = self.app.plugins_manager.get_plugin("openfile")
-			
+				
 	
 	# this method got called by SignalHandler. Use it wisely
 	# if your plugin spend much time in this method it will delay
@@ -100,8 +88,7 @@ class Plugin():
 	# because of the thread sleep in message_notify
 	# must cancel the thread		
 	def quit(self):
-		self.get_plugins_refs()
-		self.message_notify.cancel()
+		self.plugins["message_notify.message_notify"].cancel()
 		self.app.quit()
 		
 		
@@ -115,6 +102,6 @@ class Plugin():
 		self.minimize()
 	
 	def on_open_menu_button_press_event(self, widget, event):
-		self.get_plugins_refs()
-		self.openfile.openfile()
+		self.plugins["files_manager.openfile"].openfile()
+		
 		

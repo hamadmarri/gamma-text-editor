@@ -47,11 +47,7 @@ class Plugin():
 	def activate(self):
 		self.messageLbl = self.builder.get_object("messageLbl")
 		self.clear_message()
-		
-		
-	def key_bindings(self, event, keyval_name, ctrl, alt, shift):
-		pass
-	
+			
 	
 	# show message (m) in messageLbl
 	# set the thread timer to clear this
