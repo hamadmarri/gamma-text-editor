@@ -27,20 +27,26 @@ class Plugin():
 	def __init__(self, app):
 		self.name = "commander"
 		self.app = app
+		self.builder = app.builder
 		self.plugins = app.plugins_manager.plugins
 		self.signal_handler = app.signal_handler
 		self.handlers = app.signal_handler.handlers
 		self.commands = []
 		self.only_alt = False
 		self.set_handlers()
+		self.window = None
 		
 		
 	def activate(self):
 		self.signal_handler.key_bindings_to_plugins.append(self)
+		self.signal_handler.any_key_press_to_plugins.append(self)
 	
 		
 	def set_handlers(self):
 		self.handlers.on_window_key_release_event = self.on_window_key_release_event
+		self.handlers.on_commanderWindow_key_press_event = self.on_window_key_press_event
+		self.handlers.on_commanderWindow_key_release_event = self.on_commanderWindow_key_release_event
+		
 		
 	
 	def key_bindings(self, event, keyval_name, ctrl, alt, shift):
@@ -57,8 +63,48 @@ class Plugin():
 		shift = (event.state & Gdk.ModifierType.SHIFT_MASK)
 		
 		if alt and self.only_alt and keyval_name == "Alt_L":
-			for p in self.plugins:
-				if p.commands:
-					print(p.name)
-					for c in p.commands:
-						print(c["name"], c["shortcut"])
+			self.show_commander_window()
+
+			
+			
+		
+	def show_commander_window(self):
+		self.window = self.builder.get_object("commanderWindow")
+		listbox = self.builder.get_object("commanderList")
+		
+		for i in range(0, 20):
+			lbl = Gtk.Label.new(f"adasda4s {i}")
+			listbox.insert(lbl, -1)
+			
+		self.window.show_all()
+
+
+
+
+	
+	def on_window_key_press_event(self, window, event):
+		keyval_name = Gdk.keyval_name(event.keyval)
+		ctrl = (event.state & Gdk.ModifierType.CONTROL_MASK)
+		alt = (event.state & Gdk.ModifierType.MOD1_MASK)
+		shift = (event.state & Gdk.ModifierType.SHIFT_MASK)
+		
+		print(keyval_name)
+		
+		if not alt:
+			self.only_alt = True
+		else:
+			self.only_alt = False
+			
+		if keyval_name == "Escape":
+			window.hide()
+
+
+	def on_commanderWindow_key_release_event(self, window, event):
+		keyval_name = Gdk.keyval_name(event.keyval)
+		ctrl = (event.state & Gdk.ModifierType.CONTROL_MASK)
+		alt = (event.state & Gdk.ModifierType.MOD1_MASK)
+		shift = (event.state & Gdk.ModifierType.SHIFT_MASK)
+		
+		if alt and self.only_alt and keyval_name == "Alt_L":
+			window.hide()
+			

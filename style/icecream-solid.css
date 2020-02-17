@@ -196,3 +196,10 @@
     font-size: 20px;
 }
 
+
+
+/******************* COMMANDER WINDOW *********************/
+#commanderLbl {
+	background: #6B5C6B;
+	color: #fdfdfd;
+}
