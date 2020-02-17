@@ -138,13 +138,13 @@ class Plugin():
 		self.plugins["highlight.highlight"].remove_highlight(self.tag_name)
 		self.search = searchEntry.get_text()
 		self.count = self.plugins["highlight.highlight"].highlight(self.search)
-		self.is_highlight_done = True
 		
 		# if no results
 		if self.count == 0:
 			self.plugins["message_notify.message_notify"].show_message("Search Results | 0")
 			return
 			
+		self.is_highlight_done = True
 		
 		# scroll to first occurrence of search if not empty
 		if self.search:
