@@ -178,8 +178,14 @@ class Plugin():
 		
 		
 	def set_currently_displayed(self, file_ui_ref):
-		# remove current displayed class
+
 		btns = self.toolbar_files.get_children()
+		
+		# if only one file, dont highlight
+		if len(btns) == 1:
+			return
+		
+		# remove current displayed class
 		for b in btns:
 			b.get_style_context().remove_class("openned_file_current_displayed")
 		
