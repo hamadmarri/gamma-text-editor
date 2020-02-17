@@ -25,7 +25,7 @@
 
 # if passed args
 # echo $1
-export GAMMA_OPEN_FILE=$1
+export GAMMA_OPEN_FILE="$@"
 
 
 # run gamma with python3

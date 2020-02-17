@@ -44,9 +44,10 @@ class Plugin():
 		if open_file:
 			# get files_manager
 			if not self.files_manager:
-				print(str(open_file))
+				filenames = open_file.split()
+				print(filenames)
 				self.files_manager = self.app.plugins_manager.get_plugin("files_manager")
-				self.files_manager.open_file(str(open_file))
+				self.files_manager.open_files(filenames)
 				
 		else:
 			print("no GAMMA_OPEN_FILE")
