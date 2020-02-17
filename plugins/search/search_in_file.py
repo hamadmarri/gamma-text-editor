@@ -80,10 +80,15 @@ class Plugin():
 				
 		if keyval_name == "Escape":
 			self.clear_search(widget)
+			
+			# set focus back to sourceview
+			self.files_manager.current_file.source_view.grab_focus()
+			
 		elif (shift and keyval_name == "Return") or keyval_name == "Up":
 			if not self.is_highlight_done:
 				self.do_highlight(self.searchEntry)
 			self.scroll_prev()	
+			
 		elif keyval_name == "Return" or keyval_name == "KP_Enter" or keyval_name == "Down":
 			if not self.is_highlight_done:
 				self.do_highlight(self.searchEntry)
