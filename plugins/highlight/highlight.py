@@ -36,6 +36,7 @@ class Plugin():
 		self.app = app
 		self.commands = []
 		self.files_manager = None
+		self.message_notify = None
 		self.tag_name = "search-match"
 		self.spaces_pattern = re.compile("^\s+$")
 
@@ -48,6 +49,10 @@ class Plugin():
 		# get files_manager
 		if not self.files_manager:
 			self.files_manager = self.app.plugins_manager.get_plugin("files_manager")
+			
+		# get message_notify
+		if not self.message_notify:
+			self.message_notify = self.app.plugins_manager.get_plugin("message_notify")
 			
 		
 	def key_bindings(self, event, keyval_name, ctrl, alt, shift):
@@ -81,7 +86,8 @@ class Plugin():
 				# highlight text is in seperate method
 				# which help to select any text string 
 				# by other plugins like find or search
-				self.highlight(search)
+				counter = self.highlight(search)
+				self.message_notify.show_message(f"Highlighted | {counter}")
 		
 	
 	# "search" is a string text
