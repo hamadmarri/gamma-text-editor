@@ -199,12 +199,43 @@
 
 
 /******************* COMMANDER WINDOW *********************/
-#commanderSearchEntry , #commanderSearchEntry * {
+
+#commanderSearchEntry, #commanderSearchEntry * {
 	color:#0DD100;
+	background: #fdfdfd;
+	font-family: monospace;
+	font-size: 22px;
+	min-height: 40px;
 }
 
+#commanderList{
+	background: #6D5E6D;
+	padding-top:4px;
+}
+
+.commanderRow {
+	color:#fdfdfd;
+
+	font-size: 18px;
+	padding: 10px 30px 10px 30px;
+	border:none;
+}
+
+row {
+	border:none;
+}
+row:hover {
+	color: #FDFDFD;
+	background: rgba(255, 196, 255, 0.15);
+	border:none;
+}
 
 row:selected {
-	background:red;
-	color:white;
+	background:#00B5FF;
+	color:#fdfdfd;
+	font-weight:bold;
+	border:none;
 }
+
+
+

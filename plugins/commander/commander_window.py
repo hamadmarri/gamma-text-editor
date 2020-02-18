@@ -29,10 +29,6 @@ class CommanderWindow:
 		
 		self.commanderSearchEntry.set_text("")
 		
-		
-		#no_result = Gtk.Label.new("No commands found!")
-		#no_result.command = None
-		#self.listbox.insert(no_result, -1)
 		self.listbox.unselect_all()
 		self.listbox.show_all()
 		
@@ -41,12 +37,18 @@ class CommanderWindow:
 	
 	
 	def add_commands(self):
-		lbl = None
 		for c in self.commander.commands:
-			#print(c, "\n")
-			lbl = Gtk.Label.new(f"{c['name']}\t{c['shortcut']}")
-			lbl.command = c
-			self.listbox.insert(lbl, -1)
+			box = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
+			box.command = c
+			lblName = Gtk.Label.new(c['name'])
+			lblShortcut = Gtk.Label.new(c['shortcut'])
+			box.pack_start(lblName, False, False, 0)
+			box.pack_end(lblShortcut, False, False, 0)
+			
+			box.get_style_context().add_class("commanderRow")
+			lblName.get_style_context().add_class("commanderCommandName")
+			lblShortcut.get_style_context().add_class("commanderCommanShortcut")
+			self.listbox.insert(box, -1)
 		
 		
 		
@@ -61,7 +63,8 @@ class CommanderWindow:
 			self.listbox.select_row(None)
 			return True
 		
-		row_text = row.get_child().get_text().lower()
+		box = row.get_child()
+		row_text = box.get_children()[0].get_text().lower()
 		show = (row_text.find(search_text) != -1)
 			
 		if not self.selected_row and show:
@@ -78,8 +81,8 @@ class CommanderWindow:
 		if not search:
 			return -1
 		
-		command1 = row1.get_child().get_text().lower()
-		command2 = row2.get_child().get_text().lower()
+		command1 = row1.get_child().get_children()[0].get_text().lower()
+		command2 = row2.get_child().get_children()[0].get_text().lower()
 		index1 = command1.find(search)
 		index2 = command2.find(search)
 		
@@ -122,7 +125,8 @@ class CommanderWindow:
 		
 		
 	def close(self):
-		self.window.hide()
+		#self.window.hide()
+		pass
 		
 
 
