@@ -29,6 +29,8 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 
+from . import savefile_commands as commands
+
 # TODO: only save when buffer is changed
 # TODO: empty file is saved at home!
 class Plugin():
@@ -43,6 +45,7 @@ class Plugin():
 		
 	def activate(self):
 		self.signal_handler.key_bindings_to_plugins.append(self)
+		commands.set_commands(self)
 		
 	
 	# key_bindings is called by SignalHandler
@@ -50,25 +53,29 @@ class Plugin():
 		
 		# save is bound to "<Ctrl>+s"
 		if ctrl and keyval_name == "s":
+			self.save_current_file()
 			
-			# get the current displayed file
-			current_file = self.plugins["files_manager.files_manager"].current_file
 			
-			# get current buffer
-			buffer = current_file.source_view.get_buffer()
+			
+	def save_current_file(self):
+		# get the current displayed file
+		current_file = self.plugins["files_manager.files_manager"].current_file
+		
+		# get current buffer
+		buffer = current_file.source_view.get_buffer()
 
-			# get all buffer text without the hidden markups
-			# (read: https://developer.gnome.org/gtk3/stable/GtkTextBuffer.html#gtk-text-buffer-get-text) 	
-			text = buffer.get_text(buffer.get_start_iter(), buffer.get_end_iter(), False)
-			
-			# check if file is new
-			if current_file.new_file:
-				new_filename = self.show_save_dialog()
-				if new_filename:
-					self.save_file(new_filename, text)
-					self.plugins["files_manager.files_manager"].convert_new_empty_file(current_file, new_filename)
-			else:
-				self.save_file(current_file.filename, text)
+		# get all buffer text without the hidden markups
+		# (read: https://developer.gnome.org/gtk3/stable/GtkTextBuffer.html#gtk-text-buffer-get-text) 	
+		text = buffer.get_text(buffer.get_start_iter(), buffer.get_end_iter(), False)
+		
+		# check if file is new
+		if current_file.new_file:
+			new_filename = self.show_save_dialog()
+			if new_filename:
+				self.save_file(new_filename, text)
+				self.plugins["files_manager.files_manager"].convert_new_empty_file(current_file, new_filename)
+		else:
+			self.save_file(current_file.filename, text)
 	
 	
 	

@@ -22,8 +22,8 @@
     <property name="name">window</property>
     <property name="can_focus">False</property>
     <property name="window_position">center</property>
-    <property name="default_width">1400</property>
-    <property name="default_height">700</property>
+    <property name="default_width">1500</property>
+    <property name="default_height">750</property>
     <property name="startup_id">org.gtk.example</property>
     <signal name="key-press-event" handler="on_window_key_press_event" swapped="no"/>
     <signal name="key-release-event" handler="on_window_key_release_event" swapped="no"/>
@@ -709,9 +709,13 @@
   <object class="GtkWindow" id="commanderWindow">
     <property name="name">commanderWindow</property>
     <property name="can_focus">False</property>
+    <property name="resizable">False</property>
     <property name="window_position">center-on-parent</property>
-    <property name="default_width">600</property>
+    <property name="default_width">800</property>
+    <property name="destroy_with_parent">True</property>
+    <property name="skip_taskbar_hint">True</property>
     <property name="decorated">False</property>
+    <property name="deletable">False</property>
     <property name="gravity">center</property>
     <property name="transient_for">window</property>
     <signal name="focus-out-event" handler="on_commanderWindow_focus_out_event" swapped="no"/>
@@ -732,9 +736,13 @@
             <property name="name">commanderSearchEntry</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
+            <property name="shadow_type">none</property>
             <property name="primary_icon_name">edit-find-symbolic</property>
             <property name="primary_icon_activatable">False</property>
             <property name="primary_icon_sensitive">False</property>
+            <property name="placeholder_text" translatable="yes">Type command here</property>
+            <signal name="key-press-event" handler="on_commanderSearchEntry_key_press_event" swapped="no"/>
+            <signal name="search-changed" handler="on_commanderSearchEntry_changed" swapped="no"/>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -746,6 +754,7 @@
           <object class="GtkScrolledWindow">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
+            <property name="vscrollbar_policy">always</property>
             <property name="shadow_type">in</property>
             <child>
               <object class="GtkViewport">
@@ -755,8 +764,9 @@
                   <object class="GtkListBox" id="commanderList">
                     <property name="name">commanderList</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="resize_mode">queue</property>
+                    <property name="can_focus">True</property>
+                    <signal name="key-press-event" handler="on_commanderList_key_press_event" swapped="no"/>
+                    <signal name="row-activated" handler="on_commanderList_row_activated" swapped="no"/>
                   </object>
                 </child>
               </object>
@@ -766,22 +776,6 @@
             <property name="expand">True</property>
             <property name="fill">True</property>
             <property name="position">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkActionBar" id="commanderActionbar">
-            <property name="name">commanderActionbar</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <child>
-              <placeholder/>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="pack_type">end</property>
-            <property name="position">2</property>
           </packing>
         </child>
       </object>

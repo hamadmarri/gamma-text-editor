@@ -23,7 +23,7 @@
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk
-#from . import commands
+from . import commands
 
 class Plugin(): 
 
@@ -52,13 +52,12 @@ class Plugin():
 		self.tag = None
 		self.tag_name = "selected_search"
 		
-		# commands.set_commands(self)
-		self.set_handlers()
-			
-
+		
+	
 	def activate(self):
 		self.signal_handler.key_bindings_to_plugins.append(self)
-		
+		self.set_handlers()
+		commands.set_commands(self)
 		self.searchEntry = self.builder.get_object("searchEntry")
 	
 

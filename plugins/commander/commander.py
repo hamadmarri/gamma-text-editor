@@ -22,33 +22,40 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk
 
+from . import commands
+from . import commander_window as cw
+
 class Plugin():
 	
 	def __init__(self, app):
 		self.name = "commander"
 		self.app = app
 		self.builder = app.builder
-		self.plugins = app.plugins_manager.plugins
+		self.plugins_manager = app.plugins_manager
 		self.signal_handler = app.signal_handler
 		self.handlers = app.signal_handler.handlers
-		self.commands = []
+		self.commands = None
 		self.only_alt = False
-		self.set_handlers()
-		self.window = None
+		self.commander_window = cw.CommanderWindow(app, self)
 		
 		
 	def activate(self):
 		self.signal_handler.key_bindings_to_plugins.append(self)
 		self.signal_handler.any_key_press_to_plugins.append(self)
+		self.set_handlers()
 	
 		
 	def set_handlers(self):
 		self.handlers.on_window_key_release_event = self.on_window_key_release_event
-		self.handlers.on_commanderWindow_key_press_event = self.on_window_key_press_event
-		self.handlers.on_commanderWindow_key_release_event = self.on_commanderWindow_key_release_event
-		self.handlers.on_commanderWindow_focus_out_event = self.on_commanderWindow_focus_out_event
-		
-		
+		self.handlers.on_commanderWindow_key_press_event = self.commander_window.on_commanderWindow_key_press_event
+		self.handlers.on_commanderWindow_key_release_event = self.commander_window.on_commanderWindow_key_release_event
+		self.handlers.on_commanderWindow_focus_out_event = self.commander_window.on_commanderWindow_focus_out_event
+		self.handlers.on_commanderSearchEntry_changed = self.commander_window.on_commanderSearchEntry_changed
+		self.handlers.on_commanderList_row_activated = self.commander_window.on_commanderList_row_activated
+		self.handlers.on_commanderSearchEntry_key_press_event = self.commander_window.on_commanderSearchEntry_key_press_event
+		self.handlers.on_commanderList_key_press_event = self.commander_window.on_commanderList_key_press_event
+
+				
 	
 	def key_bindings(self, event, keyval_name, ctrl, alt, shift):
 		if not alt:
@@ -64,52 +71,30 @@ class Plugin():
 		shift = (event.state & Gdk.ModifierType.SHIFT_MASK)
 		
 		if alt and self.only_alt and keyval_name == "Alt_L":
-			self.show_commander_window()
-
-			
-			
-		
-	def show_commander_window(self):
-		self.window = self.builder.get_object("commanderWindow")
-		listbox = self.builder.get_object("commanderList")
-		
-		for i in range(0, 20):
-			lbl = Gtk.Label.new(f"adasda4s {i}")
-			listbox.insert(lbl, -1)
-			
-		self.window.show_all()
-
-
-
+			self.run()
 
 	
-	def on_window_key_press_event(self, window, event):
-		keyval_name = Gdk.keyval_name(event.keyval)
-		ctrl = (event.state & Gdk.ModifierType.CONTROL_MASK)
-		alt = (event.state & Gdk.ModifierType.MOD1_MASK)
-		shift = (event.state & Gdk.ModifierType.SHIFT_MASK)
-		
-		print(keyval_name)
-		
-		if not alt:
-			self.only_alt = True
-		else:
-			self.only_alt = False
+	def run(self):
+		# check if commands have been loaded
+		if not self.commands:
+			# load commands
+			self.load_commands()
 			
-		if keyval_name == "Escape":
-			window.hide()
-
-
-	def on_commanderWindow_key_release_event(self, window, event):
-		keyval_name = Gdk.keyval_name(event.keyval)
-		ctrl = (event.state & Gdk.ModifierType.CONTROL_MASK)
-		alt = (event.state & Gdk.ModifierType.MOD1_MASK)
-		shift = (event.state & Gdk.ModifierType.SHIFT_MASK)
-		
-		if alt and self.only_alt and keyval_name == "Alt_L":
-			window.hide()
-			
-			
+		self.commander_window.show_commander_window()
 	
-	def on_commanderWindow_focus_out_event(self, window, d):
-		window.hide()
+	
+	
+	def load_commands(self):
+		self.commands = []
+				
+		for plugin in self.plugins_manager.plugins_array:
+			if plugin.name != self.name and plugin.commands:
+				for c in plugin.commands:
+					self.commands.append(c)
+		
+		# add self commands!
+		commands.set_commands(self)				
+		print(len(self.commands))
+
+	
+	

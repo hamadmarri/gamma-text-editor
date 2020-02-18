@@ -25,6 +25,8 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk
 
+from . import openfile_commands as commands
+
 class Plugin():
 	
 	def __init__(self, app):
@@ -37,6 +39,7 @@ class Plugin():
 		
 	def activate(self):
 		self.signal_handler.key_bindings_to_plugins.append(self)
+		commands.set_commands(self)
 		
 		
 	def open_files_from_args(self, args):

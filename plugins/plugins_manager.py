@@ -65,6 +65,7 @@ class PluginsManager():
 	def __init__(self, app):
 		self.app = app
 		self.plugins = {}
+		self.plugins_array = []
 
 
 	# importing all plugins in "plugin_list"
@@ -83,12 +84,10 @@ class PluginsManager():
 			module.activate()
 			
 			# add a reference of the plugin 
-			# to plugins dictionary
+			# to plugins dictionary and array
 			self.plugins[p] = module
+			self.plugins_array.append(module)
 		
-		#for p in self.plugins:
-		#	if hasattr(p, "auto_run"):
-		#		p.auto_run()
 			
 			
 	

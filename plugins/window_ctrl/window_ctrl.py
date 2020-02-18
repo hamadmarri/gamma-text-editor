@@ -38,7 +38,6 @@ class Plugin():
 		# commands and set_commands are important for
 		# the commander plugin to know this plugin methods, key bindings, description
 		self.commands = []
-		commands.set_commands(self)
 		
 		self.set_handlers()
 		self.message_notify = None
@@ -48,6 +47,7 @@ class Plugin():
 	
 	def activate(self):
 		self.signal_handler.key_bindings_to_plugins.append(self)
+		commands.set_commands(self)
 	
 	
 	# setting handlers, see SignalHandler

@@ -26,7 +26,7 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 
-from . import commands
+from . import files_manager_commands as commands
 
 
 # each openned file is set in File object and
@@ -51,13 +51,14 @@ class Plugin():
 		self.plugins = app.plugins_manager.plugins
 		self.sourceview_manager = app.sourceview_manager
 		self.commands = []
-		commands.set_commands(self)
 		self.files = []
 		self.current_file = None
 		
 	
 	def activate(self):
 		self.signal_handler.key_bindings_to_plugins.append(self)
+		
+		commands.set_commands(self)
 		
 		# default empty file when open editor with no opened files
 		self.current_file = File("empty", self.sourceview_manager.source_view, new_file=True)

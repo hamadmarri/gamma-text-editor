@@ -199,11 +199,12 @@
 
 
 /******************* COMMANDER WINDOW *********************/
-#commanderLbl {
-	background: #6B5C6B;
-	color: #fdfdfd;
-}
-
 #commanderSearchEntry , #commanderSearchEntry * {
 	color:#0DD100;
+}
+
+
+row:selected {
+	background:red;
+	color:white;
 }

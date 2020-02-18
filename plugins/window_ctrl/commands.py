@@ -17,7 +17,7 @@ def set_commands(plugin):
 	plugin.commands.append( 
 		{
 			"plugin-name": plugin.name,
-			"name": "toggle maximize",
+			"name": "Toggle maximize window",
 			"ref": plugin.toggle_maximize,
 			"shortcut": "<Alt>+m",
 		}
@@ -26,7 +26,7 @@ def set_commands(plugin):
 	plugin.commands.append( 
 		{
 			"plugin-name": plugin.name,
-			"name": "minimize",
+			"name": "Minimize window",
 			"ref": plugin.minimize,
 			"shortcut": "<Ctrl><Alt>+m",
 		}
@@ -35,7 +35,7 @@ def set_commands(plugin):
 	plugin.commands.append( 
 		{
 			"plugin-name": plugin.name,
-			"name": "quit",
+			"name": "Exit",
 			"ref": plugin.quit,
 			"shortcut": "<Ctrl>+q",
 		}
