@@ -55,6 +55,7 @@ plugin_list = [
 	"message_notify.message_notify",
 	"search.search_in_file",
 	"ui_manager.ui_manager",
+	"files_manager.opendir",
 ]
 
 

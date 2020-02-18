@@ -18,7 +18,7 @@ def set_commands(plugin):
 			"plugin-name": plugin.name,
 			"name": "A command name 1",
 			"ref": plugin.a_method1,
-			"shortcut": "<Alt><Ctrl>+n",
+			"shortcut": "<Alt><Ctrl> + n",
 		}
 	)
 	
@@ -27,7 +27,7 @@ def set_commands(plugin):
 			"plugin-name": plugin.name,
 			"name": "A command name 2",
 			"ref": plugin.a_method2,
-			"shortcut": "<Alt>+t",
+			"shortcut": "<Alt> + t",
 		}
 	)
 	
@@ -36,7 +36,7 @@ def set_commands(plugin):
 			"plugin-name": plugin.name,
 			"name": "A command name 3",
 			"ref": plugin.a_method3,
-			"shortcut": "<Shift><Ctrl>+a",
+			"shortcut": "<Shift><Ctrl> + a",
 		}
 	)
 	

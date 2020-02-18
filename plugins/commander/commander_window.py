@@ -99,10 +99,10 @@ class CommanderWindow:
 		alt = (event.state & Gdk.ModifierType.MOD1_MASK)
 		shift = (event.state & Gdk.ModifierType.SHIFT_MASK)
 				
-		if not alt:
-			self.only_alt = True
+		if not ctrl:
+			self.only_ctrl = True
 		else:
-			self.only_alt = False
+			self.only_ctrl = False
 			
 		if keyval_name == "Escape":
 			self.close()
@@ -115,7 +115,7 @@ class CommanderWindow:
 		alt = (event.state & Gdk.ModifierType.MOD1_MASK)
 		shift = (event.state & Gdk.ModifierType.SHIFT_MASK)
 		
-		if alt and self.only_alt and keyval_name == "Alt_L":
+		if ctrl and self.only_ctrl and keyval_name == "Control_L":
 			self.close()
 			
 			

@@ -145,6 +145,10 @@ class Plugin():
 		for f in filenames:
 			self.open_file(f)
 		
+		
+		self.current_file = self.files[-1]
+		self.plugins["ui_manager.ui_manager"].replace_sourceview_widget(self.current_file.source_view)
+		
 		# set headerbar text to the filename
 		self.plugins["ui_manager.ui_manager"].update_header(self.current_file.filename)
 		
@@ -173,7 +177,7 @@ class Plugin():
 		# DEBUG: print("newsource")
 		
 		# replace old sourceview(previously opened) with this new one
-		self.plugins["ui_manager.ui_manager"].replace_sourceview_widget(newsource)
+		# self.plugins["ui_manager.ui_manager"].replace_sourceview_widget(newsource)
 		# DEBUG: print("replace_sourceview_widget")
 		
 		# new File object
@@ -212,7 +216,7 @@ class Plugin():
 		self.plugins["ui_manager.ui_manager"].add_filename_to_ui(newfile)
 				
 		# set current file to this file
-		self.current_file = newfile
+		# self.current_file = newfile
 		
 	
 	

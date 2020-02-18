@@ -18,6 +18,6 @@ def set_commands(plugin):
 			"plugin-name": plugin.name,
 			"name": "Search in File",
 			"ref": plugin.get_focus,
-			"shortcut": "<Ctrl>+f",
+			"shortcut": "<Ctrl> + f",
 		}
 	)

@@ -6,7 +6,7 @@ def set_commands(plugin):
 			"plugin-name": plugin.name,
 			"name": "Open/Close This Window!",
 			"ref": plugin.run,
-			"shortcut": "<Alt>",
+			"shortcut": "<Ctrl>",
 		}
 	)
 	
