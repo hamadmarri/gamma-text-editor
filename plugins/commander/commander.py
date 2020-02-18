@@ -86,7 +86,8 @@ class Plugin():
 	
 	def load_commands(self):
 		self.commands = []
-				
+		
+
 		for plugin in self.plugins_manager.plugins_array:
 			if plugin.name != self.name and plugin.commands:
 				for c in plugin.commands:

@@ -125,8 +125,8 @@ class CommanderWindow:
 		
 		
 	def close(self):
-		#self.window.hide()
-		pass
+		self.window.hide()
+		#pass
 		
 
 
