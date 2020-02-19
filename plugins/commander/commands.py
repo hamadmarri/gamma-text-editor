@@ -1,5 +1,7 @@
 
 
+
+
 def set_commands(plugin):
 	plugin.commands.append( 
 		{

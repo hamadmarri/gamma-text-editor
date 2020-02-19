@@ -3,6 +3,7 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk
 
+from . import list_functions as lf
 
 class CommanderWindow:
 	def __init__(self, app, commander):
@@ -15,79 +16,71 @@ class CommanderWindow:
 		self.window = self.builder.get_object("commanderWindow")
 		self.commanderSearchEntry = self.builder.get_object("commanderSearchEntry")
 		self.listbox = self.builder.get_object("commanderList")
-		self.listbox.set_filter_func(self.filter, self.commanderSearchEntry)
-		self.listbox.set_sort_func(self.sort, self.commanderSearchEntry)
+		self.listbox.set_filter_func(lf.filter, self, self.commanderSearchEntry)
+		self.listbox.set_sort_func(lf.sort, self.commanderSearchEntry)
+		
+		# commands are added to list only once
+		# list takes care of filtering and sorting
 		self.commands_added = False
-		self.selected_row = False
+		
+		# when search, first command must be highlighted
+		self.selected_first_row = None
+		
+		# this is to fix press down from search 
+		# to move selection to the seacond row 
+		# since the first row is already selected
+		self.prepare_second_row = None
 
 
 
 	def show_commander_window(self):
+		# commands are added to list only once
+		# list takes care of filtering and sorting
 		if not self.commands_added:
 			self.add_commands()
 			self.commands_added = True
 		
+		# must empty search every time showing commander
 		self.commanderSearchEntry.set_text("")
 		
+		# get the focus to search to let user type right away
+		self.commanderSearchEntry.grab_focus()
+				
+		# unselect_all previously selected row
 		self.listbox.unselect_all()
 		self.listbox.show_all()
 		
 		self.window.show()
 		
+		# unhighlight first row when show commander
+		self.selected_first_row = None
+		
+	
 	
 	
 	def add_commands(self):
+		# loop through commands,
 		for c in self.commander.commands:
+			# put each in gtkbox (name, shurtcut) and bind the command 
 			box = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
+			
+			# box doesn't have command, but in python
+			# we are allowed to bind any method in run time
+			# we can get command from activated rows
 			box.command = c
+			
 			lblName = Gtk.Label.new(c['name'])
 			lblShortcut = Gtk.Label.new(c['shortcut'])
 			box.pack_start(lblName, False, False, 0)
 			box.pack_end(lblShortcut, False, False, 0)
-			
+	
+			# adding styles		
 			box.get_style_context().add_class("commanderRow")
 			lblName.get_style_context().add_class("commanderCommandName")
 			lblShortcut.get_style_context().add_class("commanderCommanShortcut")
-			self.listbox.insert(box, -1)
-		
-		
-		
-		
-	def filter(self, row, *user_data):
-		searchEntry = user_data[0]
-		search_text = searchEntry.get_text().lower()
-		show = False
-		
-		# if empty, show all
-		if not search_text:
-			self.listbox.select_row(None)
-			return True
-		
-		box = row.get_child()
-		row_text = box.get_children()[0].get_text().lower()
-		show = (row_text.find(search_text) != -1)
 			
-		if not self.selected_row and show:
-			self.selected_row = True
-			self.listbox.select_row(row)
-		
-		return show
-		
-	
-	
-	def sort(self, row1, row2, *user_data):
-		search = user_data[0].get_text().lower()
-		
-		if not search:
-			return -1
-		
-		command1 = row1.get_child().get_children()[0].get_text().lower()
-		command2 = row2.get_child().get_children()[0].get_text().lower()
-		index1 = command1.find(search)
-		index2 = command2.find(search)
-		
-		
-		return (index1 - index2)
+			# add to listbox
+			self.listbox.insert(box, -1)
 		
 		
 	
@@ -99,16 +92,20 @@ class CommanderWindow:
 		alt = (event.state & Gdk.ModifierType.MOD1_MASK)
 		shift = (event.state & Gdk.ModifierType.SHIFT_MASK)
 				
+		# the same way as commander when open commander window,
+		# this will close it with the same key
 		if not ctrl:
 			self.only_ctrl = True
 		else:
 			self.only_ctrl = False
 			
+		# also if press escape then close commander
 		if keyval_name == "Escape":
 			self.close()
 
 
 
+	# if user preseed and released ctrl key, commander will close
 	def on_commanderWindow_key_release_event(self, window, event):
 		keyval_name = Gdk.keyval_name(event.keyval)
 		ctrl = (event.state & Gdk.ModifierType.CONTROL_MASK)
@@ -119,22 +116,26 @@ class CommanderWindow:
 			self.close()
 			
 			
-	
+	# if user clicked outside commander window then close
 	def on_commanderWindow_focus_out_event(self, window, d):
 		self.close()
 		
-		
+
+	# use hide to not lose the widgets from builder		
 	def close(self):
 		self.window.hide()
-		#pass
+
 		
 
 
 	################### LIST EVENTS ########################		
+	# activated means either row clicked or selected by keyboard and hit enter 
 	def on_commanderList_row_activated(self, widget, row):
+		# run the command 
 		self.run_command(row.get_child().command)
 		
-		
+	
+	
 	def on_commanderList_key_press_event(self, widget, event):
 		keyval_name = Gdk.keyval_name(event.keyval)
 		
@@ -143,7 +144,7 @@ class CommanderWindow:
 			first_row = self.listbox.get_row_at_y(1)
 			if not first_row or first_row.is_selected():
 				self.commanderSearchEntry.grab_focus_without_selecting()
-		
+				
 		# if start typing again, back to searchEntry
 		# and insert that key to search 
 		elif keyval_name != "Return" and keyval_name != "Up" and keyval_name != "Down":
@@ -154,30 +155,65 @@ class CommanderWindow:
 
 
 
+
 	################### SEARCH ENTRY EVENTS ########################
+	# The “search-changed” signal is emitted with a short delay of
+	# 150 milliseconds after the last change to the entry text.
+	# (see https://developer.gnome.org/gtk3/stable/GtkSearchEntry.html#GtkSearchEntry-search-changed) 
 	def on_commanderSearchEntry_changed(self, widget):
-		self.selected_row = False
-		self.listbox.invalidate_sort()
-		self.listbox.invalidate_filter()
+		# reset first and second row refs
+		self.selected_first_row = None
+		self.prepare_second_row = None
+		
+		# for performance it is better to filter first then sort 
+		# but to be able to detected first and second rows, we
+		# have to run sort first, then filter.
+		# when filter ran last, we can get the first and second rows
+		# if sort ran after filter, then first and second rows would be 
+		# sorted in different locations
+		self.listbox.invalidate_sort()		# to force list to sort items
+		self.listbox.invalidate_filter()	# to force list to filter items
 		
 		
-		
+	
+	
 	def on_commanderSearchEntry_key_press_event(self, widget, event):
 		keyval_name = Gdk.keyval_name(event.keyval)
 				
-		# run the first result
-		if keyval_name == "Return":
+		# run the first result when hit enter, or right numpad enter
+		if keyval_name == "Return" or keyval_name == "KP_Enter":
+			
+			# get the selected row, it should be the first (filtered/sorted) row 
 			first_row = self.listbox.get_selected_row()
 			
 			if first_row:
 				self.run_command(first_row.get_child().command)
 			else:
-				self.app.plugins_manager.plugins["message_notify.message_notify"].show_message("No commands found!")
-						
+				# if no rows, then show message no commands selected
+				self.app.plugins_manager.plugins["message_notify.message_notify"].show_message("No commands selected!")
+
 		
+		# move to next row when press down key from searchEntry
+		elif keyval_name == "Down":
+			
+			# if just opened the commander (i.e. no row selected)
+			# then select the first row in list
+			if not self.selected_first_row:
+				# passing None as row makes listbox to select
+				# the first row
+				# shortcut of self.listbox.select_row(self.listbox.get_row_at_index(0)) 
+				self.listbox.select_row(None)
+			else:	
+				# move to second row then focus
+				# without this, user need to press "down" key twice
+				# first to get listbox focus, second to move to second row
+				self.listbox.select_row(self.prepare_second_row)
+			
+			# get the focus to listbox
+			self.listbox.grab_focus()
+			
 
 
 	def run_command(self, command):
 		command["ref"]()
-		#print(command["name"])
 		self.close()

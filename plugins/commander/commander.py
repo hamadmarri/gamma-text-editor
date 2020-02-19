@@ -18,6 +18,8 @@
 #
 #
 
+import time
+
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk
@@ -38,12 +40,31 @@ class Plugin():
 		self.only_ctrl = False
 		self.commander_window = cw.CommanderWindow(app, self)
 		
+		# when user hold ctrl for long time
+		# but never used key bindings, then
+		# no need to show commander 
+		# it is annoying to show commander 
+		# when user hold ctrl but then changed
+		# their mind (i.e. ctrl+c to copy something 
+		# but changed their mind before hit the 'c'
+		# when relaeas ctrl (without timing) commander 
+		# will show which is not good
+		# but with timing if ctrl is helf for self.max_time
+		# then open commander will fire 
+		self.t0 = 0
+		self.max_time = 0.3
+		
+		
+		
+		
 		
 	def activate(self):
 		self.signal_handler.key_bindings_to_plugins.append(self)
 		self.signal_handler.any_key_press_to_plugins.append(self)
 		self.set_handlers()
 	
+		
+		
 		
 	def set_handlers(self):
 		self.handlers.on_window_key_release_event = self.on_window_key_release_event
@@ -54,14 +75,31 @@ class Plugin():
 		self.handlers.on_commanderList_row_activated = self.commander_window.on_commanderList_row_activated
 		self.handlers.on_commanderSearchEntry_key_press_event = self.commander_window.on_commanderSearchEntry_key_press_event
 		self.handlers.on_commanderList_key_press_event = self.commander_window.on_commanderList_key_press_event
+		
 
 				
 	
+	
+	
+	
 	def key_bindings(self, event, keyval_name, ctrl, alt, shift):
+		# when user hit ctrl alone, or any key 
+		# not ctrl + any 
 		if not ctrl:
+			# we assume that only ctrl is pressed
+			# we know it is for sure not ctrl+'any key'
+			# on_window_key_release_event verifies if
+			# ctrl was released, but we need to know
+			# if ctrl has been pressed and released (alone)
 			self.only_ctrl = True
+			
+			# get time
+			self.t0 = time.time()
 		else:
 			self.only_ctrl = False
+			
+			
+			
 			
 
 	def on_window_key_release_event(self, window, event):
@@ -70,16 +108,21 @@ class Plugin():
 		alt = (event.state & Gdk.ModifierType.MOD1_MASK)
 		shift = (event.state & Gdk.ModifierType.SHIFT_MASK)
 		
+		# if only ctrl has been pressed and released, and 
+		# time is not to long during the held!, then open commander
 		if ctrl and self.only_ctrl and keyval_name == "Control_L":
-			self.run()
+			if (time.time() - self.t0) <= self.max_time:
+				self.run()
 
 	
 	def run(self):
+		# load commands only once, for first time
 		# check if commands have been loaded
 		if not self.commands:
 			# load commands
 			self.load_commands()
-			
+		
+		# show commander window	
 		self.commander_window.show_commander_window()
 	
 	
@@ -87,15 +130,13 @@ class Plugin():
 	def load_commands(self):
 		self.commands = []
 		
-
 		for plugin in self.plugins_manager.plugins_array:
+			
+			# avoid recursive loading this commander commands!
 			if plugin.name != self.name and plugin.commands:
 				for c in plugin.commands:
 					self.commands.append(c)
 		
 		# add self commands!
 		commands.set_commands(self)				
-		print(len(self.commands))
-
-	
 	
