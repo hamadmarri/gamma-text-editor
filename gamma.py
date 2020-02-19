@@ -118,6 +118,7 @@ class Application(Gtk.Application):
 		self.plugins_manager.plugins["files_manager.openfile"].open_files_from_args(filenames)
 		
 		# self.window.maximize()
+		self.window.set_icon_name("com.editor.gamma")
 		self.window.show_all()
 
 
