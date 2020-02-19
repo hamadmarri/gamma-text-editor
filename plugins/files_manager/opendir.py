@@ -74,10 +74,10 @@ class Plugin():
 					filenames.append(os.path.join(root, filename))
 		    	
 		    
-		# for name in dirs:
-		#   print(os.path.join(root, name))
-		    
-		self.plugins["files_manager.files_manager"].open_files(filenames)
+		
+		
+		if filenames:
+			self.plugins["files_manager.files_manager"].open_files(filenames)
 		    
 
 	

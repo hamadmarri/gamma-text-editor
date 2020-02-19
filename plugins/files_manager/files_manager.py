@@ -76,6 +76,23 @@ class Plugin():
 		if ctrl and keyval_name == "w":
 			# close current_file
 			self.close_current_file()
+		elif shift and ctrl and keyval_name == "W":
+			self.close_all()
+			
+	
+	
+	def close_all(self):
+	
+		# empty file will keep adding
+		# if > 0, then infinite loop
+		while len(self.files) > 1:
+			self.close_current_file()
+
+		# close the last file
+		self.close_current_file()
+			
+		
+			
 			
 	
 	# TODO: check if need saving before close
