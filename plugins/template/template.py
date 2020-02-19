@@ -57,14 +57,14 @@ class Plugin():
 	def __init__(self, app):
 		self.name = "template"
 		self.app = app
-		self.handlers = app.signal_handler.handlers # optional
+		self.signal_handler = app.signal_handler.handlers # optional
 		self.commands = []
-		commands.set_commands(self)
-		self.set_handlers() # optional
 	
 	# do not remove 
 	def activate(self):
 		# self.signal_handler.key_bindings_to_plugins.append(self) <-- if need key_bindings
+		commands.set_commands(self)
+		self.set_handlers() # optional
 		pass
 	
 	# works with "self.signal_handler.key_bindings_to_plugins.append(self)"

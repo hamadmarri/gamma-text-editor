@@ -56,6 +56,7 @@ plugin_list = [
 	"search.search_in_file",
 	"ui_manager.ui_manager",
 	"files_manager.opendir",
+	"codecomment.codecomment2",
 ]
 
 
