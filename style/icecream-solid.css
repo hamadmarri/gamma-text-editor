@@ -117,14 +117,11 @@
 
 
 /********** FILES *************/
-.openned_file, .close_file { 
+.openned_file { 
 	background:transparent;
 	border:none;
 	margin: 0 0 0 0;
 	
-	padding-top: 17px;
-	padding-bottom: 17px;
-
 	border-style: dotted none none none;
 	border-width: 3px;
 	
@@ -132,24 +129,45 @@
 	font-size: 1.05em;
 }
 
-.openned_file:hover label  {
-	text-decoration: none;
+.openned_file button { 
+	background:transparent;
+	border:none;
+	margin: 0;
+	padding-top: 17px;
+	padding-bottom: 17px;
+	font-size: 1.05em;
 }
 
-.openned_file label { 
+.close_btn label {
+	color: transparent;
+}
+.close_btn:hover {
+	background: rgba(255, 25, 70, 0.85);
+	font-weight:bold;
+}
+
+
+.openned_file_hover label  {
+	text-decoration: none;
 	color: #fdfdfd;
 }
-.openned_file:hover  {
+.openned_file_hover  {
 	background: rgba(253, 253, 253, 0.05);
 }
-.openned_file:hover label  {
+
+
+.openned_file * { 
 	color: #fdfdfd;
 }
+
+
+
 .openned_file_current_displayed {
-	background: rgba(253, 253, 253, 0.05);
+	background: rgba(253, 253, 253, 0.10);
 }
 .openned_file_current_displayed label {
 	font-weight: bold;
+	color: #fdfdfd;
 }
 
 

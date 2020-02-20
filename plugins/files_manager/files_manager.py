@@ -106,6 +106,9 @@ class Plugin():
 			# destroy file, after switching, the current file 
 			# become second last in the "files" array
 			self.destroy_file(len(self.files) - 2)
+			
+			# update ui, set selected
+			self.plugins["ui_manager.ui_manager"].files_ui.set_currently_displayed(self.current_file.ui_ref)
 		
 		
 		# if empty file only there, do nothing
@@ -120,7 +123,7 @@ class Plugin():
 			newsource = self.sourceview_manager.get_new_sourceview()
 			
 			# remove current sourceview and put the new empty sourceview
-			self.plugins["ui_manager.ui_manager"].replace_sourceview_widget(newsource)
+			self.plugins["ui_manager.ui_manager"].files_ui.replace_sourceview_widget(newsource)
 			
 			# current file is now empty
 			self.current_file = File("empty", newsource, new_file=True)
@@ -132,12 +135,13 @@ class Plugin():
 			self.files.append(self.current_file)
 			
 			# since it is an empty file, set the headerbar to "Gamma"
-			self.plugins["ui_manager.ui_manager"].set_header("Gamma")
+			self.plugins["ui_manager.ui_manager"].files_ui.set_header("Gamma")
 			
 			# cancel and clear message 
 			# why? sometimes user save a file and close it right after,
 			# so no need to keep showing that file is saved
 			self.plugins["message_notify.message_notify"].cancel()
+		
 			
 	
 	
@@ -164,13 +168,13 @@ class Plugin():
 		
 		
 		self.current_file = self.files[-1]
-		self.plugins["ui_manager.ui_manager"].replace_sourceview_widget(self.current_file.source_view)
+		self.plugins["ui_manager.ui_manager"].files_ui.replace_sourceview_widget(self.current_file.source_view)
 		
 		# set headerbar text to the filename
-		self.plugins["ui_manager.ui_manager"].update_header(self.current_file.filename)
+		self.plugins["ui_manager.ui_manager"].files_ui.update_header(self.current_file.filename)
 		
 		# update ui, set selected
-		self.plugins["ui_manager.ui_manager"].set_currently_displayed(self.current_file.ui_ref)
+		self.plugins["ui_manager.ui_manager"].files_ui.set_currently_displayed(self.current_file.ui_ref)
 			
 	
 	# TODO: this method is doing too much, must get seperated
@@ -193,9 +197,6 @@ class Plugin():
 		newsource = self.sourceview_manager.get_new_sourceview()
 		# DEBUG: print("newsource")
 		
-		# replace old sourceview(previously opened) with this new one
-		# self.plugins["ui_manager.ui_manager"].replace_sourceview_widget(newsource)
-		# DEBUG: print("replace_sourceview_widget")
 		
 		# new File object
 		newfile = File(filename, newsource)
@@ -230,7 +231,7 @@ class Plugin():
 		self.sourceview_manager.set_language(filename, buffer)
 		# DEBUG: print("set_language")
 		
-		self.plugins["ui_manager.ui_manager"].add_filename_to_ui(newfile)
+		self.plugins["ui_manager.ui_manager"].files_ui.add_filename_to_ui(newfile)
 				
 		# set current file to this file
 		# self.current_file = newfile
@@ -240,7 +241,7 @@ class Plugin():
 	def convert_new_empty_file(self, newfile, filename):
 		newfile.filename = filename
 		newfile.new_file = False
-		self.plugins["ui_manager.ui_manager"].add_filename_to_ui(newfile)
+		self.plugins["ui_manager.ui_manager"].files_ui.add_filename_to_ui(newfile)
 	
 	
 	
@@ -266,7 +267,7 @@ class Plugin():
 		f = self.files[file_index]
 		
 		# replace the source view 
-		self.plugins["ui_manager.ui_manager"].replace_sourceview_widget(f.source_view)
+		self.plugins["ui_manager.ui_manager"].files_ui.replace_sourceview_widget(f.source_view)
 				
 		# reposition file in files list
 		del self.files[file_index]
@@ -274,7 +275,7 @@ class Plugin():
 		self.current_file = f
 				
 		# update headerbar to filename
-		self.plugins["ui_manager.ui_manager"].update_header(f.filename)
+		self.plugins["ui_manager.ui_manager"].files_ui.update_header(f.filename)
 		
 		
 

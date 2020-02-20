@@ -45,7 +45,7 @@ class Plugin():
 	def open_files_from_args(self, args):
 		if args:
 			filenames = args.split()
-			print(filenames)
+#			print(filenames)
 			self.plugins["files_manager.files_manager"].open_files(filenames)				
 		else:
 			print("no GAMMA_OPEN_FILE")

@@ -43,7 +43,7 @@ class Plugin():
 	
 
 	def key_bindings(self, event, keyval_name, ctrl, alt, shift):
-		print(keyval_name, event.keyval)
+		# print(keyval_name, event.keyval)
 		if shift and ctrl and keyval_name == "question":
 			self.do_comment()
 			

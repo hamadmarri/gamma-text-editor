@@ -40,12 +40,12 @@
 #
 #
 
-import os
 
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk	
 
+from . import files_ui 
 
 # class name must be "Plugin". Do not change the name 
 class Plugin():
@@ -68,6 +68,8 @@ class Plugin():
 		self.toolbar_files = None
 		self.headerbar = None
 		self.scrolledwindow = None
+		
+		self.files_ui = files_ui.FilesUI(self)
 		
 		
 
@@ -106,115 +108,10 @@ class Plugin():
 		self.app.window.get_window().set_cursor(cursor)
 		
 	
-
 	def on_menue_leave_notify_event(self, widget, event):
 		lbl = widget.get_child()
 		lbl.get_style_context().remove_class("menu_hover")
 		cursor = Gdk.Cursor(Gdk.CursorType.ARROW)
 		self.app.window.get_window().set_cursor(cursor)
 
-
-
-	# adds ui button with filename label in toolbar_file
-	# (the left side panel)
-	def add_filename_to_ui(self, newfile):		
-		
-		# create new button
-		btn = Gtk.Button()
-		
-		# associate btn widget to File object
-		newfile.ui_ref = btn
-		
-		# set the text of button to filename
-		basename = os.path.basename(newfile.filename)
-		btn.set_label(basename)
-
-		# connect clicked signal to side_file_clicked method		
-		btn.connect("clicked", self.side_file_clicked, newfile.filename)
-		
-		# set the ui/css class to the button (.openned_file)
-		btn.get_style_context().add_class("openned_file")
-		
-		# get the label of the button, and set left padding to 0
-		lbl = btn.get_children()[0]
-		lbl.set_xalign(0)
-		
-		# add button to toolbar_files
-		# (read: https://developer.gnome.org/gtk3/stable/GtkBox.html#gtk-box-pack-start)
-		self.toolbar_files.pack_start(btn, False, False, 0)
-		
-		# position new opened file's button to top of toolbar_files
-		# (read: https://developer.gnome.org/gtk3/unstable/GtkBox.html#gtk-box-reorder-child)
-		self.toolbar_files.reorder_child(btn, 0)
-		
-		# show the widget
-		btn.show()
-		
-		
-		
-	# handler of "clicked" event
-	# it switch the view to the filename in clicked button
-	def side_file_clicked(self, btn, filename):
-		self.set_currently_displayed(btn)	
-		self.plugins["files_manager.files_manager"].side_file_clicked(filename)
-		
-		
-		
-	def set_currently_displayed(self, file_ui_ref):
-
-		btns = self.toolbar_files.get_children()
-		
-		# if only one file, dont highlight
-		if len(btns) == 1:
-			return
-		
-		# remove current displayed class
-		for b in btns:
-			b.get_style_context().remove_class("openned_file_current_displayed")
-		
-		file_ui_ref.get_style_context().add_class("openned_file_current_displayed")
 	
-	
-	# updates the headerbar by filename
-	def update_header(self, filename):		
-		# gets basename of the file, not the full path
-		basename = os.path.basename(filename)
-		
-		# set the title of headerbar
-		self.headerbar.set_title(basename)
-		
-		# show message of the full path of the file 
-		# it is useful to avoid confusion when having 
-		# different files with similar names in different paths
-		self.plugins["message_notify.message_notify"].show_message(filename)
-		
-	
-	
-	# updates the headerbar by filename
-	def set_header(self, text):
-		# set the title of headerbar
-		self.headerbar.set_title(text)
-
-
-
-
-
-	def replace_sourceview_widget(self, newsource):
-		# remove previously displayed sourceview
-		# DEBUG: print("scrolledwindow.remove before")
-		prev_child = self.scrolledwindow.get_child()
-		# DEBUG: print(prev_child)
-		if prev_child:
-			self.scrolledwindow.remove(prev_child)
-		# DEBUG: print("scrolledwindow.remove")
-		
-		# add the newsource view
-		self.scrolledwindow.add(newsource)
-		# DEBUG: print("scrolledwindow.add")
-		
-		# place the cursor in it
-		newsource.grab_focus()
-		
-		# need to update the mini map too
-		self.sourceview_manager.update_sourcemap(newsource)
-		# DEBUG: print("sourceview_manager.update_sourcemap")
