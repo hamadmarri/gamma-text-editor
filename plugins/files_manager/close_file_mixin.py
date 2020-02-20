@@ -13,7 +13,7 @@ class CloseFileMixin(object):
 			to_close_index = self.get_file_index(filename)
 					
 			# destroy file
-			self.destroy_file(to_close_index)				
+			self.destroy_file(to_close_index)
 
 		
 	
@@ -52,14 +52,18 @@ class CloseFileMixin(object):
 		# if 2 files (a signle file, and empty in array), close and make empty file to stay 
 		# in the view
 		else:			
+			# destroy opened file 
+			self.destroy_file(1)
+			
+			# make sure init file is empty
+			self.files[0].source_view.get_buffer().set_text("")
+			
 			# remove current sourceview and put the new empty sourceview
 			self.plugins["ui_manager.ui_manager"].replace_sourceview_widget(self.files[0].source_view)
 			
 			# current file is now empty
 			self.current_file = self.files[0]
 			
-			# destroy opened file 
-			self.destroy_file(1)
 						
 			# since it is an empty file, set the headerbar to "Gamma"
 			self.plugins["ui_manager.ui_manager"].set_header("Gamma")
@@ -73,7 +77,11 @@ class CloseFileMixin(object):
 	
 	
 
-	def destroy_file(self, file_index):		
+	def destroy_file(self, file_index):
+		# check if file is marked editted
+		if self.files[file_index].editted:
+			self.files[file_index].reset_editted()
+	
 		# destroy the ui_ref btn attached to file TODO: move to ui manager
 		self.files[file_index].ui_ref.destroy()
 		

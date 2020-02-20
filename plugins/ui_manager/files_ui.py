@@ -1,6 +1,4 @@
-
-
-
+#
 
 import os
 
@@ -143,12 +141,18 @@ class FilesUI(object):
 		
 	
 	# updates the headerbar by filename
-	def update_header(self, filename):		
+	def update_header(self, filename, editted=False):		
 		# gets basename of the file, not the full path
 		basename = os.path.basename(filename)
 		
-		# set the title of headerbar
-		self.headerbar.set_title(basename)
+		if editted:
+			self.headerbar.get_style_context().add_class("openned_file_editted")
+			# set the edited title of headerbar
+			self.headerbar.set_title("*" + basename)
+		else:
+			self.headerbar.get_style_context().remove_class("openned_file_editted")
+			# set the title of headerbar
+			self.headerbar.set_title(basename)
 		
 		# show message of the full path of the file 
 		# it is useful to avoid confusion when having 
@@ -187,3 +191,15 @@ class FilesUI(object):
 		newsource.grab_focus()		
 		
 
+
+
+	def set_editted(self, box):
+		box.get_style_context().add_class("openned_file_editted")
+		self.headerbar.get_style_context().add_class("openned_file_editted")
+		self.headerbar.set_title("*" + self.headerbar.get_title())
+	
+	
+	def reset_editted(self, box):
+		box.get_style_context().remove_class("openned_file_editted")
+		self.headerbar.get_style_context().remove_class("openned_file_editted")
+		self.update_header(box.file.filename)

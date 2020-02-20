@@ -1,3 +1,4 @@
+
 #
 #### Author: Hamad Al Marri <hamad.s.almarri@gmail.com>
 #### Date: Feb 11th, 2020
@@ -27,6 +28,7 @@
 # Also it loads the eager plugins in self.plugins_manager.load_plugins()
 # which call activate for each plugin and store plugins references in
 # plugins_manager.plugins
+
 
 import os
 

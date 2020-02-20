@@ -13,10 +13,10 @@
 #	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
+  
 /* @import url("/home/hamad/.themes/victory-gtk-theme-19-10/gtk-3.20/gtk.css");*/
 
-/*
+/* 
 COLORS:
 RED: #FF1946
 BLUE: #00B5FF
@@ -50,12 +50,12 @@ FOREGROUND: #827082 #6B5C6B
 #headerPaned > separator {
 	background: #fdfdfd;
 }
-
+ 
 
 #headerbarMain, #headerbarMain * {
 	background: #fdfdfd;
 	color: rgba(130, 112, 130, 0.77);
-	border:none;
+	border:none; 
 }
 
 #headerbarMain {
@@ -64,7 +64,12 @@ FOREGROUND: #827082 #6B5C6B
 
 #headerbarMain .title {
 	color: #827082;
+	font-size: 16px;
 }
+.openned_file_editted#headerbarMain .title {
+	color: #FF931F;
+}
+
 
 
 #searchEntry {
@@ -151,12 +156,18 @@ FOREGROUND: #827082 #6B5C6B
 	font-size: 1.05em;
 }
 
+
+.openned_file_editted label {
+	color: #FCE94F;
+	font-style: italic;
+}
 .close_btn label {
 	color: transparent;
 }
 .close_btn:hover {
 	background: rgba(255, 25, 70, 0.85);
 	font-weight:bold;
+	color: #fdfdfd;
 }
 
 
@@ -164,24 +175,28 @@ FOREGROUND: #827082 #6B5C6B
 	text-decoration: none;
 	color: #fdfdfd;
 }
+
+
+.openned_file_hover.openned_file_editted label  {
+	text-decoration: none;
+	color: #FCE94F;
+}
+
+
 .openned_file_hover  {
 	background: rgba(253, 253, 253, 0.05);
 }
-
-
 .openned_file * { 
 	color: #fdfdfd;
 }
-
-
-
 .openned_file_current_displayed {
 	background: rgba(253, 253, 253, 0.10);
 }
-.openned_file_current_displayed label {
+.openned_file_current_displayed {
 	font-weight: bold;
-	color: #fdfdfd;
 }
+
+
 
 
 /********** MENUS *************/

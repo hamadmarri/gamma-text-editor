@@ -1,5 +1,4 @@
-
-#
+# 
 #### Author: Hamad Al Marri <hamad.s.almarri@gmail.com>
 #### Date: Feb 11th, 2020
 #
@@ -55,30 +54,40 @@ class Plugin():
 		if ctrl and keyval_name == "s":
 			self.save_current_file()
 			
-			
-			
+					
 	def save_current_file(self):
 		# get the current displayed file
 		current_file = self.plugins["files_manager.files_manager"].current_file
+		self.save_file(current_file)
 		
+	
+	
+	def save_file(self, file_object):		
 		# get current buffer
-		buffer = current_file.source_view.get_buffer()
+		buffer = file_object.source_view.get_buffer()
 
 		# get all buffer text without the hidden markups
 		# (read: https://developer.gnome.org/gtk3/stable/GtkTextBuffer.html#gtk-text-buffer-get-text) 	
 		text = buffer.get_text(buffer.get_start_iter(), buffer.get_end_iter(), False)
 		
 		# check if file is new
-		if current_file.new_file:
+		if file_object.new_file:
+			files_manager = self.plugins["files_manager.files_manager"]
+			# switch to file to let the user 
+			# know which file is it
+			files_manager.switch_to_file(files_manager.get_file_index(file_object.filename))
 			new_filename = self.show_save_dialog()
 			if new_filename:
-				self.save_file(new_filename, text)
-				self.plugins["files_manager.files_manager"].rename_file(current_file, new_filename)
-				
+				self.write_file(new_filename, text)
+				files_manager.rename_file(file_object, new_filename)
+				file_object.reset_editted()
+						
 				# TODO: if saved(overwrite) a file in HD, but that file 
 				# is already is open here! need to close old file 
 		else:
-			self.save_file(current_file.filename, text)
+			self.write_file(file_object.filename, text)
+			file_object.reset_editted()
+		
 	
 	
 	
@@ -109,7 +118,7 @@ class Plugin():
 		
 		
 			
-	def save_file(self, filename, text):
+	def write_file(self, filename, text):
 		try:
 			# save the file, in other words, copy text 
 			# from buffer and write the file "current_file.filename"
@@ -126,3 +135,4 @@ class Plugin():
 			f.close()
 			print(f"{basename} saved and closed")
 			
+

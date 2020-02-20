@@ -131,17 +131,27 @@ class Plugin():
 
 			
 			
-		
+	################ OPEN #######################
 	def on_open_menu_button_press_event(self, widget, event):
 		self.plugins["files_manager.openfile"].openfile()
 		
-		
+	################ NEW #########################
 	def on_project_menu_button_press_event(self, widget, event):
 		self.plugins["files_manager.opendir"].opendir()
-		
-		
+	
+	################ SAVE ########################
 	def on_save_menu_button_press_event(self, widget, event):
-		pass
+		editted_counter = self.plugins["files_manager.files_manager"].editted_counter
+		if editted_counter > 0:
+			files = editted_counter = self.plugins["files_manager.files_manager"].files
+			# loop through all files objects
+			# reversed so from user prespective "from top to bottom"
+			for f in reversed(files):
+				if f.editted:
+					self.plugins["files_manager.savefile"].save_file(f)
+		
+			
+			
 		
 	def on_find_menu_button_press_event(self, widget, event):
 		pass
@@ -170,4 +180,9 @@ class Plugin():
 		# add "sourceviewclass" css class
 		menu.get_style_context().add_class("menu_attention")
 		
-		
+	def remove_attention(self, menu=None):
+		if not menu:
+			menu = self.H
+			
+		# add "sourceviewclass" css class
+		menu.get_style_context().remove_class("menu_attention")

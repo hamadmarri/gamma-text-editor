@@ -2,7 +2,7 @@
 from .file import File
 
 
-
+ 
 class CreateFileMixin(object):		
 	
 	
@@ -21,3 +21,4 @@ class CreateFileMixin(object):
 		
 		self.counter += 1
 		self.current_file.set_editted()
+		

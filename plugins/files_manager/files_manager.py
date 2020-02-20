@@ -47,6 +47,7 @@ class Plugin(CreateFileMixin, CloseFileMixin, OpenFileMixin):
 		self.files = []
 		self.current_file = None
 		self.counter = 1
+		self.editted_counter = 0
 		
 	
 	def activate(self):
@@ -144,7 +145,7 @@ class Plugin(CreateFileMixin, CloseFileMixin, OpenFileMixin):
 		self.plugins["ui_manager.ui_manager"].set_currently_displayed(self.current_file.ui_ref)
 			
 		# update headerbar to filename
-		self.plugins["ui_manager.ui_manager"].update_header(f.filename)
+		self.plugins["ui_manager.ui_manager"].update_header(f.filename, f.editted)
 		
 		
 		
