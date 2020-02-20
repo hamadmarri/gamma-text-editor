@@ -48,6 +48,18 @@ class Plugin():
 	def activate(self):
 		self.signal_handler.key_bindings_to_plugins.append(self)
 		commands.set_commands(self)
+		
+		self.N = self.builder.get_object("new_menu")
+		self.O = self.builder.get_object("open_menu")
+		self.P = self.builder.get_object("project_menu")
+		self.S = self.builder.get_object("save_menu")
+		self.F = self.builder.get_object("find_menu")
+		self.R = self.builder.get_object("find_replace_menu")
+		self.W = self.builder.get_object("welcome_menu")
+		self.H = self.builder.get_object("help_menu")
+		self.A = self.builder.get_object("about_menu")
+		
+		
 	
 	
 	# setting handlers, see SignalHandler
@@ -145,3 +157,17 @@ class Plugin():
 		
 	def on_about_menu_button_press_event(self, widget, event):
 		pass
+		
+		
+	
+	
+	
+	####################### css control #########################
+	def grap_attention(self, menu=None):
+		if not menu:
+			menu = self.H
+			
+		# add "sourceviewclass" css class
+		menu.get_style_context().add_class("menu_attention")
+		
+		

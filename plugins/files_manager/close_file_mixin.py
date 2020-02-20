@@ -2,66 +2,65 @@ from .file import File
 
 class CloseFileMixin(object):
 	
+	
+	def close_file(self, filename):
+		# check if the current file is being closed
+		if self.current_file.filename == filename:
+			self.close_current_file()
+			
+		else:
+			# get  file index
+			to_close_index = self.get_file_index(filename)
+					
+			# destroy file
+			self.destroy_file(to_close_index)				
+
+		
+	
 	def close_all(self):
-		# empty file will keep adding
-		# if > 0, then infinite loop
+		# > 1 to not delete empty init file
 		while len(self.files) > 1:
 			self.close_current_file()
-
-		# close the last file
-		self.close_current_file()
-			
 		
-			
-			
+		
+		
 	
 	# TODO: check if need saving before close
 	def close_current_file(self):
-		
 		# if current file is new file created by user, and not saved
 		# then ask to save it first
 		# TODO: prompt do you want save window
-		if self.current_file.filename == "New File" and self.current_file.new_file:
-			self.plugins["files_manager.savefile"].save_current_file()
-		
-	
+			
 		# if length > 2, then close current and switch to previouse file 
 		# in "files" array
-		if len(self.files) > 1:
-			# first switch to previouse openned file
-			self.switch_to_file(len(self.files) - 2)
+		if len(self.files) > 2:
+			# get current file index
+			to_close_index = self.get_file_index(self.current_file.filename)
+					
+			# destroy file
+			self.destroy_file(to_close_index)
 			
-			# destroy file, after switching, the current file 
-			# become second last in the "files" array
-			self.destroy_file(len(self.files) - 2)
-			
-			# update ui, set selected
-			self.plugins["ui_manager.ui_manager"].set_currently_displayed(self.current_file.ui_ref)
-		
+			# switch to last file
+			self.switch_to_file(len(self.files) - 1)
+
 		
 		# if empty file only there, do nothing
-		elif len(self.files) == 1 and self.files[0].filename == "empty":
+		elif len(self.files) == 1 and self.files[0].init_file:
 			return
 			
 			
-		# if signle file openned, close and make empty file to stay 
+		# if 2 files (a signle file, and empty in array), close and make empty file to stay 
 		# in the view
-		else:
-			# new sourceview for the empty file
-			newsource = self.sourceview_manager.get_new_sourceview()
-			
+		else:			
 			# remove current sourceview and put the new empty sourceview
-			self.plugins["ui_manager.ui_manager"].replace_sourceview_widget(newsource)
+			self.plugins["ui_manager.ui_manager"].replace_sourceview_widget(self.files[0].source_view)
 			
 			# current file is now empty
-			self.current_file = File("empty", newsource, new_file=True)
+			self.current_file = self.files[0]
 			
 			# destroy opened file 
-			self.destroy_file(0)
-			
-			# append empty file to "files" array
-			self.files.append(self.current_file)
-			
+			self.destroy_file(1)
+						
 			# since it is an empty file, set the headerbar to "Gamma"
 			self.plugins["ui_manager.ui_manager"].set_header("Gamma")
 			
@@ -74,10 +73,7 @@ class CloseFileMixin(object):
 	
 	
 
-	def destroy_file(self, file_index):
-		# destroy the sourceview attached to file 
-		self.files[file_index].source_view.destroy()
-		
+	def destroy_file(self, file_index):		
 		# destroy the ui_ref btn attached to file TODO: move to ui manager
 		self.files[file_index].ui_ref.destroy()
 		

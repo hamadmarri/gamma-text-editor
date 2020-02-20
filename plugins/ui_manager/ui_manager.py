@@ -83,6 +83,9 @@ class Plugin(FilesUI):
 		# get headerbar widget reference, to show current filename
 		# in headerbar label
 		self.headerbar = self.builder.get_object("headerbarMain")
+		
+		self.scroll_and_source_and_map_box = self.builder.get_object("scroll_and_source_and_map_box") 
+	
 	
 	
 	

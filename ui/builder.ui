@@ -331,7 +331,7 @@
                         <signal name="enter-notify-event" handler="on_menue_enter_notify_event" swapped="no"/>
                         <signal name="leave-notify-event" handler="on_menue_leave_notify_event" swapped="no"/>
                         <child>
-                          <object class="GtkLabel" id="open_menu1">
+                          <object class="GtkLabel" id="project_menu">
                             <property name="name">open_menu</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
@@ -452,7 +452,7 @@
                         <signal name="enter-notify-event" handler="on_menue_enter_notify_event" swapped="no"/>
                         <signal name="leave-notify-event" handler="on_menue_leave_notify_event" swapped="no"/>
                         <child>
-                          <object class="GtkLabel" id="open_menu2">
+                          <object class="GtkLabel" id="find_replace_menu">
                             <property name="name">open_menu</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
@@ -492,7 +492,7 @@
                         <signal name="enter-notify-event" handler="on_menue_enter_notify_event" swapped="no"/>
                         <signal name="leave-notify-event" handler="on_menue_leave_notify_event" swapped="no"/>
                         <child>
-                          <object class="GtkLabel" id="open_menu3">
+                          <object class="GtkLabel" id="welcome_menu">
                             <property name="name">open_menu</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
@@ -532,7 +532,7 @@
                         <signal name="enter-notify-event" handler="on_menue_enter_notify_event" swapped="no"/>
                         <signal name="leave-notify-event" handler="on_menue_leave_notify_event" swapped="no"/>
                         <child>
-                          <object class="GtkLabel" id="open_menu4">
+                          <object class="GtkLabel" id="help_menu">
                             <property name="name">open_menu</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
@@ -572,7 +572,7 @@
                         <signal name="enter-notify-event" handler="on_menue_enter_notify_event" swapped="no"/>
                         <signal name="leave-notify-event" handler="on_menue_leave_notify_event" swapped="no"/>
                         <child>
-                          <object class="GtkLabel" id="open_menu5">
+                          <object class="GtkLabel" id="about_menu">
                             <property name="name">open_menu</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
@@ -644,7 +644,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkBox">
+          <object class="GtkBox" id="scroll_and_source_and_map_box">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="hexpand">True</property>

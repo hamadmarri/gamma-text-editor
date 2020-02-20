@@ -31,10 +31,12 @@ class SourceViewManager():
 	def __init__(self, app):
 		self.app = app
 		self.plugins = app.plugins_manager.plugins
-		self.source_view = self.app.builder.get_object("view")
+		self.source_view = app.builder.get_object("view")
 		self.source_view.grab_focus()
-		self.sourcemap = self.app.builder.get_object("sourcemap")
+		self.sourcemap = app.builder.get_object("sourcemap")
 		self.sourcemap.set_view(self.source_view)
+		self.source_view.sourcemap = self.sourcemap
+
 		
 	
 	# opening new file needs new sourceview object
@@ -46,8 +48,9 @@ class SourceViewManager():
 	def get_new_sourceview(self):
 			
 		# get new sourceview object
-		newsource = GtkSource.View.new()
-		
+		newsource = GtkSource.View.new()		
+		newsourcemap = GtkSource.Map.new()
+				
 		# copy the default sourceview properties
 		newsource.set_visible(self.source_view.get_visible())
 		newsource.set_can_focus(self.source_view.get_can_focus())
@@ -77,6 +80,10 @@ class SourceViewManager():
 		# see highlight.highlight_signal function for handling 
 		# mark-set event
 		newsource.get_buffer().connect("mark-set", self.plugins["highlight.highlight"].highlight_signal)
+		
+		
+		# newsourcemap.set_view(newsource)
+		newsource.sourcemap = newsourcemap
 		
 		# show the gtk widget
 		newsource.show()
@@ -114,6 +121,9 @@ class SourceViewManager():
 	# update source map (mini map) to connect to a sourceview
 	def update_sourcemap(self, source_view):
 		# DEBUG: print("sourcemap.set_view before")
-		self.sourcemap.set_view(source_view)
+		# self.sourcemap.set_view(source_view)
 		# DEBUG: print("sourcemap.set_view after")
+		
+		#self.scroll_and_source_and_map_box
+		pass
 

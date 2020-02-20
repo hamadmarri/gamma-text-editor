@@ -55,7 +55,7 @@ class Plugin(CreateFileMixin, CloseFileMixin, OpenFileMixin):
 		commands.set_commands(self)
 		
 		# default empty file when open editor with no opened files
-		self.current_file = File("empty", self.sourceview_manager.source_view, new_file=True, init_file=True)
+		self.current_file = File(self, "empty", self.builder.get_object("view"), new_file=True, init_file=True)
 
 		# add empty/current_file to files array
 		self.files.append(self.current_file)
@@ -71,28 +71,51 @@ class Plugin(CreateFileMixin, CloseFileMixin, OpenFileMixin):
 		elif shift and ctrl and keyval_name == "W":
 			self.close_all()
 			
+		elif shift and ctrl and keyval_name == "Z":
+			print("files\n")
+			for i, f in enumerate(self.files):
+				print(i, f.filename)
+			
 	
 	
 	def rename_file(self, file_object, filename):
-		# check if it is the new init file, need to be added to ui
+		# check if it is the new init file, need to make new sourceview and be added to ui
 		if file_object.init_file:
-			file_object.init_file = False	# not init anymore	
-			file_object.filename = filename
-			self.plugins["ui_manager.ui_manager"].add_filename_to_ui(file_object)
-		
+			self.duplicate_init_file(file_object, filename)
+			
 		# if new file added by the user
 		else:
 			# rename in array
 			file_object.filename = filename
+			file_object.new_file = False	# not new anymore
 			self.plugins["ui_manager.ui_manager"].rename_file(file_object)
 			
 		
 		
 	
+	def duplicate_init_file(self, file_object, filename):
+		newsource = self.sourceview_manager.get_new_sourceview()
+			
+		# default empty file when open editor with no opened files
+		newfile = File(self, filename, newsource)
+		
+		# copy text from init file to newfile
+		buffer = file_object.source_view.get_buffer()
+		text = buffer.get_text(buffer.get_start_iter(), buffer.get_end_iter(), True)
+		newsource.get_buffer().set_text(text)
+		file_object.source_view.get_buffer().set_text("")
+
+		# add newfile to files array
+		self.files.append(newfile)
+		
+		self.plugins["ui_manager.ui_manager"].add_filename_to_ui(newfile)
+		self.switch_to_file(len(self.files) - 1)		
+				
+				
+	
 	# handler of "clicked" event
 	# it switch the view to the filename in clicked button
 	def side_file_clicked(self, filename):
-	
 		# is_already_openned gets the index of the file in "files" array
 		file_index = self.is_already_openned(filename)
 		
@@ -111,15 +134,15 @@ class Plugin(CreateFileMixin, CloseFileMixin, OpenFileMixin):
 				
 		# get file object
 		f = self.files[file_index]
-		
+				
 		# replace the source view 
 		self.plugins["ui_manager.ui_manager"].replace_sourceview_widget(f.source_view)
-				
-		# reposition file in files list
-		del self.files[file_index]
-		self.files.append(f)
+		
 		self.current_file = f
-				
+		
+		# update ui, set selected
+		self.plugins["ui_manager.ui_manager"].set_currently_displayed(self.current_file.ui_ref)
+			
 		# update headerbar to filename
 		self.plugins["ui_manager.ui_manager"].update_header(f.filename)
 		
@@ -129,8 +152,13 @@ class Plugin(CreateFileMixin, CloseFileMixin, OpenFileMixin):
 		
 	# returns file index if found or -1
 	def is_already_openned(self, filename):
+		return self.get_file_index(filename)
+		
+		
+		
+		
+	def get_file_index(self, filename):
 		for i, f in enumerate(self.files):
-			print(f"{filename} {f.filename} {filename == f.filename}")
 			if filename == f.filename:
 				return i	
 		return -1

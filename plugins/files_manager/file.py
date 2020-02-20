@@ -1,8 +1,9 @@
 # each openned file is set in File object and
 # appended to "files" array
 class File():
-	def __init__(self, filename, source_view, ui_ref=None,
+	def __init__(self, files_manager, filename, source_view, ui_ref=None,
 					need_save=False, new_file=False, init_file=False):
+		self.files_manager = files_manager
 		self.filename = filename
 		self.source_view = source_view
 		self.ui_ref = ui_ref
@@ -29,3 +30,5 @@ class File():
 	def set_editted(self):
 		print(f"editted {self.filename}")
 		self.editted = True
+		window_ctrl = self.files_manager.plugins["window_ctrl.window_ctrl"]
+		window_ctrl.grap_attention(window_ctrl.S)

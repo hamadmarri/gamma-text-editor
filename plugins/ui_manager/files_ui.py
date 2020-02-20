@@ -32,10 +32,7 @@ class FilesUI(object):
 	# adds ui button with filename label in toolbar_file
 	# (the left side panel)
 	def add_filename_to_ui(self, newfile):
-	
-		# create event box to detect hover signal on box
-		# eventBox = Gtk.EventBox()
-		
+			
 		# create box for both filename and close btn 
 		box = Gtk.Box(Gtk.Orientation.HORIZONTAL, 0)
 				
@@ -65,8 +62,7 @@ class FilesUI(object):
 		
 		# add close btn to the right
 		box.pack_end(btnClose, False, False, 0)
-		
-		
+				
 		# add button to toolbar_files
 		# (read: https://developer.gnome.org/gtk3/stable/GtkBox.html#gtk-box-pack-start)
 		self.toolbar_files.pack_start(box, False, False, 0)
@@ -110,12 +106,10 @@ class FilesUI(object):
 		
 		
 	def enter_notify_event(self, widget, event):
-		#print("enter", widget)
 		widget.get_parent().get_style_context().add_class("openned_file_hover")
 		
 	
 	def leave_notify_event(self, widget, event):
-		#print("leave", widget)
 		widget.get_parent().get_style_context().remove_class("openned_file_hover")
 		
 				
@@ -123,15 +117,13 @@ class FilesUI(object):
 	# handler of "clicked" event
 	# it switch the view to the filename in clicked button
 	def side_file_clicked(self, btn, box, newfile):
-		self.set_currently_displayed(box)	
 		self.plugins["files_manager.files_manager"].side_file_clicked(newfile.filename)
 		
 		
 		
-	def close_file_clicked(self, btn, box, newfile):
-		self.set_currently_displayed(box)
-		self.plugins["files_manager.files_manager"].side_file_clicked(newfile.filename)
-		self.plugins["files_manager.files_manager"].close_current_file()
+	def close_file_clicked(self, btn, box, newfile):		
+		self.plugins["files_manager.files_manager"].close_file(newfile.filename)
+		
 				
 		
 		
@@ -175,21 +167,23 @@ class FilesUI(object):
 
 
 	def replace_sourceview_widget(self, newsource):
+		# remove old source map
+		old_sourcemap = self.scroll_and_source_and_map_box.get_children()[1]
+		if old_sourcemap:
+			self.scroll_and_source_and_map_box.remove(old_sourcemap)
+		
 		# remove previously displayed sourceview
-		# DEBUG: print("scrolledwindow.remove before")
 		prev_child = self.scrolledwindow.get_child()
-		# DEBUG: print(prev_child)
 		if prev_child:
 			self.scrolledwindow.remove(prev_child)
-		# DEBUG: print("scrolledwindow.remove")
 		
 		# add the newsource view
 		self.scrolledwindow.add(newsource)
-		# DEBUG: print("scrolledwindow.add")
-		
+
+		self.scroll_and_source_and_map_box.pack_start(newsource.sourcemap, False, True, 0)
+		newsource.sourcemap.set_view(newsource)
+			
 		# place the cursor in it
-		newsource.grab_focus()
+		newsource.grab_focus()		
 		
-		# need to update the mini map too
-		self.sourceview_manager.update_sourcemap(newsource)
-		# DEBUG: print("sourceview_manager.update_sourcemap")
+
