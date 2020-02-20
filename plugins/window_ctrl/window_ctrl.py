@@ -106,12 +106,19 @@ class Plugin():
 			self.window.maximize()
 			
 			
-	# before quit, need to stop any notify message
-	# because of the thread sleep in message_notify
-	# must cancel the thread		
 	def quit(self):
+		# before quit, need to stop any notify message
+		# because of the thread sleep in message_notify
+		# must cancel the thread		
 		self.plugins["message_notify.message_notify"].cancel()
-		self.app.quit()
+		
+		# close all files
+		self.plugins["files_manager.files_manager"].close_all()
+		
+		# if all files are closed (user didn't click "don't close")
+		editted_counter = self.plugins["files_manager.files_manager"].editted_counter
+		if editted_counter == 0:
+			self.app.quit()
 		
 		
 	def on_closeBtn_release_event(self, widget, event):
