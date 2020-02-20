@@ -59,7 +59,6 @@ class Plugin(CreateFileMixin, CloseFileMixin, OpenFileMixin):
 		# add empty/current_file to files array
 		self.files.append(self.current_file)
 				
-				
 	
 	# key_bindings is called by SignalHandler
 	def key_bindings(self, event, keyval_name, ctrl, alt, shift):		
@@ -72,16 +71,13 @@ class Plugin(CreateFileMixin, CloseFileMixin, OpenFileMixin):
 			self.close_all()
 			
 	
-	
-	
-	
-	
 	def convert_new_empty_file(self, newfile, filename):
 		newfile.filename = filename
 		newfile.new_file = False
-		self.plugins["ui_manager.ui_manager"].files_ui.add_filename_to_ui(newfile)
-	
-	
+		self.plugins["ui_manager.ui_manager"].add_filename_to_ui(newfile)
+		
+		
+		
 	
 	# handler of "clicked" event
 	# it switch the view to the filename in clicked button
@@ -94,7 +90,9 @@ class Plugin(CreateFileMixin, CloseFileMixin, OpenFileMixin):
 		if file_index >= 0:
 			self.switch_to_file(file_index)
 	
-		
+	
+	
+	
 	
 	def switch_to_file(self, file_index):
 		# check if it is the current_file, then exit method 
@@ -105,7 +103,7 @@ class Plugin(CreateFileMixin, CloseFileMixin, OpenFileMixin):
 		f = self.files[file_index]
 		
 		# replace the source view 
-		self.plugins["ui_manager.ui_manager"].files_ui.replace_sourceview_widget(f.source_view)
+		self.plugins["ui_manager.ui_manager"].replace_sourceview_widget(f.source_view)
 				
 		# reposition file in files list
 		del self.files[file_index]
@@ -113,14 +111,19 @@ class Plugin(CreateFileMixin, CloseFileMixin, OpenFileMixin):
 		self.current_file = f
 				
 		# update headerbar to filename
-		self.plugins["ui_manager.ui_manager"].files_ui.update_header(f.filename)
+		self.plugins["ui_manager.ui_manager"].update_header(f.filename)
 		
 		
-
+		
+		
+		
 	# returns file index if found or -1
 	def is_already_openned(self, filename):
 		for i, f in enumerate(self.files):
 			if filename == f.filename:
 				return i	
 		return -1
+		
+		
+		
 		

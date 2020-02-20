@@ -45,10 +45,10 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk	
 
-from . import files_ui 
+from .files_ui import  FilesUI
 
 # class name must be "Plugin". Do not change the name 
-class Plugin():
+class Plugin(FilesUI):
 	
 	# the plugins_manager will pass "app" reference 
 	# to your plugin. "app" object is defined in gamma.py
@@ -67,10 +67,7 @@ class Plugin():
 		
 		self.toolbar_files = None
 		self.headerbar = None
-		self.scrolledwindow = None
-		
-		self.files_ui = files_ui.FilesUI(self)
-		
+		self.scrolledwindow = None		
 		
 
 	def activate(self):

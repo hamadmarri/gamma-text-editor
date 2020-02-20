@@ -10,13 +10,8 @@ from gi.repository import Gtk, Gdk
 
 
 
-class FilesUI():
+class FilesUI(object):
 	
-	def __init__(self, ui_manager):
-		self.ui_manager = ui_manager
-		self.plugins = ui_manager.plugins
-		
-		
 
 	# adds ui button with filename label in toolbar_file
 	# (the left side panel)
@@ -58,11 +53,11 @@ class FilesUI():
 		
 		# add button to toolbar_files
 		# (read: https://developer.gnome.org/gtk3/stable/GtkBox.html#gtk-box-pack-start)
-		self.ui_manager.toolbar_files.pack_start(box, False, False, 0)
+		self.toolbar_files.pack_start(box, False, False, 0)
 		
 		# position new opened file's button to top of toolbar_files
 		# (read: https://developer.gnome.org/gtk3/unstable/GtkBox.html#gtk-box-reorder-child)
-		self.ui_manager.toolbar_files.reorder_child(box, 0)
+		self.toolbar_files.reorder_child(box, 0)
 		
 		# add css styling classes
 		self.add_css_classes(box, btnName, btnClose)
@@ -121,13 +116,11 @@ class FilesUI():
 		self.set_currently_displayed(box)
 		self.plugins["files_manager.files_manager"].side_file_clicked(filename)
 		self.plugins["files_manager.files_manager"].close_current_file()
-		
-		
-		
+				
 		
 		
 	def set_currently_displayed(self, box):
-		boxes = self.ui_manager.toolbar_files.get_children()
+		boxes = self.toolbar_files.get_children()
 		
 		# if only one file, dont highlight
 		if len(boxes) == 1:
@@ -147,7 +140,7 @@ class FilesUI():
 		basename = os.path.basename(filename)
 		
 		# set the title of headerbar
-		self.ui_manager.headerbar.set_title(basename)
+		self.headerbar.set_title(basename)
 		
 		# show message of the full path of the file 
 		# it is useful to avoid confusion when having 
@@ -160,7 +153,7 @@ class FilesUI():
 	# updates the headerbar by filename
 	def set_header(self, text):
 		# set the title of headerbar
-		self.ui_manager.headerbar.set_title(text)
+		self.headerbar.set_title(text)
 
 
 
@@ -168,19 +161,19 @@ class FilesUI():
 	def replace_sourceview_widget(self, newsource):
 		# remove previously displayed sourceview
 		# DEBUG: print("scrolledwindow.remove before")
-		prev_child = self.ui_manager.scrolledwindow.get_child()
+		prev_child = self.scrolledwindow.get_child()
 		# DEBUG: print(prev_child)
 		if prev_child:
-			self.ui_manager.scrolledwindow.remove(prev_child)
+			self.scrolledwindow.remove(prev_child)
 		# DEBUG: print("scrolledwindow.remove")
 		
 		# add the newsource view
-		self.ui_manager.scrolledwindow.add(newsource)
+		self.scrolledwindow.add(newsource)
 		# DEBUG: print("scrolledwindow.add")
 		
 		# place the cursor in it
 		newsource.grab_focus()
 		
 		# need to update the mini map too
-		self.ui_manager.sourceview_manager.update_sourcemap(newsource)
+		self.sourceview_manager.update_sourcemap(newsource)
 		# DEBUG: print("sourceview_manager.update_sourcemap")

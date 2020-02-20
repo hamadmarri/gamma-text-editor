@@ -11,13 +11,13 @@ class OpenFileMixin(object):
 			self.open_file(f)
 				
 		self.current_file = self.files[-1]
-		self.plugins["ui_manager.ui_manager"].files_ui.replace_sourceview_widget(self.current_file.source_view)
+		self.plugins["ui_manager.ui_manager"].replace_sourceview_widget(self.current_file.source_view)
 		
 		# set headerbar text to the filename
-		self.plugins["ui_manager.ui_manager"].files_ui.update_header(self.current_file.filename)
+		self.plugins["ui_manager.ui_manager"].update_header(self.current_file.filename)
 		
 		# update ui, set selected
-		self.plugins["ui_manager.ui_manager"].files_ui.set_currently_displayed(self.current_file.ui_ref)
+		self.plugins["ui_manager.ui_manager"].set_currently_displayed(self.current_file.ui_ref)
 			
 	
 	
@@ -77,7 +77,7 @@ class OpenFileMixin(object):
 		self.sourceview_manager.set_language(filename, buffer)
 		# DEBUG: print("set_language")
 		
-		self.plugins["ui_manager.ui_manager"].files_ui.add_filename_to_ui(newfile)
+		self.plugins["ui_manager.ui_manager"].add_filename_to_ui(newfile)
 				
 		# set current file to this file
 		# self.current_file = newfile

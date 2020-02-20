@@ -35,7 +35,7 @@ class CloseFileMixin(object):
 			self.destroy_file(len(self.files) - 2)
 			
 			# update ui, set selected
-			self.plugins["ui_manager.ui_manager"].files_ui.set_currently_displayed(self.current_file.ui_ref)
+			self.plugins["ui_manager.ui_manager"].set_currently_displayed(self.current_file.ui_ref)
 		
 		
 		# if empty file only there, do nothing
@@ -50,7 +50,7 @@ class CloseFileMixin(object):
 			newsource = self.sourceview_manager.get_new_sourceview()
 			
 			# remove current sourceview and put the new empty sourceview
-			self.plugins["ui_manager.ui_manager"].files_ui.replace_sourceview_widget(newsource)
+			self.plugins["ui_manager.ui_manager"].replace_sourceview_widget(newsource)
 			
 			# current file is now empty
 			self.current_file = File("empty", newsource, new_file=True)
@@ -62,7 +62,7 @@ class CloseFileMixin(object):
 			self.files.append(self.current_file)
 			
 			# since it is an empty file, set the headerbar to "Gamma"
-			self.plugins["ui_manager.ui_manager"].files_ui.set_header("Gamma")
+			self.plugins["ui_manager.ui_manager"].set_header("Gamma")
 			
 			# cancel and clear message 
 			# why? sometimes user save a file and close it right after,

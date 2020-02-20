@@ -13,10 +13,10 @@ class CreateFileMixin(object):
 		# add empty/current_file to files array
 		self.files.append(self.current_file)
 		
-		self.plugins["ui_manager.ui_manager"].files_ui.add_filename_to_ui(self.current_file)
-		self.plugins["ui_manager.ui_manager"].files_ui.replace_sourceview_widget(self.current_file.source_view)
+		self.plugins["ui_manager.ui_manager"].add_filename_to_ui(self.current_file)
+		self.plugins["ui_manager.ui_manager"].replace_sourceview_widget(self.current_file.source_view)
 		# set headerbar text to the filename
-		self.plugins["ui_manager.ui_manager"].files_ui.update_header(self.current_file.filename)
+		self.plugins["ui_manager.ui_manager"].update_header(self.current_file.filename)
 		# update ui, set selected
-		self.plugins["ui_manager.ui_manager"].files_ui.set_currently_displayed(self.current_file.ui_ref)
+		self.plugins["ui_manager.ui_manager"].set_currently_displayed(self.current_file.ui_ref)
 		
