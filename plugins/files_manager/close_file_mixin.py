@@ -1,8 +1,24 @@
+#  
+import gi
+gi.require_version('Gtk', '3.0')
+from gi.repository import Gtk
+
 from .file import File
 
 class CloseFileMixin(object):
 	
 	
+	def close_all(self):
+		# > 1 to not delete empty init file
+		num_files = len(self.files)
+		counter = 1  # < don't close empty init
+		while counter < num_files:
+			self.switch_to_file(num_files - counter)
+			self.close_current_file()
+			counter += 1
+	
+
+
 	def close_file(self, filename):
 		# check if the current file is being closed
 		if self.current_file.filename == filename:
@@ -11,22 +27,21 @@ class CloseFileMixin(object):
 		else:
 			# get  file index
 			to_close_index = self.get_file_index(filename)
-					
+			
 			# destroy file
-			self.destroy_file(to_close_index)
+			if not self.destroy_file(to_close_index):
+				return
+			
+			# switch to last file
+			self.switch_to_file(len(self.files) - 1)
 
-		
+				
 	
-	def close_all(self):
-		# > 1 to not delete empty init file
-		while len(self.files) > 1:
-			self.close_current_file()
-		
-		
+	
 		
 	
 	# TODO: check if need saving before close
-	def close_current_file(self):
+	def close_current_file(self):	
 		# if current file is new file created by user, and not saved
 		# then ask to save it first
 		# TODO: prompt do you want save window
@@ -38,7 +53,8 @@ class CloseFileMixin(object):
 			to_close_index = self.get_file_index(self.current_file.filename)
 					
 			# destroy file
-			self.destroy_file(to_close_index)
+			if not self.destroy_file(to_close_index):
+				return
 			
 			# switch to last file
 			self.switch_to_file(len(self.files) - 1)
@@ -53,7 +69,8 @@ class CloseFileMixin(object):
 		# in the view
 		else:			
 			# destroy opened file 
-			self.destroy_file(1)
+			if not self.destroy_file(1):
+				return
 			
 			# make sure init file is empty
 			self.files[0].source_view.get_buffer().set_text("")
@@ -74,18 +91,90 @@ class CloseFileMixin(object):
 			self.plugins["message_notify.message_notify"].cancel()
 		
 			
+		
+
+	def destroy_file(self, file_index):
+		print(file_index)
+		file_object =self.files[file_index]
+		close = True
+		
+		if file_object.editted:
+			# switch to file to let the user 
+			# know which file is it
+			self.switch_to_file(self.get_file_index(file_object.filename))
+		
+			response = self.prompt_save(file_object)
+			
+			# if user clicked save
+			if response == 0:
+				# save does the reset_editted
+				self.plugins["files_manager.savefile"].save_file(file_object)
+			
+			# if user clicked no
+			elif response == 2:
+				# reduce number of editted files
+				file_object.reset_editted()
+			
+			# if user clicked "back to edit (cancel)"
+			# then cancel closing
+			else:
+				close = False
+
+		if close:
+			print(close, file_object.filename)
+		
+			# destroy the ui_ref btn attached to file TODO: move to ui manager
+			file_object.ui_ref.destroy()
+		
+			# remove from "files" array
+			del self.files[file_index]
+		
+
+		return close
+	
+	
 	
 	
 
-	def destroy_file(self, file_index):
-		# check if file is marked editted
-		if self.files[file_index].editted:
-			self.files[file_index].reset_editted()
-	
-		# destroy the ui_ref btn attached to file TODO: move to ui manager
-		self.files[file_index].ui_ref.destroy()
+
+	def prompt_save(self, file_object=None):
+		filename = file_object.filename
 		
-		# remove from "files" array
-		del self.files[file_index]
+		
+		dialog = Gtk.MessageDialog(
+			self.app.window,
+			Gtk.DialogFlags.DESTROY_WITH_PARENT,
+			Gtk.MessageType.WARNING, # or WARNING
+			Gtk.ButtonsType.NONE,
+			f'Save "{filename}" ?'
+		)
+		
+		dialog.format_secondary_text("")
+		
+		dialog.add_button("Save", 0)
+		dialog.add_button("Don't Close", 1)
+		
+		btn = Gtk.Button.new()
+		btn.set_label("No")
+		btn.get_style_context().add_class("danger")
+		btn.show()
+		
+		dialog.add_action_widget(btn, 2)
+		dialog.set_default_response(0)
 	
-	
+		# show the dialog		
+		response = dialog.run()
+		# close and destroy dialog object
+		dialog.destroy()
+
+		print(response)
+		
+		if response == 0:
+			print("save")
+		elif response == 2:
+			print("no")
+		else:
+			print("cancel")
+
+		return response		
+		

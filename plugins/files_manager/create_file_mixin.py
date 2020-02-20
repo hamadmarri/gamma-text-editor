@@ -4,8 +4,7 @@ from .file import File
 
  
 class CreateFileMixin(object):		
-	
-	
+		
 	def create_new_file(self):
 		# get new sourceview from sourceview_manager
 		# TODO: must handled by ui manager

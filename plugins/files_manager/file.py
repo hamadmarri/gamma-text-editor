@@ -1,4 +1,4 @@
-# 
+#  
 # each openned file is set in File object and
 # appended to "files" array
 class File():

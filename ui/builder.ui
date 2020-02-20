@@ -33,7 +33,7 @@
         <property name="name">headerPaned</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
-        <property name="position">200</property>
+        <property name="position">260</property>
         <signal name="notify::position" handler="resizeHeaderSide" swapped="no"/>
         <child>
           <object class="GtkBox">
@@ -138,7 +138,7 @@
         <property name="height_request">-1</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
-        <property name="position">200</property>
+        <property name="position">260</property>
         <signal name="notify::position" handler="resizeBodySide" swapped="no"/>
         <child>
           <object class="GtkBox" id="toolbar_side">
