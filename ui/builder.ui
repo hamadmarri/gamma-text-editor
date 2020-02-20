@@ -247,6 +247,7 @@
                       <object class="GtkEventBox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <signal name="button-press-event" handler="on_new_menu_button_press_event" swapped="no"/>
                         <signal name="enter-notify-event" handler="on_menue_enter_notify_event" swapped="no"/>
                         <signal name="leave-notify-event" handler="on_menue_leave_notify_event" swapped="no"/>
                         <child>
@@ -326,6 +327,7 @@
                       <object class="GtkEventBox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <signal name="button-press-event" handler="on_project_menu_button_press_event" swapped="no"/>
                         <signal name="enter-notify-event" handler="on_menue_enter_notify_event" swapped="no"/>
                         <signal name="leave-notify-event" handler="on_menue_leave_notify_event" swapped="no"/>
                         <child>
@@ -365,6 +367,7 @@
                       <object class="GtkEventBox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <signal name="button-press-event" handler="on_save_menu_button_press_event" swapped="no"/>
                         <signal name="enter-notify-event" handler="on_menue_enter_notify_event" swapped="no"/>
                         <signal name="leave-notify-event" handler="on_menue_leave_notify_event" swapped="no"/>
                         <child>
@@ -405,6 +408,7 @@
                       <object class="GtkEventBox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <signal name="button-press-event" handler="on_find_menu_button_press_event" swapped="no"/>
                         <signal name="enter-notify-event" handler="on_menue_enter_notify_event" swapped="no"/>
                         <signal name="leave-notify-event" handler="on_menue_leave_notify_event" swapped="no"/>
                         <child>
@@ -444,6 +448,7 @@
                       <object class="GtkEventBox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <signal name="button-press-event" handler="on_find_replace_menu_button_press_event" swapped="no"/>
                         <signal name="enter-notify-event" handler="on_menue_enter_notify_event" swapped="no"/>
                         <signal name="leave-notify-event" handler="on_menue_leave_notify_event" swapped="no"/>
                         <child>
@@ -483,6 +488,7 @@
                       <object class="GtkEventBox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <signal name="button-press-event" handler="on_welcome_menu_button_press_event" swapped="no"/>
                         <signal name="enter-notify-event" handler="on_menue_enter_notify_event" swapped="no"/>
                         <signal name="leave-notify-event" handler="on_menue_leave_notify_event" swapped="no"/>
                         <child>
@@ -522,6 +528,7 @@
                       <object class="GtkEventBox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <signal name="button-press-event" handler="on_help_menu_button_press_event" swapped="no"/>
                         <signal name="enter-notify-event" handler="on_menue_enter_notify_event" swapped="no"/>
                         <signal name="leave-notify-event" handler="on_menue_leave_notify_event" swapped="no"/>
                         <child>
@@ -561,6 +568,7 @@
                       <object class="GtkEventBox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <signal name="button-press-event" handler="on_about_menu_button_press_event" swapped="no"/>
                         <signal name="enter-notify-event" handler="on_menue_enter_notify_event" swapped="no"/>
                         <signal name="leave-notify-event" handler="on_menue_leave_notify_event" swapped="no"/>
                         <child>

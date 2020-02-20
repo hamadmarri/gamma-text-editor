@@ -55,8 +55,18 @@ class Plugin():
 		self.handlers.on_closeBtn_release_event = self.on_closeBtn_release_event
 		self.handlers.on_maximizeBtn_release_event = self.on_maximizeBtn_release_event
 		self.handlers.on_minimizeBtn_release_event = self.on_minimizeBtn_release_event
+		
+		self.handlers.on_new_menu_button_press_event = self.on_new_menu_button_press_event
 		self.handlers.on_open_menu_button_press_event = self.on_open_menu_button_press_event
-				
+		self.handlers.on_project_menu_button_press_event = self.on_project_menu_button_press_event
+		self.handlers.on_save_menu_button_press_event = self.on_save_menu_button_press_event
+		self.handlers.on_find_menu_button_press_event = self.on_find_menu_button_press_event
+		self.handlers.on_find_replace_menu_button_press_event = self.on_find_replace_menu_button_press_event
+		self.handlers.on_welcome_menu_button_press_event = self.on_welcome_menu_button_press_event
+		self.handlers.on_help_menu_button_press_event = self.on_help_menu_button_press_event
+		self.handlers.on_about_menu_button_press_event = self.on_about_menu_button_press_event
+		
+
 	
 	# this method got called by SignalHandler. Use it wisely
 	# if your plugin spend much time in this method it will delay
@@ -101,7 +111,48 @@ class Plugin():
 	def on_minimizeBtn_release_event(self, widget, event):
 		self.minimize()
 	
+	
+	
+	####################### MENU ##############################
+	def on_new_menu_button_press_event(self, widget, event):
+		# get the current displayed file
+		current_file = self.plugins["files_manager.files_manager"].current_file
+		
+		# check if file is new
+		#if current_file.new_file:
+			# savefile plugin takes care of prompt
+			# save new file, if current is new empty file
+			#self.plugins["files_manager.savefile"].save_current_file()
+		
+		#else:
+			# create new current empty file 
+		self.plugins["files_manager.files_manager"].create_new_file()
+			# self.plugins["files_manager.savefile"].save_current_file()
+			
+			
+		
 	def on_open_menu_button_press_event(self, widget, event):
 		self.plugins["files_manager.openfile"].openfile()
 		
 		
+	def on_project_menu_button_press_event(self, widget, event):
+		self.plugins["files_manager.opendir"].opendir()
+		
+		
+	def on_save_menu_button_press_event(self, widget, event):
+		pass
+		
+	def on_find_menu_button_press_event(self, widget, event):
+		pass
+		
+	def on_find_replace_menu_button_press_event(self, widget, event):
+		pass
+		
+	def on_welcome_menu_button_press_event(self, widget, event):
+		pass
+		
+	def on_help_menu_button_press_event(self, widget, event):
+		pass
+		
+	def on_about_menu_button_press_event(self, widget, event):
+		pass

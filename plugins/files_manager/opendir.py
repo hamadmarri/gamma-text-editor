@@ -69,7 +69,7 @@ class Plugin():
 		for root, dirs, files in os.walk(dir_path, topdown=False):
 			for filename in files:
 				(name, ext) = os.path.splitext(filename)
-				if ext == ".py":
+				if name[0] != '.' and ext != ".pyc":
 					print(os.path.join(root, filename))
 					filenames.append(os.path.join(root, filename))
 		    	
@@ -90,13 +90,10 @@ class Plugin():
 		final_path = None
 		
 		# initialize file chooser 
-		dialog = Gtk.FileChooserDialog("Open File", None,
+		dialog = Gtk.FileChooserDialog("Open Project", None,
 										Gtk.FileChooserAction.SELECT_FOLDER,
 										(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
 										Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
-
-		# add files types filters
-		# self.add_filters(dialog)
 		
 		# TODO: current folder must be dynamicly change
 		dialog.set_current_folder("/home/hamad/dev/pygtk/gamma")
