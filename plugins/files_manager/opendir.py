@@ -87,7 +87,7 @@ class Plugin():
 	# (see: https://developer.gnome.org/gtk3/stable/GtkFileChooserDialog.html)
 	# (see: https://developer.gnome.org/gtk3/stable/GtkFileChooser.html#GtkFileChooserAction)
 	def chooseDir(self):
-		dir_path = None
+		final_path = None
 		
 		# initialize file chooser 
 		dialog = Gtk.FileChooserDialog("Open File", None,
