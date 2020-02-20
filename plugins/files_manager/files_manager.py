@@ -46,6 +46,7 @@ class Plugin(CreateFileMixin, CloseFileMixin, OpenFileMixin):
 		self.commands = []
 		self.files = []
 		self.current_file = None
+		self.counter = 1
 		
 	
 	def activate(self):
@@ -54,7 +55,7 @@ class Plugin(CreateFileMixin, CloseFileMixin, OpenFileMixin):
 		commands.set_commands(self)
 		
 		# default empty file when open editor with no opened files
-		self.current_file = File("empty", self.sourceview_manager.source_view, new_file=True)
+		self.current_file = File("empty", self.sourceview_manager.source_view, new_file=True, init_file=True)
 
 		# add empty/current_file to files array
 		self.files.append(self.current_file)
@@ -71,11 +72,20 @@ class Plugin(CreateFileMixin, CloseFileMixin, OpenFileMixin):
 			self.close_all()
 			
 	
-	def convert_new_empty_file(self, newfile, filename):
-		newfile.filename = filename
-		newfile.new_file = False
-		self.plugins["ui_manager.ui_manager"].add_filename_to_ui(newfile)
+	
+	def rename_file(self, file_object, filename):
+		# check if it is the new init file, need to be added to ui
+		if file_object.init_file:
+			file_object.init_file = False	# not init anymore	
+			file_object.filename = filename
+			self.plugins["ui_manager.ui_manager"].add_filename_to_ui(file_object)
 		
+		# if new file added by the user
+		else:
+			# rename in array
+			file_object.filename = filename
+			self.plugins["ui_manager.ui_manager"].rename_file(file_object)
+			
 		
 		
 	
@@ -88,7 +98,7 @@ class Plugin(CreateFileMixin, CloseFileMixin, OpenFileMixin):
 		
 		# if found, which should!, switch to it
 		if file_index >= 0:
-			self.switch_to_file(file_index)
+			self.switch_to_file(file_index) 
 	
 	
 	
@@ -120,6 +130,7 @@ class Plugin(CreateFileMixin, CloseFileMixin, OpenFileMixin):
 	# returns file index if found or -1
 	def is_already_openned(self, filename):
 		for i, f in enumerate(self.files):
+			print(f"{filename} {f.filename} {filename == f.filename}")
 			if filename == f.filename:
 				return i	
 		return -1

@@ -1,3 +1,4 @@
+from .file import File
 
 class CloseFileMixin(object):
 	

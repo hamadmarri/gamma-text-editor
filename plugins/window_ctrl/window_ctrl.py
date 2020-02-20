@@ -115,19 +115,8 @@ class Plugin():
 	
 	####################### MENU ##############################
 	def on_new_menu_button_press_event(self, widget, event):
-		# get the current displayed file
-		current_file = self.plugins["files_manager.files_manager"].current_file
-		
-		# check if file is new
-		#if current_file.new_file:
-			# savefile plugin takes care of prompt
-			# save new file, if current is new empty file
-			#self.plugins["files_manager.savefile"].save_current_file()
-		
-		#else:
-			# create new current empty file 
 		self.plugins["files_manager.files_manager"].create_new_file()
-			# self.plugins["files_manager.savefile"].save_current_file()
+
 			
 			
 		

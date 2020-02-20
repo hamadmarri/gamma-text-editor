@@ -13,6 +13,22 @@ from gi.repository import Gtk, Gdk
 class FilesUI(object):
 	
 
+	def rename_file(self, file_object):
+		box = file_object.ui_ref
+		btnName = box.get_children()[0]
+		
+		# set the text of button to filename
+		basename = os.path.basename(file_object.filename)
+		btnName.set_label(basename)
+		
+		# get the label of the button, and set left padding to 0
+		btnName.get_children()[0].set_xalign(0)
+				
+		# set headerbar text to the filename
+		self.update_header(self.plugins["files_manager.files_manager"].current_file.filename)
+		
+		
+
 	# adds ui button with filename label in toolbar_file
 	# (the left side panel)
 	def add_filename_to_ui(self, newfile):
@@ -80,10 +96,10 @@ class FilesUI(object):
 		
 	def connect_signals(self, box, btnName, btnClose, newfile):
 		# connect clicked signal to side_file_clicked method		
-		btnName.connect("clicked", self.side_file_clicked, box, newfile.filename)
+		btnName.connect("clicked", self.side_file_clicked, box, newfile)
 		
 		# connect clicked signal to close method		
-		btnClose.connect("clicked", self.close_file_clicked, box, newfile.filename)
+		btnClose.connect("clicked", self.close_file_clicked, box, newfile)
 		
 		btnName.connect("enter_notify_event", self.enter_notify_event)
 		btnName.connect("leave_notify_event", self.leave_notify_event)
@@ -106,15 +122,15 @@ class FilesUI(object):
 		
 	# handler of "clicked" event
 	# it switch the view to the filename in clicked button
-	def side_file_clicked(self, btn, box, filename):
+	def side_file_clicked(self, btn, box, newfile):
 		self.set_currently_displayed(box)	
-		self.plugins["files_manager.files_manager"].side_file_clicked(filename)
+		self.plugins["files_manager.files_manager"].side_file_clicked(newfile.filename)
 		
 		
 		
-	def close_file_clicked(self, btn, box, filename):
+	def close_file_clicked(self, btn, box, newfile):
 		self.set_currently_displayed(box)
-		self.plugins["files_manager.files_manager"].side_file_clicked(filename)
+		self.plugins["files_manager.files_manager"].side_file_clicked(newfile.filename)
 		self.plugins["files_manager.files_manager"].close_current_file()
 				
 		

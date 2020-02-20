@@ -73,7 +73,11 @@ class Plugin():
 			new_filename = self.show_save_dialog()
 			if new_filename:
 				self.save_file(new_filename, text)
-				self.plugins["files_manager.files_manager"].convert_new_empty_file(current_file, new_filename)
+				current_file.new_file = False	# not new anymore
+				self.plugins["files_manager.files_manager"].rename_file(current_file, new_filename)
+				
+				# TODO: if saved(overwrite) a file in HD, but that file 
+				# is already is open here! need to close old file 
 		else:
 			self.save_file(current_file.filename, text)
 	
