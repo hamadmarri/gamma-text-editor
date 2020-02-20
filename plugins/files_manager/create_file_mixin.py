@@ -33,3 +33,4 @@ class CreateFileMixin(object):
 			self.plugins["ui_manager.ui_manager"].set_currently_displayed(self.current_file.ui_ref)
 		
 		self.counter += 1
+		self.current_file.set_editted()

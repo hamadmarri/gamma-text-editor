@@ -89,6 +89,9 @@ class SourceViewManager():
 		return newsource
 		
 	
+	
+	
+	
 	# detect the language of the just openned file 
 	# and set the langauge (i.e. C,Python,C++ ..)
 	def set_language(self, filename, buffer):
@@ -105,6 +108,9 @@ class SourceViewManager():
 			buffer.set_highlight_syntax(False)
 			
 			
+		
+	
+	# TODO: create new source map for each sourceview (sometimes it crashes)
 	# update source map (mini map) to connect to a sourceview
 	def update_sourcemap(self, source_view):
 		# DEBUG: print("sourcemap.set_view before")
