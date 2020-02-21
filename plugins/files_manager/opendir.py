@@ -70,7 +70,7 @@ class Plugin():
 			for filename in files:
 				(name, ext) = os.path.splitext(filename)
 				if name[0] != '.' and ext != ".pyc":
-					print(os.path.join(root, filename))
+					#print(os.path.join(root, filename))
 					filenames.append(os.path.join(root, filename))
 		    	
 		    

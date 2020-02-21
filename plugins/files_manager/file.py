@@ -44,7 +44,7 @@ class File():
 		self.editted = True
 		self.files_manager.editted_counter += 1
 		
-		print(f"editted {self.filename}")
+		# print(f"editted {self.filename}")
 		
 		# show save all "S" menu in color
 		window_ctrl = self.files_manager.plugins["window_ctrl.window_ctrl"]
@@ -59,7 +59,7 @@ class File():
 		self.editted = False
 		self.files_manager.editted_counter -= 1
 		
-		print(f"reset editted {self.filename}")
+		# print(f"reset editted {self.filename}")
 		
 		# change ui file appearance
 		self.files_manager.plugins["ui_manager.ui_manager"].reset_editted(self.ui_ref)

@@ -167,14 +167,14 @@ class CloseFileMixin(object):
 		# close and destroy dialog object
 		dialog.destroy()
 
-		print(response)
-		
-		if response == 0:
-			print("save")
-		elif response == 2:
-			print("no")
-		else:
-			print("cancel")
+#		print(response)
+#		
+#		if response == 0:
+#			print("save")
+#		elif response == 2:
+#			print("no")
+#		else:
+#			print("cancel")
 
 		return response		
 		

@@ -68,11 +68,7 @@ class SourceViewManager():
 		newsource.set_highlight_current_line(self.source_view.get_highlight_current_line())
 		newsource.set_background_pattern(self.source_view.get_background_pattern())
 		newsource.set_smart_home_end(self.source_view.get_smart_home_end())
-
-
-		newsourcemap.set_visible(newsource.get_visible())
-		newsourcemap.set_can_focus(newsource.get_can_focus())
-		
+	
 		
 		# set the source style
 		self.plugins["styles.source_style"].set_source_style(newsource.get_buffer())
@@ -86,13 +82,10 @@ class SourceViewManager():
 		# mark-set event
 		newsource.get_buffer().connect("mark-set", self.plugins["highlight.highlight"].highlight_signal)
 		
-		
 		newsource.sourcemap = newsourcemap
 		
 		# show the gtk widget
-		newsourcemap.show()
 		newsource.show()
-		#newsourcemap.set_view(newsource)
 
 		
 		# TODO: move to files_manager, sometimes we don't need to 
