@@ -40,4 +40,3 @@ def set_commands(plugin):
 			"shortcut": "<Ctrl> + q",
 		}
 	)
-	

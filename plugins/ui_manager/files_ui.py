@@ -183,12 +183,17 @@ class FilesUI(object):
 		
 		# add the newsource view
 		self.scrolledwindow.add(newsource)
+		
+		# the order of set_view for sourcemap is very important
+		# when move this line below/after pack_start, sometimes 
+		# it crashes when open files which have no \n at the end!!
+		newsource.sourcemap.set_view(newsource)
 
 		self.scroll_and_source_and_map_box.pack_start(newsource.sourcemap, False, True, 0)
-		newsource.sourcemap.set_view(newsource)
 			
 		# place the cursor in it
 		newsource.grab_focus()		
+
 		
 
 

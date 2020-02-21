@@ -132,11 +132,11 @@ class Plugin(CreateFileMixin, CloseFileMixin, OpenFileMixin):
 		# check if it is the current_file, then exit method 
 		if self.current_file == self.files[file_index]:
 			return
-				
+			
 		# get file object
 		f = self.files[file_index]
 				
-		# replace the source view 
+		# replace the source view
 		self.plugins["ui_manager.ui_manager"].replace_sourceview_widget(f.source_view)
 		
 		self.current_file = f
@@ -146,6 +146,7 @@ class Plugin(CreateFileMixin, CloseFileMixin, OpenFileMixin):
 			
 		# update headerbar to filename
 		self.plugins["ui_manager.ui_manager"].update_header(f.filename, f.editted)
+
 		
 		
 		
@@ -167,3 +168,4 @@ class Plugin(CreateFileMixin, CloseFileMixin, OpenFileMixin):
 		
 		
 		
+

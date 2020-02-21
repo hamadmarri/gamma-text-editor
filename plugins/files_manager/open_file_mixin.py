@@ -36,16 +36,20 @@ class OpenFileMixin(object):
 		
 		# open the file in reading mode
 		f = open(filename, "r", encoding="utf-8", errors="replace")
-		
+		#f = open(filename, "r")
 		# actual reading from the file and populate the new sourceview buffer
 		# with file data
 		text = f.read()
+		# DEBUG: print(bytes(text, "ascii"))
 				
 		# get new sourceview from sourceview_manager
 		# TODO: must handled by ui manager
 		newsource = self.sourceview_manager.get_new_sourceview()
+		
+		# If len is -1, text must be nul-terminated. text must be valid UTF-8.
+		# (read: https://developer.gnome.org/gtk3/stable/GtkTextBuffer.html#gtk-text-buffer-set-text)
 		newsource.get_buffer().set_text(text)
-
+		
 		# place cursor at the begining
 		newsource.get_buffer().place_cursor(newsource.get_buffer().get_start_iter())
 		
@@ -64,5 +68,10 @@ class OpenFileMixin(object):
 		self.sourceview_manager.set_language(filename, buffer)
 
 		self.plugins["ui_manager.ui_manager"].add_filename_to_ui(newfile)
+
 		
 		
+
+
+
+

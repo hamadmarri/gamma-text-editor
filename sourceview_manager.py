@@ -46,7 +46,7 @@ class SourceViewManager():
 	# - connects signal mark-set event which is when user select text
 	# - updates the world completion to include new source buffer
 	def get_new_sourceview(self):
-			
+					
 		# get new sourceview object
 		newsource = GtkSource.View.new()		
 		newsourcemap = GtkSource.Map.new()
@@ -69,6 +69,11 @@ class SourceViewManager():
 		newsource.set_background_pattern(self.source_view.get_background_pattern())
 		newsource.set_smart_home_end(self.source_view.get_smart_home_end())
 
+
+		newsourcemap.set_visible(newsource.get_visible())
+		newsourcemap.set_can_focus(newsource.get_can_focus())
+		
+		
 		# set the source style
 		self.plugins["styles.source_style"].set_source_style(newsource.get_buffer())
 		
@@ -82,11 +87,13 @@ class SourceViewManager():
 		newsource.get_buffer().connect("mark-set", self.plugins["highlight.highlight"].highlight_signal)
 		
 		
-		# newsourcemap.set_view(newsource)
 		newsource.sourcemap = newsourcemap
 		
 		# show the gtk widget
+		newsourcemap.show()
 		newsource.show()
+		#newsourcemap.set_view(newsource)
+
 		
 		# TODO: move to files_manager, sometimes we don't need to 
 		# update completion based on file type and size!

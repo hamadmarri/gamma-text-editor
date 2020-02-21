@@ -94,7 +94,7 @@ class CloseFileMixin(object):
 		
 
 	def destroy_file(self, file_index):
-		print(file_index)
+		# print(file_index)
 		file_object =self.files[file_index]
 		close = True
 		
@@ -121,7 +121,7 @@ class CloseFileMixin(object):
 				close = False
 
 		if close:
-			print(close, file_object.filename)
+			# print(close, file_object.filename)
 		
 			# destroy the ui_ref btn attached to file TODO: move to ui manager
 			file_object.ui_ref.destroy()

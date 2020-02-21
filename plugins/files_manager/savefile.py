@@ -136,3 +136,4 @@ class Plugin():
 			print(f"{basename} saved and closed")
 			
 
+
