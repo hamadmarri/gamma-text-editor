@@ -37,6 +37,7 @@ class Plugin():
 	def __init__(self, app):
 		self.name = "savefile"
 		self.app = app
+		self.sourceview_manager = app.sourceview_manager
 		self.signal_handler = app.signal_handler
 		self.plugins = app.plugins_manager.plugins
 		self.commands = []
@@ -53,7 +54,22 @@ class Plugin():
 		# save is bound to "<Ctrl>+s"
 		if ctrl and keyval_name == "s":
 			self.save_current_file()
-			
+		elif shift and ctrl and keyval_name == "S":
+			self.save_all()
+	
+	
+	
+	def save_all(self):
+		editted_counter = self.plugins["files_manager.files_manager"].editted_counter
+		if editted_counter > 0:
+			files = self.plugins["files_manager.files_manager"].files
+			# loop through all files objects
+			# reversed so from user prespective "from top to bottom"
+			for f in reversed(files):
+				if f.editted:
+					self.save_file(f)
+					
+					
 					
 	def save_current_file(self):
 		# get the current displayed file
@@ -62,7 +78,11 @@ class Plugin():
 		
 	
 	
-	def save_file(self, file_object):		
+	def save_file(self, file_object):
+		# check if not editted then exit
+		if not file_object.editted:
+			return
+		
 		# get current buffer
 		buffer = file_object.source_view.get_buffer()
 
@@ -81,6 +101,12 @@ class Plugin():
 				self.write_file(new_filename, text)
 				files_manager.rename_file(file_object, new_filename)
 				file_object.reset_editted()
+				
+				# set the language of new created file 
+				# see sourceview_manager
+				buffer = file_object.source_view.get_buffer()
+				self.sourceview_manager.set_language(new_filename, buffer)
+				
 						
 				# TODO: if saved(overwrite) a file in HD, but that file 
 				# is already is open here! need to close old file 
