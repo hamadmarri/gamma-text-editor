@@ -1,6 +1,6 @@
 
-#from .splay_tree import SplayTree
-import splay_tree
+from .splay_tree import SplayTree
+
 
 # from random import randrange
 
@@ -18,7 +18,7 @@ import splay_tree
 # 7: get next soft search for n items:
 
 
-class CommandsTree(splay_tree.SplayTree):
+class CommandsTree(SplayTree):
 	def __init__(self):
 		super().__init__()
 		self.seek_iter = 0
@@ -27,31 +27,34 @@ class CommandsTree(splay_tree.SplayTree):
 		self.queue = [] # <-- for breadth first search
 		
 	
-	def insert(self, value):
-		super().insert(value.lower())
+	def insert(self, command):
+		value = command["name"]
+		node = super().insert(value.strip().lower())
+		node.command = command
+		command["node"] = node
+		return node
 		
 		
 
-	def find(self, value, match_callback, node=None):
+	def find(self, value, match_callback=None, node=None):
 		#print(f"find from {node}")
+		if not match_callback:
+			match_callback = self.exact_match
+			
 		return super().find(value.strip().lower(), match_callback, node)
 		
 				
 
-		
+	def exact_match(self, node, value):
+		return (node.value == value)
+			
 	def strict_search_match(self, node, value):
-		if node.value.find(value) == 0:
-			return True
-		
-		return False
-		
-	
-	def soft_search_match(self, node, value):
-		if node.value.find(value) != -1:
-			return True
-		
-		return False
+		return (node.value.find(value) == 0)
 				
+	def soft_search_match(self, node, value):
+		return (node.value.find(value) != -1)
+
+	
 			
 	def strict_search(self, search_term, max_result=1):
 		# set search_iter to first match 
@@ -85,7 +88,7 @@ class CommandsTree(splay_tree.SplayTree):
 		if not node:
 			return
 				
-		yield node
+		yield node.command
 		self.search_iter_counter -= 1
 
 		yield from self.recursive_strict_search(search_term, node.left)
@@ -127,34 +130,23 @@ class CommandsTree(splay_tree.SplayTree):
 		# add root
 		if node == self.root:
 			self.queue.append(node)
-		
-		# if not root we don't need to retrieve
-		# that last item in previuse results
-		#else:
-			# enqueue children
-		#	self.enqueue_children(node)
-		
+				
 		# while queue not empty and search_iter_counter > 0
 		while self.queue and self.search_iter_counter > 0:
 			# pop
 			node = self.queue.pop(0)
-			#print("visit", node)
 	
 			# is solution?
 			# search_term is None, then show without checking
 			if show_anyway or self.soft_search_match(node, search_term):
 				#search_iter_counter--
 				self.search_iter_counter -= 1			
-				yield node
+				yield node.command
 				# set search_iter to node
 				self.search_iter = node
 							
-				 
 			# enqueue children
 			self.enqueue_children(node)
-		
-#		if not queue:
-#			self.search_iter = None
 	
 		
 	def enqueue_children(self, node):
@@ -166,60 +158,41 @@ class CommandsTree(splay_tree.SplayTree):
 		
 if __name__ == "__main__":
 	t = CommandsTree()
-	t.insert("Minimize window")
-	t.insert("Toggle maximize window")
-	t.insert("Exit")
-	t.insert("Close File")
-	t.insert("Close All")
-	t.insert("Open File")
-	t.insert("Save File")
-	t.insert("Search in File")
-	t.insert("Open Directory")
-	t.insert("Switch to File < commander_window.py")
-	t.insert("oz")
-	t.insert("Saa")
-	t.insert("Seaa")
-	t.insert("Sed")
-	t.insert("Sed")
-	t.insert("Seda")
-	t.insert("Sede")
-	t.insert("Sedb")
-	t.insert("Sedd")
-	t.insert("Sw")
-	t.insert("Sl")
-	t.insert("R")
-	
+	t.insert({"plugin-name": "commander", "name": "Open/Close This Window!", "ref": print,"shortcut": "<Ctrl>",	})
+	t.insert({"plugin-name": "commander", "name": "Toggle maximize window", "ref": print,"shortcut": "<Ctrl>",	})
+	t.insert({"plugin-name": "commander", "name": "Exit", "ref": print,"shortcut": "<Ctrl>",	})
+	t.insert({"plugin-name": "commander", "name": "Close File", "ref": print,"shortcut": "<Ctrl>",	})
+	t.insert({"plugin-name": "commander", "name": "Close All", "ref": print,"shortcut": "<Ctrl>",	})
+	t.insert({"plugin-name": "commander", "name": "Open File", "ref": print,"shortcut": "<Ctrl>",	})
+	t.insert({"plugin-name": "commander", "name": "Save File", "ref": print,"shortcut": "<Ctrl>",	})
+	t.insert({"plugin-name": "commander", "name": "Search in File", "ref": print,"shortcut": "<Ctrl>",})
+	t.insert({"plugin-name": "commander", "name": "Open Directory", "ref": print,"shortcut": "<Ctrl>",})
+	t.insert({"plugin-name": "commander", "name": "Switch to File < commander_window.py", "ref": print,"shortcut": "<Ctrl>",})
 	t.traverse(0)
 	
 	
+#	n = t.find("Exit")
+#	t.delete(n)	
+#	t.traverse(0)
 
-		
+
 	SS = t.first(max_result=4)
 	for n in SS:
-		print("-----------------------> ", n)
+		print(n["name"])
+		
+	
 
-	print()
-	SS = t.next(max_result=4)
-	for n in SS:
-		print("-----------------------> ", n)
-
-	
-	print()
-	SS = t.first(max_result=10)
-	for n in SS:
-		print("-----------------------> ", n)
-	
-	
 #	n = t.find("Sedb", n)
 #	print("n", n)
 		
 	
-	#t.splay(t.find("Switch to File < commander_window.py"))
-#	t.splay(t.find("R"))
-#	t.splay(t.find("Search in File"))
-	#t.traverse(0)
+	n = t.find("Search in File")
+	t.splay(n)
+	t.traverse(0)
 	
-	
+	SS = t.first(max_result=4)
+	for n in SS:
+		print(n["name"])
 	
 	
 	

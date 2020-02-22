@@ -36,9 +36,9 @@ class SplayTree():
 			return new_node
 			
 		elif value < root.value:
-			self.insert_helper(root.left, value, parent=root)
+			return self.insert_helper(root.left, value, parent=root)
 		else: 	
-			self.insert_helper(root.right, value, parent=root)
+			return self.insert_helper(root.right, value, parent=root)
 		
 		
 	################################ FIND ###########################

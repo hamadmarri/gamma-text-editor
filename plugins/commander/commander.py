@@ -19,7 +19,6 @@
 #
 
 
-#import threading
 import time
 
 import gi
@@ -29,7 +28,7 @@ from gi.repository import Gtk, Gdk, GObject
 
 from . import commands
 from . import commander_window as cw
-
+from .commands_tree import CommandsTree 
 
 
 class Plugin():
@@ -42,8 +41,8 @@ class Plugin():
 		self.plugins = app.plugins_manager.plugins
 		self.signal_handler = app.signal_handler
 		self.handlers = app.signal_handler.handlers
+		self.commands_tree = CommandsTree()
 		self.commands = None
-		self.dynamic_commands = []
 		self.only_ctrl = False
 		self.commander_window = cw.CommanderWindow(app, self)
 		
@@ -114,28 +113,29 @@ class Plugin():
 
 
 	def cache_commands(self):
-#		self.cache_thread = threading.Thread(target=self.cache_commands_thread_func)
-#		self.cache_thread.daemon = True
-#		self.cache_thread.start()
-		self.cache_commands_thread_func()
-		
-	
-	def cache_commands_thread_func(self):
 		print("start caching")
-		
 		# load commands only once, for first time
 		# check if commands have been loaded
-		if not self.commands:
-			# load commands
-			self.load_commands()
-		
-		self.load_dynamic_commands()
-		
-		self.commander_window.cache_commander_window()
-		
+		self.load_commands()
 		print("done caching")
 		
 		
+	
+	def load_commands(self):
+		print("load_commands")
+		
+		#for i in range(0, 100):
+		for plugin in self.plugins_manager.plugins_array:
+			if plugin.commands:
+				for c in plugin.commands:
+					self.commands_tree.insert(c)
+					
+		# add self commands 
+		self.commands = []
+		commands.set_commands(self)
+		for c in self.commands:
+			self.commands_tree.insert(c)
+	
 		
 	
 	def run(self):
@@ -144,34 +144,5 @@ class Plugin():
 	
 	
 	
-	def load_commands(self):
-		print("load_commands")
-		temp_thread_safe = []
-		
-		#for i in range(0, 100):
-		for plugin in self.plugins_manager.plugins_array:
-			if plugin.commands:
-				for c in plugin.commands:
-					temp_thread_safe.append(c)
-
-		self.commands = temp_thread_safe
 	
-	
-	
-
-	def load_dynamic_commands(self):
-		# delete all items 
-		temp_thread_safe = []
-		
-		temp_thread_safe.append({
-			"plugin-name":		self.name,
-			"name": 			"Switch to File < commander_window.py",
-			"ref": 				self.plugins["files_manager.files_manager"].switch_to_file,
-			"parameters": 		2,
-			"shortcut": 		"",
-			})
-		self.dynamic_commands = temp_thread_safe
-		
-		
-		
 		

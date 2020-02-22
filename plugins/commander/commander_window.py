@@ -3,9 +3,8 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk
 
-from .list_functions import ListFunctionsMixin
 
-class CommanderWindow(ListFunctionsMixin):
+class CommanderWindow():
 	def __init__(self, app, commander):
 		self.app = app
 		self.builder = app.builder
@@ -16,8 +15,8 @@ class CommanderWindow(ListFunctionsMixin):
 		self.window = self.builder.get_object("commanderWindow")
 		self.commanderSearchEntry = self.builder.get_object("commanderSearchEntry")
 		self.listbox = self.builder.get_object("commanderList")
-		self.listbox.set_filter_func(self.filter, self.commanderSearchEntry)
-		self.listbox.set_sort_func(self.sort, self.commanderSearchEntry)
+
+		self.previous_search = ""		
 				
 		# when search, first command must be highlighted
 		self.selected_first_row = None
@@ -29,26 +28,16 @@ class CommanderWindow(ListFunctionsMixin):
 
 
 	
-	def cache_commander_window(self):
-		
+	def show_commander_window(self):
 		self.remove_all_commands()
 	
-		# commands are added to list only once
-		# list takes care of filtering and sorting
-		if not self.commands_added:
-			self.add_commands(self.commander.commands)
-			self.commands_added = True
-			
-		self.add_commands(self.commander.dynamic_commands)
-		
+		self.add_commands(self.commander.commands_tree)
+
 		print("commands# " + str(len(self.listbox.get_children())))
-	
-		
-		
-		
-	def show_commander_window(self):
-	
+		self.commander.commands_tree.traverse(0)
+
 		# must empty search every time showing commander
+		self.previous_search = ""
 		self.commanderSearchEntry.set_text("")
 		
 		# get the focus to search to let user type right away
@@ -70,33 +59,39 @@ class CommanderWindow(ListFunctionsMixin):
 		for r in rows:
 			self.listbox.remove(r)
 		
-		self.commands_added = False
 		
 		
 		
-	def add_commands(self, commands):
+	def add_commands(self, commands_tree):
+		first = commands_tree.first(max_result=20)
+		
 		# loop through commands,
-		for c in commands:
-			# put each in gtkbox (name, shurtcut) and bind the command 
-			box = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
+		for c in first:
+			self.add_command(c)
 			
-			# box doesn't have command, but in python
-			# we are allowed to bind any method in run time
-			# we can get command from activated rows
-			box.command = c
 			
-			lblName = Gtk.Label.new(c['name'])
-			lblShortcut = Gtk.Label.new(c['shortcut'])
-			box.pack_start(lblName, False, False, 0)
-			box.pack_end(lblShortcut, False, False, 0)
-	
-			# adding styles
-			box.get_style_context().add_class("commanderRow")
-			lblName.get_style_context().add_class("commanderCommandName")
-			lblShortcut.get_style_context().add_class("commanderCommanShortcut")
-			
-			# add to listbox
-			self.listbox.insert(box, -1)
+	def add_command(self, c):
+		# put each in gtkbox (name, shurtcut) and bind the command 
+		box = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
+		
+		# box doesn't have command, but in python
+		# we are allowed to bind any method in run time
+		# we can get command from activated rows
+		box.command = c
+		
+		lblName = Gtk.Label.new(c['name'])
+		lblShortcut = Gtk.Label.new(c['shortcut'])
+		box.pack_start(lblName, False, False, 0)
+		box.pack_end(lblShortcut, False, False, 0)
+
+		# adding styles
+		box.get_style_context().add_class("commanderRow")
+		lblName.get_style_context().add_class("commanderCommandName")
+		lblShortcut.get_style_context().add_class("commanderCommanShortcut")
+		
+		# add to listbox
+		self.listbox.insert(box, -1)
+		print("adding", c['name'])
 				
 		
 	
@@ -177,19 +172,39 @@ class CommanderWindow(ListFunctionsMixin):
 	# 150 milliseconds after the last change to the entry text.
 	# (see https://developer.gnome.org/gtk3/stable/GtkSearchEntry.html#GtkSearchEntry-search-changed) 
 	def on_commanderSearchEntry_changed(self, widget):
+		
+		search_term = widget.get_text().lower()
+		commands = self.commander.commands_tree
+		
+		if not self.previous_search and not search_term:
+			return
+		
+		
 		# reset first and second row refs
 		self.selected_first_row = None
 		self.prepare_second_row = None
 		
-		# for performance it is better to filter first then sort 
-		# but to be able to detected first and second rows, we
-		# have to run sort first, then filter.
-		# when filter ran last, we can get the first and second rows
-		# if sort ran after filter, then first and second rows would be 
-		# sorted in different locations
-		self.listbox.invalidate_sort()		# to force list to sort items
-		self.listbox.invalidate_filter()	# to force list to filter items
+		self.remove_all_commands()
 		
+		# if user is continuing typing a word (i.e. "s", "se", "sea")
+		if self.previous_search and search_term.find(self.previous_search) == 0:
+			ss = commands.continue_strict_search(search_term, max_result=20)
+			#print("continue_strict_search")
+		else:
+			ss = commands.strict_search(search_term, max_result=20)
+			#print("strict_search")
+			
+		self.previous_search = search_term
+		
+		for c in ss:
+			#print(c['name'])
+			self.add_command(c)
+		
+		self.listbox.unselect_all()
+		self.selected_first_row = self.listbox.get_row_at_index(0)
+		self.listbox.select_row(self.selected_first_row)
+		self.prepare_second_row = self.listbox.get_row_at_index(1)
+		self.listbox.show_all()
 		
 	
 	
@@ -236,5 +251,9 @@ class CommanderWindow(ListFunctionsMixin):
 			command["ref"](p)
 		else:
 			command["ref"]()
+			
+		# splay command
+		self.commander.commands_tree.splay(command["node"])
+		self.commander.commands_tree.traverse(0)
 			
 		self.close()
