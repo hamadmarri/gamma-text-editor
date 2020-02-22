@@ -1,6 +1,3 @@
-from random import randrange
-
-
 
 class TreeNode():
 	def __init__(self, value, parent=None):
@@ -12,14 +9,14 @@ class TreeNode():
 	def __str__(self):
 		return str(self.value)
 		
-		
+	
 
 class SplayTree():
 	
 	def __init__(self):
 		self.root = None
 	
-	
+	################################ INSERT ###########################
 	def insert(self, value):
 		# if tree root is null, then just set it
 		if not self.root:
@@ -38,22 +35,25 @@ class SplayTree():
 				parent.right = new_node
 			return new_node
 			
-			
-		elif value == root.value:
-			# duplicate
-			return root
 		elif value < root.value:
 			self.insert_helper(root.left, value, parent=root)
 		else: 	
 			self.insert_helper(root.right, value, parent=root)
 		
 		
-			
-	def find(self, value):
-		node = self.root
+	################################ FIND ###########################
+	def find(self, value, match_callback, node=None):
+		if not node:
+			node = self.root
 		
+		#print(f"find from {node}")
+		return self.find_in_subtree(value, node, match_callback)
+		
+	
+	def find_in_subtree(self, value, node, match_callback):
 		while node:
-			if value == node.value:
+			#print(f"visit {node}")
+			if match_callback(node, value):
 				return node
 			elif value < node.value:
 				node = node.left
@@ -63,8 +63,7 @@ class SplayTree():
 		return node
 		
 
-
-
+	################################ DELETE ###########################
 	def delete(self, node):		
 		if not node:
 			return
@@ -94,9 +93,6 @@ class SplayTree():
 			print("error")
 		
 		
-		
-		
-		
 	def get_successor(self, node):
 		successor = node.left
 		while successor.right:
@@ -105,7 +101,6 @@ class SplayTree():
 		return successor
 
 
-	
 	def replace_node(self, node, new_node=None):
 		parent = node.parent
 		
@@ -121,59 +116,14 @@ class SplayTree():
 		if node == self.root:
 			self.root = new_node
 		 
-
-
-	
-	def traverse(self, order):
-		if order == 0:
-			self.inorder(self.root)
-		elif order == 1:
-			self.preorder(self.root)
-		elif order == 2:
-			self.postorder(self.root)
-		
-		print()
-		print("---------------------------------")
-	
-
-	
-	def inorder(self, root, tabs=""):
-		if not root:
-			return
-			
-		self.inorder(root.right, tabs + "      ")
-		print(tabs + str(root.value))
-		self.inorder(root.left, tabs + "      ")
-
-
-
-	def preorder(self, root):
-		if not root:
-			return
-		print(root.value, end=" ")
-		self.preorder(root.left)
-		self.preorder(root.right)
-		
-		
-		
-	def postorder(self, root):
-		if not root:
-			return			
-		self.postorder(root.left)
-		self.postorder(root.right)
-		print(root.value, end=" ")
-
-
-
-
+		 
+	################################ SPLAY ###########################
 	def splay(self, node):
 		
 		# if root just return
 		if node == self.root or not node:
 			return
-			
-		#print(f"splay {node.value}") 
-			
+						
 		# if it's child of root
 		if node.parent == self.root:
 			if node == self.root.left:
@@ -243,7 +193,6 @@ class SplayTree():
 		#self.traverse(0)
 			
 	
-	
 	def L_Rot(self, node):
 		#print(f"L:{node}")
 		parent = node.parent
@@ -259,7 +208,6 @@ class SplayTree():
 		parent.parent = node
 		node.parent = grand_parent
 		
-		
 		# if parent is root
 		if not grand_parent:
 			self.root = node
@@ -269,43 +217,47 @@ class SplayTree():
 			grand_parent.right = node
 			
 		#self.traverse(0)
-			
-		
-	
 		
 		
-if __name__ == "__main__":
-	t = SplayTree()
-	
-	for i in range(99):
-		t.insert(randrange(100))
 		
+	################################ TRAVERSE ###########################
+	def traverse(self, order):
+		print()
+		if order == 0:
+			self.inorder(self.root)
+		elif order == 1:
+			self.preorder(self.root)
+		elif order == 2:
+			self.postorder(self.root)
+		
+		print()
+		print("---------------------------------")
 	
-	#t.traverse(0)
-	#t.traverse(1)
-	#t.traverse(2)
+
 	
-	
-	# print(t.find(7))
-	#t.delete(t.find(10))
-	
-	arr = []
-	for i in range(100):
-		arr.append(0)
+	def inorder(self, root, tabs="", level=1):
+		if not root:
+			return
+		
+		spaces = "\t"
+		self.inorder(root.right, tabs + spaces, level + 1)
+		print(tabs + f"({level})" + str(root.value))
+		self.inorder(root.left, tabs + spaces, level + 1)
+
+
+
+	def preorder(self, root):
+		if not root:
+			return
+		print(root.value, end=" ")
+		self.preorder(root.left)
+		self.preorder(root.right)
 		
 		
-	for i in range(2000):
-		if randrange(2000) > 100:
-			n = randrange(10)
-		else:
-			n = randrange(100)
-		arr[n] += 1	
-		t.splay(t.find(n))
-	
 		
-#		
-	t.traverse(0)
-	
-	for i in range(100):
-		print(f"{i}: {arr[i]}: {100 * arr[i] / 2000}")
-	
+	def postorder(self, root):
+		if not root:
+			return			
+		self.postorder(root.left)
+		self.postorder(root.right)
+		print(root.value, end=" ")

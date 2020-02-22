@@ -119,6 +119,8 @@ class Plugin():
 		editted_counter = self.plugins["files_manager.files_manager"].editted_counter
 		if editted_counter == 0:
 			self.app.quit()
+		else:
+			print(f"!!!! edited {editted_counter}")
 		
 		
 	def on_closeBtn_release_event(self, widget, event):
@@ -148,14 +150,7 @@ class Plugin():
 	
 	################ SAVE ########################
 	def on_save_menu_button_press_event(self, widget, event):
-		editted_counter = self.plugins["files_manager.files_manager"].editted_counter
-		if editted_counter > 0:
-			files = editted_counter = self.plugins["files_manager.files_manager"].files
-			# loop through all files objects
-			# reversed so from user prespective "from top to bottom"
-			for f in reversed(files):
-				if f.editted:
-					self.plugins["files_manager.savefile"].save_file(f)
+		self.plugins["files_manager.savefile"].save_all()
 		
 			
 			

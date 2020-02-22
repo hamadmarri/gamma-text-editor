@@ -3,9 +3,9 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk
 
-from . import list_functions as lf
+from .list_functions import ListFunctionsMixin
 
-class CommanderWindow:
+class CommanderWindow(ListFunctionsMixin):
 	def __init__(self, app, commander):
 		self.app = app
 		self.builder = app.builder
@@ -16,13 +16,9 @@ class CommanderWindow:
 		self.window = self.builder.get_object("commanderWindow")
 		self.commanderSearchEntry = self.builder.get_object("commanderSearchEntry")
 		self.listbox = self.builder.get_object("commanderList")
-		self.listbox.set_filter_func(lf.filter, self, self.commanderSearchEntry)
-		self.listbox.set_sort_func(lf.sort, self.commanderSearchEntry)
-		
-		# commands are added to list only once
-		# list takes care of filtering and sorting
-		self.commands_added = False
-		
+		self.listbox.set_filter_func(self.filter, self.commanderSearchEntry)
+		self.listbox.set_sort_func(self.sort, self.commanderSearchEntry)
+				
 		# when search, first command must be highlighted
 		self.selected_first_row = None
 		
@@ -32,14 +28,26 @@ class CommanderWindow:
 		self.prepare_second_row = None
 
 
-
-	def show_commander_window(self):
+	
+	def cache_commander_window(self):
+		
+		self.remove_all_commands()
+	
 		# commands are added to list only once
 		# list takes care of filtering and sorting
 		if not self.commands_added:
-			self.add_commands()
+			self.add_commands(self.commander.commands)
 			self.commands_added = True
+			
+		self.add_commands(self.commander.dynamic_commands)
 		
+		print("commands# " + str(len(self.listbox.get_children())))
+	
+		
+		
+		
+	def show_commander_window(self):
+	
 		# must empty search every time showing commander
 		self.commanderSearchEntry.set_text("")
 		
@@ -49,18 +57,26 @@ class CommanderWindow:
 		# unselect_all previously selected row
 		self.listbox.unselect_all()
 		self.listbox.show_all()
-		
+			
 		self.window.show()
 		
 		# unhighlight first row when show commander
 		self.selected_first_row = None
 		
+		
 	
-	
-	
-	def add_commands(self):
+	def remove_all_commands(self):
+		rows = self.listbox.get_children()
+		for r in rows:
+			self.listbox.remove(r)
+		
+		self.commands_added = False
+		
+		
+		
+	def add_commands(self, commands):
 		# loop through commands,
-		for c in self.commander.commands:
+		for c in commands:
 			# put each in gtkbox (name, shurtcut) and bind the command 
 			box = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
 			
@@ -74,14 +90,14 @@ class CommanderWindow:
 			box.pack_start(lblName, False, False, 0)
 			box.pack_end(lblShortcut, False, False, 0)
 	
-			# adding styles		
+			# adding styles
 			box.get_style_context().add_class("commanderRow")
 			lblName.get_style_context().add_class("commanderCommandName")
 			lblShortcut.get_style_context().add_class("commanderCommanShortcut")
 			
 			# add to listbox
 			self.listbox.insert(box, -1)
-		
+				
 		
 	
 	
@@ -215,5 +231,10 @@ class CommanderWindow:
 
 
 	def run_command(self, command):
-		command["ref"]()
+		if "parameters" in command:
+			p = command["parameters"]
+			command["ref"](p)
+		else:
+			command["ref"]()
+			
 		self.close()

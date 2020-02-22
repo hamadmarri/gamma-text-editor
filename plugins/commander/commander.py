@@ -18,14 +18,19 @@
 #
 #
 
+
+#import threading
 import time
 
 import gi
 gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk, Gdk
+from gi.repository import Gtk, Gdk, GObject
+
 
 from . import commands
 from . import commander_window as cw
+
+
 
 class Plugin():
 	
@@ -34,9 +39,11 @@ class Plugin():
 		self.app = app
 		self.builder = app.builder
 		self.plugins_manager = app.plugins_manager
+		self.plugins = app.plugins_manager.plugins
 		self.signal_handler = app.signal_handler
 		self.handlers = app.signal_handler.handlers
 		self.commands = None
+		self.dynamic_commands = []
 		self.only_ctrl = False
 		self.commander_window = cw.CommanderWindow(app, self)
 		
@@ -52,20 +59,17 @@ class Plugin():
 		# but with timing if ctrl is helf for self.max_time
 		# then open commander will fire 
 		self.t0 = 0
-		self.max_time = 0.3
-		
-		
-		
+		self.max_time = 0.2 # was 0.3 
+		self.cache_thread = None
 		
 		
 	def activate(self):
 		self.signal_handler.key_bindings_to_plugins.append(self)
 		self.signal_handler.any_key_press_to_plugins.append(self)
 		self.set_handlers()
-	
+		self.cache_commands()
 		
-		
-		
+
 	def set_handlers(self):
 		self.handlers.on_window_key_release_event = self.on_window_key_release_event
 		self.handlers.on_commanderWindow_key_press_event = self.commander_window.on_commanderWindow_key_press_event
@@ -75,13 +79,8 @@ class Plugin():
 		self.handlers.on_commanderList_row_activated = self.commander_window.on_commanderList_row_activated
 		self.handlers.on_commanderSearchEntry_key_press_event = self.commander_window.on_commanderSearchEntry_key_press_event
 		self.handlers.on_commanderList_key_press_event = self.commander_window.on_commanderList_key_press_event
-		
+			
 
-				
-	
-	
-	
-	
 	def key_bindings(self, event, keyval_name, ctrl, alt, shift):
 		# when user hit ctrl alone, or any key 
 		# not ctrl + any 
@@ -99,9 +98,6 @@ class Plugin():
 			self.only_ctrl = False
 			
 			
-			
-			
-
 	def on_window_key_release_event(self, window, event):
 		keyval_name = Gdk.keyval_name(event.keyval)
 		ctrl = (event.state & Gdk.ModifierType.CONTROL_MASK)
@@ -114,29 +110,68 @@ class Plugin():
 			if (time.time() - self.t0) <= self.max_time:
 				self.run()
 
+
+
+
+	def cache_commands(self):
+#		self.cache_thread = threading.Thread(target=self.cache_commands_thread_func)
+#		self.cache_thread.daemon = True
+#		self.cache_thread.start()
+		self.cache_commands_thread_func()
+		
 	
-	def run(self):
+	def cache_commands_thread_func(self):
+		print("start caching")
+		
 		# load commands only once, for first time
 		# check if commands have been loaded
 		if not self.commands:
 			# load commands
 			self.load_commands()
 		
+		self.load_dynamic_commands()
+		
+		self.commander_window.cache_commander_window()
+		
+		print("done caching")
+		
+		
+		
+	
+	def run(self):
 		# show commander window	
 		self.commander_window.show_commander_window()
 	
 	
 	
 	def load_commands(self):
-		self.commands = []
+		print("load_commands")
+		temp_thread_safe = []
 		
+		#for i in range(0, 100):
 		for plugin in self.plugins_manager.plugins_array:
-			
-			# avoid recursive loading this commander commands!
-			if plugin.name != self.name and plugin.commands:
+			if plugin.commands:
 				for c in plugin.commands:
-					self.commands.append(c)
-		
-		# add self commands!
-		commands.set_commands(self)				
+					temp_thread_safe.append(c)
+
+		self.commands = temp_thread_safe
 	
+	
+	
+
+	def load_dynamic_commands(self):
+		# delete all items 
+		temp_thread_safe = []
+		
+		temp_thread_safe.append({
+			"plugin-name":		self.name,
+			"name": 			"Switch to File < commander_window.py",
+			"ref": 				self.plugins["files_manager.files_manager"].switch_to_file,
+			"parameters": 		2,
+			"shortcut": 		"",
+			})
+		self.dynamic_commands = temp_thread_safe
+		
+		
+		
+		

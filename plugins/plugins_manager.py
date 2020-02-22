@@ -49,7 +49,6 @@ plugin_list = [
 	"files_manager.files_manager",
 	"files_manager.openfile",
 	"files_manager.savefile",
-	"commander.commander",
 	"simple_completion.simple_completion",
 	"highlight.highlight",
 	"message_notify.message_notify",
@@ -57,6 +56,12 @@ plugin_list = [
 	"ui_manager.ui_manager",
 	"files_manager.opendir",
 	"codecomment.codecomment2",
+
+
+	# special case for commander 
+	# must be last because the activate method 
+	# of commands need to cache other plugins commands 
+	"commander.commander",
 ]
 
 
