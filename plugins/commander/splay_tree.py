@@ -1,3 +1,22 @@
+#
+#### Author: Hamad Al Marri <hamad.s.almarri@gmail.com>
+#### Date: Feb 23rd, 2020
+#
+#	This program is free software: you can redistribute it and/or modify
+#	it under the terms of the GNU General Public License as published by
+#	the Free Software Foundation, either version 3 of the License, or
+#	(at your option) any later version.
+#
+#	This program is distributed in the hope that it will be useful,
+#	but WITHOUT ANY WARRANTY; without even the implied warranty of
+#	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#	GNU General Public License for more details.
+#
+#	You should have received a copy of the GNU General Public License
+#	along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+#
+#
 
 class TreeNode():
 	def __init__(self, value, parent=None):
@@ -26,19 +45,25 @@ class SplayTree():
 		return self.insert_helper(self.root, value)
 	
 	
-	def insert_helper(self, root, value, parent=None):
-		if not root:
-			new_node = TreeNode(value, parent)
-			if new_node.value < parent.value:
-				parent.left = new_node
+	def insert_helper(self, node, value):
+		parent = None
+		while node:
+			parent = node
+			if value < node.value:
+				node = node.left
 			else:
-				parent.right = new_node
-			return new_node
+				node = node.right
+		
+		new_node = TreeNode(value, parent)
+		if new_node.value < parent.value:
+			parent.left = new_node
+		else:
+			parent.right = new_node
+		return new_node
+		
+
 			
-		elif value < root.value:
-			return self.insert_helper(root.left, value, parent=root)
-		else: 	
-			return self.insert_helper(root.right, value, parent=root)
+			
 		
 		
 	################################ FIND ###########################

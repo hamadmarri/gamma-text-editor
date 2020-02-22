@@ -1,9 +1,24 @@
+#
+#### Author: Hamad Al Marri <hamad.s.almarri@gmail.com>
+#### Date: Feb 23rd, 2020
+#
+#	This program is free software: you can redistribute it and/or modify
+#	it under the terms of the GNU General Public License as published by
+#	the Free Software Foundation, either version 3 of the License, or
+#	(at your option) any later version.
+#
+#	This program is distributed in the hope that it will be useful,
+#	but WITHOUT ANY WARRANTY; without even the implied warranty of
+#	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#	GNU General Public License for more details.
+#
+#	You should have received a copy of the GNU General Public License
+#	along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+#
+#
 
 from .splay_tree import SplayTree
-
-
-# from random import randrange
-
 
 
 
@@ -21,6 +36,7 @@ from .splay_tree import SplayTree
 class CommandsTree(SplayTree):
 	def __init__(self):
 		super().__init__()
+		self.size = 0
 		self.seek_iter = 0
 		self.search_iter = None
 		self.search_iter_counter = 0
@@ -32,6 +48,7 @@ class CommandsTree(SplayTree):
 		node = super().insert(value.strip().lower())
 		node.command = command
 		command["node"] = node
+		self.size += 1
 		return node
 		
 		
@@ -155,92 +172,3 @@ class CommandsTree(SplayTree):
 		if node.right:
 			self.queue.append(node.right)
 		
-		
-if __name__ == "__main__":
-	t = CommandsTree()
-	t.insert({"plugin-name": "commander", "name": "Open/Close This Window!", "ref": print,"shortcut": "<Ctrl>",	})
-	t.insert({"plugin-name": "commander", "name": "Toggle maximize window", "ref": print,"shortcut": "<Ctrl>",	})
-	t.insert({"plugin-name": "commander", "name": "Exit", "ref": print,"shortcut": "<Ctrl>",	})
-	t.insert({"plugin-name": "commander", "name": "Close File", "ref": print,"shortcut": "<Ctrl>",	})
-	t.insert({"plugin-name": "commander", "name": "Close All", "ref": print,"shortcut": "<Ctrl>",	})
-	t.insert({"plugin-name": "commander", "name": "Open File", "ref": print,"shortcut": "<Ctrl>",	})
-	t.insert({"plugin-name": "commander", "name": "Save File", "ref": print,"shortcut": "<Ctrl>",	})
-	t.insert({"plugin-name": "commander", "name": "Search in File", "ref": print,"shortcut": "<Ctrl>",})
-	t.insert({"plugin-name": "commander", "name": "Open Directory", "ref": print,"shortcut": "<Ctrl>",})
-	t.insert({"plugin-name": "commander", "name": "Switch to File < commander_window.py", "ref": print,"shortcut": "<Ctrl>",})
-	t.traverse(0)
-	
-	
-#	n = t.find("Exit")
-#	t.delete(n)	
-#	t.traverse(0)
-
-
-	SS = t.first(max_result=4)
-	for n in SS:
-		print(n["name"])
-		
-	
-
-#	n = t.find("Sedb", n)
-#	print("n", n)
-		
-	
-	n = t.find("Search in File")
-	t.splay(n)
-	t.traverse(0)
-	
-	SS = t.first(max_result=4)
-	for n in SS:
-		print(n["name"])
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-#	t = SplayTree()
-#	
-#	for i in range(1000):
-#		t.insert(randrange(1000))
-#			
-#	arr = []
-#	for i in range(1000):
-#		arr.append(0)
-#		
-#		
-#	for i in range(2000):
-#		if randrange(2000) > 500:
-#			n = randrange(10)
-#		else:
-#			n = randrange(1000)
-#		
-#		N = t.find(n)
-#		if N:
-#			arr[n] += 1	
-#			t.splay(N)
-#	
-#		
-#		
-#	t.traverse(0)
-#	
-#	for i in range(1000):
-#		print(f"{i}: {arr[i]}: {100 * arr[i] / 2000}")

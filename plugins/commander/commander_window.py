@@ -1,3 +1,22 @@
+#
+#### Author: Hamad Al Marri <hamad.s.almarri@gmail.com>
+#### Date: Feb 18th, 2020
+#
+#	This program is free software: you can redistribute it and/or modify
+#	it under the terms of the GNU General Public License as published by
+#	the Free Software Foundation, either version 3 of the License, or
+#	(at your option) any later version.
+#
+#	This program is distributed in the hope that it will be useful,
+#	but WITHOUT ANY WARRANTY; without even the implied warranty of
+#	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#	GNU General Public License for more details.
+#
+#	You should have received a copy of the GNU General Public License
+#	along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+#
+#
 
 import gi
 gi.require_version('Gtk', '3.0')
@@ -33,8 +52,8 @@ class CommanderWindow():
 	
 		self.add_commands(self.commander.commands_tree)
 
-		print("commands# " + str(len(self.listbox.get_children())))
-		self.commander.commands_tree.traverse(0)
+		#print("commands# " + str(len(self.listbox.get_children())))
+		# self.commander.commands_tree.traverse(0)
 
 		# must empty search every time showing commander
 		self.previous_search = ""
@@ -91,7 +110,7 @@ class CommanderWindow():
 		
 		# add to listbox
 		self.listbox.insert(box, -1)
-		print("adding", c['name'])
+		#print("adding", c['name'])
 				
 		
 	
@@ -254,6 +273,6 @@ class CommanderWindow():
 			
 		# splay command
 		self.commander.commands_tree.splay(command["node"])
-		self.commander.commands_tree.traverse(0)
+		#self.commander.commands_tree.traverse(0)
 			
 		self.close()

@@ -20,6 +20,7 @@
 
 
 import time
+import random
 
 import gi
 gi.require_version('Gtk', '3.0')
@@ -66,7 +67,7 @@ class Plugin():
 		self.signal_handler.key_bindings_to_plugins.append(self)
 		self.signal_handler.any_key_press_to_plugins.append(self)
 		self.set_handlers()
-		self.cache_commands()
+		# self.cache_commands()
 		
 
 	def set_handlers(self):
@@ -113,18 +114,17 @@ class Plugin():
 
 
 	def cache_commands(self):
-		print("start caching")
+		#print("start caching")
 		# load commands only once, for first time
 		# check if commands have been loaded
 		self.load_commands()
-		print("done caching")
+		#print("done caching")
 		
 		
 	
 	def load_commands(self):
-		print("load_commands")
+		#print("load_commands")
 		
-		#for i in range(0, 100):
 		for plugin in self.plugins_manager.plugins_array:
 			if plugin.commands:
 				for c in plugin.commands:
@@ -135,10 +135,16 @@ class Plugin():
 		commands.set_commands(self)
 		for c in self.commands:
 			self.commands_tree.insert(c)
+			
+		#self.commands_tree.traverse(0)
+		#print("commands size: " + str(self.commands_tree.size))
 	
 		
 	
 	def run(self):
+		if not self.commands:
+			self.cache_commands()
+			
 		# show commander window	
 		self.commander_window.show_commander_window()
 	
