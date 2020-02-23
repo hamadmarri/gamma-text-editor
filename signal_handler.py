@@ -79,18 +79,27 @@ class SignalHandler:
 		alt = (event.state & Gdk.ModifierType.MOD1_MASK)
 		shift = (event.state & Gdk.ModifierType.SHIFT_MASK)
 		
+		stop_propagation = False
+		
 		# for performance reason:
 		# - pass only key bindings (i.e. when ctrl, alt)
 		# - or when "F" function keys pressed such F1, F2 ..
 		# this if is to condition the exit
 		if (not ctrl and not alt) and len(keyval_name) != 2: # not F1, ..:
 			for p in self.any_key_press_to_plugins:
-				p.key_bindings(event, keyval_name, ctrl, alt, shift)
+				return_value = p.key_bindings(event, keyval_name, ctrl, alt, shift)
+				if return_value:
+					stop_propagation = True
 		else:
 			# loop through all plugins and call their key_bindings method
 			# only key bindings
 			for p in self.key_bindings_to_plugins:
-				p.key_bindings(event, keyval_name, ctrl, alt, shift)
+				return_value = p.key_bindings(event, keyval_name, ctrl, alt, shift)
+				if return_value:
+					stop_propagation = True
+		
+		# print("stop_propagation", stop_propagation)
+		return stop_propagation
 			
 
 	

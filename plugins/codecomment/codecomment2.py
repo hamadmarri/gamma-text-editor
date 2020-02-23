@@ -26,7 +26,8 @@
 #  Boston, MA 02110-1301, USA.
 
 
-
+# TODO: comment empty line right above non-empty line
+# causes comment to next line. need fix
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk
@@ -43,19 +44,15 @@ class Plugin(CodeCommentTags):
 		self.plugins = app.plugins_manager.plugins
 		self.signal_handler = app.signal_handler
 		self.commands = []
+		
 	
 	def activate(self):
 		self.signal_handler.key_bindings_to_plugins.append(self)
-#		commands.set_commands(self)
-
-	
-
-	def key_bindings(self, event, keyval_name, ctrl, alt, shift):
-		# print(keyval_name, event.keyval)
-		if shift and ctrl and keyval_name == "question":
-			self.do_comment()
+		commands.set_commands(self)
 		
-		print(keyval_name)
+		
+
+	def key_bindings(self, event, keyval_name, ctrl, alt, shift):		
 		if ctrl and keyval_name == "slash":
 			self.do_comment()
 			return True
@@ -104,10 +101,10 @@ class Plugin(CodeCommentTags):
 			
 		
 		# if empty line (i.e. start == end - 1)
-		print(start.get_offset())
-		print(end.get_offset())
+		# print(start.get_offset())
+		# print(end.get_offset())
 		if start.get_offset() == end.get_offset() - 1:
-			print("empty line comment")
+			# print("empty line comment")
 			buffer.insert(start, start_tag)
 			buffer.insert(start, " ")
 			return
