@@ -60,7 +60,7 @@ class OpenFileMixin(object):
 		newfile = File(self, filename, newsource)
 				
 		# add newfile object to "files" array
-		self.files.append(newfile)
+		self.add_file_to_list(newfile)
 				
 		# set the language of just openned file 
 		# see sourceview_manager
@@ -73,5 +73,4 @@ class OpenFileMixin(object):
 		
 
 
-
-
+	

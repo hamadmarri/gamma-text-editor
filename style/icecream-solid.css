@@ -91,9 +91,24 @@ FOREGROUND: #827082 #6B5C6B
 }
 
 
-#headerbarMain *:focus {
-	color:#0DD100;
+
+#headerbarMain entry selection {
+	background: #e1e0e1;
 }
+
+#headerbarMain*.searching, #headerbarMain*.searching * {
+       color:#00B5FF;
+}
+#headerbarMain*.searchSuccess, #headerbarMain*.searchSuccess * {
+	color: #0DD100;
+}
+#headerbarMain*.searchFail, #headerbarMain*.searchFail * {
+	color: #FF1946;
+}
+
+
+
+
 
 #messageLbl {
 	font-family: monospace;
@@ -264,7 +279,7 @@ FOREGROUND: #827082 #6B5C6B
 /******************* COMMANDER WINDOW *********************/
 
 #commanderSearchEntry, #commanderSearchEntry * {
-	color:#0DD100;
+	color:#00B5FF;
 	background: #fdfdfd;
 	font-family: monospace;
 	font-size: 22px;
@@ -300,6 +315,7 @@ FOREGROUND: #827082 #6B5C6B
 	font-weight:bold;
 	border:none;
 }
+
 
 
 

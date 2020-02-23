@@ -44,19 +44,19 @@ class Plugin():
 		self.handlers = app.signal_handler.handlers
 		self.commands_tree = CommandsTree()
 		self.commands = None
-		self.only_ctrl = False
+		self.only_alt = False
 		self.commander_window = cw.CommanderWindow(app, self)
 		
-		# when user hold ctrl for long time
+		# when user hold alt for long time
 		# but never used key bindings, then
 		# no need to show commander 
 		# it is annoying to show commander 
-		# when user hold ctrl but then changed
-		# their mind (i.e. ctrl+c to copy something 
+		# when user hold alt but then changed
+		# their mind (i.e. alt+c to copy something 
 		# but changed their mind before hit the 'c'
-		# when relaeas ctrl (without timing) commander 
+		# when relaeas alt (without timing) commander 
 		# will show which is not good
-		# but with timing if ctrl is helf for self.max_time
+		# but with timing if alt is helf for self.max_time
 		# then open commander will fire 
 		self.t0 = 0
 		self.max_time = 0.2 # was 0.3 
@@ -84,18 +84,18 @@ class Plugin():
 	def key_bindings(self, event, keyval_name, ctrl, alt, shift):
 		# when user hit ctrl alone, or any key 
 		# not ctrl + any 
-		if not ctrl:
-			# we assume that only ctrl is pressed
-			# we know it is for sure not ctrl+'any key'
+		if not alt:
+			# we assume that only alt is pressed
+			# we know it is for sure not alt+'any key'
 			# on_window_key_release_event verifies if
-			# ctrl was released, but we need to know
-			# if ctrl has been pressed and released (alone)
-			self.only_ctrl = True
+			# alt was released, but we need to know
+			# if alt has been pressed and released (alone)
+			self.only_alt = True
 			
 			# get time
 			self.t0 = time.time()
 		else:
-			self.only_ctrl = False
+			self.only_alt = False
 			
 			
 	def on_window_key_release_event(self, window, event):
@@ -104,9 +104,9 @@ class Plugin():
 		alt = (event.state & Gdk.ModifierType.MOD1_MASK)
 		shift = (event.state & Gdk.ModifierType.SHIFT_MASK)
 		
-		# if only ctrl has been pressed and released, and 
+		# if only alt has been pressed and released, and 
 		# time is not to long during the held!, then open commander
-		if ctrl and self.only_ctrl and keyval_name == "Control_L":
+		if alt and self.only_alt and keyval_name == "Alt_L":
 			if (time.time() - self.t0) <= self.max_time:
 				self.run()
 
@@ -138,7 +138,19 @@ class Plugin():
 			
 		#self.commands_tree.traverse(0)
 		#print("commands size: " + str(self.commands_tree.size))
+		self.plugins["message_notify.message_notify"] \
+							.show_message(f"{self.commands_tree.size} commands loaded")
 	
+	
+	def add_command(self, c):
+		 return self.commands_tree.insert(c)
+		
+		
+	def remove_command(self, node):
+		#self.commands_tree.traverse(0)
+		node = self.commands_tree.delete(node)
+		#self.commands_tree.traverse(0)
+		return node
 		
 	
 	def run(self):

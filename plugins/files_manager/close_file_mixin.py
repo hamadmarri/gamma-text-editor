@@ -95,7 +95,7 @@ class CloseFileMixin(object):
 
 	def destroy_file(self, file_index):
 		# print(file_index)
-		file_object =self.files[file_index]
+		file_object = self.files[file_index]
 		close = True
 		
 		if file_object.editted:
@@ -120,15 +120,13 @@ class CloseFileMixin(object):
 			else:
 				close = False
 
-		if close:
-			# print(close, file_object.filename)
+		if close:		
+			# remove from "files" array
+			#del self.files[file_index]
+			self.remove_file_from_list(file_object, file_index)
 		
 			# destroy the ui_ref btn attached to file TODO: move to ui manager
 			file_object.ui_ref.destroy()
-		
-			# remove from "files" array
-			del self.files[file_index]
-		
 
 		return close
 	

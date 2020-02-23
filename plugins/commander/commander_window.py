@@ -124,10 +124,10 @@ class CommanderWindow():
 				
 		# the same way as commander when open commander window,
 		# this will close it with the same key
-		if not ctrl:
-			self.only_ctrl = True
+		if not alt:
+			self.only_alt = True
 		else:
-			self.only_ctrl = False
+			self.only_alt = False
 			
 		# also if press escape then close commander
 		if keyval_name == "Escape":
@@ -135,14 +135,14 @@ class CommanderWindow():
 
 
 
-	# if user preseed and released ctrl key, commander will close
+	# if user preseed and released alt key, commander will close
 	def on_commanderWindow_key_release_event(self, window, event):
 		keyval_name = Gdk.keyval_name(event.keyval)
 		ctrl = (event.state & Gdk.ModifierType.CONTROL_MASK)
 		alt = (event.state & Gdk.ModifierType.MOD1_MASK)
 		shift = (event.state & Gdk.ModifierType.SHIFT_MASK)
 		
-		if ctrl and self.only_ctrl and keyval_name == "Control_L":
+		if alt and self.only_alt and keyval_name == "Alt_L":
 			self.close()
 			
 			
@@ -215,9 +215,22 @@ class CommanderWindow():
 			
 		self.previous_search = search_term
 		
+		temp = []
 		for c in ss:
-			#print(c['name'])
 			self.add_command(c)
+			temp.append(c)
+			
+		# if no enough results from strict search, then
+		# do soft search 
+		added_commands = len(self.listbox.get_children())
+		to_add = 20 - added_commands
+		soft_s = commands.soft_search(search_term, max_result=to_add)
+		
+		for c in soft_s:
+			if not c in temp:
+				self.add_command(c)
+		
+		
 		
 		self.listbox.unselect_all()
 		self.selected_first_row = self.listbox.get_row_at_index(0)

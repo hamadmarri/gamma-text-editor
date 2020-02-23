@@ -26,7 +26,7 @@ from gi.repository import Gtk, Gdk
 from . import commands
 
 class Plugin(): 
-
+	
 	def __init__(self, app):
 		self.name = "search_in_file"
 		self.app = app
@@ -100,6 +100,7 @@ class Plugin():
 	def on_search_focus_out_event(self, widget, data):
 		self.is_highlight_done = False
 		self.plugins["highlight.highlight"].remove_highlight(self.tag_name)
+		self.update_style(-1)
 		
 			
 	def get_focus(self):	
@@ -123,7 +124,27 @@ class Plugin():
 
 		# set cursor to searchEntry
 		self.searchEntry.grab_focus()
+		self.update_style(0)
 				
+	
+	
+	
+	def update_style(self, state):
+		self.searchEntry.get_style_context().remove_class("searching")
+		self.searchEntry.get_style_context().remove_class("searchSuccess")
+		self.searchEntry.get_style_context().remove_class("searchFail")
+		
+		if state == 0:
+			# searching in blue
+			self.searchEntry.get_style_context().add_class("searching")
+		elif state == 1:
+			# search success in green
+			self.searchEntry.get_style_context().add_class("searchSuccess")
+		elif state == 2:
+			# no results in red 
+			self.searchEntry.get_style_context().add_class("searchFail")
+			
+			
 	
 	# (see https://developer.gnome.org/gtk3/stable/GtkSearchEntry.html)
 	# (https://developer.gnome.org/gtk3/stable/GtkEntry.html)
@@ -138,10 +159,16 @@ class Plugin():
 		self.search = searchEntry.get_text()
 		self.count = self.plugins["highlight.highlight"].highlight(self.search)
 		
-		# if no results
-		if self.count == 0:
+		# if no results while search is not empty
+		if self.count == 0 and self.search:
 			self.plugins["message_notify.message_notify"].show_message("Search Results | 0")
+			self.update_style(2)
 			return
+			
+		if not self.search:
+			self.update_style(0)
+		else:
+			self.update_style(1)
 			
 		self.is_highlight_done = True
 		

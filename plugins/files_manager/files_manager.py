@@ -22,6 +22,7 @@
 #
 #
 
+import os
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
@@ -32,9 +33,10 @@ from .file import File
 from .create_file_mixin import CreateFileMixin
 from .close_file_mixin import CloseFileMixin
 from .open_file_mixin import OpenFileMixin
+from .commands_ctrl import CommandsCtrl
 
 
-class Plugin(CreateFileMixin, CloseFileMixin, OpenFileMixin):
+class Plugin(CommandsCtrl, CreateFileMixin, CloseFileMixin, OpenFileMixin):
 	
 	def __init__(self, app):
 		self.name = "files_manager"
@@ -87,7 +89,16 @@ class Plugin(CreateFileMixin, CloseFileMixin, OpenFileMixin):
 		# if new file added by the user
 		else:
 			# rename in array
+			
+			# remove old command in commander
+			self.update_commanders_remove(file_object)
+			
+			# rename file
 			file_object.filename = filename
+			
+			# add new commander for the file
+			self.update_commanders_add(file_object)
+						
 			file_object.new_file = False	# not new anymore
 			self.plugins["ui_manager.ui_manager"].rename_file(file_object)
 			
@@ -107,7 +118,8 @@ class Plugin(CreateFileMixin, CloseFileMixin, OpenFileMixin):
 		file_object.source_view.get_buffer().set_text("")
 
 		# add newfile to files array
-		self.files.append(newfile)
+		# self.files.append(newfile)
+		self.add_file_to_list(newfile)
 		
 		self.plugins["ui_manager.ui_manager"].add_filename_to_ui(newfile)
 		self.switch_to_file(len(self.files) - 1)		
@@ -166,6 +178,14 @@ class Plugin(CreateFileMixin, CloseFileMixin, OpenFileMixin):
 		return -1
 		
 		
+	
+	def add_file_to_list(self, newfile):
+		self.files.append(newfile)
+		self.update_commanders_add(newfile)
 		
 		
+	def remove_file_from_list(self, file_object, file_index):
+		self.update_commanders_remove(file_object)
+		del self.files[file_index]
+
 
