@@ -27,7 +27,6 @@
 
 
 
-
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk
@@ -55,6 +54,11 @@ class Plugin(CodeCommentTags):
 		# print(keyval_name, event.keyval)
 		if shift and ctrl and keyval_name == "question":
 			self.do_comment()
+		
+		print(keyval_name)
+		if ctrl and keyval_name == "slash":
+			self.do_comment()
+			return True
 			
 			
 
@@ -74,10 +78,11 @@ class Plugin(CodeCommentTags):
 		if not start_tag and not end_tag:
 			return
 			
-			
+		
 		# get user selection
 		sel = buffer.get_selection_bounds()
 		currentPosMark = buffer.get_insert()
+		oldPos = 0
 		
 		# if user selected chars or multilines
 		if sel != ():
@@ -96,14 +101,20 @@ class Plugin(CodeCommentTags):
 			start.set_line_offset(0)
 			end = start.copy()
 			end.forward_to_line_end()
+			
+		
+		# if empty line (i.e. start == end - 1)
+		print(start.get_offset())
+		print(end.get_offset())
+		if start.get_offset() == end.get_offset() - 1:
+			print("empty line comment")
+			buffer.insert(start, start_tag)
+			buffer.insert(start, " ")
+			return
 
 		
-		new_code = self.add_comment_characters(buffer, start_tag, end_tag, start, end)
+		new_code = self.add_comment_characters(buffer, start_tag, end_tag, start, end, deselect, oldPos)
 
-		# place the cursor to its old position
-		if deselect:
-			oldPosIter = buffer.get_iter_at_offset(oldPos + 2)
-			buffer.place_cursor(oldPosIter)
 
 	
 	
@@ -134,7 +145,7 @@ class Plugin(CodeCommentTags):
 
 
 
-	def add_comment_characters(self, document, start_tag, end_tag, start, end):
+	def add_comment_characters(self, document, start_tag, end_tag, start, end, deselect, oldPos):
 		smark = document.create_mark("start", start, False)
 		imark = document.create_mark("iter", start, False)
 		emark = document.create_mark("end", end, False)
@@ -197,6 +208,13 @@ class Plugin(CodeCommentTags):
 		document.delete_mark(smark)
 		document.delete_mark(emark)
 		
+		# place the cursor to its old position
+		if deselect:
+			oldPosIter = document.get_iter_at_offset(oldPos + 2)
+			document.place_cursor(oldPosIter)
+		
+	
+	
 	
 	
 	def forward_tag(self, iter, tag):
@@ -206,12 +224,6 @@ class Plugin(CodeCommentTags):
 		iter.backward_chars(len(tag))
 		
 		
-		
-		
-
-
-
-        
 
 	def get_tag_position_in_line(self, tag, head_iter, iter):
 		while not iter.ends_line():
@@ -236,6 +248,7 @@ class Plugin(CodeCommentTags):
 		document.begin_user_action()
 
 		for i in range(0, number_lines):
+			print(f"line {i}")
 			if self.get_tag_position_in_line(start_tag, head_iter, iter):
 				dmark = document.create_mark("delete", iter, False)
 				document.delete(iter, head_iter)
@@ -248,13 +261,14 @@ class Plugin(CodeCommentTags):
 					# remove 
 					document.delete(head_iter, space_iter)
 				
-				if end_tag is not None:
+				if end_tag:
 					iter = document.get_iter_at_mark(dmark)
 					head_iter = iter.copy()
 					self.forward_tag(head_iter, end_tag)
 					if self.get_tag_position_in_line(end_tag, head_iter, iter):
 						document.delete(iter, head_iter)
 				document.delete_mark(dmark)
+				
 			iter = document.get_iter_at_mark(smark)
 			iter.forward_line()
 			document.delete_mark(smark)
