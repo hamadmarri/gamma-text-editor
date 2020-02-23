@@ -105,6 +105,8 @@ class SplayTree():
 			
 			# copy successor to node
 			node.value = successor.value
+			node.command = successor.command
+			node.command["node"] = node
 			
 			self.delete(successor)
 			
