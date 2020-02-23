@@ -197,7 +197,8 @@ class Plugin():
 			self.sourceview.scroll_to_iter(match_start, 0, True, 0.5, 0.5)
 			
 			self.match_number = 1
-			self.plugins["message_notify.message_notify"].show_message("Search Results | " + str(self.match_number) + "/" + str(self.count))
+			self.plugins["message_notify.message_notify"].show_message( \
+						"Search Results | " + str(self.match_number) + "/" + str(self.count))
 			self.highlight_scrolled()
 		
 			
@@ -214,7 +215,8 @@ class Plugin():
 			self.sourceview.scroll_to_iter(match_end, 0, True, 0.5, 0.5)
 			
 			self.match_number += 1
-			self.plugins["message_notify.message_notify"].show_message("Search Results | " + str(self.match_number) + "/" + str(self.count))
+			self.plugins["message_notify.message_notify"].show_message( \
+						"Search Results | " + str(self.match_number) + "/" + str(self.count))
 			self.highlight_scrolled()
 		else:
 			# call again scroll to go up
@@ -238,8 +240,8 @@ class Plugin():
 			self.sourceview.scroll_to_iter(match_end, 0, True, 0.5, 0.5)
 			
 			self.match_number -= 1
-			self.plugins["message_notify.message_notify"].show_message("Search Results | " 
-											+ str(self.match_number) + "/" + str(self.count))
+			self.plugins["message_notify.message_notify"].show_message( \
+							"Search Results | "	+ str(self.match_number) + "/" + str(self.count))
 			self.highlight_scrolled()
 		else:
 			# scroll from the end

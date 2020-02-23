@@ -1,7 +1,7 @@
-#
+#  
 #### Author: Hamad Al Marri <hamad.s.almarri@gmail.com>
 #### Date: Feb 11th, 2020
-#
+# 
 #	This program is free software: you can redistribute it and/or modify
 #	it under the terms of the GNU General Public License as published by
 #	the Free Software Foundation, either version 3 of the License, or
@@ -40,7 +40,7 @@ class Plugin():
 		self.builder = app.builder
 		self.commands = []
 		self.messageLbl = None
-		self.message_time = 7.5 # 7.5 seconds
+		self.message_time = 7000.5 # 7.5 seconds
 		self.timer = None
 		
 	
@@ -52,12 +52,32 @@ class Plugin():
 	# show message (m) in messageLbl
 	# set the thread timer to clear this
 	# message after "message_time" seconds
-	def show_message(self, m):
+	def show_message(self, m, state=0):
 		self.cancel()
 		
+		print(m, state)
 		self.messageLbl.set_text(m)
+		self.update_style(state)
 		self.timer = threading.Timer(self.message_time, self.clear_message)
 		self.timer.start()
+	
+	
+	
+	
+	def update_style(self, state):
+		self.messageLbl.get_style_context().remove_class("messageImportant")
+		self.messageLbl.get_style_context().remove_class("messageSuccess")
+		self.messageLbl.get_style_context().remove_class("messageFail")
+		
+		#if state == 0:
+			# do nothing just remove all css classes	
+		if state == 1:
+			self.messageLbl.get_style_context().add_class("messageImportant")
+		elif state == 2:
+			self.messageLbl.get_style_context().add_class("messageSuccess")
+		elif state == 3: 
+			self.messageLbl.get_style_context().add_class("messageFail")
+			
 	
 	
 	# removes any text in messageLbl
@@ -72,3 +92,5 @@ class Plugin():
 			self.timer.cancel()
 		
 		self.clear_message()
+		
+	

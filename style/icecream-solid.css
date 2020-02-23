@@ -8,7 +8,7 @@
 #	but WITHOUT ANY WARRANTY; without even the implied warranty of
 #	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #	GNU General Public License for more details.
-#
+# 
 #	You should have received a copy of the GNU General Public License
 #	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
@@ -96,15 +96,20 @@ FOREGROUND: #827082 #6B5C6B
 	background: #e1e0e1;
 }
 
-#headerbarMain*.searching, #headerbarMain*.searching * {
+#headerbarMain*.searching, #headerbarMain*.searching *,
+#headerbarMain*.messageImportant, #headerbarMain*.messageImportant * {
        color:#00B5FF;
 }
-#headerbarMain*.searchSuccess, #headerbarMain*.searchSuccess * {
+#headerbarMain*.searchSuccess, #headerbarMain*.searchSuccess *,
+#headerbarMain*.messageSuccess, #headerbarMain*.messageSuccess * {
 	color: #0DD100;
 }
-#headerbarMain*.searchFail, #headerbarMain*.searchFail * {
+#headerbarMain*.searchFail, #headerbarMain*.searchFail * ,
+#headerbarMain*.messageFail, #headerbarMain*.messageFail * {
 	color: #FF1946;
 }
+
+
 
 
 
@@ -180,9 +185,9 @@ FOREGROUND: #827082 #6B5C6B
 	padding-bottom: 17px;
 	font-size: 1.05em;
 }
+ 
 
-
-.openned_file_editted label {
+.openned_file_editted button label {
 	color: #FCE94F;
 	font-style: italic;
 }
@@ -279,13 +284,15 @@ FOREGROUND: #827082 #6B5C6B
 /******************* COMMANDER WINDOW *********************/
 
 #commanderSearchEntry, #commanderSearchEntry * {
-	color:#00B5FF;
-	background: #fdfdfd;
+	color:#827082;
+	background: #fdfdfd; 
 	font-family: monospace;
 	font-size: 22px;
 	min-height: 40px;
 }
-
+#commanderSearchEntry selection {
+	background: #e1e0e1;
+}
 #commanderList{
 	background: #6D5E6D;
 	padding-top:4px;
@@ -315,7 +322,5 @@ FOREGROUND: #827082 #6B5C6B
 	font-weight:bold;
 	border:none;
 }
-
-
 
 

@@ -1,7 +1,7 @@
-# 
+#  
 #### Author: Hamad Al Marri <hamad.s.almarri@gmail.com>
 #### Date: Feb 11th, 2020
-#
+# 
 #	This program is free software: you can redistribute it and/or modify
 #	it under the terms of the GNU General Public License as published by
 #	the Free Software Foundation, either version 3 of the License, or
@@ -156,10 +156,10 @@ class Plugin():
 		else:
 			# when successfully wrote the file, show successful message
 			basename = os.path.basename(filename)
-			self.plugins["message_notify.message_notify"].show_message(basename + " | Saved")
+			self.plugins["message_notify.message_notify"].show_message(basename + " | Saved", 2)
 		finally:
-			f.close()
-			print(f"{basename} saved and closed")
+			f.close() 
+			print(f"{basename} saved and closed") 
 			
 
 

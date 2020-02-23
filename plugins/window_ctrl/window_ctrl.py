@@ -182,9 +182,13 @@ class Plugin():
 		# add "sourceviewclass" css class
 		menu.get_style_context().add_class("menu_attention")
 		
+		
+		
 	def remove_attention(self, menu=None):
 		if not menu:
 			menu = self.H
 			
 		# add "sourceviewclass" css class
 		menu.get_style_context().remove_class("menu_attention")
+		
+		

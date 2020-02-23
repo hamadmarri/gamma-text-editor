@@ -154,11 +154,6 @@ class FilesUI(object):
 			# set the title of headerbar
 			self.headerbar.set_title(basename)
 		
-		# show message of the full path of the file 
-		# it is useful to avoid confusion when having 
-		# different files with similar names in different paths
-		self.plugins["message_notify.message_notify"].show_message(filename)
-		
 
 	
 	

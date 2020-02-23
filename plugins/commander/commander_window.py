@@ -253,7 +253,7 @@ class CommanderWindow():
 				self.run_command(first_row.get_child().command)
 			else:
 				# if no rows, then show message no commands selected
-				self.app.plugins_manager.plugins["message_notify.message_notify"].show_message("No commands selected!")
+				self.app.plugins_manager.plugins["message_notify.message_notify"].show_message("No commands selected!", 3)
 
 		
 		# move to next row when press down key from searchEntry

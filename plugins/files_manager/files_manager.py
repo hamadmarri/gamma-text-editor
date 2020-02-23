@@ -158,6 +158,11 @@ class Plugin(CommandsCtrl, CreateFileMixin, CloseFileMixin, OpenFileMixin):
 			
 		# update headerbar to filename
 		self.plugins["ui_manager.ui_manager"].update_header(f.filename, f.editted)
+		
+		# show message of the full path of the file 
+		# it is useful to avoid confusion when having 
+		# different files with similar names in different paths
+		self.plugins["message_notify.message_notify"].show_message(f.filename)
 
 		
 		
@@ -177,7 +182,7 @@ class Plugin(CommandsCtrl, CreateFileMixin, CloseFileMixin, OpenFileMixin):
 				return i	
 		return -1
 		
-		
+	
 	
 	def add_file_to_list(self, newfile):
 		self.files.append(newfile)
