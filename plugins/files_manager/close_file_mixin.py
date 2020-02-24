@@ -154,7 +154,7 @@ class CloseFileMixin(object):
 		
 		btn = Gtk.Button.new()
 		btn.set_label("No")
-		btn.get_style_context().add_class("danger")
+		btn.get_style_context().add_class("destructive-action")
 		btn.show()
 		
 		dialog.add_action_widget(btn, 2)
@@ -165,14 +165,6 @@ class CloseFileMixin(object):
 		# close and destroy dialog object
 		dialog.destroy()
 
-#		print(response)
-#		
-#		if response == 0:
-#			print("save")
-#		elif response == 2:
-#			print("no")
-#		else:
-#			print("cancel")
 
 		return response		
 		

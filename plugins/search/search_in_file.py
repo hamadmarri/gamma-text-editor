@@ -18,7 +18,7 @@
 #  
 #  
 #     TODO: when Escape search keep cursor at last found
-
+#
 
 import gi
 gi.require_version('Gtk', '3.0')
@@ -31,8 +31,8 @@ class Plugin():
 		self.name = "search_in_file"
 		self.app = app
 		self.signal_handler = app.signal_handler
-		self.builder = app.builder
 		self.handlers = app.signal_handler.handlers
+		self.builder = app.builder
 		self.plugins = app.plugins_manager.plugins
 		self.sourceview = None
 		self.buffer = None
@@ -86,23 +86,27 @@ class Plugin():
 			
 		elif (shift and keyval_name == "Return") or keyval_name == "Up":
 			if not self.is_highlight_done:
-				self.do_highlight(self.searchEntry)
+				self.do_highlight(self.searchEntry.get_text())
 			self.scroll_prev()	
 			
 		elif keyval_name == "Return" or keyval_name == "KP_Enter" or keyval_name == "Down":
 			if not self.is_highlight_done:
-				self.do_highlight(self.searchEntry)
+				self.do_highlight(self.searchEntry.get_text())
 			else:
 				self.scroll_next()
 				
 		
 	
 	def on_search_focus_out_event(self, widget, data):
+		self.quit_search()
+		
+			
+	def quit_search(self):
 		self.is_highlight_done = False
 		self.plugins["highlight.highlight"].remove_highlight(self.tag_name)
 		self.update_style(-1)
-		
-			
+	
+	
 	def get_focus(self):	
 		self.sourceview = self.plugins["files_manager.files_manager"].current_file.source_view
 		self.buffer = self.sourceview.get_buffer()
@@ -149,14 +153,14 @@ class Plugin():
 	# (see https://developer.gnome.org/gtk3/stable/GtkSearchEntry.html)
 	# (https://developer.gnome.org/gtk3/stable/GtkEntry.html)
 	def on_search_field_changed(self, widget):
-		self.do_highlight(widget)
+		self.do_highlight(widget.get_text())
 		
 	
 	# (see https://developer.gnome.org/gtk3/stable/GtkSearchEntry.html)
 	# (https://developer.gnome.org/gtk3/stable/GtkEntry.html)
-	def do_highlight(self, searchEntry):
+	def do_highlight(self, search):
 		self.plugins["highlight.highlight"].remove_highlight(self.tag_name)
-		self.search = searchEntry.get_text()
+		self.search = search
 		self.count = self.plugins["highlight.highlight"].highlight(self.search)
 		
 		# if no results while search is not empty
@@ -208,6 +212,19 @@ class Plugin():
 			return
 		
 		(match_start, match_end) = self.next_match
+		
+		
+		# TODO: remove 
+		# buffer = self.sourceview.get_buffer()
+		# # after_end_iter = match_end.copy()
+		# # after_end_iter.forward_char()
+		# pos_mark = buffer.create_mark("find-replace", match_end, True)
+		# # pos_mark.set_visible(True)
+		# buffer.delete(match_start, match_end)
+		# p = buffer.get_iter_at_mark(pos_mark)
+		# buffer.insert(p, "~!@~!@~!@")
+		# match_end = buffer.get_iter_at_mark(pos_mark)
+		
 		self.next_match = match_end.forward_search(self.search, 0, None)
 				
 		if self.next_match != None:

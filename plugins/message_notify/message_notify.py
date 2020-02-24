@@ -55,7 +55,6 @@ class Plugin():
 	def show_message(self, m, state=0):
 		self.cancel()
 		
-		print(m, state)
 		self.messageLbl.set_text(m)
 		self.update_style(state)
 		self.timer = threading.Timer(self.message_time, self.clear_message)

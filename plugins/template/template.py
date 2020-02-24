@@ -57,7 +57,8 @@ class Plugin():
 	def __init__(self, app):
 		self.name = "template"
 		self.app = app
-		self.signal_handler = app.signal_handler.handlers # optional
+		self.signal_handler = app.signal_handler # optional
+		self.handlers = app.signal_handler.handlers # optional
 		self.commands = []
 	
 	# do not remove 

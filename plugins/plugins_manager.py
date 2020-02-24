@@ -56,6 +56,7 @@ plugin_list = [
 	"ui_manager.ui_manager",
 	"files_manager.opendir",
 	"codecomment.codecomment2",
+	"find_and_replace.find_and_replace",
 
 
 	# special case for commander 

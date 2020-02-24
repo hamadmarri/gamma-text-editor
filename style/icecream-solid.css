@@ -40,17 +40,6 @@ FOREGROUND: #827082 #6B5C6B
     margin: 0px;
 }
 
-.danger, .danger:hover {
-	color: #FF1946;
-	border-color: #FF1946;
-	border-width:1px;
-}
-
-.danger:hover , .danger:focus {
-	background: rgba (255, 25, 70, 0.1);
-	border-color: #FF1946;
-}
-
 /********** HEADER *************/
 #headerPaned, #headerbarMain, #headerbarSide {    
     border-top-left-radius: 0px;
