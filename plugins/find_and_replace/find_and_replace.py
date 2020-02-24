@@ -36,9 +36,12 @@ class Plugin(FindReplaceWindow):
 		self.handlers = app.signal_handler.handlers
 		self.plugins = app.plugins_manager.plugins
 		self.commands = []
+		self.show_replace = False
 		self.find_text_view = None
 		self.replace_text_view = None
 		self.new_search = True
+		self.match_case = True
+		self.whole_word = False
 		
 	
  
@@ -50,14 +53,22 @@ class Plugin(FindReplaceWindow):
 
 	def key_bindings(self, event, keyval_name, ctrl, alt, shift):
 		if ctrl and keyval_name == "h":
-			self.show_window()
+			self.show_window(show_replace=False)
 
 
-	
+	def clear_highlights(self):
+		# to clear highlights
+		self.plugins["search.search_in_file"].do_highlight("")
+		self.plugins["search.search_in_file"].quit_search()
 		
-
+	
 	def do_find(self):
 		if self.new_search:
+			if self.match_case:
+				self.plugins["search.search_in_file"].search_flags = 0
+			else:
+				self.plugins["search.search_in_file"].search_flags = Gtk.TextSearchFlags.CASE_INSENSITIVE
+			
 			self.new_search = False
 			buffer = self.find_text_view.get_buffer()
 			text = buffer.get_text(buffer.get_start_iter(), buffer.get_end_iter(), False)

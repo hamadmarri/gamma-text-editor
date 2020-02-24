@@ -31,7 +31,7 @@ class FindReplaceWindow(object):
 		
 		self.replace_text_view = self.builder.get_object("replace_text_view")
 				
-		self.window = self.builder.get_object("window")
+		self.window = self.builder.get_object("find_replace_window")
 		self.window.set_transient_for(self.app.window)
 		
 		
@@ -39,18 +39,20 @@ class FindReplaceWindow(object):
 	def hide(self):
 		self.window.hide()
 		self.new_search = True
-		
-		# to clear highlights
-		self.plugins["search.search_in_file"].do_highlight("")
-		self.plugins["search.search_in_file"].quit_search()
+		self.clear_highlights()
 		
 		
 		
-	def show_window(self):
+	def show_window(self, show_replace=False):
+		self.show_replace = show_replace
 		if not self.window:
 			self.load_ui()
-			
+		
+		replace_expander = self.builder.get_object("replace_expander")
+		replace_expander.set_expanded(self.show_replace)
+		
 		self.window.show_all()
+
 		
 		
 	def on_window_delete_event(self, w, e):
@@ -58,7 +60,9 @@ class FindReplaceWindow(object):
 		return True
 		
 	def on_find_btn_clicked(self, w):
+		# self.clear_highlights()
 		self.do_find()
+	
 	
 	def on_replace_btn_clicked(self, w):
 		pass
@@ -67,8 +71,13 @@ class FindReplaceWindow(object):
 		pass
 	
 	def on_match_case_btn_toggled(self, w):
-		# get_active
-		pass
+		if w.get_active():
+			self.match_case = True
+		else:
+			self.match_case = False
+		
+		self.new_search = True
+		
 	
 	def on_whole_world_btn_toggled(self, w):
 		# get_active

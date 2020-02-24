@@ -2,7 +2,7 @@
 <!-- Generated with glade 3.22.1 -->
 <interface>
   <requires lib="gtk+" version="3.20"/>
-  <object class="GtkWindow" id="window">
+  <object class="GtkWindow" id="find_replace_window">
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Find and Replace</property>
     <property name="default_width">440</property>
@@ -103,57 +103,29 @@
           </packing>
         </child>
         <child>
-          <object class="GtkBox">
+          <object class="GtkExpander" id="replace_expander">
+            <property name="name">replace_expander</property>
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="orientation">vertical</property>
+            <property name="can_focus">True</property>
+            <property name="label_fill">True</property>
+            <property name="resize_toplevel">True</property>
             <child>
-              <object class="GtkLabel">
+              <object class="GtkBox" id="replace_box">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Replace</property>
-                <property name="xalign">0</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkBox">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <child>
-                  <object class="GtkTextView" id="replace_text_view">
-                    <property name="name">replace_text_view</property>
-                    <property name="height_request">100</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="hexpand">True</property>
-                    <property name="vexpand">True</property>
-                  </object>
-                  <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
+                <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkBox">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="orientation">vertical</property>
                     <child>
-                      <object class="GtkButton" id="replace_btn">
-                        <property name="label" translatable="yes">Replace</property>
-                        <property name="name">replace_btn</property>
-                        <property name="width_request">160</property>
-                        <property name="height_request">60</property>
+                      <object class="GtkTextView" id="replace_text_view">
+                        <property name="name">replace_text_view</property>
+                        <property name="height_request">100</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <signal name="clicked" handler="on_replace_btn_clicked" swapped="no"/>
+                        <property name="hexpand">True</property>
+                        <property name="vexpand">True</property>
                       </object>
                       <packing>
                         <property name="expand">True</property>
@@ -162,18 +134,47 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkButton" id="replace_all_btn">
-                        <property name="label" translatable="yes">Replace All</property>
-                        <property name="name">replace_all_btn</property>
-                        <property name="width_request">160</property>
-                        <property name="height_request">60</property>
+                      <object class="GtkBox">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <signal name="clicked" handler="on_replace_all_btn_clicked" swapped="no"/>
+                        <property name="can_focus">False</property>
+                        <property name="orientation">vertical</property>
+                        <child>
+                          <object class="GtkButton" id="replace_btn">
+                            <property name="label" translatable="yes">Replace</property>
+                            <property name="name">replace_btn</property>
+                            <property name="width_request">160</property>
+                            <property name="height_request">60</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <signal name="clicked" handler="on_replace_btn_clicked" swapped="no"/>
+                          </object>
+                          <packing>
+                            <property name="expand">True</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="replace_all_btn">
+                            <property name="label" translatable="yes">Replace All</property>
+                            <property name="name">replace_all_btn</property>
+                            <property name="width_request">160</property>
+                            <property name="height_request">60</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <signal name="clicked" handler="on_replace_all_btn_clicked" swapped="no"/>
+                          </object>
+                          <packing>
+                            <property name="expand">True</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
                       </object>
                       <packing>
-                        <property name="expand">True</property>
+                        <property name="expand">False</property>
                         <property name="fill">True</property>
                         <property name="position">1</property>
                       </packing>
@@ -186,11 +187,13 @@
                   </packing>
                 </child>
               </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
+            </child>
+            <child type="label">
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Replace</property>
+              </object>
             </child>
           </object>
           <packing>
@@ -210,6 +213,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="active">True</property>
                 <signal name="toggled" handler="on_match_case_btn_toggled" swapped="no"/>
               </object>
               <packing>
@@ -255,9 +259,10 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">35 matches</property>
+                <property name="angle">0.5</property>
               </object>
               <packing>
-                <property name="expand">False</property>
+                <property name="expand">True</property>
                 <property name="fill">True</property>
                 <property name="position">3</property>
               </packing>

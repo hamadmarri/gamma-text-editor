@@ -102,7 +102,7 @@ class Plugin():
 	# or you can copy the "search-match" style from
 	# the style scheme which is set for styling the 
 	# sourceview ins source_style plugin
-	def highlight(self, search):
+	def highlight(self, search, search_flags=0):
 			
 		self.remove_highlight(self.tag_name)
 		
@@ -126,7 +126,7 @@ class Plugin():
 		# gets start,end iters or None if no match
 		# first search start from the beggining of the buffer
 		# i.e. start_iter
-		matches = start_iter.forward_search(search, 0, None)			
+		matches = start_iter.forward_search(search, search_flags, None)			
 		
 		# loop while still have matches (occurrences)
 		while matches != None:
@@ -141,7 +141,7 @@ class Plugin():
 			# do search again but start from the match_end
 			# i.e. continue the search, do not search from the 
 			# beggining of the file again!
-			matches = match_end.forward_search(search, 0, None)
+			matches = match_end.forward_search(search, search_flags, None)
 		
 		return counter
 		

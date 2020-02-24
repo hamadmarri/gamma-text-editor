@@ -39,6 +39,7 @@ class Plugin():
 		self.commands = []
 		self.searchEntry = None
 		self.search = None
+		self.search_flags = 0
 		self.first_match = None
 		self.next_match = None
 		self.is_highlight_done = False
@@ -85,11 +86,13 @@ class Plugin():
 			self.plugins["files_manager.files_manager"].current_file.source_view.grab_focus()
 			
 		elif (shift and keyval_name == "Return") or keyval_name == "Up":
+			self.search_flags = 0
 			if not self.is_highlight_done:
 				self.do_highlight(self.searchEntry.get_text())
 			self.scroll_prev()	
 			
 		elif keyval_name == "Return" or keyval_name == "KP_Enter" or keyval_name == "Down":
+			self.search_flags = 0
 			if not self.is_highlight_done:
 				self.do_highlight(self.searchEntry.get_text())
 			else:
@@ -153,6 +156,7 @@ class Plugin():
 	# (see https://developer.gnome.org/gtk3/stable/GtkSearchEntry.html)
 	# (https://developer.gnome.org/gtk3/stable/GtkEntry.html)
 	def on_search_field_changed(self, widget):
+		self.search_flags = 0
 		self.do_highlight(widget.get_text())
 		
 	
@@ -161,7 +165,7 @@ class Plugin():
 	def do_highlight(self, search):
 		self.plugins["highlight.highlight"].remove_highlight(self.tag_name)
 		self.search = search
-		self.count = self.plugins["highlight.highlight"].highlight(self.search)
+		self.count = self.plugins["highlight.highlight"].highlight(self.search, self.search_flags)
 		
 		# if no results while search is not empty
 		if self.count == 0 and self.search:
@@ -192,7 +196,7 @@ class Plugin():
 		# TODO: start scroll after cursor location
 		#mark = self.buffer.get_insert()
 		#start_iter = self.buffer.get_iter_at_mark(mark)
-		matches = start_iter.forward_search(self.search, 0, None)
+		matches = start_iter.forward_search(self.search, self.search_flags, None)
 		
 		self.first_match = matches
 		self.next_match = matches
@@ -225,7 +229,7 @@ class Plugin():
 		# buffer.insert(p, "~!@~!@~!@")
 		# match_end = buffer.get_iter_at_mark(pos_mark)
 		
-		self.next_match = match_end.forward_search(self.search, 0, None)
+		self.next_match = match_end.forward_search(self.search, self.search_flags, None)
 				
 		if self.next_match != None:
 			(match_start, match_end) = self.next_match
