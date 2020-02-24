@@ -69,6 +69,8 @@ class Plugin(FindReplaceWindow):
 			else:
 				self.plugins["search.search_in_file"].search_flags = Gtk.TextSearchFlags.CASE_INSENSITIVE
 			
+			self.plugins["search.search_in_file"].whole_word = self.whole_word
+			
 			self.new_search = False
 			buffer = self.find_text_view.get_buffer()
 			text = buffer.get_text(buffer.get_start_iter(), buffer.get_end_iter(), False)

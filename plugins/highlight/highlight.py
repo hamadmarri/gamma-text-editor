@@ -102,7 +102,7 @@ class Plugin():
 	# or you can copy the "search-match" style from
 	# the style scheme which is set for styling the 
 	# sourceview ins source_style plugin
-	def highlight(self, search, search_flags=0):
+	def highlight(self, search, search_flags=0, whole_word=True):
 			
 		self.remove_highlight(self.tag_name)
 		
@@ -130,20 +130,69 @@ class Plugin():
 		
 		# loop while still have matches (occurrences)
 		while matches != None:
-			counter += 1
-			
 			# extract start, end iters from matches
 			(match_start, match_end) = matches
 			
-			# set the tag to current match 
-			buffer.apply_tag(tag, match_start, match_end)
-			
+			if whole_word and self.is_whole_word(match_start, match_end):
+				# set the tag to current match 
+				buffer.apply_tag(tag, match_start, match_end)
+				counter += 1
+			elif not whole_word:
+				# set the tag to current match 
+				buffer.apply_tag(tag, match_start, match_end)
+				counter += 1
+							
 			# do search again but start from the match_end
 			# i.e. continue the search, do not search from the 
 			# beggining of the file again!
 			matches = match_end.forward_search(search, search_flags, None)
+
+			
 		
 		return counter
+		
+		
+		
+		
+	def is_whole_word(self, match_start, match_end):
+		is_prev_a_char = True
+		is_next_a_char = True
+		
+		prev_iter = match_start.copy()
+		next_iter = match_end.copy()
+		
+		# move backstep
+		# Returns TRUE if movement was possible; if iter was the 
+		# first in the buffer (character offset 0) returns FALSE
+		if not prev_iter.backward_char():
+			is_prev_a_char = False
+		else:
+			# here the iter has moved back one step
+			c = prev_iter.get_char()
+			# need to check if c is not alpha nor a digit
+			is_prev_a_char = (c.isalpha() or c.isdigit())
+		
+		
+		# move forward step
+		# If iter is the end iterator or one character before it,
+		# iter will now point at the end iterator,
+		# and gtk_text_iter_forward_char() returns FALSE
+		if not next_iter:
+			is_next_a_char = False
+		else:
+			# here the iter has moved next one step
+			c = next_iter.get_char()
+			# need to check if c is not alpha nor a digit
+			is_next_a_char = (c.isalpha() or c.isdigit())
+		
+		is_word = (not is_prev_a_char and not is_next_a_char)
+		 
+		# both must be false to be a word
+		return is_word
+		
+		
+		
+		
 		
 	
 	def setup_tag(self, buffer):
@@ -209,5 +258,6 @@ class Plugin():
 		# must remove tag from both tag table and buffer
 		tag_table.remove(tag)
 		buffer.remove_tag_by_name(tag_name, buffer.get_start_iter(), buffer.get_end_iter())
+		
 	
 	

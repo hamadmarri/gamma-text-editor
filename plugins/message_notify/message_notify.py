@@ -40,7 +40,7 @@ class Plugin():
 		self.builder = app.builder
 		self.commands = []
 		self.messageLbl = None
-		self.message_time = 7000.5 # 7.5 seconds
+		self.message_time = 7.5 # seconds
 		self.timer = None
 		
 	

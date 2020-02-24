@@ -80,8 +80,12 @@ class FindReplaceWindow(object):
 		
 	
 	def on_whole_world_btn_toggled(self, w):
-		# get_active
-		pass
+		if w.get_active():
+			self.whole_word = True
+		else:
+			self.whole_word = False
+		
+		self.new_search = True
 	
 	def on_close_find_btn_clicked(self, w):
 		self.hide()

@@ -40,6 +40,7 @@ class Plugin():
 		self.searchEntry = None
 		self.search = None
 		self.search_flags = 0
+		self.whole_word = False
 		self.first_match = None
 		self.next_match = None
 		self.is_highlight_done = False
@@ -87,12 +88,14 @@ class Plugin():
 			
 		elif (shift and keyval_name == "Return") or keyval_name == "Up":
 			self.search_flags = 0
+			self.whole_word = False
 			if not self.is_highlight_done:
 				self.do_highlight(self.searchEntry.get_text())
 			self.scroll_prev()	
 			
 		elif keyval_name == "Return" or keyval_name == "KP_Enter" or keyval_name == "Down":
 			self.search_flags = 0
+			self.whole_word = False
 			if not self.is_highlight_done:
 				self.do_highlight(self.searchEntry.get_text())
 			else:
@@ -157,6 +160,7 @@ class Plugin():
 	# (https://developer.gnome.org/gtk3/stable/GtkEntry.html)
 	def on_search_field_changed(self, widget):
 		self.search_flags = 0
+		self.whole_word = False
 		self.do_highlight(widget.get_text())
 		
 	
@@ -165,7 +169,8 @@ class Plugin():
 	def do_highlight(self, search):
 		self.plugins["highlight.highlight"].remove_highlight(self.tag_name)
 		self.search = search
-		self.count = self.plugins["highlight.highlight"].highlight(self.search, self.search_flags)
+		self.count = self.plugins["highlight.highlight"].highlight( \
+									self.search, self.search_flags, self.whole_word)
 		
 		# if no results while search is not empty
 		if self.count == 0 and self.search:
@@ -189,6 +194,7 @@ class Plugin():
 	# first search start from the beggining of the buffer
 	# i.e. start_iter
 	def scroll(self):
+		highlight = self.plugins["highlight.highlight"]
 		self.sourceview = self.plugins["files_manager.files_manager"].current_file.source_view
 		self.buffer = self.sourceview.get_buffer()
 		start_iter = self.buffer.get_start_iter()
@@ -198,10 +204,18 @@ class Plugin():
 		#start_iter = self.buffer.get_iter_at_mark(mark)
 		matches = start_iter.forward_search(self.search, self.search_flags, None)
 		
+		if self.whole_word:
+			(match_start, match_end) = matches
+			while not highlight.is_whole_word(match_start, match_end):
+				matches = match_end.forward_search(self.search, self.search_flags, None)
+				(match_start, match_end) = matches
+				
+				
 		self.first_match = matches
 		self.next_match = matches
 		if matches != None:
 			(match_start, match_end) = matches
+			
 			self.sourceview.scroll_to_iter(match_start, 0, True, 0.5, 0.5)
 			
 			self.match_number = 1
@@ -215,6 +229,7 @@ class Plugin():
 		if not self.next_match:
 			return
 		
+		highlight = self.plugins["highlight.highlight"]
 		(match_start, match_end) = self.next_match
 		
 		
@@ -230,7 +245,14 @@ class Plugin():
 		# match_end = buffer.get_iter_at_mark(pos_mark)
 		
 		self.next_match = match_end.forward_search(self.search, self.search_flags, None)
-				
+		
+		if self.whole_word:
+			(match_start, match_end) = self.next_match
+			while not highlight.is_whole_word(match_start, match_end):
+				self.next_match = match_end.forward_search(self.search, self.search_flags, None)
+				(match_start, match_end) = self.next_match
+		
+		
 		if self.next_match != None:
 			(match_start, match_end) = self.next_match
 			self.sourceview.scroll_to_iter(match_end, 0, True, 0.5, 0.5)
