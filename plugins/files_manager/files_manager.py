@@ -168,11 +168,8 @@ class Plugin(CommandsCtrl, CreateFileMixin, CloseFileMixin, OpenFileMixin):
 		self.plugins["message_notify.message_notify"].show_message(f.filename)
 		
 		
-		
+		self.signal_handler.emit("file-switched", self.current_file.source_view)
 
-		
-		
-		
 		
 		
 	# returns file index if found or -1

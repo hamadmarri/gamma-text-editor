@@ -51,6 +51,7 @@ class Plugin(FindReplaceWindow):
 		self.signal_handler.key_bindings_to_plugins.append(self)
 		commands.set_commands(self)
 		self.set_handlers()
+		self.signal_handler.connect("file-switched", self.update_buffer)
 
 
 	def key_bindings(self, event, keyval_name, ctrl, alt, shift):
@@ -58,6 +59,12 @@ class Plugin(FindReplaceWindow):
 			self.show_window(show_replace=False)
 
 
+	def update_buffer(self, new_source):
+		self.sourceview = new_source
+		self.buffer = self.sourceview.get_buffer()
+		self.new_search = True
+		
+	
 	def clear_highlights(self):
 		# to clear highlights
 		self.plugins["search.search_in_file"].do_highlight("", self.buffer)
@@ -78,7 +85,6 @@ class Plugin(FindReplaceWindow):
 			buffer = self.find_text_view.get_buffer()
 			text = buffer.get_text(buffer.get_start_iter(), buffer.get_end_iter(), False)
 
-			search.refresh_sources()
 			search.do_highlight(text, self.buffer)
 		elif not previous:
 			search.scroll_next()

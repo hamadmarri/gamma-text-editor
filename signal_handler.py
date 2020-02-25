@@ -30,6 +30,10 @@ import gi
 from gi.repository import Gdk
 
 
+class Event(object):
+	pass
+
+
 # "Handlers" is an object for mapping signal names with 
 # callback methods references. You can mapp ui signals by
 # simply handlers.on_some_ui_event = some_callback_method
@@ -114,4 +118,32 @@ class SignalHandler:
 	def resizeHeaderSide(self, headerPaned, param):
 		bodyPaned = self.builder.get_object("bodyPaned")
 		bodyPaned.set_position(headerPaned.get_position())
-			
+		
+		
+		
+		
+		
+	def setup_event(self, event):
+		if not hasattr(self, event):
+			setattr(self, event, Event())
+		
+		e = getattr(self, event)
+		
+		if not hasattr(e, "connected"):
+			e.connected = [] 
+	
+	
+	
+	def emit(self, event, data):
+		self.setup_event(event)
+		e = getattr(self, event)
+		
+		for c in e.connected:
+			c(data)
+	
+	
+	def connect(self, event, callback):
+		self.setup_event(event)
+		e = getattr(self, event)
+		e.connected.append(callback)
+	

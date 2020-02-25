@@ -10,7 +10,7 @@ class FindReplaceWindow(object):
 	def set_handlers(self):
 		self.signals = {
 			"on_window_delete_event": self.on_window_delete_event,
-			"on_find_replace_window_focus_in_event": self.on_find_replace_window_focus_in_event,
+			# "on_find_replace_window_focus_in_event": self.on_find_replace_window_focus_in_event,
 			"on_find_prev_btn_clicked": self.on_find_prev_btn_clicked,
 			"on_find_btn_clicked": self.on_find_btn_clicked,
 			"on_replace_btn_clicked": self.on_replace_btn_clicked,
@@ -57,13 +57,13 @@ class FindReplaceWindow(object):
 
 		
 	
-	def on_find_replace_window_focus_in_event(self, w, d):
-		self.sourceview = self.plugins["files_manager.files_manager"].current_file.source_view
-		if not self.buffer:
-			self.buffer = self.sourceview.get_buffer()
-		elif self.buffer != self.sourceview.get_buffer():
-			self.new_search = True
-			self.buffer = self.sourceview.get_buffer()
+	# def on_find_replace_window_focus_in_event(self, w, d):
+	# 	self.sourceview = self.plugins["files_manager.files_manager"].current_file.source_view
+	# 	if not self.buffer:
+	# 		self.buffer = self.sourceview.get_buffer()
+	# 	elif self.buffer != self.sourceview.get_buffer():
+	# 		self.new_search = True
+	# 		self.buffer = self.sourceview.get_buffer()
 
  
 	

@@ -57,11 +57,13 @@ class Plugin():
 		self.tag = None
 		self.tag_name = "selected_search"
 		
-		
+				
 	
 	def activate(self):
 		self.signal_handler.key_bindings_to_plugins.append(self)
 		self.set_handlers()
+		self.signal_handler.connect("file-switched", self.refresh_source)
+		
 		commands.set_commands(self)
 		self.searchEntry = self.builder.get_object("searchEntry")
 	
@@ -78,9 +80,10 @@ class Plugin():
 		self.handlers.on_search_focus_out_event = self.on_search_focus_out_event
 		
 	
-	def refresh_sources(self):
+	def refresh_source(self, new_source):
+		self.quit_search()
 		h = self.plugins["highlight.highlight"]
-		self.sourceview = self.plugins["files_manager.files_manager"].current_file.source_view
+		self.sourceview = new_source
 		self.buffer = self.sourceview.get_buffer()
 		self.tag = h.get_custom_tag(self.buffer, self.tag_name, self.props)
 		
@@ -91,7 +94,7 @@ class Plugin():
 		shift = (event.state & Gdk.ModifierType.SHIFT_MASK)
 		
 		if keyval_name == "Escape":
-			self.refresh_sources()
+			# self.refresh_sources()
 			
 			self.clear_search(widget)
 			
@@ -99,7 +102,7 @@ class Plugin():
 			self.plugins["files_manager.files_manager"].current_file.source_view.grab_focus()
 			
 		elif (shift and keyval_name == "Return") or keyval_name == "Up":
-			self.refresh_sources()
+			# self.refresh_sources()
 			
 			self.search_flags = 0
 			self.whole_word = False
@@ -108,7 +111,7 @@ class Plugin():
 			self.scroll_prev()	
 			
 		elif keyval_name == "Return" or keyval_name == "KP_Enter" or keyval_name == "Down":
-			self.refresh_sources()
+			# self.refresh_sources()
 			
 			self.search_flags = 0
 			self.whole_word = False
@@ -124,7 +127,6 @@ class Plugin():
 		
 			
 	def quit_search(self):
-		# print("quit_search")
 		self.is_highlight_done = False
 		if self.buffer:
 			self.plugins["highlight.highlight"].remove_highlight(self.buffer, self.tag)
@@ -132,11 +134,10 @@ class Plugin():
 		if self.buffer:
 			self.plugins["highlight.highlight"].remove_highlight(self.buffer)
 		self.update_style(-1)
-		# self.buffer = None
 	
 	
 	def get_focus(self):
-		self.refresh_sources()
+		# self.refresh_sources()
 				
 		# gets (start, end) iterators of 
 		# the selected text
@@ -180,7 +181,7 @@ class Plugin():
 	# (see https://developer.gnome.org/gtk3/stable/GtkSearchEntry.html)
 	# (https://developer.gnome.org/gtk3/stable/GtkEntry.html)
 	def on_search_field_changed(self, widget):
-		self.refresh_sources()
+		# self.refresh_sources()
 		
 		self.search_flags = 0
 		self.whole_word = False
@@ -287,7 +288,7 @@ class Plugin():
 	
 	def set_selected_iters(self, s_iter, e_iter):
 		self.old_start_iter = s_iter
-		self.old_end_iter = s_iter
+		self.old_end_iter = e_iter
 		if s_iter:
 			self.current_selection = (s_iter, e_iter)
 		else:
