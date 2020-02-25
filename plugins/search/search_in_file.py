@@ -44,8 +44,10 @@ class Plugin():
 		self.is_highlight_done = False
 		self.count = 0
 		self.match_number = 0
+		self.deleted_marks = 0
 		self.old_start_iter = None
 		self.old_end_iter = None
+		self.current_selection = None
 		
 		# for highlight current match
 		self.props = {
@@ -126,9 +128,7 @@ class Plugin():
 		self.is_highlight_done = False
 		if self.buffer:
 			self.plugins["highlight.highlight"].remove_highlight(self.buffer, self.tag)
-		self.old_start_iter = None
-		self.old_end_iter = None
-		
+		self.set_selected_iters(None, None)
 		if self.buffer:
 			self.plugins["highlight.highlight"].remove_highlight(self.buffer)
 		self.update_style(-1)
@@ -196,9 +196,7 @@ class Plugin():
 		
 		# remove selected tag (bold text)
 		self.plugins["highlight.highlight"].remove_highlight(buffer, self.tag)
-		self.old_start_iter = None
-		self.old_end_iter = None
-		
+		self.set_selected_iters(None, None)
 		
 		# print(f"search.whole_word: {self.whole_word}")
 		self.search = search
@@ -221,6 +219,7 @@ class Plugin():
 		# scroll to first occurrence of search if not empty
 		if self.search:
 			self.match_number = -1
+			self.deleted_marks = 0
 			self.scroll_next()
 		
 
@@ -256,12 +255,13 @@ class Plugin():
 		
 		
 	def scroll(self, marks):
-		match_start = self.buffer.get_iter_at_mark(marks[self.match_number * 2])
-		match_end = self.buffer.get_iter_at_mark(marks[(self.match_number * 2) + 1])
+		next_mark_pos = self.match_number * 2
+		match_start = self.buffer.get_iter_at_mark(marks[next_mark_pos])
+		match_end = self.buffer.get_iter_at_mark(marks[next_mark_pos + 1])
 		
 		self.sourceview.scroll_to_mark(marks[self.match_number * 2], 0.20, False, 1.0, 0.5)
 		self.plugins["message_notify.message_notify"].show_message( \
-					"Search Results | " + str(self.match_number + 1) + "/" + str(self.count))
+					"Search Results | " + str(self.match_number + self.deleted_marks + 1) + "/" + str(self.count))
 		self.highlight_scrolled(match_start, match_end)
 			
 	
@@ -275,8 +275,7 @@ class Plugin():
 			h.remove_highlight(self.buffer, self.tag, self.old_start_iter, self.old_end_iter)
 		
 		h.highlight_custom_tag(self.buffer, start_iter, end_iter, self.tag)
-		self.old_start_iter = start_iter
-		self.old_end_iter = end_iter
+		self.set_selected_iters(start_iter, end_iter)
 		
 		
 
@@ -284,6 +283,31 @@ class Plugin():
 		self.search = ""
 		widget.set_text(self.search)
 		self.plugins["highlight.highlight"].remove_highlight(self.buffer, self.tag)
-		self.old_start_iter = None
-		self.old_end_iter = None
+		
 	
+	def set_selected_iters(self, s_iter, e_iter):
+		self.old_start_iter = s_iter
+		self.old_end_iter = s_iter
+		if s_iter:
+			self.current_selection = (s_iter, e_iter)
+		else:
+			self.current_selection = None
+
+
+
+	def delete_current_marks(self):
+		highlight = self.plugins["highlight.highlight"]
+		marks = highlight.marks
+		
+		s_mark = marks[self.match_number * 2]
+		e_mark = marks[(self.match_number * 2) + 1]
+		
+		self.buffer.delete_mark(s_mark)
+		self.buffer.delete_mark(e_mark)
+		
+		del marks[(self.match_number * 2) + 1]
+		del marks[self.match_number * 2]
+		
+		self.match_number -= 1
+		self.deleted_marks += 1
+		

@@ -78,7 +78,6 @@ class Plugin(FindReplaceWindow):
 			buffer = self.find_text_view.get_buffer()
 			text = buffer.get_text(buffer.get_start_iter(), buffer.get_end_iter(), False)
 
-			print("new search")
 			search.refresh_sources()
 			search.do_highlight(text, self.buffer)
 		elif not previous:
@@ -89,17 +88,81 @@ class Plugin(FindReplaceWindow):
 
 
 
-
-	# TODO: remove 
-		# buffer = self.sourceview.get_buffer()
-		# # after_end_iter = match_end.copy()
-		# # after_end_iter.forward_char()
-		# pos_mark = buffer.create_mark("find-replace", match_end, True)
-		# # pos_mark.set_visible(True)
-		# buffer.delete(match_start, match_end)
-		# p = buffer.get_iter_at_mark(pos_mark)
-		# buffer.insert(p, "~!@~!@~!@")
-		# match_end = buffer.get_iter_at_mark(pos_mark)
+	def do_replace(self):
+		if self.new_search:
+			self.do_find()
+			return
+		
+		search = self.plugins["search.search_in_file"]
+		
+		# if no current selection (end of replace)
+		if not search.current_selection:
+			return
+		
+		# get replace text 
+		replace_buffer = self.replace_text_view.get_buffer()
+		text = replace_buffer.get_text(replace_buffer.get_start_iter(), replace_buffer.get_end_iter(), False)
+		
+		# get current selected 
+		(s_iter, e_iter) = search.current_selection
+	  
+		self.replace_in_buffer(self.buffer, s_iter, e_iter, text)
+		
+		search.delete_current_marks()
+		# reset iters after buffer manipulation
+		search.set_selected_iters(None, None)
+		
+		self.do_find()
+		
+		
+		
+		
+	def replace_in_buffer(self, buffer, s_iter, e_iter, text):
+		pos_mark = buffer.create_mark("find-replace", e_iter, True)
+		# pos_mark.set_visible(True)
+		buffer.delete(s_iter, e_iter)
+		replace_iter = buffer.get_iter_at_mark(pos_mark)
+		buffer.insert(replace_iter, text)
+		
+		
+		
+	def do_replace_all(self):
+		if self.new_search:
+			self.do_find()
+			return
+	
+		highlight = self.plugins["highlight.highlight"]
+		search = self.plugins["search.search_in_file"]
+		marks = highlight.marks
+		
+		# if no current selection (end of replace)
+		if not search.current_selection:
+			return
+			
+		# get replace text 
+		replace_buffer = self.replace_text_view.get_buffer()
+		text = replace_buffer.get_text(replace_buffer.get_start_iter(), replace_buffer.get_end_iter(), False)
+		
+		
+		i = len(marks) - 1
+		while marks:
+			s_mark = marks[i - 1]
+			e_mark = marks[i]
+			s_iter = self.buffer.get_iter_at_mark(s_mark)
+			e_iter = self.buffer.get_iter_at_mark(e_mark)
+			
+			self.replace_in_buffer(self.buffer, s_iter, e_iter, text)
+			
+			self.buffer.delete_mark(s_mark)
+			self.buffer.delete_mark(e_mark)
+			
+			del marks[i]
+			del marks[i - 1]
+			i -= 2
+		# end while
+			
+		# reset iters after buffer manipulation
+		search.set_selected_iters(None, None)
 		
 		
 		

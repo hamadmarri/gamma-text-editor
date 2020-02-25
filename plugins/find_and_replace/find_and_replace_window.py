@@ -82,10 +82,10 @@ class FindReplaceWindow(object):
 	
 	
 	def on_replace_btn_clicked(self, w):
-		pass
+		self.do_replace()
 	
 	def on_replace_all_btn_clicked(self, w):
-		pass
+		self.do_replace_all()
 	
 	def on_match_case_btn_toggled(self, w):
 		self.match_case = w.get_active()
