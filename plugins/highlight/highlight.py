@@ -39,6 +39,7 @@ class Plugin():
 		self.commands = []
 		self.tag_name = "search-match"
 		self.spaces_pattern = re.compile("^\s+$")
+		self.marks = []
 
 		
 	def activate(self):
@@ -63,7 +64,7 @@ class Plugin():
 			# previously highlighted texts
 			if not iters:
 				# remove highlight
-				self.remove_highlight(self.tag_name)
+				self.remove_highlight(buffer)
 			else:
 				# when user selected some text
 				# get the start and end iters
@@ -78,20 +79,20 @@ class Plugin():
 				# if select only one letter
 				if len(search) == 1 and search.isalpha():
 					# remove highlight
-					self.remove_highlight(self.tag_name)
+					self.remove_highlight(buffer)
 					return
 				
 				# if selected is only spaces
 				if self.spaces_pattern.match(search):
 					# remove highlight
-					self.remove_highlight(self.tag_name)
+					self.remove_highlight(buffer)
 					return
 		
 		
 				# highlight text is in seperate method
 				# which help to select any text string 
 				# by other plugins like find or search
-				counter = self.highlight(search)
+				counter = self.highlight(buffer, search)
 				self.plugins["message_notify.message_notify"].show_message(f"Highlighted | {counter}")
 		
 	
@@ -102,19 +103,15 @@ class Plugin():
 	# or you can copy the "search-match" style from
 	# the style scheme which is set for styling the 
 	# sourceview ins source_style plugin
-	def highlight(self, search, search_flags=0, whole_word=True):
+	def highlight(self, buffer, search, search_flags=0, whole_word=True):
 			
-		self.remove_highlight(self.tag_name)
+		tag = self.get_tag(buffer, self.tag_name)
+		self.remove_highlight(buffer)
 		
 		# if search is empty, exit
 		if not search:
 			return
 		
-		# get the currently openned/showing buffer
-		buffer = self.plugins["files_manager.files_manager"].current_file.source_view.get_buffer()
-		
-		tag = self.setup_tag(buffer)
-
 		# to count occurrences
 		counter = 0
 
@@ -133,21 +130,19 @@ class Plugin():
 			# extract start, end iters from matches
 			(match_start, match_end) = matches
 			
-			if whole_word and self.is_whole_word(match_start, match_end):
+			if (whole_word and self.is_whole_word(match_start, match_end)) or not whole_word:
 				# set the tag to current match 
-				buffer.apply_tag(tag, match_start, match_end)
 				counter += 1
-			elif not whole_word:
-				# set the tag to current match 
 				buffer.apply_tag(tag, match_start, match_end)
-				counter += 1
+				s = buffer.create_mark(f"h{counter}", match_start, True)
+				e = buffer.create_mark(f"eh{counter}", match_end, True)
+				self.marks.append(s)
+				self.marks.append(e)
 							
 			# do search again but start from the match_end
 			# i.e. continue the search, do not search from the 
 			# beggining of the file again!
 			matches = match_end.forward_search(search, search_flags, None)
-
-			
 		
 		return counter
 		
@@ -193,45 +188,35 @@ class Plugin():
 		
 		
 		
-		
 	
-	def setup_tag(self, buffer):
-		# get the tags table 
-		tag_table = buffer.get_tag_table();
-		
+	def get_tag(self, buffer, tag_name):
+		# check if tags dict has been bound to buffer
+		if hasattr(buffer, "tags_dict"):
+			# try to get previously created tag 
+			if tag_name in buffer.tags_dict:			
+				tag = buffer.tags_dict[tag_name]
+				return tag
+		else:
+			buffer.tags_dict = {}
+			
 		# create new tag
-		tag = Gtk.TextTag.new(self.tag_name)
+		tag = buffer.create_tag(tag_name)
 		
 		# get the style scheme to copy "search-match" styling 
 		style = buffer.get_style_scheme()
 		search_tag = style.get_style("search-match")
 		tag.props.background = search_tag.props.background
-		
-		# add the styled tag to tag_table
-		tag_table.add(tag)
-		
+		buffer.tags_dict[tag_name] = tag
+	
 		return tag
 		
 	
-	
-	def highlight_custom_tag(self, buffer, start_iter, end_iter, tag, tag_name):
-		self.remove_highlight(tag_name)
-		
-		# get the tags table 
-		tag_table = buffer.get_tag_table();
-		
-		# add the styled tag to tag_table
-		tag_table.add(tag)
-		buffer.apply_tag(tag, start_iter, end_iter)
-		
-
-		
 	# props can have:
-	#	background
-	#	weight
-	def setup_custom_tag(self, buffer, tag_name, props):
+	# - background
+	# - weight
+	def get_custom_tag(self, buffer, tag_name, props):
 		# create new tag
-		tag = Gtk.TextTag.new(tag_name)
+		tag = self.get_tag(buffer, tag_name)
 				
 		if "background" in props:
 			tag.props.background = props["background"]
@@ -241,23 +226,42 @@ class Plugin():
 		
 		return tag
 		
-	
-	
-	
-	def remove_highlight(self, tag_name):
-		buffer = self.plugins["files_manager.files_manager"].current_file.source_view.get_buffer()
-		tag_table = buffer.get_tag_table();
 		
-		# get the tag by looking up to it is name "search-match"
-		tag = tag_table.lookup(tag_name)
+	
+	def highlight_custom_tag(self, buffer, start_iter, end_iter, tag):
+		self.remove_highlight(buffer, tag, start_iter, end_iter)
+		buffer.apply_tag(tag, start_iter, end_iter)
 		
-		# if no tag with this name then return/done
+
+	
+		
+	
+	
+	def remove_highlight(self, buffer, tag=None, start_iter=None, end_iter=None):
+		
+		# if not cleint tag, remove all highlights
 		if not tag:
-			return
+			# print("a marks: ", len(self.marks))
+			# delete marks too
+			for m in self.marks:
+				buffer.delete_mark(m)
 			
-		# must remove tag from both tag table and buffer
-		tag_table.remove(tag)
-		buffer.remove_tag_by_name(tag_name, buffer.get_start_iter(), buffer.get_end_iter())
+			self.marks = []
+			# print("b marks: ", len(self.marks))
+			
+			tag = self.get_tag(buffer, self.tag_name)
+			
+			
+		if not start_iter:
+			buffer.remove_tag(tag, buffer.get_start_iter(), buffer.get_end_iter())
+		else:			
+			# for performance when remove selected search
+			buffer.remove_tag(tag, start_iter, end_iter)
+				
+						
+		
+			
+		
 		
 	
 	

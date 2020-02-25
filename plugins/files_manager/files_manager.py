@@ -144,7 +144,10 @@ class Plugin(CommandsCtrl, CreateFileMixin, CloseFileMixin, OpenFileMixin):
 		# check if it is the current_file, then exit method 
 		if self.current_file == self.files[file_index]:
 			return
-			
+		
+		buffer = self.current_file.source_view.get_buffer()
+		self.plugins["highlight.highlight"].remove_highlight(buffer)
+		
 		# get file object
 		f = self.files[file_index]
 				
@@ -163,6 +166,9 @@ class Plugin(CommandsCtrl, CreateFileMixin, CloseFileMixin, OpenFileMixin):
 		# it is useful to avoid confusion when having 
 		# different files with similar names in different paths
 		self.plugins["message_notify.message_notify"].show_message(f.filename)
+		
+		
+		
 
 		
 		

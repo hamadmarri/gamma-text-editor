@@ -10,6 +10,8 @@ class FindReplaceWindow(object):
 	def set_handlers(self):
 		self.signals = {
 			"on_window_delete_event": self.on_window_delete_event,
+			"on_find_replace_window_focus_in_event": self.on_find_replace_window_focus_in_event,
+			"on_find_prev_btn_clicked": self.on_find_prev_btn_clicked,
 			"on_find_btn_clicked": self.on_find_btn_clicked,
 			"on_replace_btn_clicked": self.on_replace_btn_clicked,
 			"on_replace_all_btn_clicked": self.on_replace_all_btn_clicked,
@@ -54,14 +56,29 @@ class FindReplaceWindow(object):
 		self.window.show_all()
 
 		
-		
+	
+	def on_find_replace_window_focus_in_event(self, w, d):
+		self.sourceview = self.plugins["files_manager.files_manager"].current_file.source_view
+		if not self.buffer:
+			self.buffer = self.sourceview.get_buffer()
+		elif self.buffer != self.sourceview.get_buffer():
+			self.new_search = True
+			self.buffer = self.sourceview.get_buffer()
+
+ 
+	
 	def on_window_delete_event(self, w, e):
 		self.hide()
 		return True
+	
+	
+	def on_find_prev_btn_clicked(self, w):
+		self.do_find(previous=True)
+		
 		
 	def on_find_btn_clicked(self, w):
-		# self.clear_highlights()
 		self.do_find()
+	
 	
 	
 	def on_replace_btn_clicked(self, w):
@@ -71,21 +88,14 @@ class FindReplaceWindow(object):
 		pass
 	
 	def on_match_case_btn_toggled(self, w):
-		if w.get_active():
-			self.match_case = True
-		else:
-			self.match_case = False
-		
+		self.match_case = w.get_active()
 		self.new_search = True
 		
 	
 	def on_whole_world_btn_toggled(self, w):
-		if w.get_active():
-			self.whole_word = True
-		else:
-			self.whole_word = False
-		
+		self.whole_word = w.get_active()
 		self.new_search = True
+		
 	
 	def on_close_find_btn_clicked(self, w):
 		self.hide()

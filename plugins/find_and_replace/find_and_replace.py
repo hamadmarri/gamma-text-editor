@@ -32,6 +32,8 @@ class Plugin(FindReplaceWindow):
 		self.name = "find_and_replace"
 		self.app = app
 		self.window = None
+		self.sourceview = None
+		self.buffer = None
 		self.signal_handler = app.signal_handler
 		self.handlers = app.signal_handler.handlers
 		self.plugins = app.plugins_manager.plugins
@@ -58,23 +60,46 @@ class Plugin(FindReplaceWindow):
 
 	def clear_highlights(self):
 		# to clear highlights
-		self.plugins["search.search_in_file"].do_highlight("")
+		self.plugins["search.search_in_file"].do_highlight("", self.buffer)
 		self.plugins["search.search_in_file"].quit_search()
 		
 	
-	def do_find(self):
+	def do_find(self, previous=False):
+		search = self.plugins["search.search_in_file"]
 		if self.new_search:
 			if self.match_case:
-				self.plugins["search.search_in_file"].search_flags = 0
+				search.search_flags = 0
 			else:
-				self.plugins["search.search_in_file"].search_flags = Gtk.TextSearchFlags.CASE_INSENSITIVE
+				search.search_flags = Gtk.TextSearchFlags.CASE_INSENSITIVE
 			
-			self.plugins["search.search_in_file"].whole_word = self.whole_word
+			search.whole_word = self.whole_word
 			
 			self.new_search = False
 			buffer = self.find_text_view.get_buffer()
 			text = buffer.get_text(buffer.get_start_iter(), buffer.get_end_iter(), False)
-			self.plugins["search.search_in_file"].do_highlight(text)
+
+			print("new search")
+			search.refresh_sources()
+			search.do_highlight(text, self.buffer)
+		elif not previous:
+			search.scroll_next()
 		else:
-			self.plugins["search.search_in_file"].scroll_next()
+			search.scroll_prev()
+		
+
+
+
+
+	# TODO: remove 
+		# buffer = self.sourceview.get_buffer()
+		# # after_end_iter = match_end.copy()
+		# # after_end_iter.forward_char()
+		# pos_mark = buffer.create_mark("find-replace", match_end, True)
+		# # pos_mark.set_visible(True)
+		# buffer.delete(match_start, match_end)
+		# p = buffer.get_iter_at_mark(pos_mark)
+		# buffer.insert(p, "~!@~!@~!@")
+		# match_end = buffer.get_iter_at_mark(pos_mark)
+		
+		
 		

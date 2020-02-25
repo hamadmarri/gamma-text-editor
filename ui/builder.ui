@@ -655,6 +655,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="shadow_type">in</property>
+                <property name="kinetic_scrolling">False</property>
                 <child>
                   <object class="GtkSourceView" id="view">
                     <property name="name">view</property>
