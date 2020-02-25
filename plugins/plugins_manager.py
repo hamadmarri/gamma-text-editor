@@ -89,13 +89,16 @@ class PluginsManager():
 			# initializing plugin and passing the
 			# reference of app
 			module = plugin.Plugin(self.app)
-			module.activate()
+			# module.activate()
 			
 			# add a reference of the plugin 
 			# to plugins dictionary and array
 			self.plugins[p] = module
 			self.plugins_array.append(module)
 		
+		# activate plugins 
+		for p in self.plugins_array:
+			p.activate()
 			
 			
 	

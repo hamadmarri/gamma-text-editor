@@ -16,8 +16,19 @@ def set_commands(plugin):
 	plugin.commands.append( 
 		{
 			"plugin-name": plugin.name,
-			"name": "Find nd Replace",
+			"name": "Find",
 			"ref": plugin.show_window,
+			"parameters": False,
+			"shortcut": "<Shift><Ctrl> + F",
+		}
+	)
+	
+	plugin.commands.append( 
+		{
+			"plugin-name": plugin.name,
+			"name": "Find and Replace",
+			"ref": plugin.show_window,
+			"parameters": True,
 			"shortcut": "<Ctrl> + h",
 		}
 	)

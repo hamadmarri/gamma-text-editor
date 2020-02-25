@@ -332,7 +332,7 @@
                         <signal name="leave-notify-event" handler="on_menue_leave_notify_event" swapped="no"/>
                         <child>
                           <object class="GtkLabel" id="project_menu">
-                            <property name="name">open_menu</property>
+                            <property name="name">project_menu</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="label" translatable="yes">P</property>
@@ -453,7 +453,7 @@
                         <signal name="leave-notify-event" handler="on_menue_leave_notify_event" swapped="no"/>
                         <child>
                           <object class="GtkLabel" id="find_replace_menu">
-                            <property name="name">open_menu</property>
+                            <property name="name">find_replace_menu</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="label" translatable="yes">R</property>
@@ -493,7 +493,7 @@
                         <signal name="leave-notify-event" handler="on_menue_leave_notify_event" swapped="no"/>
                         <child>
                           <object class="GtkLabel" id="welcome_menu">
-                            <property name="name">open_menu</property>
+                            <property name="name">welcome_menu</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="label" translatable="yes">W</property>
@@ -533,7 +533,7 @@
                         <signal name="leave-notify-event" handler="on_menue_leave_notify_event" swapped="no"/>
                         <child>
                           <object class="GtkLabel" id="help_menu">
-                            <property name="name">open_menu</property>
+                            <property name="name">help_menu</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="label" translatable="yes">H</property>
@@ -573,7 +573,7 @@
                         <signal name="leave-notify-event" handler="on_menue_leave_notify_event" swapped="no"/>
                         <child>
                           <object class="GtkLabel" id="about_menu">
-                            <property name="name">open_menu</property>
+                            <property name="name">about_menu</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="label" translatable="yes">A</property>

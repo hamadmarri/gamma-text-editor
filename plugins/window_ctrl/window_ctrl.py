@@ -156,10 +156,10 @@ class Plugin():
 			
 		
 	def on_find_menu_button_press_event(self, widget, event):
-		pass
+		self.plugins["find_and_replace.find_and_replace"].show_window(show_replace=False)
 		
 	def on_find_replace_menu_button_press_event(self, widget, event):
-		pass
+		self.plugins["find_and_replace.find_and_replace"].show_window(show_replace=True)
 		
 	def on_welcome_menu_button_press_event(self, widget, event):
 		pass

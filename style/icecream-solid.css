@@ -12,7 +12,7 @@
 #	You should have received a copy of the GNU General Public License
 #	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-
+ 
   
 /* @import url("/home/hamad/.themes/victory-gtk-theme-19-10/gtk-3.20/gtk.css");*/
 
@@ -239,6 +239,17 @@ FOREGROUND: #827082 #6B5C6B
 }
 
 
+#find_menu.menu_attention {
+	color: #ADCEFF;
+	font-weight: bold;
+}
+
+#find_replace_menu.menu_attention {
+	color: #FFADE3;
+	font-weight: bold;
+}
+
+
 
 /********** BUTTONS *************/
 #closeBtn {
@@ -313,3 +324,35 @@ FOREGROUND: #827082 #6B5C6B
 }
 
 
+
+
+
+
+/******************* FIND AND REPLACE *********************/
+#find_replace_window button {
+	margin: 0 5px 0px 10px;
+}
+
+#find_replace_window #find_prev_btn,
+#find_replace_window #replace_btn {
+	margin-bottom:2px;
+}
+
+#find_replace_window #find_btn,
+#find_replace_window #replace_all_btn {
+	margin-top:2px;
+}
+
+#find_replace_window #find_status_lbl {
+	color: #827082;
+}
+
+#find_replace_window textview {
+	color:red;
+	font-size: 17px;
+	padding: 7px;
+}
+
+#find_replace_window #find_box {
+	margin: 0 0 0px 2px;
+}

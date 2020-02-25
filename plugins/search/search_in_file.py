@@ -48,6 +48,9 @@ class Plugin():
 		self.old_start_iter = None
 		self.old_end_iter = None
 		self.current_selection = None
+		self.signal_handler.connect("file-switched", self.refresh_source)
+		self.searchEntry = self.builder.get_object("searchEntry")
+		
 		
 		# for highlight current match
 		self.props = {
@@ -62,10 +65,8 @@ class Plugin():
 	def activate(self):
 		self.signal_handler.key_bindings_to_plugins.append(self)
 		self.set_handlers()
-		self.signal_handler.connect("file-switched", self.refresh_source)
-		
+				
 		commands.set_commands(self)
-		self.searchEntry = self.builder.get_object("searchEntry")
 	
 
 	def key_bindings(self, event, keyval_name, ctrl, alt, shift):
@@ -137,7 +138,6 @@ class Plugin():
 	
 	
 	def get_focus(self):
-		# self.refresh_sources()
 				
 		# gets (start, end) iterators of 
 		# the selected text

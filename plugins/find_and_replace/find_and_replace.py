@@ -31,6 +31,7 @@ class Plugin(FindReplaceWindow):
 	def __init__(self, app):
 		self.name = "find_and_replace"
 		self.app = app
+		self.plugins = app.plugins_manager
 		self.window = None
 		self.sourceview = None
 		self.buffer = None
@@ -41,9 +42,11 @@ class Plugin(FindReplaceWindow):
 		self.show_replace = False
 		self.find_text_view = None
 		self.replace_text_view = None
+		self.find_status_lbl = None
 		self.new_search = True
 		self.match_case = True
 		self.whole_word = False
+		self.signal_handler.connect("file-switched", self.update_buffer)
 		
 	
  
@@ -51,12 +54,13 @@ class Plugin(FindReplaceWindow):
 		self.signal_handler.key_bindings_to_plugins.append(self)
 		commands.set_commands(self)
 		self.set_handlers()
-		self.signal_handler.connect("file-switched", self.update_buffer)
 
 
 	def key_bindings(self, event, keyval_name, ctrl, alt, shift):
-		if ctrl and keyval_name == "h":
+		if shift and ctrl and keyval_name == "F":
 			self.show_window(show_replace=False)
+		elif ctrl and keyval_name == "h":
+			self.show_window(show_replace=True)
 
 
 	def update_buffer(self, new_source):
@@ -90,6 +94,18 @@ class Plugin(FindReplaceWindow):
 			search.scroll_next()
 		else:
 			search.scroll_prev()
+		
+		self.update_status(search)
+	
+	
+	
+	def update_status(self, search):
+		if search.count > 0:
+			self.find_status_lbl.set_text( \
+				str(search.match_number + search.deleted_marks + 1) \
+				+ "/" + str(search.count))
+		else:
+			self.find_status_lbl.set_text("No results")
 		
 
 
@@ -169,6 +185,8 @@ class Plugin(FindReplaceWindow):
 			
 		# reset iters after buffer manipulation
 		search.set_selected_iters(None, None)
+		
+		self.find_status_lbl.set_text("Done")
 		
 		
 		

@@ -62,6 +62,8 @@ class Plugin(CommandsCtrl, CreateFileMixin, CloseFileMixin, OpenFileMixin):
 
 		# add empty/current_file to files array
 		self.files.append(self.current_file)
+		
+		self.signal_handler.emit("file-switched", self.current_file.source_view)
 				
 	
 	# key_bindings is called by SignalHandler
@@ -118,7 +120,6 @@ class Plugin(CommandsCtrl, CreateFileMixin, CloseFileMixin, OpenFileMixin):
 		file_object.source_view.get_buffer().set_text("")
 
 		# add newfile to files array
-		# self.files.append(newfile)
 		self.add_file_to_list(newfile)
 		
 		self.plugins["ui_manager.ui_manager"].add_filename_to_ui(newfile)
