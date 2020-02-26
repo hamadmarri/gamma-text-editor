@@ -147,3 +147,5 @@ class SignalHandler:
 		e = getattr(self, event)
 		e.connected.append(callback)
 	
+
+

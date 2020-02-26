@@ -62,6 +62,7 @@ plugin_list = [
 	"welcome.welcome",
 	"help.help",
 	"about.about",
+	"fast_copy_cut_duplicate.fast_copy_cut_duplicate",
 
 
 	# special case for commander 
