@@ -1,0 +1,9 @@
+<page xmlns="http://projectmallard.org/1.0/"
+      type="guide"
+      id="uses">
+<info>
+  <link type="guide" xref="index"/>
+  <link type="topic" xref="planting"/>
+</info>
+<title>Bean Uses</title>
+</page>

@@ -1,6 +1,6 @@
 #
-#### Author: first lastname <email>
-#### Date: MMM ddth, yyyy
+#### Author: Author: Hamad Al Marri <hamad.s.almarri@gmail.com>
+#### Date: Feb 25th, 2020
 #
 #
 #	This program is free software: you can redistribute it and/or modify

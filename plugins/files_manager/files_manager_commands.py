@@ -18,4 +18,13 @@ def set_commands(plugin):
 			"ref": plugin.close_all,
 			"shortcut": "<Shift><Ctrl> + W",
 		}
-	) 
+	)
+	
+	plugin.commands.append( 
+		{
+			"plugin-name": plugin.name,
+			"name": "New File",
+			"ref": plugin.create_new_file,
+			"shortcut": "<Ctrl> + n",
+		}
+	)

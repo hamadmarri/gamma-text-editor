@@ -356,3 +356,16 @@ FOREGROUND: #827082 #6B5C6B
 #find_replace_window #find_box {
 	margin: 0 0 0px 2px;
 }
+
+
+
+
+
+/******************* BOTTOM PANEL *********************/
+
+notebook tab label {
+	color: #827082;
+	font-size: 17px;
+}
+
+

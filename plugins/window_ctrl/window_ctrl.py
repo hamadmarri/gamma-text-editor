@@ -162,13 +162,13 @@ class Plugin():
 		self.plugins["find_and_replace.find_and_replace"].show_window(show_replace=True)
 		
 	def on_welcome_menu_button_press_event(self, widget, event):
-		pass
+		self.plugins["welcome.welcome"].show_welcome()
 		
 	def on_help_menu_button_press_event(self, widget, event):
-		pass
+		self.plugins["help.help"].show_help()
 		
 	def on_about_menu_button_press_event(self, widget, event):
-		pass
+		self.plugins["about.about"].show_about()
 		
 		
 	

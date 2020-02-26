@@ -57,6 +57,11 @@ plugin_list = [
 	"files_manager.opendir",
 	"codecomment.codecomment2",
 	"find_and_replace.find_and_replace",
+	"terminal.terminal",
+	"bottom_panel.bottom_panel",
+	"welcome.welcome",
+	"help.help",
+	"about.about",
 
 
 	# special case for commander 

@@ -75,6 +75,8 @@ class Plugin(CommandsCtrl, CreateFileMixin, CloseFileMixin, OpenFileMixin):
 			self.close_current_file()
 		elif shift and ctrl and keyval_name == "W":
 			self.close_all()
+		elif ctrl and keyval_name == "n":
+			self.create_new_file()
 			
 		elif shift and ctrl and keyval_name == "Z":
 			print("files\n")
