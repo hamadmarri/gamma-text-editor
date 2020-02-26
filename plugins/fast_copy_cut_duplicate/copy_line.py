@@ -33,7 +33,7 @@ class CopyLine(object):
 		# if empty line (i.e. start == end), the exit
 		if start.get_offset() == end.get_offset():
 			self.copied_line = ""
-			return None
+			return (start, end)
 		
 		# copy text only without white spaces/indentations
 		(start, whitespaces) = self.discard_white_spaces(start)

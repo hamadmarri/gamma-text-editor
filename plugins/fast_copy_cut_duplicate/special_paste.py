@@ -34,13 +34,13 @@ class SpecialPaste(object):
 	def copied_text(self, clipboard, text):
 		if text == self.copied_line:				
 			self.dont_propagate_paste = True
-			self.do_special_pate(text)
+			self.do_special_paste(text)
 		else:
 			self.dont_propagate_paste = False
 			self.copied_line = ""
 			
 			
-	def do_special_pate(self, text):
+	def do_special_paste(self, text):
 		# get current viewing file' buffer
 		self.buffer = self.plugins["files_manager.files_manager"].current_file.source_view.get_buffer()
 		

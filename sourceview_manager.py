@@ -31,6 +31,7 @@ class SourceViewManager():
 	def __init__(self, app):
 		self.app = app
 		self.plugins = app.plugins_manager.plugins
+		self.signal_handler = app.signal_handler
 		self.source_view = app.builder.get_object("view")
 		self.source_view.grab_focus()
 		self.sourcemap = app.builder.get_object("sourcemap")
@@ -76,13 +77,18 @@ class SourceViewManager():
 		# add "sourceviewclass" css class
 		newsource.get_style_context().add_class("sourceviewclass")
 		
+		newsource.sourcemap = newsourcemap
+		
+		
 		# connect signal mark-set event which is when user select text
 		# user clicks to unselect text is also connected
 		# see highlight.highlight_signal function for handling 
 		# mark-set event
 		newsource.get_buffer().connect("mark-set", self.plugins["highlight.highlight"].highlight_signal)
 		
-		newsource.sourcemap = newsourcemap
+		# when creating new buffer,
+		# share this buffer to whom need it
+		self.signal_handler.emit("sourceview-created", newsource)
 		
 		# show the gtk widget
 		newsource.show()

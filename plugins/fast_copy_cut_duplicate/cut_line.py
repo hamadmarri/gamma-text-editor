@@ -19,6 +19,9 @@ class CutLine(object):
 		# after discard_white_spaces, need to position start at line begining
 		start.set_line_offset(0)
 		
+		# delete the \n as well
+		end.forward_char()
+		
 		# delete line 
 		self.buffer.delete(start, end)
 		

@@ -63,6 +63,8 @@ plugin_list = [
 	"help.help",
 	"about.about",
 	"fast_copy_cut_duplicate.fast_copy_cut_duplicate",
+	"typing_assistant.typing_assistant",
+	
 
 
 	# special case for commander 

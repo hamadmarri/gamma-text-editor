@@ -23,9 +23,10 @@
 from . import commands
 from .copy_line import CopyLine
 from .cut_line import CutLine
+from .duplicate_line import DuplicateLine
 from .special_paste import SpecialPaste
 
-class Plugin(SpecialPaste, CutLine, CopyLine):
+class Plugin(SpecialPaste, DuplicateLine, CutLine, CopyLine):
 	
 	def __init__(self, app):
 		self.name = "fast_copy_cut_duplicate"
@@ -47,14 +48,12 @@ class Plugin(SpecialPaste, CutLine, CopyLine):
 			self.copy_line()
 		elif ctrl and keyval_name == "x":
 			self.cut_line()
+		elif ctrl and keyval_name == "d":
+			self.duplicate_line()
 		elif ctrl and keyval_name == "v":
 			self.dont_propagate_paste = False
 			self.special_paste()
 			return self.dont_propagate_paste
-	
-
-	def duplicate_line(self):
-		pass
 		
 
 
