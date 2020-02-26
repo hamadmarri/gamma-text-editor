@@ -92,7 +92,8 @@ class Plugin():
 		self.add_filters(dialog)
 		
 		# TODO: current folder must be dynamicly change
-		dialog.set_current_folder("/home/hamad/dev/pygtk/gamma")
+		# dialog.set_current_folder("/home/hamad/dev/pygtk/gamma")
+		dialog.set_current_folder(self.plugins["files_manager.files_manager"].get_directory())
 		
 		# can select and open multiple files
 		dialog.set_select_multiple(True)
@@ -102,8 +103,6 @@ class Plugin():
 		
 		if response == Gtk.ResponseType.OK:
 			filenames = dialog.get_filenames()
-		# elif response == Gtk.ResponseType.CANCEL:
-		#	print("Cancel clicked")
 
 		# close and destroy dialog object
 		dialog.destroy()

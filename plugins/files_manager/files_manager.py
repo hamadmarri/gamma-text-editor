@@ -23,6 +23,8 @@
 #
 
 import os
+from pathlib import Path
+
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
@@ -48,6 +50,7 @@ class Plugin(CommandsCtrl, CreateFileMixin, CloseFileMixin, OpenFileMixin):
 		self.commands = []
 		self.files = []
 		self.current_file = None
+		self.current_directory = str(Path.home())
 		self.counter = 1
 		self.editted_counter = 0
 		
@@ -200,3 +203,8 @@ class Plugin(CommandsCtrl, CreateFileMixin, CloseFileMixin, OpenFileMixin):
 		del self.files[file_index]
 
 
+	def get_directory(self):
+		if self.current_file.parent_dir:
+			return self.current_file.parent_dir
+		
+		return self.current_directory

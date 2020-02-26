@@ -20,7 +20,7 @@ def set_commands(plugin):
 	plugin.commands.append( 
 		{
 			"plugin-name": plugin.name,
-			"name": "Duplicate Line(s)",
+			"name": "Duplicate Line",
 			"ref": plugin.duplicate_line,
 			"shortcut": "<Ctrl> + d",
 		}

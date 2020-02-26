@@ -1,3 +1,4 @@
+import os
 
 from .file import File
 
@@ -46,9 +47,11 @@ class OpenFileMixin(object):
 		# TODO: must handled by ui manager
 		newsource = self.sourceview_manager.get_new_sourceview()
 		
-		# If len is -1, text must be nul-terminated. text must be valid UTF-8.
-		# (read: https://developer.gnome.org/gtk3/stable/GtkTextBuffer.html#gtk-text-buffer-set-text)
+		
+		# begin_not_undoable_action to prevent ctrl+z to empty the file
+		newsource.get_buffer().begin_not_undoable_action()
 		newsource.get_buffer().set_text(text)
+		newsource.get_buffer().end_not_undoable_action()
 		
 		# place cursor at the begining
 		newsource.get_buffer().place_cursor(newsource.get_buffer().get_start_iter())
@@ -58,6 +61,11 @@ class OpenFileMixin(object):
 				
 		# new File object
 		newfile = File(self, filename, newsource)
+		
+		# attach parent directory to file 
+		parent_dir = os.path.dirname(filename)
+		
+		newfile.parent_dir = parent_dir
 				
 		# add newfile object to "files" array
 		self.add_file_to_list(newfile)

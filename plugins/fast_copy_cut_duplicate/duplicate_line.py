@@ -11,7 +11,6 @@ class DuplicateLine(object):
 		
 		# if user selected text, then exit
 		if selection != ():
-			self.copied_line = ""
 			return None
 			
 		# if selection is empty
