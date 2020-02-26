@@ -95,7 +95,10 @@ class Plugin():
 		shift = (event.state & Gdk.ModifierType.SHIFT_MASK)
 		
 		if keyval_name == "Escape":
-			# self.refresh_sources()
+			
+			# before self.clear_search(before loosing search marks)
+			# try to place the cursor on current selected text in sourceview
+			self.place_cursor_to_selection()
 			
 			self.clear_search(widget)
 			
@@ -125,6 +128,11 @@ class Plugin():
 	
 	def on_search_focus_out_event(self, widget, data):
 		self.quit_search()
+		
+		
+	def place_cursor_to_selection(self):
+		if self.old_start_iter:
+			self.buffer.place_cursor(self.old_start_iter)
 		
 			
 	def quit_search(self):
