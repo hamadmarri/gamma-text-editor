@@ -1,7 +1,4 @@
 #
-#  Editted By: Hamad Al Marri <hamad.s.almarri@gmail.com>
-#  Date: Feb 19th, 2020
-#
 #
 #  Code comment plugin
 #  This file is part of gedit
@@ -24,6 +21,13 @@
 #  along with this program; if not, write to the Free Software
 #  Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #  Boston, MA 02110-1301, USA.
+#
+#
+#
+# Editted By: Hamad Al Marri <hamad.s.almarri@gmail.com>
+# Date: Feb 19th, 2020
+#
+#
 
 
 # TODO: comment empty line right above non-empty line
@@ -91,22 +95,24 @@ class Plugin(CodeCommentTags):
 				end.forward_to_line_end()
 		
 		# if user not selecting any chars (i.e. just placed cursor in a line)
-		else:	
+		else:
 			deselect = True
 			start = buffer.get_iter_at_mark(currentPosMark)
 			oldPos = buffer.get_iter_at_mark(currentPosMark).get_offset()
 			start.set_line_offset(0)
 			end = start.copy()
-			end.forward_to_line_end()
+			if not end.ends_line():
+				end.forward_to_line_end()
+
+
 			
-		
-		# if empty line (i.e. start == end - 1)
-		# print(start.get_offset())
-		# print(end.get_offset())
-		if start.get_offset() == end.get_offset() - 1:
-			# print("empty line comment")
+				
+		# if empty line (i.e. start == end)
+		if start.get_offset() == end.get_offset():
+			buffer.begin_user_action()
 			buffer.insert(start, start_tag)
 			buffer.insert(start, " ")
+			buffer.end_user_action()
 			return
 
 		
