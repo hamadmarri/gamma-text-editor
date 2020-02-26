@@ -20,11 +20,12 @@
 #
 
 
-
 from . import commands
 from .copy_line import CopyLine
+from .cut_line import CutLine
+from .special_paste import SpecialPaste
 
-class Plugin(CopyLine):
+class Plugin(SpecialPaste, CutLine, CopyLine):
 	
 	def __init__(self, app):
 		self.name = "fast_copy_cut_duplicate"
@@ -32,6 +33,9 @@ class Plugin(CopyLine):
 		self.plugins = app.plugins_manager.plugins
 		self.signal_handler = app.signal_handler 
 		self.commands = []
+		self.copied_line = ""
+		self.dont_propagate_paste = False
+		
 	
 	def activate(self):
 		self.signal_handler.key_bindings_to_plugins.append(self)
@@ -41,11 +45,32 @@ class Plugin(CopyLine):
 	def key_bindings(self, event, keyval_name, ctrl, alt, shift):
 		if ctrl and keyval_name == "c":
 			self.copy_line()
+		elif ctrl and keyval_name == "x":
+			self.cut_line()
+		elif ctrl and keyval_name == "v":
+			self.dont_propagate_paste = False
+			self.special_paste()
+			return self.dont_propagate_paste
 	
 
-	def cut_line(self):
-		pass
-	
 	def duplicate_line(self):
 		pass
+		
+
+
+	def discard_white_spaces(self, iter):
+		whitespaces = ""
+		while not iter.ends_line():
+			# get char where the current iter pointing to
+			c = iter.get_char()
+			
+			# check if c is not white space
+			if c != " " and c != "\t":
+				return (iter, whitespaces)
+			
+			iter.forward_char()
+			whitespaces += c
+
+		return (iter, whitespaces)
+		
 		

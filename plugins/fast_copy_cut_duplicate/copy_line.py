@@ -17,7 +17,8 @@ class CopyLine(object):
 		# if user selected text, then exit
 		# no need for fast copy a line
 		if selection != ():
-			return
+			self.copied_line = ""
+			return None
 			
 		
 		# if selection is empty
@@ -31,10 +32,11 @@ class CopyLine(object):
 		
 		# if empty line (i.e. start == end), the exit
 		if start.get_offset() == end.get_offset():
-			return
+			self.copied_line = ""
+			return None
 		
 		# copy text only without white spaces/indentations
-		start = self.discard_white_spaces(start)
+		(start, whitespaces) = self.discard_white_spaces(start)
 		
 		# get line text
 		line = self.buffer.get_text(start, end, False)
@@ -42,27 +44,21 @@ class CopyLine(object):
 		# copy line in clipboard
 		self.copy_to_clipboard(line)
 		
-		
-		
-		
-	def discard_white_spaces(self, iter):
-		while not iter.ends_line():
-			# get char where the current iter pointing to
-			c = iter.get_char()
-			
-			# check if c is not white space
-			if c != " " and c != "\t":
-				return iter
-			
-			iter.forward_char()
-		
-		return iter
+		return (start, end)
 		
 		
 		
 	def copy_to_clipboard(self, line):
 		clipboard = Gtk.Clipboard.get_default(Gdk.Display.get_default())
+		
+		# + \n is useful when paste line
+		# the cursor moves to next line
+		# good for copy one line and paste
+		# multiple times
+		self.copied_line = line
+			
 		clipboard.set_text(line, -1)
+		
 		
 		
 		

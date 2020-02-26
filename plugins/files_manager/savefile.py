@@ -158,8 +158,7 @@ class Plugin():
 			basename = os.path.basename(filename)
 			self.plugins["message_notify.message_notify"].show_message(basename + " | Saved", 2)
 		finally:
-			f.close() 
-			print(f"{basename} saved and closed") 
+			f.close()
 			
 
 
