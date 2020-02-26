@@ -67,7 +67,6 @@ class Plugin():
 		self.signal_handler.key_bindings_to_plugins.append(self)
 		self.signal_handler.any_key_press_to_plugins.append(self)
 		self.set_handlers()
-		# self.cache_commands()
 		
 
 	def set_handlers(self):
@@ -79,6 +78,8 @@ class Plugin():
 		self.handlers.on_commanderList_row_activated = self.commander_window.on_commanderList_row_activated
 		self.handlers.on_commanderSearchEntry_key_press_event = self.commander_window.on_commanderSearchEntry_key_press_event
 		self.handlers.on_commanderList_key_press_event = self.commander_window.on_commanderList_key_press_event
+		self.handlers.on_commander_list_edge_reached = self.commander_window.on_commander_list_edge_reached
+		
 			
 
 	def key_bindings(self, event, keyval_name, ctrl, alt, shift):
@@ -112,19 +113,9 @@ class Plugin():
 
 
 
-
 	def cache_commands(self):
-		#print("start caching")
 		# load commands only once, for first time
-		# check if commands have been loaded
-		self.load_commands()
-		#print("done caching")
-		
-		
-	
-	def load_commands(self):
-		#print("load_commands")
-		
+		# check if commands have been loaded	
 		for plugin in self.plugins_manager.plugins_array:
 			if plugin.commands:
 				for c in plugin.commands:
@@ -136,8 +127,6 @@ class Plugin():
 		for c in self.commands:
 			self.commands_tree.insert(c)
 			
-		#self.commands_tree.traverse(0)
-		#print("commands size: " + str(self.commands_tree.size))
 		self.plugins["message_notify.message_notify"] \
 							.show_message(f"{self.commands_tree.size} commands loaded")
 	
@@ -147,11 +136,9 @@ class Plugin():
 		
 		
 	def remove_command(self, node):
-		#self.commands_tree.traverse(0)
 		node = self.commands_tree.delete(node)
-		#self.commands_tree.traverse(0)
 		return node
-		
+
 	
 	def run(self):
 		if not self.commands:
