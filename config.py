@@ -19,18 +19,19 @@
 #
 #
 
-from pathlib import Path
+# from pathlib import Path
+import os
 
-# user home directory
-home_path = str(Path.home())
 
 # path of gamma files
-gamma_path = home_path + "/dev/pygtk/gamma"
+gamma_path = os.path.dirname(os.path.realpath(__file__))
+
 
 # default .ui layout file
 ui_file = "builder.ui"
 
 # default css style file
+# style_file = "default.css"
 style_file = "icecream-solid.css"
 
 # style scheme for srource view style
@@ -39,11 +40,15 @@ style_file = "icecream-solid.css"
 style_scheme = "icecream"
 
 
+
 # from config_paths_and_settings can get 
 # all important paths
 config_paths_and_settings = {
 	"ui-path":		gamma_path + "/ui/"		+ ui_file,
 	"style-path":	gamma_path + "/style/"	+ style_file,
 	"style-scheme":	style_scheme,
+	"show_grid": False,
+	"font-family": "Monospace, Droid Sans Mono",
+	"font-size": 18, # in px
 }
 

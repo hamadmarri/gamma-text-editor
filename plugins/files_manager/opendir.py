@@ -96,7 +96,8 @@ class Plugin():
 										Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
 		
 		# TODO: current folder must be dynamicly change
-		dialog.set_current_folder("/home/hamad/dev/pygtk/gamma")
+		# dialog.set_current_folder("/home/hamad/dev/pygtk/gamma")
+		dialog.set_current_folder(self.plugins["files_manager.files_manager"].get_directory())
 		
 		# can select and open multiple files
 		# dialog.set_select_multiple(True)

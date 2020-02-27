@@ -37,6 +37,7 @@ class SourceViewManager():
 		self.sourcemap = app.builder.get_object("sourcemap")
 		self.sourcemap.set_view(self.source_view)
 		self.source_view.sourcemap = self.sourcemap
+		self.source_view.set_background_pattern(app.config['show_grid'])
 
 		
 	
@@ -72,7 +73,7 @@ class SourceViewManager():
 	
 		
 		# set the source style
-		self.plugins["styles.source_style"].set_source_style(newsource.get_buffer())
+		self.plugins["styles.source_style"].set_source_style(newsource)
 		
 		# add "sourceviewclass" css class
 		newsource.get_style_context().add_class("sourceviewclass")

@@ -68,7 +68,7 @@ FOREGROUND: #827082 #6B5C6B
 .openned_file_editted#headerbarMain .title {
 	color: #FF931F;
 }
-
+ 
 
 
 #searchEntry {
@@ -274,10 +274,11 @@ FOREGROUND: #827082 #6B5C6B
 	border:none;
 }
 
-.sourceviewclass {
-	font-family: monospace;
-    font-size: 20px;
-}
+/*.sourceviewclass {*/
+/*	font-family: monospace;*/
+/*    font-size: 20px;*/
+    /* font-size: 10px;*/
+/*}*/
 
 
 

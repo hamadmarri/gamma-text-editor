@@ -11,59 +11,55 @@
 #
 #	You should have received a copy of the GNU General Public License
 #	along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
+*/ 
+
+/*
+COLORS:
+RED: #FF1946
+BLUE: #00B5FF
+ORANGE: #FF931F
+YELLOW: #FCE94F
+GREEN: #0DD100
+WHITE: #FDFDFD
+FOREGROUND: #827082 #6B5C6B
+
+*/ 
 
 
-
-#window {
-    background-color: transparent;
-}
-
-
-.titlebar, headerbar {
-    min-height: 0px;
-    margin: 0px;
-}
-
-
+ 
 /********** HEADER *************/
-#headerPaned, #headerbarMain, #headerbarSide {    
-    border-top-left-radius: 0px;
+#headerbarSide {    
     border-top-right-radius: 0px;
 }
 
-#headerPaned > separator {
-	background: rgba(253, 253, 253, 0.84);
+
+.openned_file_editted#headerbarMain .title {
+	color: @warning_color;
 }
-
-
-#headerbarMain, #headerbarMain * {
-	background: #fdfdfd;
-	color: rgba(130, 112, 130, 0.77);
-	border:none;
-}
-
-#headerbarMain {
-	padding: 0px;
-}
-
-#headerbarMain .title {
-	color: #827082;
-}
-
+ 
 
 #searchEntry {
-	margin:0 0 0 10px;
-	padding:0;
-	background: #fdfdfd;
 	font-family: monospace;
 	font-size: 20px;
 }
 
 
-#headerbarMain *:focus {
-	color:#0DD100;
+
+#headerbarMain*.searching, #headerbarMain*.searching *,
+#headerbarMain*.messageImportant, #headerbarMain*.messageImportant * {
+      /* color:#00B5FF; */
 }
+
+#headerbarMain*.searchSuccess, #headerbarMain*.searchSuccess *,
+#headerbarMain*.messageSuccess, #headerbarMain*.messageSuccess * {
+	/* color: @success_color; */
+}
+#headerbarMain*.searchFail, #headerbarMain*.searchFail * ,
+#headerbarMain*.messageFail, #headerbarMain*.messageFail * {
+	color: @error_color;
+}
+
+
 
 #messageLbl {
 	font-family: monospace;
@@ -72,86 +68,95 @@
 
 
 /********** HEADER LEFT SIDE *************/
-#headerbarSide {
-	background: rgba(253, 253, 253, 0.84);
-	border:none;
-}
 
-#headerbarSide * {
-	color: #827082;
-}
 
 #logo {
-    background: rgba(253, 253, 253, 0.815); 
-    color: #00B5FF;
+    background: #827082; 
+    color: #FDFDFD;
 }
 
 /********** BODY *************/
-#bodyPaned > separator {
-	background:  rgba(253, 253, 253, 0.84);
-}
+
 
 #toolbar_side {
-    background-color:transparent;
     min-width: 34px;
     min-height: 100px;
 }
 
 #toolbar_files {
-    background:  rgba(253, 253, 253, 0.84);
-    padding-left:15px;
-	padding-right:15px;
-    padding-top:0px;
+	/* padding-left:15px;*/
+	/* padding-right:15px;*/
+	padding-top:0px;
 }
 
 
 #toolbar_ctrls {
-    background: rgba(253, 253, 253, 0.815);
-    padding-top:10px;
-    padding-bottom:18px;
+    padding-top: 16px;
+    padding-bottom: 18px;
 }
 
 
 
 /********** FILES *************/
-.openned_file, .close_file { 
-	background:transparent;
-	border:none;
-	margin: 0 0 0 0;
-	
+
+
+.openned_file button { 
+	margin: 0;
 	padding-top: 17px;
 	padding-bottom: 17px;
-
-	border-style: dotted none none none;
-	border-width: 3px;
-	border-color: rgba(130, 112, 130, 0.17);
+	font-size: 1.05em;
+	border:none;
+}
+ 
+.openned_file_current_displayed button label {
+	font-weight: bold;
 }
 
-.openned_file:hover label  {
-	text-decoration: underline;
+.openned_file_editted button label {
+	color: @warning_color;
+	font-style: italic;
 }
 
-.openned_file label { 
-	color: #827082;
-    /* font-size: 1.0em; */
-	/* font-weight: normal; */
+.close_btn:hover {
+	font-weight:bold;
 }
 
+ 
 
 
 
 /********** MENUS *************/
 .menu {
-	background:transparent;
+	margin-top: 0px;
+	padding: 6px 0 6px 0;
+	background: transparent;
 	border:none;
-	color:#6A636A;
-	margin-top:12px;
 }
+
+
+
+.menu_attention {
+	color: @warning_color;
+	font-style: italic;
+	font-weight: bold;
+}
+
+
+#find_menu.menu_attention {
+	color: #00B5FF;
+	font-weight: bold;
+}
+
+#find_replace_menu.menu_attention {
+	color: #00B5FF;
+	font-weight: bold;
+}
+
 
 
 /********** BUTTONS *************/
 #closeBtn {
-    background: #FF1946;
+    background: @error_color;
     border-radius: 100%;
 }
 
@@ -161,19 +166,48 @@
     border-radius: 100%;
 }
 
+
 #minimizeBtn {
-    background: #FCE94F;
+    background: @warning_color;
     border-radius: 100%;
 }
 
 
-#source_scrolledwindow {
-	border:none;
-}
 
-.sourceviewclass {
+/******************* COMMANDER WINDOW *********************/
+#commanderSearchEntry, #commanderSearchEntry * {
+	background: white; 
+	color: black;
 	font-family: monospace;
-    font-size: 20px;
+	padding: 0 5px 0 5px;
+}
+
+#commanderSearchEntry, #commanderSearchEntry * {
+	font-family: monospace;
+	font-size: 22px;
+	min-height: 40px;
+}
+
+#commanderList{
+	padding-top:4px;
+}
+
+.commanderRow {
+	font-size: 18px;
+	padding: 10px 30px 10px 30px;
+}
+
+
+#commanderList row:hover {
+	color:#fdfdfd;
+	background: #00B5FF;
+
+}
+
+#commanderList row:selected {
+	background:#00B5FF;
+	color:#fdfdfd;
+	font-weight:bold;
 }
 
 
@@ -181,13 +215,31 @@
 
 
 
-#ok_btn {
-    background-color: rgba(65, 100, 218, 0.5);
-    margin-top: 50px;
+/******************* FIND AND REPLACE *********************/
+#find_replace_window button {
+	margin: 0 5px 0px 10px;
 }
 
+#find_replace_window #find_prev_btn,
+#find_replace_window #replace_btn {
+	margin-bottom:2px;
+}
 
-#ok_btn:hover, 
-#ok_btn:focus {
-  box-shadow: 0px 0px 0px 0px rgba(255,255,255,0.0);
+#find_replace_window #find_btn,
+#find_replace_window #replace_all_btn {
+	margin-top:2px;
+}
+
+#find_replace_window #find_status_lbl {
+	color: #827082;
+}
+
+#find_replace_window textview {
+	color:red;
+	font-size: 17px;
+	padding: 7px;
+}
+
+#find_replace_window #find_box {
+	margin: 0 0 0px 2px;
 }
