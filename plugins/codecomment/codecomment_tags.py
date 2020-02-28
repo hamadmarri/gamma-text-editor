@@ -26,7 +26,7 @@
 #  Boston, MA 02110-1301, USA.
 
 
-
+ 
 class CodeCommentTags(object):
 	
 	def get_comment_tags(self, lang):

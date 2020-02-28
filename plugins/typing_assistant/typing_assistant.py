@@ -84,7 +84,8 @@ class Plugin():
 		
 		
 		
-
+	# TODO: key_bindings only when typing in sourceview,
+	# when search type '{' is problem
 	def text_insert(self, text):
 		# get current viewing file' buffer
 		self.buffer = self.plugins["files_manager.files_manager"].current_file.source_view.get_buffer()
