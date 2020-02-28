@@ -90,7 +90,7 @@ class Plugin():
 		final_path = None
 		
 		# initialize file chooser 
-		dialog = Gtk.FileChooserDialog("Open Project", None,
+		dialog = Gtk.FileChooserDialog("Open Directory", None,
 										Gtk.FileChooserAction.SELECT_FOLDER,
 										(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
 										Gtk.STOCK_OPEN, Gtk.ResponseType.OK))

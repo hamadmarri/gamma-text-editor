@@ -97,7 +97,8 @@ class Plugin(FilesUI):
 		
 
 	def on_closeBtn_hover_event(self, widget, event):
-		print("on_closeBtn_hover_event")
+		# print("on_closeBtn_hover_event")
+		pass
 		
 		
 

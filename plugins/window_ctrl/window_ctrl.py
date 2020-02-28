@@ -51,7 +51,7 @@ class Plugin():
 		
 		self.N = self.builder.get_object("new_menu")
 		self.O = self.builder.get_object("open_menu")
-		self.P = self.builder.get_object("project_menu")
+		self.D = self.builder.get_object("project_menu")
 		self.S = self.builder.get_object("save_menu")
 		self.F = self.builder.get_object("find_menu")
 		self.R = self.builder.get_object("find_replace_menu")

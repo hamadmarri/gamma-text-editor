@@ -321,7 +321,7 @@
                     <property name="width_request">34</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">Open Project</property>
+                    <property name="tooltip_text" translatable="yes">Open Directory</property>
                     <property name="baseline_position">bottom</property>
                     <child>
                       <object class="GtkEventBox">
@@ -335,7 +335,7 @@
                             <property name="name">project_menu</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">P</property>
+                            <property name="label" translatable="yes">D</property>
                             <style>
                               <class name="menu"/>
                             </style>
