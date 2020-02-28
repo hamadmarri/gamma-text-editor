@@ -38,14 +38,7 @@ class CloseFileMixin(object):
 				
 	
 	
-		
-	
-	# TODO: check if need saving before close
 	def close_current_file(self):	
-		# if current file is new file created by user, and not saved
-		# then ask to save it first
-		# TODO: prompt do you want save window
-			
 		# if length > 2, then close current and switch to previouse file 
 		# in "files" array
 		if len(self.files) > 2:

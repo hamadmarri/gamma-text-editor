@@ -122,15 +122,4 @@ class SourceViewManager():
 			buffer.set_highlight_syntax(False)
 			
 			
-		
-	
-	# TODO: create new source map for each sourceview (sometimes it crashes)
-	# update source map (mini map) to connect to a sourceview
-	def update_sourcemap(self, source_view):
-		# DEBUG: print("sourcemap.set_view before")
-		# self.sourcemap.set_view(source_view)
-		# DEBUG: print("sourcemap.set_view after")
-		
-		#self.scroll_and_source_and_map_box
-		pass
 

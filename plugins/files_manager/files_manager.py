@@ -72,7 +72,6 @@ class Plugin(CommandsCtrl, CreateFileMixin, CloseFileMixin, OpenFileMixin):
 	# key_bindings is called by SignalHandler
 	def key_bindings(self, event, keyval_name, ctrl, alt, shift):		
 		# close current file is bound to "<Ctrl>+w"
-		# TODO: check if need saving before close
 		if ctrl and keyval_name == "w":
 			# close current_file
 			self.close_current_file()
@@ -208,3 +207,4 @@ class Plugin(CommandsCtrl, CreateFileMixin, CloseFileMixin, OpenFileMixin):
 			return self.current_file.parent_dir
 		
 		return self.current_directory
+		

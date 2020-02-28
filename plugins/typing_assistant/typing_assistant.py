@@ -82,10 +82,8 @@ class Plugin():
 		
 		
 		
+	
 		
-		
-	# TODO: key_bindings only when typing in sourceview,
-	# when search type '{' is problem
 	def text_insert(self, text):
 	
 		# check if sourceview is in focus

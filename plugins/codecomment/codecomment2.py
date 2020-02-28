@@ -29,9 +29,6 @@
 #
 #
 
-
-# TODO: comment empty line right above non-empty line
-# causes comment to next line. need fix
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk

@@ -95,8 +95,6 @@ class Plugin():
 										(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
 										Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
 		
-		# TODO: current folder must be dynamicly change
-		# dialog.set_current_folder("/home/hamad/dev/pygtk/gamma")
 		dialog.set_current_folder(self.plugins["files_manager.files_manager"].get_directory())
 		
 		# can select and open multiple files
@@ -117,24 +115,4 @@ class Plugin():
 		return final_path
 
 
-
-	# add files types filters
-	# when user select "Python files" for example,
-	# only python files are displyed
-	# TODO: add more filters
-	def add_filters(self, dialog):
-		filter_text = Gtk.FileFilter()
-		filter_text.set_name("Text files")
-		filter_text.add_mime_type("text/plain")
-		dialog.add_filter(filter_text)
-
-		filter_py = Gtk.FileFilter()
-		filter_py.set_name("Python files")
-		filter_py.add_mime_type("text/x-python")
-		dialog.add_filter(filter_py)
-
-		filter_any = Gtk.FileFilter()
-		filter_any.set_name("Any files")
-		filter_any.add_pattern("*")
-		dialog.add_filter(filter_any)
 		

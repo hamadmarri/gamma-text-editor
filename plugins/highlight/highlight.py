@@ -206,6 +206,7 @@ class Plugin():
 		style = buffer.get_style_scheme()
 		search_tag = style.get_style("search-match")
 		tag.props.background = search_tag.props.background
+		tag.props.foreground = search_tag.props.foreground
 		buffer.tags_dict[tag_name] = tag
 	
 		return tag

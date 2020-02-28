@@ -30,8 +30,6 @@ from gi.repository import Gtk
 
 from . import savefile_commands as commands
 
-# TODO: only save when buffer is changed
-# TODO: empty file is saved at home!
 class Plugin():
 	
 	def __init__(self, app):
@@ -108,7 +106,7 @@ class Plugin():
 				self.sourceview_manager.set_language(new_filename, buffer)
 				
 						
-				# TODO: if saved(overwrite) a file in HD, but that file 
+				# TODO: if saved(overwrite) a file in Hard Drive, but that file 
 				# is already is open here! need to close old file 
 		else:
 			self.write_file(file_object.filename, text)
@@ -122,11 +120,10 @@ class Plugin():
 		# initialize file chooser 
 		dialog = Gtk.FileChooserDialog("Save File", None,
 										Gtk.FileChooserAction.SAVE,
-										(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+				 						(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
 										Gtk.STOCK_SAVE, Gtk.ResponseType.ACCEPT))
 		
-		# TODO: current folder must be dynamicly change
-		dialog.set_current_folder("/home/hamad/dev/pygtk/gamma")
+		dialog.set_current_folder(self.plugins["files_manager.files_manager"].get_directory())
 		
 		dialog.set_do_overwrite_confirmation(True);
 		
