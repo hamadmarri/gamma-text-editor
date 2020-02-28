@@ -120,6 +120,7 @@ class Application(Gtk.Application):
 		
 		# self.window.maximize()
 		self.window.set_icon_name("com.editor.gamma")
+		# self.window.set_icon_name("/home/hamad/dev/pygtk/gamma/icon.svg")
 		self.window.show_all()
 
 
