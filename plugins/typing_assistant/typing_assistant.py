@@ -87,8 +87,14 @@ class Plugin():
 	# TODO: key_bindings only when typing in sourceview,
 	# when search type '{' is problem
 	def text_insert(self, text):
+	
+		# check if sourceview is in focus
+		sourceview = self.plugins["files_manager.files_manager"].current_file.source_view
+		if not sourceview.is_focus():
+			return False
+		
 		# get current viewing file' buffer
-		self.buffer = self.plugins["files_manager.files_manager"].current_file.source_view.get_buffer()
+		self.buffer = sourceview.get_buffer()
 		
 		# get selection bound
 		selection = self.buffer.get_selection_bounds()
