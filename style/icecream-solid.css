@@ -326,6 +326,11 @@ headerbar {
 	font-size: 22px;
 	min-height: 40px;
 }
+#commanderSearchEntry {
+	border-radius: 0px;
+	padding:0 5px 0 5px;
+}
+
 #commanderSearchEntry selection {
 	background: #e1e0e1;
 }
