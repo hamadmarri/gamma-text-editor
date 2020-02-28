@@ -761,6 +761,7 @@
     </child>
     <child>
       <object class="GtkScrolledWindow">
+        <property name="name">commanderScrolled</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="vscrollbar_policy">always</property>

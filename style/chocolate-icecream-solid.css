@@ -16,14 +16,15 @@
 
 /* 
 COLORS:
-RED: #FF1946
-BLUE: #00B5FF
+RED: #FF1946 FF749B FF1846
+BLUE: #00B5FF 60DEDE
 ORANGE: #FF931F
 YELLOW: #FCE94F
-GREEN: #0DD100
-WHITE: #FDFDFD
-FOREGROUND: #827082 #6B5C6B
-
+GREEN: #0DD100 C2FF8E
+pink: BEB0BE D33682
+purpul: CAC5FF
+BACKGROUND: #36292d #36292d
+FOREGROUND: #ffffda rgba(255, 255, 218, 0.86) 847479
 */
 
 /* from theme */
@@ -49,13 +50,6 @@ headerbar {
 
  
 
-
-
-
-
-
-
-
 #window {
     background-color: transparent;
     border:none;
@@ -74,13 +68,13 @@ headerbar {
 }
 
 #headerPaned > separator {
-	background: #fdfdfd;
+	background: #36292d;
 }
  
 
 #headerbarMain, #headerbarMain * {
-	background: #fdfdfd;
-	color: rgba(130, 112, 130, 0.77);
+	background: #36292d;
+	color: rgba(255, 255, 218, 0.86);
 	border:none; 
 }
 
@@ -89,11 +83,11 @@ headerbar {
 }
 
 #headerbarMain .title {
-	color: #827082;
+	color: #ffffda;
 	font-size: 16px;
-}
+} 
 .openned_file_editted#headerbarMain .title {
-	color: #FF931F;
+	color: #FCE94F;
 }
  
 
@@ -101,7 +95,7 @@ headerbar {
 #searchEntry {
 	margin:0 0 0 10px;
 	padding:0;
-	background: #fdfdfd;
+	background: #36292d;
 	font-family: monospace;
 	font-size: 20px;
 }
@@ -111,22 +105,22 @@ headerbar {
 
 
 #headerbarMain entry selection {
-	background: #e1e0e1;
+	background: #ffffda;
+	color:#36292d;
 }
 
 #headerbarMain*.searching, #headerbarMain*.searching *,
 #headerbarMain*.messageImportant, #headerbarMain*.messageImportant * {
-       color:#00B5FF;
+       color:#60DEDE;
 }
 #headerbarMain*.searchSuccess, #headerbarMain*.searchSuccess *,
 #headerbarMain*.messageSuccess, #headerbarMain*.messageSuccess * {
-	color: #0DD100;
+	color: #C2FF8E;
 }
 #headerbarMain*.searchFail, #headerbarMain*.searchFail * ,
 #headerbarMain*.messageFail, #headerbarMain*.messageFail * {
-	color: #FF1946;
+	color: #FF749B;
 }
-
 
 
 
@@ -141,23 +135,23 @@ headerbar {
 
 /********** HEADER LEFT SIDE *************/
 #headerbarSide {
-	background: #6B5C6B;
+	background: #36292d;
 	border:none;
 }
 
 #headerbarSide * {
-	color: #fdfdfd;
+	color: rgba(255, 255, 218, 0.86);
 	border: none;
 }
 
 #logo {
-    background: #6D5E6D; 
+    background: #36292d; 
     color: #FF931F;
 }
 
 /********** BODY *************/
 #bodyPaned > separator {
-	background:  #fdfdfd;
+	background:  #36292d;
 }
 
 #toolbar_side {
@@ -167,7 +161,7 @@ headerbar {
 }
 
 #toolbar_files {
-    background:  #6B5C6B;
+    background:  #36292d;
     padding-left:15px;
 	padding-right:15px;
     padding-top:0px;
@@ -175,10 +169,10 @@ headerbar {
 
 
 #toolbar_ctrls {
-    background:  #6D5E6D;
+    background:  #372a2e;
     padding-top: 16px;
     padding-bottom: 18px;
-}
+} 
 
 
 
@@ -213,10 +207,11 @@ headerbar {
 	color: transparent;
 }
 .close_btn:hover {
-	background: rgba(255, 25, 70, 0.85);
+	background: #FF1846;
 	font-weight:bold;
-	color: #fdfdfd;
+	color: white;
 }
+
 
 
 .openned_file_hover label  {
@@ -232,18 +227,18 @@ headerbar {
 
 
 .openned_file_hover  {
-	background: rgba(253, 253, 253, 0.05);
+	background: rgba(253, 253, 253, 0.04);
 }
-.openned_file * { 
-	color: #fdfdfd;
+.openned_file * {  
+	color: #BEB0BE;
 }
 .openned_file_current_displayed {
-	background: rgba(253, 253, 253, 0.10);
+	background: rgba(253, 253, 253, 0.04);
 }
 .openned_file_current_displayed {
 	font-weight: bold;
 }
-
+ 
 
 
 
@@ -251,7 +246,7 @@ headerbar {
 .menu {
 	background:transparent;
 	border:none;
-	color:rgba(255, 196, 255, 0.60);
+	color: #BEB0BE; 
 	margin-top: 0px;
 	padding: 6px 0 6px 0;
 	box-shadow:none;
@@ -261,7 +256,7 @@ headerbar {
 }
 
 .menu_hover {
-	color: #FDFDFD;
+	color: #60DEDE;
 	background: rgba(255, 196, 255, 0.15);
 }
 
@@ -271,14 +266,14 @@ headerbar {
 	font-weight: bold;
 }
 
-
+ 
 #find_menu.menu_attention {
-	color: #ADCEFF;
+	color: #C2FF8E;
 	font-weight: bold;
 }
 
 #find_replace_menu.menu_attention {
-	color: #FFADE3;
+	color: #C2FF8E;
 	font-weight: bold;
 }
 
@@ -286,7 +281,7 @@ headerbar {
 
 /********** BUTTONS *************/
 #closeBtn {
-    background: #FF1946;
+    background: #FF1846;
     border-radius: 100%;
 }
 
@@ -318,8 +313,8 @@ headerbar {
 /******************* COMMANDER WINDOW *********************/
 
 #commanderSearchEntry, #commanderSearchEntry * {
-	color:#827082;
-	background: #fdfdfd; 
+	color:#ffffda;
+	background: #36292d; 
 	font-family: monospace;
 	font-size: 22px;
 	min-height: 40px;
@@ -330,16 +325,20 @@ headerbar {
 }
 
 #commanderSearchEntry selection {
-	background: #e1e0e1;
+	background: #ffffda;
+	color:#36292d;
+}
+
+#commanderScrolled {
+	border: none;
 }
 #commanderList{
-	background: #6D5E6D;
+	background: #392c2f;
 	padding-top:4px;
 }
 
 .commanderRow {
-	color:#fdfdfd;
-
+	color:rgba(255, 255, 218, 0.86);
 	font-size: 18px;
 	padding: 10px 30px 10px 30px;
 	border:none;
@@ -350,14 +349,14 @@ headerbar {
 }
 
 #commanderList row:hover {
-	color: #FDFDFD;
-	background: rgba(255, 196, 255, 0.15);
+	color:rgba(255, 255, 218, 0.86);
+	background:rgba(211, 54, 130, 0.4);
 	border:none;
 }
 
 #commanderList row:selected {
-	background:#00B5FF;
-	color:#fdfdfd;
+	background:#D33682;
+	color:#ffffda;
 	font-weight:bold;
 	border:none;
 }
@@ -383,7 +382,7 @@ headerbar {
 }
 
 #find_replace_window #find_status_lbl {
-	color: #827082;
+	color: #ffffda;
 }
 
 #find_replace_window textview {
@@ -403,7 +402,7 @@ headerbar {
 /******************* BOTTOM PANEL *********************/
 
 notebook tab label {
-	color: #827082;
+	color: #ffffda;
 	font-size: 17px;
 }
 
