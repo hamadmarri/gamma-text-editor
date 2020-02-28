@@ -16,10 +16,29 @@ def set_commands(plugin):
 	plugin.commands.append( 
 		{
 			"plugin-name": plugin.name,
-			"name": "A command name 1",
-			"ref": None,
-			"shortcut": "<Alt><Ctrl> + n",
+			"name": "Zoom In",
+			"ref": plugin.update_font,
+			"parameters": 1,
+			"shortcut": "<Ctrl> + =",
+		}
+	)
+	plugin.commands.append( 
+		{
+			"plugin-name": plugin.name,
+			"name": "Zoom Out",
+			"ref": plugin.update_font,
+			"parameters": -1,
+			"shortcut": "<Ctrl> + -",
 		}
 	)
 	
+	plugin.commands.append( 
+		{
+			"plugin-name": plugin.name,
+			"name": "Zoom Reset",
+			"ref": plugin.update_font,
+			"parameters": 0,
+			"shortcut": "<Ctrl> + 0",
+		}
+	)
 	

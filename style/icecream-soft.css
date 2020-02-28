@@ -1,22 +1,39 @@
 /*
-#	This program is free software: you can redistribute it and/or modify
-#	it under the terms of the GNU General Public License as published by
-#	the Free Software Foundation, either version 3 of the License, or
-#	(at your option) any later version.
-#
-#	This program is distributed in the hope that it will be useful,
-#	but WITHOUT ANY WARRANTY; without even the implied warranty of
-#	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#	GNU General Public License for more details.
-#
-#	You should have received a copy of the GNU General Public License
-#	along with this program.  If not, see <https://www.gnu.org/licenses/>.
+You can type here any CSS rule recognized by GTK+.
+You can temporarily disable this custom CSS by clicking on the “Pause” button above.
+
+Changes are applied instantly and globally, for the whole application.
 */
+ 
+
+/* from theme */
+headerbar entry, headerbar button, headerbar separator {
+  margin-top: 6px;
+  margin-bottom: 6px;
+ 
+   }
+
+headerbar {
+	box-shadow: none;
+} 
+
+.openned_file button,
+.openned_file_editted button {
+	border:none;
+	border-radius: 0px;
+	box-shadow: none;
+	text-shadow: none;
+	font-style:normal;
+	-gtk-icon-shadow: none;
+}
+
+ 
 
 
 
 #window {
     background-color: transparent;
+    border:none;
 }
 
 
@@ -24,7 +41,6 @@
     min-height: 0px;
     margin: 0px;
 }
-
 
 /********** HEADER *************/
 #headerPaned, #headerbarMain, #headerbarSide {    
@@ -35,21 +51,26 @@
 #headerPaned > separator {
 	background: rgba(253, 253, 253, 0.84);
 }
-
+ 
 
 #headerbarMain, #headerbarMain * {
 	background: #fdfdfd;
 	color: rgba(130, 112, 130, 0.77);
-	border:none;
+	border:none; 
 }
 
 #headerbarMain {
-	padding: 0px;
+	padding: 8px 0 8px 0 ;
 }
 
 #headerbarMain .title {
 	color: #827082;
+	font-size: 16px;
 }
+.openned_file_editted#headerbarMain .title {
+	color: #FF931F;
+}
+ 
 
 
 #searchEntry {
@@ -59,11 +80,33 @@
 	font-family: monospace;
 	font-size: 20px;
 }
-
-
-#headerbarMain *:focus {
-	color:#0DD100;
+#searchEntry:focus {
+	box-shadow: none;
 }
+
+
+#headerbarMain entry selection {
+	background: #e1e0e1;
+}
+
+#headerbarMain*.searching, #headerbarMain*.searching *,
+#headerbarMain*.messageImportant, #headerbarMain*.messageImportant * {
+       color:#00B5FF;
+}
+#headerbarMain*.searchSuccess, #headerbarMain*.searchSuccess *,
+#headerbarMain*.messageSuccess, #headerbarMain*.messageSuccess * {
+	color: #0DD100;
+}
+#headerbarMain*.searchFail, #headerbarMain*.searchFail * ,
+#headerbarMain*.messageFail, #headerbarMain*.messageFail * {
+	color: #FF1946;
+}
+
+
+
+
+
+
 
 #messageLbl {
 	font-family: monospace;
@@ -73,22 +116,23 @@
 
 /********** HEADER LEFT SIDE *************/
 #headerbarSide {
-	background: rgba(253, 253, 253, 0.84);
+	background: rgba(253, 253, 253, 0.77);
 	border:none;
 }
 
 #headerbarSide * {
 	color: #827082;
+	border: none;
 }
 
 #logo {
-    background: rgba(253, 253, 253, 0.815); 
-    color: #00B5FF;
+	background: rgba(253, 253, 253, 0.82); 
+	color: #00B5FF;
 }
 
 /********** BODY *************/
 #bodyPaned > separator {
-	background:  rgba(253, 253, 253, 0.84);
+	background:  rgba(253, 253, 253, 0.77);
 }
 
 #toolbar_side {
@@ -96,55 +140,90 @@
     min-width: 34px;
     min-height: 100px;
 }
-
 #viewport {
 	background:transparent;
 }
-
 #toolbar_files {
-    background:  rgba(253, 253, 253, 0.84);
-    padding-left:15px;
-	padding-right:15px;
+    background:  rgba(253, 253, 253, 0.75);
+	padding-left:0px;
+	padding-right:0px;
     padding-top:0px;
 }
 
 
 #toolbar_ctrls {
-    background: rgba(253, 253, 253, 0.815);
-    padding-top:10px;
-    padding-bottom:18px;
+    background: rgba(253, 253, 253, 0.77);
+    padding-top: 16px;
+    padding-bottom: 18px;
 }
 
 
 
 /********** FILES *************/
-.openned_file, .close_file { 
+.openned_file { 
 	background:transparent;
 	border:none;
 	margin: 0 0 0 0;
 	
-	padding-top: 17px;
-	padding-bottom: 17px;
-
 	border-style: dotted none none none;
 	border-width: 3px;
+	
 	border-color: rgba(130, 112, 130, 0.17);
+	font-size: 1.05em;
 }
 
-.openned_file:hover label  {
+.openned_file button { 
+	background:transparent;
+	border:none;
+	margin: 0;
+	padding-top: 17px;
+	padding-bottom: 17px;
+	font-size: 1.05em;
+}
+ 
+
+.openned_file_editted button label {
+	color: #EE820D;
+	font-style: italic;
+}
+.close_btn label {
+	color: transparent;
+}
+.close_btn:hover {
+	background: rgba(255, 25, 70, 0.85);
+	font-weight:bold;
+	color: #fdfdfd;
+}
+
+
+.openned_file_hover label  {
 	text-decoration: none;
+	color: #6B5C6B;
 }
 
-.openned_file:hover  {
+
+.openned_file_hover.openned_file_editted label  {
+	text-decoration: none;
+	color: #FF931F;
+}
+.close_btn:hover label {
+	color: #fdfdfd;
+}
+
+
+.openned_file_hover  {
 	background: rgba(253, 253, 253, 0.22);
 }
-
-.openned_file label { 
+.openned_file * { 
 	color: #827082;
-    /* font-size: 1.0em; */
-	/* font-weight: normal; */
 }
-
+.openned_file_current_displayed {
+	background: rgba(253, 253, 253, 0.10);
+	font-weight: bold;
+}
+.openned_file_current_displayed label {
+	color:#6B5C6B;
+}
 
 
 
@@ -152,9 +231,38 @@
 .menu {
 	background:transparent;
 	border:none;
-	color:#6A636A;
-	margin-top:12px;
+	color: #6A636A;
+	margin-top: 0px;
+	padding: 6px 0 6px 0;
+	box-shadow:none;
+	border-radius: 0;
+	margin-left:0;
+	margin-right:0;
 }
+
+.menu_hover {
+	color: #6B5C6B;
+	background: rgba(253, 253, 253, 0.22);
+}
+
+.menu_attention { 
+	color: #FF931F;
+	background: rgba(253, 253, 253, 0.22);
+	font-style: italic;
+	font-weight: bold;
+}
+
+
+#find_menu.menu_attention {
+	color: #00B5FF;
+	font-weight: bold;
+}
+
+#find_replace_menu.menu_attention {
+	color: #00B5FF;
+	font-weight: bold;
+}
+
 
 
 /********** BUTTONS *************/
@@ -169,6 +277,7 @@
     border-radius: 100%;
 }
 
+
 #minimizeBtn {
     background: #FCE94F;
     border-radius: 100%;
@@ -179,9 +288,59 @@
 	border:none;
 }
 
-.sourceviewclass {
+/*.sourceviewclass {*/
+/*	font-family: monospace;*/
+/*    font-size: 20px;*/
+    /* font-size: 10px;*/
+/*}*/
+
+
+
+/******************* COMMANDER WINDOW *********************/
+
+#commanderSearchEntry, #commanderSearchEntry * {
+	color:#827082;
+	background: #fdfdfd; 
 	font-family: monospace;
-    font-size: 20px;
+	font-size: 22px;
+	min-height: 40px;
+}
+#commanderSearchEntry {
+	border-radius: 0px;
+	padding:0 5px 0 5px;
+}
+
+#commanderSearchEntry selection {
+	background: #e1e0e1;
+}
+#commanderList{
+	background: #6D5E6D;
+	padding-top:4px;
+}
+
+.commanderRow {
+	color:#fdfdfd;
+
+	font-size: 18px;
+	padding: 10px 30px 10px 30px;
+	border:none;
+}
+
+#commanderList  row {
+	border:none;
+}
+
+#commanderList row:hover {
+	color: #FDFDFD;
+	background: rgba(255, 196, 255, 0.15);
+	border:none;
+}
+
+#commanderList row:selected {
+	background:#00B5FF;
+	color:#fdfdfd;
+	font-weight:bold;
+	border:none;
 }
 
 
@@ -189,13 +348,44 @@
 
 
 
-#ok_btn {
-    background-color: rgba(65, 100, 218, 0.5);
-    margin-top: 50px;
+/******************* FIND AND REPLACE *********************/
+#find_replace_window button {
+	margin: 0 5px 0px 10px;
+}
+
+#find_replace_window #find_prev_btn,
+#find_replace_window #replace_btn {
+	margin-bottom:2px;
+}
+
+#find_replace_window #find_btn,
+#find_replace_window #replace_all_btn {
+	margin-top:2px;
+}
+
+#find_replace_window #find_status_lbl {
+	color: #827082;
+}
+
+#find_replace_window textview {
+	color:red;
+	font-size: 17px;
+	padding: 7px;
+}
+
+#find_replace_window #find_box {
+	margin: 0 0 0px 2px;
 }
 
 
-#ok_btn:hover, 
-#ok_btn:focus {
-  box-shadow: 0px 0px 0px 0px rgba(255,255,255,0.0);
+
+
+
+/******************* BOTTOM PANEL *********************/
+
+notebook tab label {
+	color: #827082;
+	font-size: 17px;
 }
+
+

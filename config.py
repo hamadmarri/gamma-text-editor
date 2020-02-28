@@ -32,7 +32,7 @@ ui_file = "builder.ui"
 
 # default css style file
 # style_file = "default.css"
-style_file = "icecream-solid.css"
+style_file = "icecream-soft.css"
 
 # style scheme for srource view style
 # usually sourceview style files are in 
