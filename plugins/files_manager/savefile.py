@@ -109,6 +109,7 @@ class Plugin():
 				# TODO: if saved(overwrite) a file in Hard Drive, but that file 
 				# is already is open here! need to close old file 
 		else:
+			# TODO: if user hit cancel on dialog, need to revert
 			self.write_file(file_object.filename, text)
 			file_object.reset_editted()
 		
