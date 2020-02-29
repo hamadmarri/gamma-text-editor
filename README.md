@@ -14,6 +14,19 @@ a Python package that provides bindings for GObject based libraries such as GTK,
 WebKitGTK, GLib, GIO and many more.
 
 
+
+## Screenshots
+![s1](/uploads/232c19c6af148fc6a83ea55fdacace69/Screenshot_from_2020-03-01_02-28-21.png)
+
+![s2](/uploads/ef0364ca533bbed7febab7a7e2462619/Screenshot_from_2020-03-01_01-53-52.png)
+
+![s3](/uploads/a3a9328a78918aa4415c9355274adb5a/Screenshot_from_2020-03-01_02-01-59.png)
+
+
+[More Screenshots](https://gitlab.com/hamadmarri/gamma-text-editor/-/wikis/Screenshots)
+
+
+
 ## Why a new text editor?
 -	Lightweight, not CPU/RAM hungry
 -	No learning curve (easy/familiar shortcuts, easy use of plugin/extensions)
@@ -188,8 +201,6 @@ commands are placed at top because of the splay operation.
   
 
 
-
-## Screenshots
 
 ## TODO
 *	Check if file got updated externally, so reload file option
