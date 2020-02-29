@@ -26,6 +26,7 @@ WebKitGTK, GLib, GIO and many more.
 *	GTK+3
 *	Python 3
 *	gobject-introspection
+
 If you are using Linux with a Gnome desktop, you probably have those dependencies installed already. I
 am not sure if the libraries are installed for other desktops such as KDE, XFCE, or MATE. But if
 you have libgtk-3-0 and python3 installed, then Gamma is probably going to work.
@@ -57,7 +58,7 @@ a directory, there is no dependencies on other plugins. For developers, see
 
 
 ## Featuers and current available plugins
-Here are brief description about currently implemented plugins and features
+Here are brief descriptions about currently implemented plugins and features
 
 ### style
 sets the theme style to Gamma window \
@@ -65,7 +66,7 @@ the style.css file is set in `config.py` `style-path`
  
 
 ### source_style
-source_style: sets the style for the source view (text editting area) \
+sets the style for the source view (text editting area) \
 "style_scheme" is set in config.py \
 style scheme for srource view style, usually sourceview style xml files are in \
 `~/.local/share/gtksourceview-4/styles` (see `config.py`)
@@ -172,14 +173,15 @@ Auto types closing brackets and quotes while typing.
 ### commander
 Commander is a plugin that collects all other plugins' commands\
 and make it easy and fast for the user to use those commands.\
-By pressing <Alt>, commander window is shown with search entry and\
-list of commands with their key bindings. Typing auto filter the\
-commands and the very first command is selected. When hit Enter the command runs.\
+By pressing `<Alt>`, commander window is shown with search entry and\
+list of commands with their key bindings. Typing in search auto filters the\
+commands and the very first command is selected. When hit Enter the command runs.
+
 Commands can be open file, close file, close all files, switch to file, zoom in,\
 maximize window, find and replace ....\
 basically any plugin exported its commands, commander will show theirs commands. 
 
-Commander uses splay tree to store commands. It is a binary tree\
+Commander uses splay tree to store commands. It is a binary search tree\
 with splay featuer. Search in commands is fast. Also, recent used\
 commands are placed at top because of the splay operation.
   
