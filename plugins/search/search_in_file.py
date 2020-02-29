@@ -17,6 +17,12 @@
 #	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #  
 #  
+#  
+#  
+#	Quick search on current opened file. It is located at
+#	the top of the editor. It auto scroll to first found
+#	match and moving to the next/previous one by UP/DOWN keywords or Enter/Shift+Enter.
+#	It is case sensitive. For case insensitive, see find_and_replace plugin.
 #
 
 import gi

@@ -18,6 +18,16 @@
 #
 #
 #
+#
+#
+#
+#	Copy, cut, or duplicate a line without selecting all line. Just
+#	place the cursor in the line and press Ctrl+c for copy, Ctrl+x to
+#	cut, or Ctrl+d to duplicate. Also after copying and cutting, pressing
+#	Ctrl+v will paste into next line.
+#
+#
+#
 
 
 from . import commands

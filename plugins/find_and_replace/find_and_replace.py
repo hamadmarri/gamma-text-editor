@@ -16,6 +16,13 @@
 #	You should have received a copy of the GNU General Public License
 #	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
+#
+#
+#
+#	Find and replace text with some options such as case sensitive/insensitive,
+#	whole word, and replace one or replace all.
+#
+#
 
 
 import gi

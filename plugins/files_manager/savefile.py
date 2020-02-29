@@ -16,7 +16,7 @@
 #	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 #
-#	savefile: saves the current_file openned 
+#	savefile: saves the current_file openned or all editted files 
 #	it gets current_file from files_manager plugin 
 #	and saves it. Message notify is sent to tell the user
 #	that the file is saved successfully

@@ -3,6 +3,7 @@ import os
 from .file import File
 
 
+# TODO: scroll up the file when opened
 class OpenFileMixin(object):
 	# open_files is called by openfile plugin 
 	# it loops through all filenames and open each one

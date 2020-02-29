@@ -18,27 +18,11 @@
 #
 #
 #
-# template: is not used plugin, but it is an example or template for you to 
-#			start your plugin. It is good starting point to your plugin.
-#			Copy this file, rename it, change self.name to your plugin name.
-#			If the plugin needs to export its commands to commander, copy
-#			commands.py too. If not, delete lines:
-#									from . import commands
-#									commands.set_commands(self)
-# 			
-#			Currently, activate and key_bindings methods must be implemented.
-#			If no implemention needed for activate and key_bindings then keep
-#			the "pass"
 #
-#			The usual imports are:
-#			import gi
-#			gi.require_version('Gtk', '3.0')
-#			gi.require_version('GtkSource', '4')
-#			from gi.repository import GLib, Gio, Gtk, Gdk, GtkSource, GObject
-#			
-#			But your plugin may not need all of these modules
+#	ui_manager:
+#	Deals with UI events such as changing background color for hovered element.
 #
-#
+
 
 
 import gi
@@ -47,14 +31,8 @@ from gi.repository import Gtk, Gdk
 
 from .files_ui import  FilesUI
 
-# class name must be "Plugin". Do not change the name 
 class Plugin(FilesUI):
 	
-	# the plugins_manager will pass "app" reference 
-	# to your plugin. "app" object is defined in gamma.py
-	# from "app" reference you can access pretty much 
-	# everything related to Gamma (i.e. window, builder, 
-	# sourceview, and other plugins)
 	def __init__(self, app):
 		self.name = "ui_manager"
 		self.app = app

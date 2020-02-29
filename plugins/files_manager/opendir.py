@@ -16,7 +16,8 @@
 #	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 #
-#	openfile: opens file(s) by showing open dialog and send filenames array
+#	opendir: shows open folder dialog and opens all files 
+#	under the selected folder (recursively) and send filenames array 
 #	to files_manager.open_files method
 #
 

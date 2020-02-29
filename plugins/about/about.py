@@ -73,8 +73,8 @@ class Plugin():
 		about.set_program_name("Gamma Editor")
 		about.set_version("0.0.1 Beta")
 
-		about.set_website("https://github.com/hamadmarri/gamma")
-		about.set_website_label("Github")
+		about.set_website("https://gitlab.com/hamadmarri/gamma-text-editor")
+		about.set_website_label("GitLab")
 				       
 		response = about.run()
 		
