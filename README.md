@@ -16,9 +16,9 @@ WebKitGTK, GLib, GIO and many more.
 
 
 ## Screenshots
-![s1](/uploads/232c19c6af148fc6a83ea55fdacace69/Screenshot_from_2020-03-01_02-28-21.png)
+![s1](/uploads/ef0364ca533bbed7febab7a7e2462619/Screenshot_from_2020-03-01_01-53-52.png)
 
-![s2](/uploads/ef0364ca533bbed7febab7a7e2462619/Screenshot_from_2020-03-01_01-53-52.png)
+![s2](/uploads/232c19c6af148fc6a83ea55fdacace69/Screenshot_from_2020-03-01_02-28-21.png)
 
 ![s3](/uploads/a3a9328a78918aa4415c9355274adb5a/Screenshot_from_2020-03-01_02-01-59.png)
 
