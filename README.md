@@ -54,7 +54,7 @@ the new/replacement plugin. That being said, it is a special case where they are
 Gamma to work as a text editor, therefore they are highly coupled with each other. For different types
 of plugins such as a plugin for showing the terminal at bottom panel, or a plugin opens a tree view of 
 a directory, there is no dependencies on other plugins. For developers, see 
-[For Developers](#For-Developers) section.
+[For Developers](#for-developers) section.
 
 
 ## Featuers and current available plugins
@@ -213,4 +213,27 @@ commands are placed at top because of the splay operation.
 
 
 ## For Developers
+If you are interested in contributin to Gamma core development or in making plugins for Gamma, then
+this section is for you. Gamma is built on top of GTK3. GTK3 is a GUI platform that works on Linux,
+Windows, and Mac. You have to read about GTK3 and you need to keep GTK3 documentations handy. GTK3's
+main language is C, but there are many wrappers for GTK3 in different languages such as C++, Python,
+javascript, Rust, and Vala. I decided to use the python wrapper which is called pygobject. Pygobject
+is simpler to write, even though I am kind of a C guy, but making GUI editor with C would be time
+consuming to me. That is not the only reason I chose python, the other yet very important reason
+is that python make it easy to apply a plugin design where it can load modules at run time.
+
+Anyway, you need first to understand the Gamma structure (which is not that complex), know some
+basic GTK3 techniques and terminologies, for example GTK3 allows you to style your widgets (GUI components)
+with CSS files. Also, GTK3 widgets can be designed in XML formats seperetly from the code and imported
+at run time. Instead of writing row XML files to design your UI, you can use a tool called Glade
+which is a graphical tool that allows to drag/drop widgets and set widgets' properties graphically.   
+
+To sum up, here is the road map to start developing for Gamma:
+*	Read about GTK3
+	*	You do not need to learn everything in GTK3, just an overview what GTK3 can do. [GTK](https://www.gtk.org/)
+	*	Read about GTK basics, widgets, windows, layout... [GTK+ 3 Reference Manual](https://developer.gnome.org/gtk3/3.24/) 
+	*	Read about how is the styling with GTK3 
+		*	[GTK+ CSS Overview](https://developer.gnome.org/gtk3/stable/chap-css-overview.html)
+		*	[GTK+ CSS Properties](https://developer.gnome.org/gtk3/stable/chap-css-properties.html)
+
 

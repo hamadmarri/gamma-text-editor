@@ -8,7 +8,7 @@ class CopyLine(object):
 	
 	def copy_line(self):
 		
-		# get current viewing file' buffer
+		# get current viewing file's buffer
 		self.buffer = self.plugins["files_manager.files_manager"].current_file.source_view.get_buffer()
 		
 		# get selection bound
