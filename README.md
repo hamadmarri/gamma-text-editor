@@ -62,7 +62,7 @@ Here are brief description about currently implemented plugins and features
 ### style
 sets the theme style to Gamma window \
 the style.css file is set in `config.py` `style-path`
-
+ 
 
 ### source_style
 source_style: sets the style for the source view (text editting area) \
