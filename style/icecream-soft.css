@@ -314,29 +314,28 @@ headerbar {
 	background: #e1e0e1;
 }
 #commanderList{
-	background: #6D5E6D;
+	background: #f9f9ff;
 	padding-top:4px;
 }
 
 .commanderRow {
-	color:#fdfdfd;
-
+	color:#827082;
 	font-size: 18px;
 	padding: 10px 30px 10px 30px;
 	border:none;
 }
 
-#commanderList  row {
+#commanderList row {
 	border:none;
 }
 
 #commanderList row:hover {
 	color: #FDFDFD;
-	background: rgba(255, 196, 255, 0.15);
+	background: rgba(0, 181, 255, 0.15);
 	border:none;
 }
 
-#commanderList row:selected {
+#commanderList row:selected, #commanderList row:selected label {
 	background:#00B5FF;
 	color:#fdfdfd;
 	font-weight:bold;
