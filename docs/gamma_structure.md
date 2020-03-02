@@ -136,6 +136,44 @@ lazy plugins that are not loaded in Gamma startup. Instead, they will be
 loaded only when needed. 
 
 
+All plugins (including your future plugin) are placed in `./plugins` folder.
+The `PluginsManager` has two properties:-
+*	self.plugins = {}
+*	self.plugins_array = []
+They all store plugins references. The `plugins` dictionary is useful to get a pluign by its name.
+The `plugins_array` is useful to loop through all plugins. Of course, inside your plugin you can
+access `plugins` or `plugins_array` through the `app` which is passed to your plugin. See below example:
+```
+class Plugin():
+	def __init__(self, app):
+		self.name = "my_plugin"
+		self.app = app
+		self.plugins = app.plugins_manager.plugins
+	
+	# somewhere in your code 
+	self.plugins["search.search_in_file"].do_highlight("", self.buffer)
+```
+This gets the reference of the `search_in_file` plugin and calls the `do_highlight` method.
+What happens if the user disable or replaced the `search_in_file` plugin?
+It is a problem that we are going to solve in future. So, prepare for some changes.
+The new idea would be something like:
+```
+self.THE("file_searcher", do_highlight, ("", self.buffer))
+```
+-	`THE` is a plugin that we are going to add in future
+-	`file_searcher` is not a plugin name! it is a category name of any plugin do the search in file functionality
+-	the rest are the parameters
+Why this approach is better? It is better for two reasons
+1-	If user replace the current `search_in_file` plugin with lets say `better_search` plugin,
+	the `THE` is able to call the method of `better_search`.
+2-	If user disable all search in file plugins (i.e. has no any search in file plugin)
+	the `THE` simply can ignore the call. Therefore, you do not worry to change your code.
+	You just assume there is a plugin under a category called `file_searcher`.
+	
+	
+
+
+
 ### ./signal_handler.py
 Is the class that manage signal handlers. `Handlers` is an object for mapping signal names with 
 callback methods references. You can mapp ui signals by simply assign as following:
@@ -170,6 +208,39 @@ the above "if" is checking whether alt and ctrl are hold when pressed the "m" ke
 However `any_key_press_to_plugins` will call your `key_bindings`
 method for any key press! Sometimes is needed but usually
 for shortcuts use `key_bindings_to_plugins`
+
+
+SignalHandler has two methods called `emit` and `connect`. These methods are useful for custom events for
+plugins. For example, the `files_manager` `./plugins/files_manager/files_manager.py` emit a signal every 
+time the open file is switched to another file (i.e. user clicked on a file in file lists). The signal is
+emitted in this form 
+```
+self.signal_handler.emit("file-switched", self.current_file.source_view)
+```
+The name of the signal is `file-switched` and it passes the sourceview of the current just displayed file.
+
+From another plaugin, we can connect/listen to this signal by calling
+```
+self.signal_handler.connect("file-switched", self.update_buffer)
+```
+This call must be in the `__init__` method of the plugin. It connects the signal `file-switched`
+to a local method called `update_buffer`. The `update_buffer` method is as this:
+```
+def update_buffer(self, new_source):
+	self.sourceview = new_source
+	self.buffer = self.sourceview.get_buffer()
+	self.new_search = True
+```
+The name and the body of the method is up to you, but the method signature should get the sourceview that is been passed by
+the `files_manager`. This example is in `./plugins/find_and_replace/find_and_replace.py` file.
+
+
+
+### ./sourceview_manager.py
+Is responsible for sourceview related functions
+-	get new source view
+-	detect the language of the just openned file and set the langauge (i.e. C,Python,C++ ..)
+-	update source map (mini map) to connect to a sourceview
 
 
 

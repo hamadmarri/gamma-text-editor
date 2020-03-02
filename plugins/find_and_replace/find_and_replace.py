@@ -38,7 +38,7 @@ class Plugin(FindReplaceWindow):
 	def __init__(self, app):
 		self.name = "find_and_replace"
 		self.app = app
-		self.plugins = app.plugins_manager
+		# self.plugins = app.plugins_manager
 		self.window = None
 		self.sourceview = None
 		self.buffer = None
