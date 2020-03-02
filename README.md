@@ -268,3 +268,5 @@ To sum up, here is the road map to start developing for Gamma:
 		*	The idea of the plugin would be a logger which logs every action\
 			and outputs the log in bottom panel (the bottom panel would be a seperate plugin)
 	
+See [Gamma Structure](https://gitlab.com/hamadmarri/gamma-text-editor/-/blob/master/docs/gamma_structure.md)
+
