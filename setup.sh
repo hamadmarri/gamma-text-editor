@@ -12,6 +12,6 @@ sed -i -e "s,\[gamma path placeholder\],$PWD/bin/gamma," ./bin/com.editor.gamma.
 mkdir -p ~/.local/share/applications/ && cp ./bin/com.editor.gamma.desktop ~/.local/share/applications/
  
  
- # create link to gamma sh file
+ # create a symbolic link to gamma sh file
 sudo ln -s $PWD/bin/gamma /usr/bin/gamma
 
