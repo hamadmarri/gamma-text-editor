@@ -117,18 +117,18 @@ such as the font type and font size.
 
 
 ### ./plugins/plugins_manager.py
-Is responsible for initating plugins. by using "importlib" the plugins loaded and included
+Is responsible for initating plugins by using "importlib" the plugins loaded and included
 to Gamma. It goes through "plugin_list" to get exact name
 of the plugin package. For each plugin, plugin module is 
 included, the app reference is passed to plugin, and the
-"activate" method of a plugin is called. "activate" is plugin init,
+`activate` method of a plugin is called. `activate` is plugin init,
 so do not use plugins' `__init__` for complex operation. The
 plugins' `__init__` must only include direct references assignments
-(i.e. self.builder = app.builder). Other than these assignments,
-plugins activate must be your method for initializing you plugin.
+(i.e. `self.builder = app.builder`). Other than these assignments,
+plugins `activate` must be your method for initializing you plugin.
 The reason for this design is to know which plugin must be eager
-and which must be lazy plugin. Simply, if your activate method 
-is not implemented (i.e. def activate(self): pass), then the plugin 
+and which must be lazy plugin. Simply, if your `activate` method 
+is not implemented (i.e. `def activate(self): pass`), then the plugin 
 is lazy plugin.
 
 Lazy plugins strategy is not implemented yet. But in future we will have
@@ -140,6 +140,7 @@ All plugins (including your future plugin) are placed in `./plugins` folder.
 The `PluginsManager` has two properties:-
 *	self.plugins = {}
 *	self.plugins_array = []
+
 They all store plugins references. The `plugins` dictionary is useful to get a pluign by its name.
 The `plugins_array` is useful to loop through all plugins. Of course, inside your plugin you can
 access `plugins` or `plugins_array` through the `app` which is passed to your plugin. See below example:
@@ -162,11 +163,13 @@ self.THE("file_searcher", do_highlight, ("", self.buffer))
 ```
 -	`THE` is a plugin that we are going to add in future
 -	`file_searcher` is not a plugin name! it is a category name of any plugin do the search in file functionality
+-	`do_highlight` function name
 -	the rest are the parameters
+
 Why this approach is better? It is better for two reasons
-1-	If user replace the current `search_in_file` plugin with lets say `better_search` plugin,
+1.	If user replace the current `search_in_file` plugin with lets say `better_search` plugin,
 	the `THE` is able to call the method of `better_search`.
-2-	If user disable all search in file plugins (i.e. has no any search in file plugin)
+2.	If user disable all search in file plugins (i.e. has no any search in file plugin)
 	the `THE` simply can ignore the call. Therefore, you do not worry to change your code.
 	You just assume there is a plugin under a category called `file_searcher`.
 	
