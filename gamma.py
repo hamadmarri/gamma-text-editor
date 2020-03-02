@@ -33,7 +33,7 @@ import os
 
 import gi
 gi.require_version('Gtk', '3.0')
-gi.require_version('GtkSource', '4')
+gi.require_version('GtkSource', "4")
 from gi.repository import GLib, Gio, Gtk, Gdk, GtkSource, GObject
 
 import config
@@ -70,7 +70,7 @@ class Application(Gtk.Application):
 				
 		# signal_handler is for handling general signals such as
 		# key press, and basic window resizing paned
-		# SignalHandler also makes it easer for other plugins to
+		# SignalHandler also makes it easier for other plugins to
 		# process key bindings. It loop through all plugins and 
 		# call key_bindings function passing (event, keyval_name, ctrl, alt, shift)
 		# which is an easy design for plugins to set there key bindings
@@ -128,3 +128,4 @@ class Application(Gtk.Application):
 if __name__ == "__main__":
 	app = Application()
 	app.run()
+	

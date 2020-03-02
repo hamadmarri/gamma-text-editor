@@ -242,7 +242,7 @@ which is a graphical tool that allows to drag/drop widgets and set widgets' prop
 
 To sum up, here is the road map to start developing for Gamma:
 *	Read about GTK3
-	*	You do not need to learn everything in GTK3, just an overview what GTK3 can do. [GTK](https://www.gtk.org/)
+	*	You do not need to learn everything in GTK3, just an overview of what GTK3 can do ( [GTK](https://www.gtk.org/) ).
 	*	Read about GTK basics, widgets, windows, layout... [GTK+ 3 Reference Manual](https://developer.gnome.org/gtk3/3.24/)
 	*	See [Devhelp](https://wiki.gnome.org/Apps/Devhelp)
 	*	See [gtk3-demo](https://developer.gnome.org/gtk3/stable/gtk3-demo.html)
@@ -267,6 +267,4 @@ To sum up, here is the road map to start developing for Gamma:
 		*	Listening to other plugins signals
 		*	The idea of the plugin would be a logger which logs every action\
 			and outputs the log in bottom panel (the bottom panel would be a seperate plugin)
-		
-
-
+	

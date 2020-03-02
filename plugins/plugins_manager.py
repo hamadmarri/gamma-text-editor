@@ -23,14 +23,14 @@
 # 					to Gamma. It goes through "plugin_list" to get exact name
 #					of the plugin package. For each plugin, plugin module is 
 #					included, the app reference is passed to plugin, and the
-#					"activate" of a plugin is called. "activate" is plugin init,
+#					"activate" method of a plugin is called. "activate" is plugin init,
 #					so do not use plugins' __init__ for complex operation. The
 #					plugins' __init__ must only include direct references assignments
 #					(i.e. self.builder = app.builder). Other than these assignments,
 #					plugins activate must be your method for initializing you plugin.
 #					The reason for this design is to know which plugin must be eager
 #					and which must be lazy plugin. Simply, if your activate method 
-#					is not implemented (i.e. def activate(self): pass), then the
+#					is not implemented (i.e. def activate(self): pass), then the plugin 
 #					is lazy plugin.
 #					 
 # - get_plugin:		Used from plugins which need to get reference of other plugins.
