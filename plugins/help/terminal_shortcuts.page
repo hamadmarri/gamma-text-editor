@@ -3,6 +3,7 @@
       id="terminal_shortcut">
 <info>
   <link type="guide" xref="shortcuts"/>
+  <link type="guide" xref="terminal_plugin"/>
 </info>
 <title>Terminal Shortcuts</title>
 <table shade="rows" frame="all" rules="rows cols">

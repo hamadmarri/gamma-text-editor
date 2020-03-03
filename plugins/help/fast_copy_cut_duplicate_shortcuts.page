@@ -3,12 +3,10 @@
       id="fast_copy_cut_duplicate_shortcut">
 <info>
   <link type="guide" xref="shortcuts"/>
+  <link type="guide" xref="fast_copy_cut_duplicate_plugin"/>
 </info>
 <title>Fast Copy, Cur, and Duplicate Shortcuts</title>
-<p>Copy, cut, or duplicate a line without selecting all line. Just
-place the cursor in the line and press Ctrl+c for copy, Ctrl+x to
-cut, or Ctrl+d to duplicate. Also after copying and cutting, pressing
-Ctrl+v will paste into next line.</p>
+
 <table shade="rows" frame="all" rules="rows cols">
   <tr>
     <td><p>Copy Line</p></td> <td><code>Ctrl + C</code></td>

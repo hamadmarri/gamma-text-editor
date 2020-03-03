@@ -55,7 +55,7 @@ plugin_list = [
 	"search.search_in_file",
 	"ui_manager.ui_manager",
 	"files_manager.opendir",
-	"codecomment.codecomment2",
+	"codecomment.codecomment",
 	"find_and_replace.find_and_replace",
 	"terminal.terminal",
 	# "bottom_panel.bottom_panel",

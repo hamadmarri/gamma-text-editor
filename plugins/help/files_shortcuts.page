@@ -3,6 +3,10 @@
       id="files_shortcut">
 <info>
   <link type="guide" xref="shortcuts"/>
+  <link type="guide" xref="openfile_plugin"/>
+  <link type="guide" xref="opendir_plugin"/>
+  <link type="guide" xref="savefile_plugin"/>
+  <link type="guide" xref="files_manager_plugin"/>
 </info>
 <title>Files Shortcuts</title>
 <table shade="rows" frame="all" rules="rows cols">
@@ -10,7 +14,7 @@
     <td><p>Open File(s)</p></td> <td><code>Ctrl + O</code></td>
   </tr>
   <tr>
-    <td><p>Open All Files in Direcotry (recursively)</p></td> <td><code>Shift + Ctrl + O</code></td>
+    <td><p>Open All Files in Directory (recursively)</p></td> <td><code>Shift + Ctrl + O</code></td>
   </tr>
   <tr>
     <td><p>Save File</p></td> <td><code>Ctrl + S</code></td>

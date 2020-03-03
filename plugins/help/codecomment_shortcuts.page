@@ -1,12 +1,11 @@
 <page xmlns="http://projectmallard.org/1.0/"
       type="topic"
-      id="codecomment2_shortcut">
+      id="codecomment_shortcut">
 <info>
   <link type="guide" xref="shortcuts"/>
+  <link type="guide" xref="codecomment_plugin"/>
 </info>
 <title>Code Comment Shortcuts</title>
-<p>Comments line/block of code. Auto detect the language and\
-the comments symbols.</p>
 
 <table shade="rows" frame="all" rules="rows cols">
   <tr>

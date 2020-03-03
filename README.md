@@ -75,40 +75,40 @@ a directory, there is no dependencies on other plugins. For developers, see
 Here are brief descriptions about currently implemented plugins and features
 
 ### style
-sets the theme style to Gamma window \
-the style.css file is set in `config.py` `style-path`
+Sets the theme style to Gamma window \
+the `style.css` file is set in `config.py` `style-path`
  
 
 ### source_style
-sets the style for the source view (text editting area) \
-"style_scheme" is set in config.py \
+Sets the style for the source view (text editting area) \
+`style_scheme` is set in `config.py` \
 style scheme for srource view style, usually sourceview style xml files are in \
 `~/.local/share/gtksourceview-4/styles` (see `config.py`)
 
 
 ### window_ctrl
-is responsible for handling basic window operations maximize, minimize, and quit.
+Is responsible for handling basic window operations maximize, minimize, and quit.
 
 
 ### openfile
-opens file(s) by showing open dialog and send filenames array\
+Opens file(s) by showing open dialog and send filenames array\
 to files_manager.open_files method
 
 ### opendir
-shows open folder dialog and opens all files\
+Shows open folder dialog and opens all files\
 under the selected folder (recursively) and send filenames array\
 to files_manager.open_files method
 
 
 ### savefile
-saves the current file opened or all editted files\
+Saves the current file opened or all editted files\
 it gets current_file from files_manager plugin\
 and saves it. Message notify is sent to tell the user\
 that the file is saved successfully
 
 
 ### files_manager
-is responsible to manage all opened documents.
+Is responsible to manage all opened documents.
 
 
 ### simple_completion
@@ -117,12 +117,12 @@ words are collected from current opened files.
 
 
 ### highlight
-is responsible for highlighting the selected text by user. It\
+Is responsible for highlighting the selected text by user. It\
 highlights all occurrences of selected text. 
 
 
 ### message_notify
-is responsible of displaying notification\
+Is responsible of displaying notification\
 messages (file saved, opened file, ...)\
 the default message is placed on top right corner\
 default message time is 7.5 seconds, which is the time\
@@ -143,7 +143,7 @@ Deals with UI events such as changing background color for hovered element.
 
 
 
-### codecomment2
+### codecomment
 Comments line/block of code. Auto detect the language and\
 the comments symbols. The shortcut (Ctrl+/) comments/uncomment code
 

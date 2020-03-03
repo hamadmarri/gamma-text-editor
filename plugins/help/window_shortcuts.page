@@ -3,6 +3,7 @@
       id="window_shortcut">
 <info>
   <link type="guide" xref="shortcuts"/>
+  <link type="guide" xref="window_ctrl_plugin"/>
 </info>
 <title>Window Shortcuts</title>
 <table shade="rows" frame="all" rules="rows cols">
