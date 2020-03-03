@@ -114,4 +114,3 @@ class Plugin():
 		self.view_autocomplete.register(source_view.get_buffer())
 		self.view_completion.add_provider(self.view_autocomplete)
 		
-		

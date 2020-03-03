@@ -1,0 +1,20 @@
+<page xmlns="http://projectmallard.org/1.0/"
+      type="topic"
+      id="codecomment2_shortcut">
+<info>
+  <link type="guide" xref="shortcuts"/>
+</info>
+<title>Code Comment Shortcuts</title>
+<p>Comments line/block of code. Auto detect the language and\
+the comments symbols.</p>
+
+<table shade="rows" frame="all" rules="rows cols">
+  <tr>
+    <td><p>Comment Code</p></td> <td><code>Ctrl + /</code></td>
+  </tr>
+  <tr>
+    <td><p>Uncomment Code</p></td> <td><code>Ctrl + /</code></td>
+  </tr>
+</table>
+<p>Plugin: <code>codecomment2</code></p>
+</page>

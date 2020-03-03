@@ -172,6 +172,7 @@ class Plugin():
 
 	def activate(self):
 		self.signal_handler.key_bindings_to_plugins.append(self)
+		commands.set_commands(self)
 
 	
 	def key_bindings(self, event, keyval_name, ctrl, alt, shift):

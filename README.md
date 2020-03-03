@@ -221,7 +221,7 @@ commands are placed at top because of the splay operation.
 *	Abstract way to communicate with other plugins
 *	Find and replace on selected area
 
-For all issues/todos (Issues)[https://gitlab.com/hamadmarri/gamma-text-editor/issues].
+For all issues/todos [Issues](https://gitlab.com/hamadmarri/gamma-text-editor/issues).
 
 
 

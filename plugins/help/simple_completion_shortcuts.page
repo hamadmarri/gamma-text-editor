@@ -1,0 +1,16 @@
+<page xmlns="http://projectmallard.org/1.0/"
+      type="topic"
+      id="simple_completion_shortcut">
+<info>
+  <link type="guide" xref="shortcuts"/>
+</info>
+<title>Text Completion</title>
+<p>Auto completion assistant which shows popup with words for completion
+words are collected from current opened files.</p>
+<table shade="rows" frame="all" rules="rows cols">
+  <tr>
+    <td><p>Show Completion Window</p></td> <td><code>Ctrl + Spacebar</code></td>
+  </tr>
+</table>
+<p>Plugin: <code>simple_completion</code></p>
+</page>
