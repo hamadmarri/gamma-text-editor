@@ -48,7 +48,7 @@ config_paths_and_settings = {
 	"style-path":	gamma_path + "/style/"	+ style_file,
 	"style-scheme":	style_scheme,
 	"show_grid": False,
-	"font-family": " Droid Sans Mono, Monospace",
+	"font-family": "Monospace, Droid Sans Mono",
 	"font-size": 18, # in px
 }
 
