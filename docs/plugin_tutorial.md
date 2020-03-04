@@ -33,6 +33,8 @@ Open `./logger/logger.py`, at top, write your name, email, and the date.
 Change the name in `self.name = "template"` to the plugin name `self.name = "logger"`.
 Remove any comments you do not need. Remove `method1`, `method2`, and `method3`.
 
+**Note: Do not change the plugin class name, it should be called `class Plugin`.**
+
 
 ## Add logger to plugins_array in plugins_manager
 We need to add our plugin to be loaded to Gamma. Open `./plugins/plugins_manager.py`.
@@ -138,29 +140,31 @@ out in the terminal.
 
 
 ## Design our plugin programming interface
+For logging process, a nice way to log thigs is to emit a signal for logging.
+Let's say that other plugins can do something like
+-	`self.signal_handler.emit("log", some_message) # for normal log`
+-	`self.signal_handler.emit("log-warning", some_message) # for warning log`
+-	`self.signal_handler.emit("log-error", some_message) # for error log`
 
+To connect our logger to these signals, add the following in the `__init__` method
+```
+self.signal_handler.connect("log", self.log)
+self.signal_handler.connect("log-warning", self.log_warning)
+self.signal_handler.connect("log-error", self.log_error)
+```
+We connected/listened to `log`, `log-warning`, and `log-error` signals and connected each 
+to corresponding local method. Next, create the methods:
+```
+def log(self, message):
+	print(message)
+ 	
+def log_warning(self, message):
+	print(f'WARNING: {message}')
 
-# need other plugins to say something like
-# self.signal_handler.emit("log", some_message) for normal log
-# self.signal_handler.emit("log-warning", some_message) for warning log
-# self.signal_handler.emit("log-error", some_message) for error log
+def log_error(self, message):
+	print(f'ERROR: {message}')
+```
 
-
-# add
-# self.signal_handler.connect("log", self.log)
-# self.signal_handler.connect("log-warning", self.log_warning)
-# self.signal_handler.connect("log-error", self.log_error)
-
-# def log(self, message):
-# 	print(message)
-# 	
-# 	
-# def log_warning(self, message):
-# 	print(f'WARNING: {message}')
-# 	
-# 	
-# def log_error(self, message):
-# 	print(f'ERROR: {message}')
 
 
 # write 		self.signal_handler.emit("log", f"open {filename}")
