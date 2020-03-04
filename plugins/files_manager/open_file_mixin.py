@@ -45,10 +45,10 @@ class OpenFileMixin(object):
 			text = f.read()
 			# DEBUG: print(bytes(text, "ascii"))
 		except OSError as err:
-			print(f'Could not open {filename}: {err}')
+			self.signal_handler.emit("log-error", f'Could not open {filename}: {err}')
 			return
 		except PermissionError as err:
-			print(f'Could not open {filename}: {err}')
+			self.signal_handler.emit("log-error", f'Could not open {filename}: {err}')
 			return
 
 		
@@ -89,6 +89,7 @@ class OpenFileMixin(object):
 
 		self.plugins["ui_manager.ui_manager"].add_filename_to_ui(newfile)
 		
+		self.signal_handler.emit("log", f"open {filename}")
 
 
 		
