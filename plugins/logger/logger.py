@@ -34,7 +34,8 @@ class Plugin():
 		self.name = "logger"
 		self.app = app
 		self.builder = app.builder
-		self.signal_handler = app.signal_handler 
+		self.signal_handler = app.signal_handler
+		self.plugins = app.plugins_manager.plugins
 		self.commands = []
 		self.signal_handler.connect("log", self.log)
 		self.signal_handler.connect("log-warning", self.log_warning)
@@ -84,8 +85,20 @@ class Plugin():
 		log_scrolled = builder.get_object("log_scrolled_window")
 		textview = builder.get_object("log_textview")
 		textview.get_buffer().set_text(text)
-		
 		window.remove(log_scrolled)
+		
+		style_provider = Gtk.CssProvider()
+		style_provider.load_from_path(f"{dir_path}/logger.css")
+		log_scrolled.get_style_context().add_provider(
+			style_provider,
+			Gtk.STYLE_PROVIDER_PRIORITY_USER
+		)
+		
+		textview.get_style_context().add_provider(
+			style_provider,
+			Gtk.STYLE_PROVIDER_PRIORITY_USER
+		)
+		
 		log_scrolled.show_all()
 		
 		# get right side body
@@ -97,9 +110,8 @@ class Plugin():
 		paned = Gtk.Paned.new(Gtk.Orientation.VERTICAL)
 		paned.pack1(scrolled_sourceview, True, False)
 		paned.pack2(log_scrolled, False, True)
-		paned.set_position(500)	
-		
-		
+		paned.set_position(500)
+				
 		right_side_body.pack_start(paned, True, True, 0)
 		right_side_body.show_all()
 		
@@ -120,5 +132,8 @@ class Plugin():
 	def log_error(self, message):
 		print(f'ERROR: {message}')
 		self.log_array.append(f'ERROR: {message}')
+		
+		self.plugins["message_notify.message_notify"] \
+											.show_message(f'ERROR: {message}', 3)
 		
 		

@@ -146,6 +146,10 @@ class Plugin(CommandsCtrl, CreateFileMixin, CloseFileMixin, OpenFileMixin):
 	
 	
 	def switch_to_file(self, file_index):
+	
+		if file_index < 0:
+			return
+	
 		# check if it is the current_file, then exit method 
 		if self.current_file == self.files[file_index]:
 			return

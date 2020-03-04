@@ -248,7 +248,7 @@ class Plugin(CodeCommentTags):
 		document.begin_user_action()
 
 		for i in range(0, number_lines):
-			print(f"line {i}")
+			# print(f"line {i}")
 			if self.get_tag_position_in_line(start_tag, head_iter, iter):
 				dmark = document.create_mark("delete", iter, False)
 				document.delete(iter, head_iter)

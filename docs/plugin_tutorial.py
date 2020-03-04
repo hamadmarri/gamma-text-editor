@@ -265,3 +265,74 @@
 
 
 
+# add to bottom
+
+# def show_log_window(self, text):
+# 	dir_path = os.path.dirname(os.path.realpath(__file__))
+# 	builder = Gtk.Builder()
+# 	builder.add_from_file(f"{dir_path}/logger.glade")
+# 	window = builder.get_object("log_window")
+# 	log_scrolled = builder.get_object("log_scrolled_window")
+# 	textview = builder.get_object("log_textview")
+# 	textview.get_buffer().set_text(text)
+# 	window.remove(log_scrolled)
+# 	
+# 	style_provider = Gtk.CssProvider()
+# 	style_provider.load_from_path(f"{dir_path}/logger.css")
+# 	log_scrolled.get_style_context().add_provider(
+# 		style_provider,
+# 		Gtk.STYLE_PROVIDER_PRIORITY_USER
+# 	)
+# 	
+# 	textview.get_style_context().add_provider(
+# 		style_provider,
+# 		Gtk.STYLE_PROVIDER_PRIORITY_USER
+# 	)
+# 	
+# 	log_scrolled.show_all()
+# 	
+# 	# get right side body
+# 	right_side_body = self.builder.get_object("right_side_body")
+# 	scrolled_sourceview = right_side_body.get_children()[0]
+# 	right_side_body.remove(scrolled_sourceview)
+# 	
+# 	# create paned
+# 	paned = Gtk.Paned.new(Gtk.Orientation.VERTICAL)
+# 	paned.pack1(scrolled_sourceview, True, False)
+# 	paned.pack2(log_scrolled, False, True)
+# 	paned.set_position(500)
+# 			
+# 	right_side_body.pack_start(paned, True, True, 0)
+# 	right_side_body.show_all()
+		
+		
+
+
+
+
+
+
+# css
+#log_scrolled_window {
+	# border: none;
+# }
+
+#log_textview text {
+	# background: @gamma_bg_color;
+	# color: @gamma_fg_color;
+# }
+
+
+
+
+# self.plugins["message_notify.message_notify"] \
+# 											.show_message(f'ERROR: {message}', 3)
+
+
+# restart gamma 
+# ctrl+O
+# try to open /etc/shadow
+# see the message on top left
+
+
+
