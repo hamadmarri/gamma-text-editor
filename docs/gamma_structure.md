@@ -150,7 +150,8 @@ class Plugin():
 		self.name = "my_plugin"
 		self.app = app
 		self.plugins = app.plugins_manager.plugins
-	
+		...
+		
 	# somewhere in your code 
 	self.plugins["search.search_in_file"].do_highlight("", self.buffer)
 ```
@@ -207,7 +208,7 @@ if alt and ctrl and keyval_name == "m":
 the above "if" is checking whether alt and ctrl are hold when pressed the "m" key (i.e. `<Ctrl><Alt>+m`)
 
 #### key_bindings_to_plugins vs any_key_press_to_plugins
-`key_bindings_to_plugins` for key bindings only (`<Ctrl>+a`)
+`key_bindings_to_plugins` for key bindings only (i.e. `<Ctrl>+a`).
 However `any_key_press_to_plugins` will call your `key_bindings`
 method for any key press! Sometimes is needed but usually
 for shortcuts use `key_bindings_to_plugins`
