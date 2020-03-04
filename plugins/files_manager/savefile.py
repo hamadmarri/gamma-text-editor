@@ -149,14 +149,17 @@ class Plugin():
 			# in permenant storage (disk)
 			f = open(filename, 'w')
 			f.write(text)
-		except SomeError as err:
+		
+		except OSError as err:
+			print('Could not save %s: %s' % (filename, err))
+		except PermissionError as err:
 			print('Could not save %s: %s' % (filename, err))
 		else:
 			# when successfully wrote the file, show successful message
 			basename = os.path.basename(filename)
 			self.plugins["message_notify.message_notify"].show_message(basename + " | Saved", 2)
-		finally:
 			f.close()
+
 			
 
 

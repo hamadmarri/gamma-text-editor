@@ -42,7 +42,7 @@ class SearchEvents(object):
 		
 		temp = []
 		for c in ss:
-			print("strict", c['name'])
+			# print("strict", c['name'])
 			self.add_command(c)
 			temp.append(c)
 			
@@ -57,7 +57,7 @@ class SearchEvents(object):
 		
 		for c in soft_s:
 			if not c in temp:
-				print("soft", c['name'])
+				# print("soft", c['name'])
 				self.add_command(c)
 		
 		

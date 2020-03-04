@@ -36,29 +36,40 @@ class OpenFileMixin(object):
 			return
 		
 		
-		# open the file in reading mode
-		f = open(filename, "r", encoding="utf-8", errors="replace")
-		#f = open(filename, "r")
-		# actual reading from the file and populate the new sourceview buffer
-		# with file data
-		text = f.read()
-		# DEBUG: print(bytes(text, "ascii"))
+		try:
+			# open the file in reading mode
+			f = open(filename, "r", encoding="utf-8", errors="replace")
+			#f = open(filename, "r")
+			# actual reading from the file and populate the new sourceview buffer
+			# with file data
+			text = f.read()
+			# DEBUG: print(bytes(text, "ascii"))
+		except OSError as err:
+			print(f'Could not open {filename}: {err}')
+			return
+		except PermissionError as err:
+			print(f'Could not open {filename}: {err}')
+			return
+
+		
+		# when successfully opened and read the file
+		else:
+			# get new sourceview from sourceview_manager
+			# TODO: must handled by ui manager
+			newsource = self.sourceview_manager.get_new_sourceview()
+			
+			# begin_not_undoable_action to prevent ctrl+z to empty the file
+			newsource.get_buffer().begin_not_undoable_action()
+			newsource.get_buffer().set_text(text)
+			newsource.get_buffer().end_not_undoable_action()
+			
+			# place cursor at the begining
+			newsource.get_buffer().place_cursor(newsource.get_buffer().get_start_iter())
+		
+			# close file object
+			f.close()
+		# end of try block
 				
-		# get new sourceview from sourceview_manager
-		# TODO: must handled by ui manager
-		newsource = self.sourceview_manager.get_new_sourceview()
-		
-		
-		# begin_not_undoable_action to prevent ctrl+z to empty the file
-		newsource.get_buffer().begin_not_undoable_action()
-		newsource.get_buffer().set_text(text)
-		newsource.get_buffer().end_not_undoable_action()
-		
-		# place cursor at the begining
-		newsource.get_buffer().place_cursor(newsource.get_buffer().get_start_iter())
-		
-		# close file object
-		f.close()
 				
 		# new File object
 		newfile = File(self, filename, newsource)
@@ -77,6 +88,8 @@ class OpenFileMixin(object):
 		self.sourceview_manager.set_language(filename, buffer)
 
 		self.plugins["ui_manager.ui_manager"].add_filename_to_ui(newfile)
+		
+
 
 		
 		
