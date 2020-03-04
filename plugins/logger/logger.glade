@@ -8,7 +8,10 @@
     <property name="default_width">600</property>
     <property name="default_height">300</property>
     <child>
-      <object class="GtkScrolledWindow">
+      <placeholder/>
+    </child>
+    <child>
+      <object class="GtkScrolledWindow" id="log_scrolled_window">
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="shadow_type">in</property>

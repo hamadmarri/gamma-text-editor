@@ -33,6 +33,7 @@ class Plugin():
 	def __init__(self, app):
 		self.name = "logger"
 		self.app = app
+		self.builder = app.builder
 		self.signal_handler = app.signal_handler 
 		self.commands = []
 		self.signal_handler.connect("log", self.log)
@@ -55,7 +56,8 @@ class Plugin():
 	
 	
 	def show_log(self, log_type=0):
-		text = "\nlog:\n"
+		text = ""
+		print("\nlog:")
 		
 		if log_type == 0:
 			for l in self.log_array:
@@ -79,10 +81,28 @@ class Plugin():
 		builder = Gtk.Builder()
 		builder.add_from_file(f"{dir_path}/logger.glade")
 		window = builder.get_object("log_window")
+		log_scrolled = builder.get_object("log_scrolled_window")
 		textview = builder.get_object("log_textview")
 		textview.get_buffer().set_text(text)
-		window.set_transient_for(self.app.window)
-		window.show_all()
+		
+		window.remove(log_scrolled)
+		log_scrolled.show_all()
+		
+		# get right side body
+		right_side_body = self.builder.get_object("right_side_body")
+		scrolled_sourceview = right_side_body.get_children()[0]
+		right_side_body.remove(scrolled_sourceview)
+		
+		# create paned
+		paned = Gtk.Paned.new(Gtk.Orientation.VERTICAL)
+		paned.pack1(scrolled_sourceview, True, False)
+		paned.pack2(log_scrolled, False, True)
+		paned.set_position(500)	
+		
+		
+		right_side_body.pack_start(paned, True, True, 0)
+		right_side_body.show_all()
+		
 		
 		
 		

@@ -58,7 +58,7 @@ class Plugin():
 		# get right side body
 		right_side_body = self.app.builder.get_object("right_side_body")
 		scrolled_sourceview = right_side_body.get_children()[0]
-		print(scrolled_sourceview)
+		# print(scrolled_sourceview)
 		
 		right_side_body.remove(scrolled_sourceview)
 		
