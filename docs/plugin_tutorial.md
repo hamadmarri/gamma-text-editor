@@ -190,8 +190,10 @@ open plugins/logger/commands.py
 ERROR: Could not open /some/non-existed/path.file: [Errno 2] No such file or directory: '/some/non-existed/path.file'
 ```
 
-Now, try uncomment `logger.logger` from `pluigns_manager` and restart Gamma.
-Nothing hurts `open_file_mixin`, it is independent. 
+Now, try comment out `logger.logger` from `pluigns_manager` and restart Gamma.
+Nothing hurts `open_file_mixin` when disabling `logger.logger`, it is independent.
+
+Uncomment `logger.logger` back to enable it.
 
 
 
@@ -248,7 +250,7 @@ plugin.commands.append(
  		"plugin-name": plugin.name,
  		"name": "Show WARNINGS",
  		"ref": plugin.show_log,
- 		"parameters": 1,
+ 		`"parameters": 1,`
  		"shortcut": "",
  	}
 )
@@ -312,7 +314,7 @@ Make sure the `logger.glade` looks like the xml below:
 </interface>
 ```
 
-Import the `os` library at the top of `logger.py` (`import os`). Aplly the following changes in `show_log` method:
+Import the `os` library at the top of `logger.py` (`import os`). Apply the following changes in `show_log` method:
 ```
 def show_log(self, log_type=0):
  	text = "\nlog:\n"
