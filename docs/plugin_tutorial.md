@@ -165,252 +165,394 @@ def log_error(self, message):
 	print(f'ERROR: {message}')
 ```
 
+Now let's use this logging signals when opening new file. Open `./plugins/files_manager/open_file_mixin.py`,
+write `self.signal_handler.emit("log", f"open {filename}")` to the end of `open_file` method. And apply
+the changes in the try bock when cannot open a file instead of printing to console, we emit log-error message:
+```
+except OSError as err:
+	# print(f'Could not open {filename}: {err}')
+	self.signal_handler.emit("log-error", f'Could not open {filename}: {err}')
+	return
+except PermissionError as err:
+	# print(f'Could not open {filename}: {err}')			
+	self.signal_handler.emit("log-error", f'Could not open {filename}: {err}')			
+	return
+```
 
+Close gamma open again with:
+```
+gamma plugins/logger/logger.py plugins/logger/commands.py /some/non-existed/path.file
+```
+See printed log in the terminal:
+```
+open plugins/logger/logger.py
+open plugins/logger/commands.py
+ERROR: Could not open /some/non-existed/path.file: [Errno 2] No such file or directory: '/some/non-existed/path.file'
+```
 
-# write 		self.signal_handler.emit("log", f"open {filename}")
-
-# replace
-# except OSError as err:
-# 			# print(f'Could not open {filename}: {err}')
-# 			self.signal_handler.emit("log-error", f'Could not open {filename}: {err}')
-# 			return
-# 		except PermissionError as err:
-# 			# print(f'Could not open {filename}: {err}')			
-# 			self.signal_handler.emit("log-error", f'Could not open {filename}: {err}')			
-# 			return
-			
-# in open_file_mixin.py
-
-
-
-# close gamma reopen 
-# gamma plugins/logger/logger.py plugins/logger/commands.py /some/dummy/path.file
-
-
-# open plugins/logger/logger.py
-# open plugins/logger/commands.py
-# ERROR: Could not open /some/dummy/path.file: [Errno 2] No such file or directory: '/some/dummy/path.file'
-
-
-# try uncomment "logger.logger", from pluigns_manager and restart gamma
-# nothing hurts open_file_mixin, it is independent 
-
-
-
-
-# store logs in array
-# self.log_array = []
-# def log(self, message):
-# 	print(message)
-# 	self.log_array.append(message)
-# 	
-# def log_warning(self, message):
-# 	print(f'WARNING: {message}')
-# 	self.log_array.append(f'WARNING: {message}')
-# 	
-# def log_error(self, message):
-# 	print(f'ERROR: {message}')
-# 	self.log_array.append(f'ERROR: {message}')
-
-
-# def show_log(self, log_type=0):
-# 	print("\nlog:")
-# 	
-# 	if log_type == 0:
-# 		for l in self.log_array:
-# 			print(l)
-# 	elif log_type == 1:
-# 		for l in self.log_array:
-# 			if l.find("WARNING:") == 0:
-# 				print(l)
-# 	elif log_type == 2:
-# 		for l in self.log_array:
-# 			if l.find("ERROR:") == 0:
-# 				print(l)
-
-
-
-# plugin.commands.append( 
-# 	{
-# 		"plugin-name": plugin.name,
-# 		"name": "Show Log",
-# 		"ref": plugin.show_log,
-# 		"shortcut": "<Shift><Ctrl> + L",
-# 	}
-# )
-
-# plugin.commands.append( 
-# 	{
-# 		"plugin-name": plugin.name,
-# 		"name": "Show WARNINGS",
-# 		"ref": plugin.show_log,
-# 		"parameters": 1,
-# 		"shortcut": "",
-# 	}
-# )
-
-# plugin.commands.append( 
-# 	{
-# 		"plugin-name": plugin.name,
-# 		"name": "Show ERRORS",
-# 		"ref": plugin.show_log,
-# 		"parameters": 2,
-# 		"shortcut": "",
-# 	}
-# )
-
-
-# restart gamma, press alt, type err, click on Show ERRORS
-
-
-
-# create ui 
-# open glade
-# create new project
-# click toplevels, select GtkWindow (save)
-# save to ./plugins/logger/logger.glade
-# click Display, search and select GtkTextView (save)
-# right click on GtkTextView, add parent, select ScrolledWindow (save)
-# select GtkWindow and set id to log_window 
-# select GtkTextView and set id to log_textview (save) 
-
-#  make sure the logger.glade looks like
-# <?xml version="1.0" encoding="UTF-8"?>
-# <!-- Generated with glade 3.22.1 -->
-# <interface>
-#   <requires lib="gtk+" version="3.20"/>
-#   <object class="GtkWindow" id="log_window">
-#     <property name="can_focus">False</property>
-#     <property name="title" translatable="yes">Gamma Log</property>
-#     <property name="default_width">600</property>
-#     <property name="default_height">300</property>
-#     <child>
-#       <object class="GtkScrolledWindow">
-#         <property name="visible">True</property>
-#         <property name="can_focus">True</property>
-#         <property name="shadow_type">in</property>
-#         <child>
-#           <object class="GtkTextView" id="log_textview">
-#             <property name="visible">True</property>
-#             <property name="can_focus">True</property>
-#           </object>
-#         </child>
-#       </object>
-#     </child>
-#   </object>
-# </interface>
+Now, try uncomment `logger.logger` from `pluigns_manager` and restart Gamma.
+Nothing hurts `open_file_mixin`, it is independent. 
 
 
 
 
-# change
-# def show_log(self, log_type=0):
-# 	text = "\nlog:\n"
+## Store logs in array
+Instead of just printing the log out to the terminal, let's keep it in an array and use that array when needed.
+Add `self.log_array = []` to the end of `__init__` method. Edit `log`, `log_warning`, and `log_error` methods:
+```
+def log(self, message):
+	print(message)
+ 	self.log_array.append(message)
+ 	
+def log_warning(self, message):
+	print(f'WARNING: {message}')
+ 	self.log_array.append(f'WARNING: {message}')
+ 	
+def log_error(self, message):
+ 	print(f'ERROR: {message}')
+ 	self.log_array.append(f'ERROR: {message}')
+```
+After printing the log action, we store the message to `log_array`.
+Now, let's make `show_log` method prints all stored logs. We will add a parameter `log_type` to `show_log`
+which is used to know what type of log will be printed (0: all logs, 1: warning logs, and 2: errors).
+```
+def show_log(self, log_type=0):
+	print("\nlog:")
+ 	
+	if log_type == 0:
+ 		for l in self.log_array:
+ 			print(l)
+ 	elif log_type == 1:
+ 		for l in self.log_array:
+ 			if l.find("WARNING:") == 0:
+ 				print(l)
+ 	elif log_type == 2:
+ 		for l in self.log_array:
+ 			if l.find("ERROR:") == 0:
+ 				print(l)
+```
+Since we changed the `show_log` method, we need to update our commands. Open `./plugins/logger/commands.py`
+and apply the changes below:
+```
+plugin.commands.append( 
+ 	{
+ 		"plugin-name": plugin.name,
+ 		"name": "Show Log",
+ 		"ref": plugin.show_log,
+ 		"shortcut": "<Shift><Ctrl> + L",
+ 	}
+)
 
-# 	if log_type == 0:
-# 		for l in self.log_array:
-# 			text += l + '\n'
-# 	elif log_type == 1:
-# 		for l in self.log_array:
-# 			if l.find("WARNING:") == 0:
-# 				text += l + '\n'
-# 	elif log_type == 2:
-# 		for l in self.log_array:
-# 			if l.find("ERROR:") == 0:
-# 				text += l + '\n'
+plugin.commands.append( 
+ 	{
+ 		"plugin-name": plugin.name,
+ 		"name": "Show WARNINGS",
+ 		"ref": plugin.show_log,
+ 		"parameters": 1,
+ 		"shortcut": "",
+ 	}
+)
 
-# 	print(text)
-# 	self.show_log_window(text)
+plugin.commands.append( 
+ 	{
+ 		"plugin-name": plugin.name,
+ 		"name": "Show ERRORS",
+ 		"ref": plugin.show_log,
+ 		"parameters": 2,
+ 		"shortcut": "",
+ 	}
+)
+```
+We do not have to pass a parameter to the `Show Log` command since the default is `0`. We passed
+parameter `1` to `Show WARNINGS`, and `2` to `Show ERRORS`. Notices that it is ok to not write a shortcut
+for a command because `Show WARNINGS` and `Show ERRORS` have no shortcuts but can be called via commander window.
 
-
-# def show_log_window(self, text):
-# 	dir_path = os.path.dirname(os.path.realpath(__file__))
-# 	builder = Gtk.Builder()
-# 	builder.add_from_file(f"{dir_path}/logger.glade")
-# 	window = builder.get_object("log_window")
-# 	textview = builder.get_object("log_textview")
-# 	textview.get_buffer().set_text(text)
-# 	window.set_transient_for(self.app.window)
-# 	window.show_all()
-
-
-# restart gamma, press shift+ctrl+L or alt and search show log
-
-# alt again and search show errors
-
-
-
-
-# add to bottom
-
-# def show_log_window(self, text):
-# 	dir_path = os.path.dirname(os.path.realpath(__file__))
-# 	builder = Gtk.Builder()
-# 	builder.add_from_file(f"{dir_path}/logger.glade")
-# 	window = builder.get_object("log_window")
-# 	log_scrolled = builder.get_object("log_scrolled_window")
-# 	textview = builder.get_object("log_textview")
-# 	textview.get_buffer().set_text(text)
-# 	window.remove(log_scrolled)
-# 	
-# 	style_provider = Gtk.CssProvider()
-# 	style_provider.load_from_path(f"{dir_path}/logger.css")
-# 	log_scrolled.get_style_context().add_provider(
-# 		style_provider,
-# 		Gtk.STYLE_PROVIDER_PRIORITY_USER
-# 	)
-# 	
-# 	textview.get_style_context().add_provider(
-# 		style_provider,
-# 		Gtk.STYLE_PROVIDER_PRIORITY_USER
-# 	)
-# 	
-# 	log_scrolled.show_all()
-# 	
-# 	# get right side body
-# 	right_side_body = self.builder.get_object("right_side_body")
-# 	scrolled_sourceview = right_side_body.get_children()[0]
-# 	right_side_body.remove(scrolled_sourceview)
-# 	
-# 	# create paned
-# 	paned = Gtk.Paned.new(Gtk.Orientation.VERTICAL)
-# 	paned.pack1(scrolled_sourceview, True, False)
-# 	paned.pack2(log_scrolled, False, True)
-# 	paned.set_position(500)
-# 			
-# 	right_side_body.pack_start(paned, True, True, 0)
-# 	right_side_body.show_all()
-		
-		
+Restart Gamma, press Alt, type err, click on Show ERRORS.
 
 
 
+## Create the UI for logger window
+-	Open Glade
+-	Create new project
+-	Click `toplevels`, select `GtkWindow` (click save)
+	-	save to `./plugins/logger/logger.glade`
+-	Click `Display`, search and select `GtkTextView` (click save)
+-	Right click on `GtkTextView`, add parent, select `ScrolledWindow` (click save)
+-	Select `GtkWindow` and set `id` to `log_window`
+-	Select `GtkScrolledWindow` and set `id` to `log_scrolled_window`
+-	Select `GtkTextView` and set `id` to `log_textview` (click save)
+
+Sometimes when not saving after adding a widget the rest actions will not work.
+That's why I recommend after each widget addition.
+Make sure the `logger.glade` looks like the xml below:
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.22.1 -->
+<interface>
+   <requires lib="gtk+" version="3.20"/>
+   <object class="GtkWindow" id="log_window">
+     <property name="can_focus">False</property>
+     <property name="title" translatable="yes">Gamma Log</property>
+     <property name="default_width">600</property>
+     <property name="default_height">300</property>
+     <child>
+       <object class="GtkScrolledWindow">
+         <property name="visible">True</property>
+         <property name="can_focus">True</property>
+         <property name="shadow_type">in</property>
+         <child>
+           <object class="GtkTextView" id="log_textview">
+             <property name="visible">True</property>
+             <property name="can_focus">True</property>
+           </object>
+         </child>
+       </object>
+     </child>
+   </object>
+</interface>
+```
+
+Import the `os` library at the top of `logger.py` (`import os`). Aplly the following changes in `show_log` method:
+```
+def show_log(self, log_type=0):
+ 	text = "\nlog:\n"
+
+ 	if log_type == 0:
+ 		for l in self.log_array:
+ 			text += l + '\n'
+ 	elif log_type == 1:
+ 		for l in self.log_array:
+ 			if l.find("WARNING:") == 0:
+ 				text += l + '\n'
+ 	elif log_type == 2:
+ 		for l in self.log_array:
+ 			if l.find("ERROR:") == 0:
+ 				text += l + '\n'
+
+ 	print(text)
+ 	self.show_log_window(text)
+```
+
+Add `show_log_window` method below:
+```
+def show_log_window(self, text):
+	# get current file's directory path
+ 	dir_path = os.path.dirname(os.path.realpath(__file__))
+ 	
+ 	# create new GtkBuilder
+ 	builder = Gtk.Builder()
+ 	
+ 	# load the UI glade file we have just created to the builder
+ 	builder.add_from_file(f"{dir_path}/logger.glade")
+ 	
+ 	# get the window "log_window" from .glade file
+ 	window = builder.get_object("log_window")
+ 	 	
+ 	# get the window "log_textview" from .glade file
+ 	textview = builder.get_object("log_textview")
+ 	
+ 	# set the text in GtkTextView to "text"
+ 	textview.get_buffer().set_text(text)
+ 	
+ 	# make the log window as transient for the main app window
+ 	# i.e. always at top
+ 	window.set_transient_for(self.app.window)
+ 	
+ 	# show log window and its all children
+ 	window.show_all()
+```
+
+Restart Gamma, press shift+ctrl+L or Alt and search show log to see the log window. Close log window and 
+press Alt again and search show errors.
 
 
 
-# css
+## Add logger to the bottom of the editor
+Instead of opening new window to show the log, we will add it to the bottom of the Gamma editor.
+This is done by:
+-	Detaching/remove `log_scrolled` from `log_window`
+-	Get the `right_side_body` widget (GtkBox) from our main window/builder
+-	Detaching/remove `scrolled_sourceview` (has the GtkSourceview as child) from `right_side_body`
+-	Create a `Gtk.Paned` (which allow to add two children widgets and adjust their size)
+-	Add `scrolled_sourceview` and `log_scrolled` to the `paned`
+-	Add the `paned` to `right_side_body`
+
+Apply the changes below to `show_log_window` method: 
+```
+def show_log_window(self, text):
+ 	dir_path = os.path.dirname(os.path.realpath(__file__))
+ 	builder = Gtk.Builder()
+ 	builder.add_from_file(f"{dir_path}/logger.glade")
+ 	window = builder.get_object("log_window")
+ 	log_scrolled = builder.get_object("log_scrolled_window")
+ 	textview = builder.get_object("log_textview")
+ 	textview.get_buffer().set_text(text)
+ 	
+ 	window.remove(log_scrolled) 	 	
+ 	log_scrolled.show_all()
+ 	
+ 	# get right side body
+ 	right_side_body = self.builder.get_object("right_side_body")
+ 	scrolled_sourceview = right_side_body.get_children()[0]
+ 	right_side_body.remove(scrolled_sourceview)
+ 	
+ 	# create paned
+ 	paned = Gtk.Paned.new(Gtk.Orientation.VERTICAL)
+ 	paned.pack1(scrolled_sourceview, True, False)
+ 	paned.pack2(log_scrolled, False, True)
+ 	paned.set_position(500)
+ 			
+ 	right_side_body.pack_start(paned, True, True, 0)
+ 	right_side_body.show_all()
+```
+
+Restart Gamma, press shift+ctrl+L or Alt and search show log to see the log at the bottom.
+
+
+
+## Apply .css style to logger widgets
+Create a new `.css` file by pressing `Ctrl+N`. Save the file to `./plugins/logger/logger.css`.
+Write the following `css` code to `logger.css`:
+```
 #log_scrolled_window {
-	# border: none;
-# }
+	border: none;
+}
 
 #log_textview text {
-	# background: @gamma_bg_color;
-	# color: @gamma_fg_color;
-# }
+	background: @gamma_bg_color;
+	color: @gamma_fg_color;
+}
+```
+The `@gamma_bg_color` and `@gamma_fg_color` are defined colors in `chocolate-icecream-solid.css`, so
+make sure that the current Gamma style selected is `chocolate-icecream-solid.css`. Or,
+change `background` and `color` to your favourite colors.
+
+Make sure that in `logger.glade` you have set `Widget Name` for each widget. Open `Glade`, open 
+`logger.glade` files. Select `log_window`, click on `Common`, write `log_window` in the `Widget Name` field.
+Apply this to both `log_scrolled_window` and `log_textview` write their ids in `Widget Name`.
+
+The `Widget Name` is the name that is accessible as `id` to `.css` file. To use `#log_textview` id in `.css`, you 
+neet to have the `Widget Name` of the `GtkTextView` widget set to `log_textview`. Notice that you can also add style
+classes in Glade.
+
+
+To apply the `./plugins/logger/logger.css` to our logger widgets add the following to `show_log_window` method:
+```
+style_provider = Gtk.CssProvider()
+style_provider.load_from_path(f"{dir_path}/logger.css")
+log_scrolled.get_style_context().add_provider(
+	style_provider,
+	Gtk.STYLE_PROVIDER_PRIORITY_USER
+)
+
+textview.get_style_context().add_provider(
+	style_provider,
+	Gtk.STYLE_PROVIDER_PRIORITY_USER
+)
+```
+
+The `show_log_window` method will look like:
+```
+def show_log_window(self, text):
+	dir_path = os.path.dirname(os.path.realpath(__file__))
+	builder = Gtk.Builder()
+	builder.add_from_file(f"{dir_path}/logger.glade")
+	window = builder.get_object("log_window")
+	log_scrolled = builder.get_object("log_scrolled_window")
+	textview = builder.get_object("log_textview")
+	textview.get_buffer().set_text(text)
+	window.remove(log_scrolled)
+	
+	style_provider = Gtk.CssProvider()
+	style_provider.load_from_path(f"{dir_path}/logger.css")
+	log_scrolled.get_style_context().add_provider(
+		style_provider,
+		Gtk.STYLE_PROVIDER_PRIORITY_USER
+	)
+	
+	textview.get_style_context().add_provider(
+		style_provider,
+		Gtk.STYLE_PROVIDER_PRIORITY_USER
+	)
+	
+	log_scrolled.show_all()
+	
+	# get right side body
+	right_side_body = self.builder.get_object("right_side_body")
+	scrolled_sourceview = right_side_body.get_children()[0]
+	right_side_body.remove(scrolled_sourceview)
+	
+	# create paned
+	paned = Gtk.Paned.new(Gtk.Orientation.VERTICAL)
+	paned.pack1(scrolled_sourceview, True, False)
+	paned.pack2(log_scrolled, False, True)
+	paned.set_position(500)
+			
+	right_side_body.pack_start(paned, True, True, 0)
+	right_side_body.show_all()
+```
+
+Restart Gamma, press shift+ctrl+L or Alt and search show log to see the log at the bottom with applied style.
 
 
 
+## Use other plugins in Logger
+Let's use the `message_notify` plugin to show an error message when cannot open a file.
+Add the following line in `log_error` method.
+```
+self.plugins["message_notify.message_notify"] \
+											.show_message(f'ERROR: {message}', 3)
+```
+Make sure you have a reference to `app.plugins_manager.plugins` in your `__init__` method.
+```
+self.plugins = app.plugins_manager.plugins
+```
 
-# self.plugins["message_notify.message_notify"] \
-# 											.show_message(f'ERROR: {message}', 3)
-
-
-# restart gamma 
-# ctrl+O
-# try to open /etc/shadow
-# see the message on top left
+Restart Gamma, press `Ctrl+O`, and try to open `/etc/shadow`. See the message on top right.
 
 
 
-# help pages
+## Add Help pages for Logger
+Gamma uses [Yelp](https://wiki.gnome.org/Apps/Yelp/) for help display. For the pages formate,
+Gamma uses [Mallard](http://projectmallard.org/).
+
+Add these two files to `./plugins/help`:
+
+`./plugins/help/logger_plugin.page`
+```
+<page xmlns="http://projectmallard.org/1.0/"
+      type="guide"
+      id="logger_plugin">
+<info>
+  <link type="guide" xref="plugins"/>
+</info>
+<title>Logger Plugin</title>
+<p>Displays logs in both console and bottom panel</p>
+
+<p>Plugin: <code>logger</code></p>
+</page>
+```
+
+
+`./plugins/help/logger_shortcuts.page`
+```
+<page xmlns="http://projectmallard.org/1.0/"
+      type="topic"
+      id="logger_shortcut">
+<info>
+  <link type="guide" xref="shortcuts"/>
+  <link type="guide" xref="logger_plugin"/>
+</info>
+<title>Logger Shortcuts</title>
+<table shade="rows" frame="all" rules="rows cols">
+  <tr>
+    <td><p>Show Log</p></td> <td><code>Shift + Ctrl + L</code></td>
+  </tr>
+</table>
+<p>Plugin: <code>logger</code></p>
+</page>
+```
+
+
+
 

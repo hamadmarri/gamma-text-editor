@@ -8,7 +8,7 @@
 <title>About Shortcuts</title>
 <table shade="rows" frame="all" rules="rows cols">
   <tr>
-    <td><p>Show About Window</p></td> <td><code>Alt + a</code></td>
+    <td><p>Show About Window</p></td> <td><code>Alt + A</code></td>
   </tr>
 </table>
 <p>Plugin: <code>about</code></p>
