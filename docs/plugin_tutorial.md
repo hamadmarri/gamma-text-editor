@@ -451,7 +451,7 @@ Make sure that in `logger.glade` you have set `Widget Name` for each widget. Ope
 Apply this to both `log_scrolled_window` and `log_textview` write their ids in `Widget Name`.
 
 The `Widget Name` is the name that is accessible as `id` to `.css` file. To use `#log_textview` id in `.css`, you 
-neet to have the `Widget Name` of the `GtkTextView` widget set to `log_textview`. Notice that you can also add style
+need to have the `Widget Name` of the `GtkTextView` widget set to `log_textview`. Notice that you can also add style
 classes in Glade.
 
 
@@ -519,8 +519,7 @@ Restart Gamma, press shift+ctrl+L or Alt and search show log to see the log at t
 Let's use the `message_notify` plugin to show an error message when cannot open a file.
 Add the following line in `log_error` method.
 ```
-self.plugins["message_notify.message_notify"] \
-											.show_message(f'ERROR: {message}', 3)
+self.plugins["message_notify.message_notify"].show_message(f'ERROR: {message}', 3)
 ```
 Make sure you have a reference to `app.plugins_manager.plugins` in your `__init__` method.
 ```
@@ -572,6 +571,7 @@ Add these two files to `./plugins/help`:
 </page>
 ```
 
-
+No need to restart Gamma, click `H` in the left side menu, or press `F1`. See the logger help pages
+in `Plugins` and `Shortcuts and Keybindings`.
 
 
