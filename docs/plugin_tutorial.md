@@ -1,4 +1,21 @@
 # Plugin Tutorial
+
+-	[Introduction](#introduction)
+-	[Copy form the template](#copy-form-the-template)
+-	[Author, Name of the plugin, and Remove unwanted comments and methods](#author-name-of-the-plugin-and-remove-unwanted-comments-and-methods)
+-	[Add logger to plugins_array in plugins_manager](#add-logger-to-plugins_array-in-plugins_manager)
+-	[Test our plugin](#test-our-plugin)
+-	[Export our commands to the commander](#export-our-commands-to-the-commander)
+-	[Design our plugin programming interface](#design-our-plugin-programming-interface)
+-	[Store logs in array](#store-logs-in-array)
+-	[Create the UI for logger window](#create-the-ui-for-logger-window)
+-	[Add logger to the bottom of the editor](#add-logger-to-the-bottom-of-the-editor)
+-	[Apply .css style to logger widgets](#apply-css-style-to-logger-widgets)
+-	[Use other plugins in Logger](#use-other-plugins-in-logger)
+-	[Add Help pages for Logger](#add-help-pages-for-logger)
+
+
+## Introduction
 In this tutorial you will be able to accomplish the following tasks:
 *	Getting input or information from Gamma editor
 *	Getting input or information from other plugins
@@ -250,7 +267,7 @@ plugin.commands.append(
  		"plugin-name": plugin.name,
  		"name": "Show WARNINGS",
  		"ref": plugin.show_log,
- 		`"parameters": 1,`
+ 		"parameters": 1,
  		"shortcut": "",
  	}
 )
