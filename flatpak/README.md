@@ -3,7 +3,7 @@
 To install:
 ```
 cd flatpak
-flatpak-builder --force-clean --install --user ./build/ com.editor.gamma.json
+flatpak-builder --force-clean --install --user ./build/ com.github.hamadmarri.gamma.json
 ```
 
 Note: changes on Gamma's files need to be on files located under `gamma` directory, not

@@ -1,15 +1,15 @@
 #! /usr/bin/bash
 
 # copy icon to ~/.icons
-mkdir -p ~/.icons/ && cp ./bin/icon.svg ~/.icons/com.editor.gamma.svg
+mkdir -p ~/.icons/ && cp ./bin/icon.svg ~/.icons/com.github.hamadmarri.gamma.svg
 
 
-# edit com.editor.gamma.desktop put the path 
-cp ./bin/com.editor.gamma.desktop.bak ./bin/com.editor.gamma.desktop
-sed -i -e "s,\[gamma path placeholder\],$PWD/bin/gamma," ./bin/com.editor.gamma.desktop
+# edit com.github.hamadmarri.gamma.desktop put the path 
+cp ./bin/com.github.hamadmarri.gamma.desktop.bak ./bin/com.github.hamadmarri.gamma.desktop
+sed -i -e "s,\[gamma path placeholder\],$PWD/bin/gamma," ./bin/com.github.hamadmarri.gamma.desktop
 
 # and copy to ~/.local/share/applications
-mkdir -p ~/.local/share/applications/ && cp ./bin/com.editor.gamma.desktop ~/.local/share/applications/
+mkdir -p ~/.local/share/applications/ && cp ./bin/com.github.hamadmarri.gamma.desktop ~/.local/share/applications/
  
  
 # copy gtksource styles
