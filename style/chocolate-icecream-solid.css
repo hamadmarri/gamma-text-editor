@@ -29,6 +29,12 @@ FOREGROUND: #ffffda rgba(255, 255, 218, 0.86) 847479
 @define-color gamma_bg_color #36292d;
 @define-color gamma_fg_color #ffffda;
 
+window * {
+	border:none;
+	box-shadow:none;
+}
+
+
 /* from theme */
 headerbar entry, headerbar button, headerbar separator {
   margin-top: 6px;
