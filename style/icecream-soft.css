@@ -5,6 +5,11 @@ You can temporarily disable this custom CSS by clicking on the “Pause” butto
 Changes are applied instantly and globally, for the whole application.
 */
  
+ window * {
+	border:none;
+	box-shadow:none;
+}
+
 
 /* from theme */
 headerbar entry, headerbar button, headerbar separator {

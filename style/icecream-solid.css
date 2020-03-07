@@ -26,6 +26,13 @@ FOREGROUND: #827082 #6B5C6B
 
 */
 
+
+window * {
+	border:none;
+	box-shadow:none;
+}
+
+
 /* from theme */
 headerbar entry, headerbar button, headerbar separator {
   margin-top: 6px;

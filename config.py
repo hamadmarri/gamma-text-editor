@@ -32,12 +32,12 @@ ui_file = "builder.ui"
 
 # default css style file
 # style_file = "default.css"
-style_file = "chocolate-icecream-solid.css"
+style_file = "icecream-soft.css"
 
 # style scheme for srource view style
 # usually sourceview style files are in 
 # ~/.local/share/gtksourceview-4/styles
-style_scheme = "chocolateicecream"
+style_scheme = "icecream"
 
 
 
