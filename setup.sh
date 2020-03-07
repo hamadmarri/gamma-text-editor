@@ -12,6 +12,10 @@ sed -i -e "s,\[gamma path placeholder\],$PWD/bin/gamma," ./bin/com.editor.gamma.
 mkdir -p ~/.local/share/applications/ && cp ./bin/com.editor.gamma.desktop ~/.local/share/applications/
  
  
+# copy gtksource styles
+mkdir -p ~/.local/share/gtksourceview-4/styles/ && cp ./gtksourceview_styles/* ~/.local/share/gtksourceview-4/styles/
+ 
+ 
  # create a symbolic link to gamma sh file
-sudo ln -s $PWD/bin/gamma /usr/bin/gamma
+sudo ln -s $PWD/bin/gamma /usr/bin/gamma-editor
 
