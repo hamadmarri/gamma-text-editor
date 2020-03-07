@@ -9,7 +9,8 @@
     	"--socket=x11",
 		"--share=ipc",
 		"--socket=session-bus",
-		"--filesystem=host"
+		"--filesystem=host",
+		"--own-name=com.editor.gamma"
     ],
     "modules": [
     	{
@@ -27,12 +28,13 @@
             "name": "gamma",
             "buildsystem": "simple",
             "build-commands": [
-            	"./flatpak/flatpak_setup.sh"
+            	"./flatpak/flatpak_setup.sh",
+            	"install -Dm644 ${FLATPAK_ID}.metainfo.xml -t /app/share/metainfo/"
             ],
             "sources": [
                 {
                     "type": "dir",
-                    "path": "../."
+                    "path": "."
                 }
             ]
         }

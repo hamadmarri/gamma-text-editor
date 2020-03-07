@@ -2,7 +2,9 @@
 
 # copy icon to ~/.icons
 install -d /app/share/icons/hicolor/128x128/apps/
+install -d /app/share/icons/hicolor/64x64/apps/
 install -D ./bin/icon.svg /app/share/icons/hicolor/128x128/apps/com.editor.gamma.svg
+install -D ./bin/icon.svg /app/share/icons/hicolor/64x64/apps/com.editor.gamma.svg
 
 
 # edit com.editor.gamma.desktop put the path 
@@ -16,8 +18,8 @@ install -D ./bin/com.editor.gamma.desktop /app/share/applications/
 
 
 # copy fonts
-install -d /app/share/fonts/
-cp -ar /usr/share/fonts/. /app/share/fonts
+# install -d /app/share/fonts/
+# cp -ar /usr/share/fonts/. /app/share/fonts
 
 
 
