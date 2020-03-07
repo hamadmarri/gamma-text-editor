@@ -1,5 +1,6 @@
 *.pyo
 *.pyc
+.flatpak-builder
 flatpak/build/
 flatpak/.flatpak-builder/
 
