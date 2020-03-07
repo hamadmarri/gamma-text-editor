@@ -8,7 +8,8 @@
     	"--share=network",
     	"--socket=x11",
 		"--share=ipc",
-		"--socket=session-bus"
+		"--socket=session-bus",
+		"--filesystem=host"
     ],
     "modules": [
     	{
