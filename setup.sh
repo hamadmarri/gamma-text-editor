@@ -8,8 +8,8 @@ mkdir -p ~/.icons/ && cp ./bin/icon.svg ~/.icons/io.gitlab.hamadmarri.gamma.svg
 cp ./bin/io.gitlab.hamadmarri.gamma.desktop.bak ./bin/io.gitlab.hamadmarri.gamma.desktop
 sed -i -e "s,\[gamma path placeholder\],$PWD/bin/gamma," ./bin/io.gitlab.hamadmarri.gamma.desktop
 
-# and copy to ~/.local/share/applications
-mkdir -p ~/.local/share/applications/ && cp ./bin/io.gitlab.hamadmarri.gamma.desktop ~/.local/share/applications/
+# and move to ~/.local/share/applications
+mkdir -p ~/.local/share/applications/ && mv ./bin/io.gitlab.hamadmarri.gamma.desktop ~/.local/share/applications/
  
  
 # copy gtksource styles
