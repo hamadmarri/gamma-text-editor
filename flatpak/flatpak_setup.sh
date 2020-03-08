@@ -3,17 +3,17 @@
 # copy icon to ~/.icons
 install -d /app/share/icons/hicolor/128x128/apps/
 install -d /app/share/icons/hicolor/64x64/apps/
-install -D ./bin/icon.svg /app/share/icons/hicolor/128x128/apps/com.github.hamadmarri.gamma.svg
-install -D ./bin/icon.svg /app/share/icons/hicolor/64x64/apps/com.github.hamadmarri.gamma.svg
+install -D ./bin/icon.svg /app/share/icons/hicolor/128x128/apps/io.gitlab.hamadmarri.gamma.svg
+install -D ./bin/icon.svg /app/share/icons/hicolor/64x64/apps/io.gitlab.hamadmarri.gamma.svg
 
 
-# edit com.github.hamadmarri.gamma.desktop put the path 
-cp ./bin/com.github.hamadmarri.gamma.desktop.bak ./bin/com.github.hamadmarri.gamma.desktop
-sed -i -e "s,\[gamma path placeholder\], /app/bin/gamma," ./bin/com.github.hamadmarri.gamma.desktop
+# edit io.gitlab.hamadmarri.gamma.desktop put the path 
+cp ./bin/io.gitlab.hamadmarri.gamma.desktop.bak ./bin/io.gitlab.hamadmarri.gamma.desktop
+sed -i -e "s,\[gamma path placeholder\], /app/bin/gamma," ./bin/io.gitlab.hamadmarri.gamma.desktop
 
 # and copy to ~/.local/share/applications
 install -d /app/share/applications/
-install -D ./bin/com.github.hamadmarri.gamma.desktop /app/share/applications/
+install -D ./bin/io.gitlab.hamadmarri.gamma.desktop /app/share/applications/
 
 
 

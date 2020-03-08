@@ -45,10 +45,10 @@ class Application(Gtk.Application):
 
 	def __init__(self, *args, **kwargs):	
 		
-		# make the package name as "com.github.hamadmarri.gamma"
+		# make the package name as "io.gitlab.hamadmarri.gamma"
 		# FLAGS_NONE means no passing arguments from command line, this
 		# might be changed later to support new window, new file, or open a file
-		super().__init__(*args, application_id="com.github.hamadmarri.gamma", 
+		super().__init__(*args, application_id="io.gitlab.hamadmarri.gamma", 
 						flags=Gio.ApplicationFlags.FLAGS_NONE, **kwargs)
 		
 		# this line is important to mak gtk object(newer version of pygtk) to
@@ -118,7 +118,7 @@ class Application(Gtk.Application):
 		filenames = os.getenv('GAMMA_OPEN_FILE')
 		self.plugins_manager.plugins["files_manager.openfile"].open_files_from_args(filenames)
 		
-		self.window.set_icon_name("com.github.hamadmarri.gamma")
+		self.window.set_icon_name("io.gitlab.hamadmarri.gamma")
 		self.window.show_all()
 
 

@@ -1,5 +1,5 @@
 {
-	"app-id": "com.github.hamadmarri.gamma",
+	"app-id": "io.gitlab.hamadmarri.gamma",
 	"runtime": "org.gnome.Platform",
 	"runtime-version": "3.34",
 	"sdk": "org.gnome.Sdk",
@@ -11,7 +11,7 @@
 		"--share=ipc",
 		"--socket=session-bus",
 		"--filesystem=host",
-		"--own-name=com.github.hamadmarri.gamma"
+		"--own-name=io.gitlab.hamadmarri.gamma"
 	],
 	"modules": [
 		{

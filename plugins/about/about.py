@@ -69,7 +69,7 @@ class Plugin():
 		
 		about.set_license_type(Gtk.License.GPL_3_0_ONLY)
 		
-		about.set_logo_icon_name("com.github.hamadmarri.gamma")
+		about.set_logo_icon_name("io.gitlab.hamadmarri.gamma")
 		about.set_program_name("Gamma Text Editor")
 		about.set_version("0.0.1 Beta")
 
