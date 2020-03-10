@@ -55,8 +55,8 @@ class SignalHandler:
 	# SignalHandler sets the main signals such as key press 
 	def set_handlers(self):
 		self.handlers.on_window_key_press_event = self.on_window_key_press_event
-		self.handlers.resizeBodySide = self.resizeBodySide
-		self.handlers.resizeHeaderSide = self.resizeHeaderSide
+		# self.handlers.resizeBodySide = self.resizeBodySide
+		# self.handlers.resizeHeaderSide = self.resizeHeaderSide
 
 		
 	
@@ -109,15 +109,15 @@ class SignalHandler:
 	
 	# when resize the left panel of the files, need
 	# to resize the header too "Files"
-	def resizeBodySide(self, bodyPaned, param):
-		headerPaned = self.builder.get_object("headerPaned")
-		headerPaned.set_position(bodyPaned.get_position())
-		
+	# def resizeBodySide(self, bodyPaned, param):
+	# 	headerPaned = self.builder.get_object("headerPaned")
+	# 	headerPaned.set_position(bodyPaned.get_position())
+	# 	
 	# when resize the "Files" header, need
 	# to resize left panel of the files too 
-	def resizeHeaderSide(self, headerPaned, param):
-		bodyPaned = self.builder.get_object("bodyPaned")
-		bodyPaned.set_position(headerPaned.get_position())
+	# def resizeHeaderSide(self, headerPaned, param):
+	# 	bodyPaned = self.builder.get_object("bodyPaned")
+	# 	bodyPaned.set_position(headerPaned.get_position())
 		
 		
 		

@@ -43,6 +43,8 @@ class Plugin():
 		self.message_notify = None
 		self.openfile = None
 		
+		self.auto_resize = True
+		
 	
 	
 	def activate(self):
@@ -64,6 +66,9 @@ class Plugin():
 	
 	# setting handlers, see SignalHandler
 	def set_handlers(self):
+		self.handlers.resizeBodySide = self.resizeBodySide
+		self.handlers.resizeHeaderSide = self.resizeHeaderSide
+		
 		self.handlers.on_closeBtn_release_event = self.on_closeBtn_release_event
 		self.handlers.on_maximizeBtn_release_event = self.on_maximizeBtn_release_event
 		self.handlers.on_minimizeBtn_release_event = self.on_minimizeBtn_release_event
@@ -91,7 +96,32 @@ class Plugin():
 		elif ctrl and keyval_name == "q":
 			self.quit()
 			
+				
+			
 
+
+	# when resize the "Files" header, need
+	# to resize left panel of the files too 
+	def resizeHeaderSide(self, headerPaned, param):
+		if not self.auto_resize:
+			headerPaned.set_position(34)
+			return
+		
+		bodyPaned = self.builder.get_object("bodyPaned")
+		bodyPaned.set_position(headerPaned.get_position())
+		
+		
+	# when resize the left panel of the files, need
+	# to resize the header too "Files"
+	def resizeBodySide(self, bodyPaned, param):
+		if not self.auto_resize:
+			bodyPaned.set_position(34)
+			return
+		
+		headerPaned = self.builder.get_object("headerPaned")
+		headerPaned.set_position(bodyPaned.get_position())
+	
+	
 	
 	# iconify is the gtk method to minimize window
 	def minimize(self):

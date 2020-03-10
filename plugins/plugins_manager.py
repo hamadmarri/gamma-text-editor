@@ -65,6 +65,7 @@ plugin_list = [
 	"fast_copy_cut_duplicate.fast_copy_cut_duplicate",
 	"typing_assistant.typing_assistant",
 	"logger.logger",
+	"toggle_files_list.toggle_files_list",
 	
 
 
