@@ -19,6 +19,7 @@
 
 
 import os
+
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
@@ -33,11 +34,13 @@ class Plugin():
 		self.plugins = app.plugins_manager.plugins
 		self.signal_handler = app.signal_handler
 		self.commands = []
+		self.signal_handler.connect("startup", self.open_for_first_time)
 		
 
 	def activate(self):
 		self.signal_handler.key_bindings_to_plugins.append(self)
 		commands.set_commands(self)
+		self.dir_path = os.path.dirname(os.path.realpath(__file__))
 
 		
 	def key_bindings(self, event, keyval_name, ctrl, alt, shift):
@@ -48,10 +51,16 @@ class Plugin():
 			
 	def show_welcome(self):
 		files_mngr = self.plugins["files_manager.files_manager"]
-		dir_path = os.path.dirname(os.path.realpath(__file__))
-		welcome_file = f"{dir_path}/welcome"
+		welcome_file = f"{self.dir_path}/welcome"
 		
 		files_mngr.open_files((welcome_file, ))
 		sourceview = files_mngr.current_file.source_view
 		sourceview.set_editable(False)
 		
+
+	def open_for_first_time(self):
+		first_time_file = f"{self.dir_path}/first_time"
+		not_first_time_file = f"{self.dir_path}/not_first_time"
+		if os.path.isfile(first_time_file):
+			os.rename(first_time_file, not_first_time_file)
+			self.show_welcome()
