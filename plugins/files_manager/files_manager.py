@@ -79,11 +79,12 @@ class Plugin(CommandsCtrl, CreateFileMixin, CloseFileMixin, OpenFileMixin):
 			self.close_all()
 		elif ctrl and keyval_name == "n":
 			self.create_new_file()
-			
-		elif shift and ctrl and keyval_name == "Z":
-			print("files\n")
-			for i, f in enumerate(self.files):
-				print(i, f.filename)
+		
+		# DEBUG: print files array
+		# elif shift and ctrl and keyval_name == "Z":
+		# 	print("files\n")
+		# 	for i, f in enumerate(self.files):
+		# 		print(i, f.filename)
 			
 	
 	

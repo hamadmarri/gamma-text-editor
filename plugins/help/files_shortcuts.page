@@ -25,6 +25,12 @@
   <tr>
     <td><p>New File</p></td> <td><code>Ctrl + N</code></td>
   </tr>
+  <tr>
+    <td><p>Close File</p></td> <td><code>Ctrl + W</code></td>
+  </tr>
+  <tr>
+    <td><p>Close All Files</p></td> <td><code>Shift + Ctrl + W</code></td>
+  </tr>
 </table>
 <p>Plugin: <code>files_manager</code></p>
 </page>
