@@ -20,6 +20,7 @@
 #	to files_manager.open_files method
 #
 
+import os
 
 import gi
 gi.require_version('Gtk', '3.0')
@@ -36,6 +37,7 @@ class Plugin(FilterMixin):
 		self.signal_handler = app.signal_handler
 		self.plugins = app.plugins_manager.plugins
 		self.commands = []
+		self.signal_handler.connect("startup", self.open_files_from_args)
 		
 		
 	def activate(self):
@@ -43,10 +45,12 @@ class Plugin(FilterMixin):
 		commands.set_commands(self)
 		
 		
-	def open_files_from_args(self, args):
+	def open_files_from_args(self, args=None):
+		if not args:
+			args = os.getenv('GAMMA_OPEN_FILE')
+		
 		if args:
 			filenames = args.split()
-#			print(filenames)
 			self.plugins["files_manager.files_manager"].open_files(filenames)				
 		else:
 			print("no GAMMA_OPEN_FILE")

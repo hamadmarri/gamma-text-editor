@@ -99,16 +99,20 @@ class PluginsManager():
 			# initializing plugin and passing the
 			# reference of app
 			module = plugin.Plugin(self.app)
-			# module.activate()
+			
+			# activate plugins 
+			module.activate()
 			
 			# add a reference of the plugin 
 			# to plugins dictionary and array
 			self.plugins[p] = module
 			self.plugins_array.append(module)
+
 		
-		# activate plugins 
-		for p in self.plugins_array:
-			p.activate()
+		# emitting startup where any plugin could connect to
+		# startup signal. It is save to reach other plugins 
+		# from startup signals since all have been activated 
+		self.app.signal_handler.emit("startup")
 			
 			
 	
