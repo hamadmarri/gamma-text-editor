@@ -64,7 +64,7 @@ class Plugin():
 		elif ctrl and keyval_name == "Return":
 			self.move_to_next_line()
 		
-		
+
 		
 	def move_to_next_line(self):		
 		# get current viewing file' buffer
@@ -78,6 +78,11 @@ class Plugin():
 			return False
 		
 		position = buffer.get_iter_at_mark(buffer.get_insert())
+		
+		# check if iter is already at the end of the line
+		if position.ends_line():
+			return False
+		
 		position.forward_to_line_end()
 		buffer.place_cursor(position)
 		
