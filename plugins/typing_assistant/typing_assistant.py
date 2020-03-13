@@ -16,7 +16,7 @@
 #	You should have received a copy of the GNU General Public License
 #	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
-#
+#`
 #
 #
 #
@@ -41,7 +41,8 @@ class Plugin():
 			"parenleft": "(",
 			"bracketleft": "[",
 			"braceleft": "{",
-			 "less": "<" 
+			 "less": "<", 
+			 "grave": "`", 
 		}
 		self.close = {
 			"\"": "\"",
@@ -50,6 +51,7 @@ class Plugin():
 			"[": "]",
 			"{": "}",
 			"<": ">",
+			"`": "`",
 		}
 
 
@@ -124,6 +126,16 @@ class Plugin():
 		text += self.close[text]
 		
 		position = buffer.get_iter_at_mark(buffer.get_insert())
+		
+		# check if the next char is normal text 
+		# if so, do not add the closing part
+		c = position.get_char()
+		if not c in (" ", "", "\n", "\r") \
+			and not c in list(self.close.values()):
+			return False
+		
+		
+		
 		buffer.insert(position, text)
 		
 		# place cursor inbetween
@@ -148,9 +160,7 @@ class Plugin():
 		end = buffer.get_iter_at_mark(end_mark)
 		t = self.close[t]
 		buffer.insert(end, t)
-		
-		
-		
+				
 		start = buffer.get_iter_at_mark(start_mark)
 		end = buffer.get_iter_at_mark(end_mark)
 		end.backward_char()
@@ -160,5 +170,6 @@ class Plugin():
 		
 		# stop propagation
 		return True
+		
 	
 	
