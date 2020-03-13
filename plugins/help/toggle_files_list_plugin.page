@@ -1,0 +1,12 @@
+<page xmlns="http://projectmallard.org/1.0/"
+      type="guide"
+      id="toggle_files_list_plugin">
+<info>
+  <link type="guide" xref="plugins"/>
+</info>
+<title>Toggle Files List Visibility Plugin</title>
+<p>Toggle (hides/shows) the files list to make the text editing area wider.
+Clicking on <code>Files</code> or on the Gamma log <code>Γ</code> will toggle files list visibility</p>
+
+<p>Plugin: <code>toggle_files_list</code></p>
+</page>

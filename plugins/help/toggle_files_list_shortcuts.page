@@ -1,0 +1,16 @@
+<page xmlns="http://projectmallard.org/1.0/"
+      type="topic"
+      id="toggle_files_list_shortcut">
+<info>
+  <link type="guide" xref="shortcuts"/>
+  <link type="guide" xref="toggle_files_list_plugin"/>
+</info>
+<title>Toggle Files List Visibility Shortcuts</title>
+
+<table shade="rows" frame="all" rules="rows cols">
+  <tr>
+    <td><p>Toggle (Show/Hide) Files</p></td> <td><code>Alt + f</code></td>
+  </tr>
+</table>
+<p>Plugin: <code>toggle_files_list</code></p>
+</page>

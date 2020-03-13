@@ -49,9 +49,18 @@
 
 <section>
 <title>Links</title>
+<list>
+<item>
 <p>
-<link href="https://gitlab.com/hamadmarri/gamma-text-editor">Gamma Text Editor - GitLab</link>
+	<link href="https://gitlab.com/hamadmarri/gamma-text-editor">Gamma Text Editor - GitLab</link>
 </p>
+</item>
+<item>
+<p>
+	<link href="https://github.com/hamadmarri/gamma">Gamma Text Editor - GitHub</link>
+</p>
+</item>
+</list>
 </section>
 
 </page>

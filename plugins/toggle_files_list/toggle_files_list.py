@@ -38,8 +38,14 @@ class Plugin():
 		self.plugins = app.plugins_manager.plugins
 		self.signal_handler = app.signal_handler
 		self.commands = []
+		
+		# the state of current visibility
 		self.removed = False
+		
+		# previous size of the left side file list size
 		self.old_size = 0
+		
+		# the far left side size where menu is.
 		self.min_size = 0
 		
 		
@@ -48,14 +54,17 @@ class Plugin():
 		self.signal_handler.key_bindings_to_plugins.append(self)
 		commands.set_commands(self)
 		
+		# get widgets references from builder
 		toolbar_ctrls = self.builder.get_object("toolbar_ctrls")
-		self.min_size = toolbar_ctrls.get_allocated_width()
-		
 		self.bodyPaned = self.builder.get_object("bodyPaned")
 		self.toolbar_side = self.builder.get_object("toolbar_side")
 		self.headerPaned = self.builder.get_object("headerPaned")
 		self.header_left_side = self.builder.get_object("header_left_side")
-		
+		self.scrolled_toolbar_files = self.builder.get_object("scrolled_toolbar_files")
+
+		# get the menu current size which is default 34px
+		self.min_size = toolbar_ctrls.get_allocated_width()
+
 		self.setup_event_boxes()
 		
 				
@@ -94,16 +103,18 @@ class Plugin():
 		
 		
 	
+	# on hover, show hand cursor
 	def on_headerbarSide_enter_notify_event(self, widget, event):
 		cursor = Gdk.Cursor(Gdk.CursorType.HAND2)
 		self.app.window.get_window().set_cursor(cursor)
 		
-	
+	# on leave hover, show back the default cursor
 	def on_headerbarSide_leave_notify_event(self, widget, event):
 		cursor = Gdk.Cursor(Gdk.CursorType.ARROW)
 		self.app.window.get_window().set_cursor(cursor)
 		
-		
+	
+	# when click on "Files" or "Γ" logo, toggle files visibility
 	def on_headerbarSide_button_press_event(self, widget, event):
 		self.toggle_files_list()
 	
@@ -119,7 +130,8 @@ class Plugin():
 		
 	def hide_files(self):
 		self.old_size = self.bodyPaned.get_position()
-		self.scrolled_toolbar_files = self.builder.get_object("scrolled_toolbar_files")
+		
+		# to avoid auto resizing when hiding files list
 		self.plugins["window_ctrl.window_ctrl"].auto_resize = False
 		self.toolbar_side.remove(self.scrolled_toolbar_files)
 		self.bodyPaned.set_position(0)
