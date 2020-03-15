@@ -23,7 +23,9 @@ class FilesUI(object):
 		btnName.get_children()[0].set_xalign(0)
 				
 		# set headerbar text to the filename
-		self.update_header(self.plugins["files_manager.files_manager"].current_file.filename)
+		current_file = self.THE("files_manager", "current_file", None)
+		if current_file:
+			self.update_header(current_file.filename)
 		
 		
 
@@ -115,12 +117,12 @@ class FilesUI(object):
 	# handler of "clicked" event
 	# it switch the view to the filename in clicked button
 	def side_file_clicked(self, btn, box, newfile):
-		self.plugins["files_manager.files_manager"].side_file_clicked(newfile.filename)
+		self.THE("files_manager", "side_file_clicked", {"filename": newfile.filename})
 		
 		
 		
 	def close_file_clicked(self, btn, box, newfile):		
-		self.plugins["files_manager.files_manager"].close_file(newfile.filename)
+		self.THE("files_manager", "close_file", {"filename": newfile.filename})
 		
 				
 		

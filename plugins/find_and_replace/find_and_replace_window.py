@@ -62,10 +62,11 @@ class FindReplaceWindow(object):
 	
 	def hide(self):
 		self.window.hide()
-		# remove color from "F and R" menu
-		window_ctrl = self.plugins["window_ctrl.window_ctrl"]
-		window_ctrl.remove_attention(window_ctrl.F)
-		window_ctrl.remove_attention(window_ctrl.R)
+		# remove color from "F and R" menu		
+		F_menu = self.THE("window_controller", "F", None)
+		R_menu = self.THE("window_controller", "R", None)
+		self.THE("window_controller", "remove_attention", {"menu": F_menu})
+		self.THE("window_controller", "remove_attention", {"menu": R_menu})
 		
 		self.new_search = True
 		self.clear_highlights()
@@ -86,11 +87,12 @@ class FindReplaceWindow(object):
 			self.hide()
 		else:
 			self.window.show_all()
-			# show color for "F and R" menu
-			window_ctrl = self.plugins["window_ctrl.window_ctrl"]
-			window_ctrl.grap_attention(window_ctrl.F)
+			# show color for "F and R" menu			
+			F_menu = self.THE("window_controller", "F", None)
+			self.THE("window_controller", "grap_attention", {"menu": F_menu})
 			if self.show_replace:
-				window_ctrl.grap_attention(window_ctrl.R)
+				R_menu = self.THE("window_controller", "R", None)
+				self.THE("window_controller", "grap_attention", {"menu": R_menu})
 
 
 
@@ -168,10 +170,10 @@ class FindReplaceWindow(object):
 
 
 	def on_replace_expander_button_press_event(self, w, e):
-		window_ctrl = self.plugins["window_ctrl.window_ctrl"]
+		R_menu = self.THE("window_controller", "R", None)
 		
 		if w.get_expanded():
 			# remove color from "F and R" menu
-			window_ctrl.remove_attention(window_ctrl.R)
+			self.THE("window_controller", "remove_attention", {"menu": R_menu})
 		else:
-			window_ctrl.grap_attention(window_ctrl.R)
+			self.THE("window_controller", "grap_attention", {"menu": R_menu})

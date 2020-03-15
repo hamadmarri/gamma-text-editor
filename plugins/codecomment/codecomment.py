@@ -42,9 +42,9 @@ class Plugin(AddCommentMixin, RemoveCommentMixin, CodeCommentTags):
 	
 
 	def __init__(self, app):
-		self.name = "codecomment.codecomment2"
+		self.name = "codecomment.codecomment"
 		self.app = app
-		self.plugins = app.plugins_manager.plugins
+		self.THE = app.plugins_manager.THE
 		self.signal_handler = app.signal_handler
 		self.commands = []
 		
@@ -62,7 +62,12 @@ class Plugin(AddCommentMixin, RemoveCommentMixin, CodeCommentTags):
 			
 
 	def do_comment(self):
-		sourceview = self.plugins["files_manager.files_manager"].current_file.source_view
+		current_file = self.THE("files_manager", "current_file", None)
+		if not current_file:
+			return
+
+		sourceview = current_file.source_view
+			
 		buffer = sourceview.get_buffer()
 		
 		lang = buffer.get_language()

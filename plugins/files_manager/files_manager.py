@@ -45,7 +45,7 @@ class Plugin(CommandsCtrl, CreateFileMixin, CloseFileMixin, OpenFileMixin):
 		self.app = app
 		self.signal_handler = app.signal_handler
 		self.builder = app.builder
-		self.plugins = app.plugins_manager.plugins
+		self.THE = app.plugins_manager.THE
 		self.sourceview_manager = app.sourceview_manager
 		self.commands = []
 		self.files = []
@@ -110,7 +110,8 @@ class Plugin(CommandsCtrl, CreateFileMixin, CloseFileMixin, OpenFileMixin):
 			self.update_commanders_add(file_object)
 						
 			file_object.new_file = False	# not new anymore
-			self.plugins["ui_manager.ui_manager"].rename_file(file_object)
+			self.THE("ui_manager", "rename_file", {"file_object": file_object})
+			
 			
 		
 		
@@ -130,7 +131,7 @@ class Plugin(CommandsCtrl, CreateFileMixin, CloseFileMixin, OpenFileMixin):
 		# add newfile to files array
 		self.add_file_to_list(newfile)
 		
-		self.plugins["ui_manager.ui_manager"].add_filename_to_ui(newfile)
+		self.THE("ui_manager", "add_filename_to_ui", {"newfile", newfile})
 		self.switch_to_file(len(self.files) - 1)		
 				
 				
@@ -159,26 +160,26 @@ class Plugin(CommandsCtrl, CreateFileMixin, CloseFileMixin, OpenFileMixin):
 			return
 		
 		buffer = self.current_file.source_view.get_buffer()
-		self.plugins["highlight.highlight"].remove_highlight(buffer)
+		self.THE("highlighter", "remove_highlight", {"buffer": buffer})
 		
 		# get file object
 		f = self.files[file_index]
 				
 		# replace the source view
-		self.plugins["ui_manager.ui_manager"].replace_sourceview_widget(f.source_view)
+		self.THE("ui_manager", "replace_sourceview_widget", {"newsource": f.source_view})
 		
 		self.current_file = f
 		
 		# update ui, set selected
-		self.plugins["ui_manager.ui_manager"].set_currently_displayed(self.current_file.ui_ref)
-			
+		self.THE("ui_manager", "set_currently_displayed", {"box": self.current_file.ui_ref})
+		
 		# update headerbar to filename
-		self.plugins["ui_manager.ui_manager"].update_header(f.filename, f.editted)
+		self.THE("ui_manager", "update_header", {"filename": f.filename, "editted": f.editted})
 		
 		# show message of the full path of the file 
 		# it is useful to avoid confusion when having 
 		# different files with similar names in different paths
-		self.plugins["message_notify.message_notify"].show_message(f.filename)
+		self.THE("message_notifier", "show_message", {"m": f.filename})
 		
 		
 		self.signal_handler.emit("file-switched", self.current_file.source_view)

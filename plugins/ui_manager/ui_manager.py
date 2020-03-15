@@ -38,7 +38,7 @@ class Plugin(FilesUI):
 		self.app = app
 		self.builder = app.builder
 		self.handlers = app.signal_handler.handlers
-		self.plugins = app.plugins_manager.plugins
+		self.THE = app.plugins_manager.THE
 		self.sourceview_manager = app.sourceview_manager
 		self.commands = []
 		self.set_handlers()

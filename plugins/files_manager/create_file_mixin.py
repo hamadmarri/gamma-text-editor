@@ -16,7 +16,7 @@ class CreateFileMixin(object):
 		# self.files.append(newfile)
 		self.add_file_to_list(newfile)
 		
-		self.plugins["ui_manager.ui_manager"].add_filename_to_ui(newfile)
+		self.THE("ui_manager", "add_filename_to_ui", {"newfile": newfile})
 		self.switch_to_file(len(self.files) - 1)	
 		
 		self.counter += 1

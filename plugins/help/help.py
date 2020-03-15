@@ -32,7 +32,6 @@ class Plugin():
 	def __init__(self, app):
 		self.name = "help"
 		self.app = app
-		self.plugins = app.plugins_manager.plugins
 		self.signal_handler = app.signal_handler
 		self.commands = []
 		

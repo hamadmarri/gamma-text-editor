@@ -35,7 +35,7 @@ class Plugin():
 		self.app = app
 		self.builder = app.builder
 		self.signal_handler = app.signal_handler
-		self.plugins = app.plugins_manager.plugins
+		self.THE = app.plugins_manager.THE
 		self.commands = []
 		self.signal_handler.connect("log", self.log)
 		self.signal_handler.connect("log-warning", self.log_warning)
@@ -133,7 +133,6 @@ class Plugin():
 		print(f'ERROR: {message}')
 		self.log_array.append(f'ERROR: {message}')
 		
-		self.plugins["message_notify.message_notify"] \
-											.show_message(f'ERROR: {message}', 3)
+		self.THE("message_notifier", "show_message", {"m": f'ERROR: {message}', "state": 3})
 		
 		

@@ -48,32 +48,30 @@ class File():
 		# print(f"editted {self.filename}")
 		
 		# show save all "S" menu in color
-		window_ctrl = self.files_manager.plugins["window_ctrl.window_ctrl"]
-		window_ctrl.grap_attention(window_ctrl.S)
+		save_menu = self.files_manager.THE("window_controller", "S", None)
+		self.files_manager.THE("window_controller", "grap_attention", {"menu": save_menu})
 		
 		# change ui file appearance
-		self.files_manager.plugins["ui_manager.ui_manager"].set_editted(self.ui_ref)
+		self.files_manager.THE("ui_manager", "set_editted", {"box": self.ui_ref})
 		
 
 	def reset_editted(self):		
 		# reset editted
 		self.editted = False
 		self.files_manager.editted_counter -= 1
-		
-		# print(f"reset editted {self.filename}")
-		
+				
 		# change ui file appearance
-		self.files_manager.plugins["ui_manager.ui_manager"].reset_editted(self.ui_ref)
+		self.files_manager.THE("ui_manager", "reset_editted", {"box": self.ui_ref})
 		
 		# check if need to show save all "S" menu in color
-		window_ctrl = self.files_manager.plugins["window_ctrl.window_ctrl"]
+		save_menu = self.files_manager.THE("window_controller", "S", None)
 		files = self.files_manager.files
 		for f in files:
 			if f.editted:
-				window_ctrl.grap_attention(window_ctrl.S)
+				self.files_manager.THE("window_controller", "grap_attention", {"menu": save_menu})
 				return
 		
-		window_ctrl.remove_attention(window_ctrl.S)
+		self.files_manager.THE("window_controller", "remove_attention", {"menu": save_menu})
 
 
 

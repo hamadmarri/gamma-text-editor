@@ -38,7 +38,7 @@ class Plugin():
 		self.signal_handler = app.signal_handler
 		self.handlers = app.signal_handler.handlers
 		self.builder = app.builder
-		self.plugins = app.plugins_manager.plugins
+		self.THE = app.plugins_manager.THE
 		self.sourceview = None
 		self.buffer = None
 		self.commands = []
@@ -86,12 +86,25 @@ class Plugin():
 		self.handlers.on_search_focus_out_event = self.on_search_focus_out_event
 		
 	
+	def set_search_flags(self, search_flags):
+		self.search_flags = search_flags
+		
+		
+	def set_whole_word(self, whole_word):
+		self.whole_word = whole_word
+		
+		
 	def refresh_source(self, new_source):
 		self.quit_search()
-		h = self.plugins["highlight.highlight"]
 		self.sourceview = new_source
 		self.buffer = self.sourceview.get_buffer()
-		self.tag = h.get_custom_tag(self.buffer, self.tag_name, self.props)
+		
+		args = {
+			"buffer": self.buffer,
+			"tag_name": self.tag_name,
+			"props": self.props
+		}
+		self.tag = self.THE("highlighter", "get_custom_tag", args)
 		
 	
 	
@@ -108,7 +121,9 @@ class Plugin():
 			self.clear_search(widget)
 			
 			# set focus back to sourceview
-			self.plugins["files_manager.files_manager"].current_file.source_view.grab_focus()
+			current_file = self.THE("files_manager", "current_file", None)
+			if current_file:
+				current_file.source_view.grab_focus()
 			
 		elif (shift and keyval_name == "Return") or keyval_name == "Up":
 			# self.refresh_sources()
@@ -143,10 +158,10 @@ class Plugin():
 	def quit_search(self):
 		self.is_highlight_done = False
 		if self.buffer:
-			self.plugins["highlight.highlight"].remove_highlight(self.buffer, self.tag)
+			self.THE("highlighter", "remove_highlight", {"buffer": self.buffer, "tag": self.tag})
 		self.set_selected_iters(None, None)
 		if self.buffer:
-			self.plugins["highlight.highlight"].remove_highlight(self.buffer)
+			self.THE("highlighter", "remove_highlight", {"buffer": self.buffer})
 		self.update_style(-1)
 	
 	
@@ -209,17 +224,23 @@ class Plugin():
 			self.buffer = buffer
 		
 		# remove selected tag (bold text)
-		self.plugins["highlight.highlight"].remove_highlight(buffer, self.tag)
+		self.THE("highlighter", "remove_highlight", {"buffer": self.buffer, "tag": self.tag})
 		self.set_selected_iters(None, None)
 		
 		# print(f"search.whole_word: {self.whole_word}")
 		self.search = search
-		self.count = self.plugins["highlight.highlight"].highlight( buffer, \
-									self.search, self.search_flags, self.whole_word)
+
+		args = {
+			"buffer": buffer,
+			"search": self.search,
+			"search_flags": self.search_flags,
+			"whole_word": self.whole_word
+		}
+		self.count = self.THE("highlighter", "highlight", args)
 		
 		# if no results while search is not empty
 		if self.count == 0 and self.search:
-			self.plugins["message_notify.message_notify"].show_message("Search Results | 0")
+			self.THE("message_notifier", "show_message", {"m": "Search Results | 0"})
 			self.update_style(2)
 			return
 			
@@ -239,8 +260,7 @@ class Plugin():
 
 
 	def scroll_next(self):		
-		highlight = self.plugins["highlight.highlight"]
-		marks = highlight.marks
+		marks = self.THE("highlighter", "marks", None)
 		
 		if not marks:
 			return
@@ -255,8 +275,7 @@ class Plugin():
 					
 	
 	def scroll_prev(self):
-		highlight = self.plugins["highlight.highlight"]
-		marks = highlight.marks
+		marks = self.THE("highlighter", "marks", None)
 		
 		if not marks:
 			return
@@ -274,21 +293,38 @@ class Plugin():
 		match_end = self.buffer.get_iter_at_mark(marks[next_mark_pos + 1])
 		
 		self.sourceview.scroll_to_mark(marks[self.match_number * 2], 0.20, False, 1.0, 0.5)
-		self.plugins["message_notify.message_notify"].show_message( \
-					"Search Results | " + str(self.match_number + self.deleted_marks + 1) + "/" + str(self.count))
+		self.THE("message_notifier", "show_message", \
+						{"m": "Search Results | " + str(self.match_number + self.deleted_marks + 1) + "/" + str(self.count)})
+						
 		self.highlight_scrolled(match_start, match_end)
 			
 	
 	
-	def highlight_scrolled(self, start_iter, end_iter):
-		h = self.plugins["highlight.highlight"]
-		self.tag = h.get_custom_tag(self.buffer, self.tag_name, self.props)
+	def highlight_scrolled(self, start_iter, end_iter):	
+		args = {
+			"buffer": self.buffer,
+			"tag_name": self.tag_name,
+			"props": self.props
+		}
+		self.tag = self.THE("highlighter", "get_custom_tag", args)
 		
 		# remove old highlight
-		if self.old_start_iter:
-			h.remove_highlight(self.buffer, self.tag, self.old_start_iter, self.old_end_iter)
+		if self.old_start_iter:		
+			args = {
+				"buffer": self.buffer,
+				"tag": self.tag,
+				"start_iter": self.old_start_iter,
+				"end_iter": self.old_end_iter
+			}
+			self.THE("highlighter", "remove_highlight", args)
 		
-		h.highlight_custom_tag(self.buffer, start_iter, end_iter, self.tag)
+		args = {
+			"buffer": self.buffer,
+			"start_iter": start_iter,
+			"end_iter": end_iter,
+			"tag": self.tag
+		}
+		self.THE("highlighter", "highlight_custom_tag", args)
 		self.set_selected_iters(start_iter, end_iter)
 		
 		
@@ -296,7 +332,7 @@ class Plugin():
 	def clear_search(self, widget):
 		self.search = ""
 		widget.set_text(self.search)
-		self.plugins["highlight.highlight"].remove_highlight(self.buffer, self.tag)
+		self.THE("highlighter", "remove_highlight", {"buffer": self.buffer, "tag": self.tag})
 		
 	
 	def set_selected_iters(self, s_iter, e_iter):
@@ -310,8 +346,7 @@ class Plugin():
 
 
 	def delete_current_marks(self):
-		highlight = self.plugins["highlight.highlight"]
-		marks = highlight.marks
+		marks = self.THE("highlighter", "marks", None)
 		
 		s_mark = marks[self.match_number * 2]
 		e_mark = marks[(self.match_number * 2) + 1]

@@ -39,7 +39,7 @@ class Plugin():
 		self.app = app
 		self.builder = app.builder
 		self.plugins_manager = app.plugins_manager
-		self.plugins = app.plugins_manager.plugins
+		self.THE = app.plugins_manager.THE
 		self.signal_handler = app.signal_handler
 		self.handlers = app.signal_handler.handlers
 		self.commands_tree = CommandsTree()
@@ -127,8 +127,7 @@ class Plugin():
 		for c in self.commands:
 			self.commands_tree.insert(c)
 			
-		self.plugins["message_notify.message_notify"] \
-							.show_message(f"{self.commands_tree.size} commands loaded")
+		self.THE("message_notifier", "show_message", {"m": f"{self.commands_tree.size} commands loaded"})
 	
 	
 	def add_command(self, c):

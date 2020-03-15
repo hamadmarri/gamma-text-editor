@@ -81,7 +81,7 @@ class OpenFileMixin(object):
 		buffer = newsource.get_buffer()
 		self.sourceview_manager.set_language(filename, buffer)
 
-		self.plugins["ui_manager.ui_manager"].add_filename_to_ui(newfile)
+		self.THE("ui_manager", "add_filename_to_ui", {"newfile": newfile})
 		
 		self.signal_handler.emit("log", f"open {filename}")
 

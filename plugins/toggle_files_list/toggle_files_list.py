@@ -35,7 +35,7 @@ class Plugin():
 		self.name = "toggle_files_list"
 		self.app = app
 		self.builder = app.builder
-		self.plugins = app.plugins_manager.plugins
+		self.THE = app.plugins_manager.THE
 		self.signal_handler = app.signal_handler
 		self.commands = []
 		
@@ -132,7 +132,7 @@ class Plugin():
 		self.old_size = self.bodyPaned.get_position()
 		
 		# to avoid auto resizing when hiding files list
-		self.plugins["window_ctrl.window_ctrl"].auto_resize = False
+		self.THE("window_controller", "set_auto_resize", {"auto_resize": False})
 		self.toolbar_side.remove(self.scrolled_toolbar_files)
 		self.bodyPaned.set_position(0)
 		
@@ -145,7 +145,7 @@ class Plugin():
 		
 		
 	def show_files(self):
-		self.plugins["window_ctrl.window_ctrl"].auto_resize = True
+		self.THE("window_controller", "set_auto_resize", {"auto_resize": True})
 		self.header_left_side.pack_start(self.eventBox, True, True, 0)
 		self.toolbar_side.pack_start(self.scrolled_toolbar_files, True, True, 0)
 		

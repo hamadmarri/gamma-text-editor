@@ -35,7 +35,7 @@ class Plugin():
 		self.name = "highlight"
 		self.app = app
 		self.sourceview_manager = app.sourceview_manager
-		self.plugins = app.plugins_manager.plugins
+		self.THE = app.plugins_manager.THE
 		self.commands = []
 		self.tag_name = "search-match"
 		self.spaces_pattern = re.compile("^\s+$")
@@ -93,7 +93,7 @@ class Plugin():
 				# which help to select any text string 
 				# by other plugins like find or search
 				counter = self.highlight(buffer, search)
-				self.plugins["message_notify.message_notify"].show_message(f"Highlighted | {counter}")
+				self.THE("message_notifier", "show_message", {"m": f"Highlighted | {counter}"})
 		
 	
 	# "search" is a string text

@@ -37,7 +37,7 @@ class Plugin():
 		self.app = app
 		self.sourceview_manager = app.sourceview_manager
 		self.signal_handler = app.signal_handler
-		self.plugins = app.plugins_manager.plugins
+		self.THE = app.plugins_manager.THE
 		self.commands = []
 
 		
@@ -58,9 +58,9 @@ class Plugin():
 	
 	
 	def save_all(self):
-		editted_counter = self.plugins["files_manager.files_manager"].editted_counter
+		editted_counter = self.THE("files_manager", "editted_counter", None)
 		if editted_counter > 0:
-			files = self.plugins["files_manager.files_manager"].files
+			files = self.THE("files_manager", "files", None)
 			# loop through all files objects
 			# reversed so from user prespective "from top to bottom"
 			for f in reversed(files):
@@ -71,7 +71,7 @@ class Plugin():
 					
 	def save_current_file(self):
 		# get the current displayed file
-		current_file = self.plugins["files_manager.files_manager"].current_file
+		current_file = self.THE("files_manager", "current_file", None)
 		self.save_file(current_file)
 		
 	
@@ -90,14 +90,14 @@ class Plugin():
 		
 		# check if file is new
 		if file_object.new_file:
-			files_manager = self.plugins["files_manager.files_manager"]
 			# switch to file to let the user 
 			# know which file is it
-			files_manager.switch_to_file(files_manager.get_file_index(file_object.filename))
+			file_index = self.THE("files_manager", "get_file_index", {"filename": file_object.filename})
+			self.THE("files_manager", "switch_to_file", {"file_index": file_index})
 			new_filename = self.show_save_dialog()
 			if new_filename:
 				self.write_file(new_filename, text)
-				files_manager.rename_file(file_object, new_filename)
+				self.THE("files_manager", "rename_file", {"file_object": file_object, "filename": new_filename})
 				file_object.reset_editted()
 				
 				# set the language of new created file 
@@ -124,7 +124,7 @@ class Plugin():
 				 						(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
 										Gtk.STOCK_SAVE, Gtk.ResponseType.ACCEPT))
 		
-		dialog.set_current_folder(self.plugins["files_manager.files_manager"].get_directory())
+		dialog.set_current_folder(self.THE("files_manager", "get_directory" , {}))
 		
 		dialog.set_do_overwrite_confirmation(True);
 		
@@ -157,7 +157,7 @@ class Plugin():
 		else:
 			# when successfully wrote the file, show successful message
 			basename = os.path.basename(filename)
-			self.plugins["message_notify.message_notify"].show_message(basename + " | Saved", 2)
+			self.THE("message_notifier", "show_message", {"m": f"{basename} | Saved", "state": 2})
 			f.close()
 
 			

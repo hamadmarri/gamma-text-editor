@@ -41,7 +41,7 @@ class Plugin(SpecialPaste, DuplicateLine, CutLine, CopyLine):
 	def __init__(self, app):
 		self.name = "fast_copy_cut_duplicate"
 		self.app = app
-		self.plugins = app.plugins_manager.plugins
+		self.THE = app.plugins_manager.THE
 		self.signal_handler = app.signal_handler 
 		self.commands = []
 		self.copied_line = ""

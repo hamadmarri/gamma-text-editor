@@ -69,19 +69,20 @@ class CloseFileMixin(object):
 			self.files[0].source_view.get_buffer().set_text("")
 			
 			# remove current sourceview and put the new empty sourceview
-			self.plugins["ui_manager.ui_manager"].replace_sourceview_widget(self.files[0].source_view)
+			self.THE("ui_manager", "replace_sourceview_widget", {"newsource": self.files[0].source_view})
+			
 			
 			# current file is now empty
 			self.current_file = self.files[0]
 			
 						
 			# since it is an empty file, set the headerbar to "Gamma"
-			self.plugins["ui_manager.ui_manager"].set_header("Gamma")
+			self.THE("ui_manager", "set_header", {"text": "Gamma"})
 			
 			# cancel and clear message 
 			# why? sometimes user save a file and close it right after,
 			# so no need to keep showing that file is saved
-			self.plugins["message_notify.message_notify"].cancel()
+			self.THE("message_notifier", "cancel", {})
 		
 			
 		
@@ -101,7 +102,7 @@ class CloseFileMixin(object):
 			# if user clicked save
 			if response == 0:
 				# save does the reset_editted
-				self.plugins["files_manager.savefile"].save_file(file_object)
+				self.THE("files_saver", "save_file", {"file_object": file_object})
 			
 			# if user clicked no
 			elif response == 2:

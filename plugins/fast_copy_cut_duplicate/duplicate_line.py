@@ -3,8 +3,12 @@
 class DuplicateLine(object):
 	
 	def duplicate_line(self):
-		# get current viewing file' buffer
-		buffer = self.plugins["files_manager.files_manager"].current_file.source_view.get_buffer()
+		# get current viewing file's buffer		
+		current_file = self.THE("files_manager", "current_file", None)
+		if not current_file:
+			return
+		
+		buffer = current_file.source_view.get_buffer()
 		
 		# get selection bound
 		selection = buffer.get_selection_bounds()

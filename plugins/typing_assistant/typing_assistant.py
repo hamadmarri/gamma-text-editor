@@ -32,7 +32,7 @@ class Plugin():
 		self.name = "typing_assistant"
 		
 		self.app = app
-		self.plugins = app.plugins_manager.plugins
+		self.THE = app.plugins_manager.THE
 		self.signal_handler = app.signal_handler 
 		self.commands = []
 		self.chars = {
@@ -69,8 +69,13 @@ class Plugin():
 
 		
 	def move_to_next_line(self):		
-		# get current viewing file' buffer
-		buffer = self.plugins["files_manager.files_manager"].current_file.source_view.get_buffer()
+		# get current viewing file's buffer		
+		current_file = self.THE("files_manager", "current_file", None)
+		if not current_file:
+			return
+		
+		buffer = current_file.source_view.get_buffer()
+		
 		
 		# get selection bound
 		selection = buffer.get_selection_bounds()
@@ -102,7 +107,12 @@ class Plugin():
 	def text_insert(self, text):
 	
 		# check if sourceview is in focus
-		sourceview = self.plugins["files_manager.files_manager"].current_file.source_view
+		current_file = self.THE("files_manager", "current_file", None)
+		if not current_file:
+			return
+		
+		sourceview = current_file.source_view
+		
 		if not sourceview.is_focus():
 			return False
 		

@@ -31,7 +31,7 @@ class Plugin():
 		self.signal_handler = app.signal_handler
 		self.builder = app.builder
 		self.window = app.window
-		self.plugins = app.plugins_manager.plugins
+		self.THE = app.plugins_manager.THE
 		self.handlers = app.signal_handler.handlers
 		self.is_maximized = None
 		
@@ -97,7 +97,9 @@ class Plugin():
 			self.quit()
 			
 				
-			
+	
+	def set_auto_resize(self, auto_resize):
+		self.auto_resize = auto_resize
 
 
 	# when resize the "Files" header, need
@@ -140,13 +142,14 @@ class Plugin():
 		# before quit, need to stop any notify message
 		# because of the thread sleep in message_notify
 		# must cancel the thread		
-		self.plugins["message_notify.message_notify"].cancel()
+		self.THE("message_notifier", "cancel", {})
 		
 		# close all files
-		self.plugins["files_manager.files_manager"].close_all()
+		self.THE("files_manager", "close_all", {})
 		
 		# if all files are closed (user didn't click "don't close")
-		editted_counter = self.plugins["files_manager.files_manager"].editted_counter
+		editted_counter = self.THE("files_manager", "editted_counter", None)
+		
 		if editted_counter == 0:
 			self.app.quit()
 		else:
@@ -166,39 +169,38 @@ class Plugin():
 	
 	####################### MENU ##############################
 	def on_new_menu_button_press_event(self, widget, event):
-		self.plugins["files_manager.files_manager"].create_new_file()
-
+		self.THE("files_manager", "create_new_file", {})
+		
 			
 			
 	################ OPEN #######################
 	def on_open_menu_button_press_event(self, widget, event):
-		self.plugins["files_manager.openfile"].openfile()
+		self.THE("files_opener", "openfile", {})
 		
 	################ NEW #########################
 	def on_project_menu_button_press_event(self, widget, event):
-		self.plugins["files_manager.opendir"].opendir()
+		self.THE("directory_opener", "opendir", {})
 	
 	################ SAVE ########################
 	def on_save_menu_button_press_event(self, widget, event):
-		self.plugins["files_manager.savefile"].save_all()
-		
+		self.THE("files_saver", "save_all", {})
 			
 			
 		
 	def on_find_menu_button_press_event(self, widget, event):
-		self.plugins["find_and_replace.find_and_replace"].show_window(show_replace=False)
+		self.THE("find_and_replace", "show_window", {"show_replace":False})
 		
 	def on_find_replace_menu_button_press_event(self, widget, event):
-		self.plugins["find_and_replace.find_and_replace"].show_window(show_replace=True)
+		self.THE("find_and_replace", "show_window", {"show_replace":True})
 		
 	def on_welcome_menu_button_press_event(self, widget, event):
-		self.plugins["welcome.welcome"].show_welcome()
+		self.THE("welcomer", "show_welcome", {})
 		
 	def on_help_menu_button_press_event(self, widget, event):
-		self.plugins["help.help"].show_help()
+		self.THE("helper", "show_help", {})
 		
 	def on_about_menu_button_press_event(self, widget, event):
-		self.plugins["about.about"].show_about()
+		self.THE("about", "show_about", {})
 		
 		
 	

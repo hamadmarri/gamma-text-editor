@@ -35,7 +35,7 @@ class Plugin(FilterMixin):
 		self.name = "openfile"
 		self.app = app
 		self.signal_handler = app.signal_handler
-		self.plugins = app.plugins_manager.plugins
+		self.THE = app.plugins_manager.THE
 		self.commands = []
 		self.signal_handler.connect("startup", self.open_files_from_args)
 		
@@ -51,7 +51,7 @@ class Plugin(FilterMixin):
 		
 		if args:
 			filenames = args.split()
-			self.plugins["files_manager.files_manager"].open_files(filenames)				
+			self.THE("files_manager", "open_files", {"filenames": filenames})
 		else:
 			print("no GAMMA_OPEN_FILE")
 		
@@ -76,7 +76,7 @@ class Plugin(FilterMixin):
 		
 		# otherwise, let files_manager controll open, read files, and
 		# set new sourceviews to each file.  
-		self.plugins["files_manager.files_manager"].open_files(filenames)
+		self.THE("files_manager", "open_files", {"filenames": filenames})
 
 	
 	
@@ -96,7 +96,7 @@ class Plugin(FilterMixin):
 		# add files types filters
 		self.add_filters(dialog)
 		
-		dialog.set_current_folder(self.plugins["files_manager.files_manager"].get_directory())
+		dialog.set_current_folder(self.THE("files_manager", "get_directory", {}))
 		
 		# can select and open multiple files
 		dialog.set_select_multiple(True)

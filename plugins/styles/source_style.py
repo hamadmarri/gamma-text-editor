@@ -36,7 +36,7 @@ class Plugin():
 		self.app = app
 		self.signal_handler = app.signal_handler
 		self.handlers = app.signal_handler.handlers
-		self.plugins = app.plugins_manager.plugins
+		self.THE = app.plugins_manager.THE
 		self.commands = []
 		self.default_size  = app.config['font-size']
 		self.current_size = app.config['font-size']
@@ -92,7 +92,7 @@ class Plugin():
 		
 		self.current_size += increment
 		size = str(self.current_size) + "px"
-		files = self.plugins["files_manager.files_manager"].files
+		files = self.THE("files_manager", "files", None)
 		for f in files:		
 			self.update_style(f.source_view, size=size)
 		
