@@ -103,6 +103,9 @@ class Plugin(CommandsCtrl, CreateFileMixin, CloseFileMixin, OpenFileMixin):
 			# rename file
 			file_object.filename = filename
 			
+			# attach parent directory to file 
+			self.set_parent_dir(file_object)
+			
 			# add new commander for the file
 			self.update_commanders_add(file_object)
 						
@@ -197,7 +200,14 @@ class Plugin(CommandsCtrl, CreateFileMixin, CloseFileMixin, OpenFileMixin):
 		
 	
 	
+	def set_parent_dir(self, aFile):
+		# attach parent directory to file 
+		parent_dir = os.path.dirname(aFile.filename)
+		aFile.parent_dir = parent_dir
+	
+	
 	def add_file_to_list(self, newfile):
+		self.set_parent_dir(newfile)
 		self.files.append(newfile)
 		self.update_commanders_add(newfile)
 		

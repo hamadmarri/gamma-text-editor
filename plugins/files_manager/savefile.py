@@ -105,11 +105,11 @@ class Plugin():
 				buffer = file_object.source_view.get_buffer()
 				self.sourceview_manager.set_language(new_filename, buffer)
 				
-						
+					
 				# TODO: if saved(overwrite) a file in Hard Drive, but that file 
 				# is already is open here! need to close old file 
+				# TODO: if user hit cancel on dialog, need to revert
 		else:
-			# TODO: if user hit cancel on dialog, need to revert
 			self.write_file(file_object.filename, text)
 			file_object.reset_editted()
 		

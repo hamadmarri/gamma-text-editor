@@ -1,4 +1,3 @@
-import os
 
 from .file import File
 
@@ -74,11 +73,6 @@ class OpenFileMixin(object):
 		# new File object
 		newfile = File(self, filename, newsource)
 		
-		# attach parent directory to file 
-		parent_dir = os.path.dirname(filename)
-		
-		newfile.parent_dir = parent_dir
-				
 		# add newfile object to "files" array
 		self.add_file_to_list(newfile)
 				
