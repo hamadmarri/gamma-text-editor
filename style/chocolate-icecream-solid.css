@@ -83,11 +83,11 @@ headerbar {
 #headerbarMain, #headerbarMain * {
 	background: #36292d;
 	color: rgba(255, 255, 218, 0.86);
-	border:none; 
+	border:none;
 }
 
 #headerbarMain {
-	padding: 8px 0 8px 0 ;
+	padding: 8px 0 8px 0;
 }
 
 #headerbarMain .title {

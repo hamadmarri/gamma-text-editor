@@ -23,9 +23,9 @@ YELLOW: #FCE94F
 GREEN: #0DD100
 WHITE: #FDFDFD
 FOREGROUND: #827082 #6B5C6B
-
 */
-
+@define-color gamma_bg_color #FDFDFD;
+@define-color gamma_fg_color #827082;
 
 window * {
 	border:none;
@@ -56,19 +56,6 @@ headerbar {
 
  
 
-
-
-
-
-
-
-
-#window {
-    background-color: transparent;
-    border:none;
-}
-
-
 .titlebar, headerbar {
     min-height: 0px;
     margin: 0px;
@@ -88,11 +75,12 @@ headerbar {
 #headerbarMain, #headerbarMain * {
 	background: #fdfdfd;
 	color: rgba(130, 112, 130, 0.77);
-	border:none; 
 }
 
 #headerbarMain {
-	padding: 8px 0 8px 0 ;
+	padding: 8px 0 8px 0;
+	border-style: solid none none none;
+	border-width: 1px;
 }
 
 #headerbarMain .title {

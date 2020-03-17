@@ -15,21 +15,17 @@
 
 /*
 COLORS:
-RED: #FF1946
 BLUE: #00B5FF
-ORANGE: #FF931F
-YELLOW: #FCE94F
 GREEN: #0DD100
-WHITE: #FDFDFD
-FOREGROUND: #827082 #6B5C6B
-
 */ 
-
+@define-color gamma_bg_color @theme_bg_color;
+@define-color gamma_fg_color @theme_fg_color;
 
  
 /********** HEADER *************/
 #headerbarSide {    
     border-top-right-radius: 0px;
+    border-top-left-radius: 0px;
 }
 
 
@@ -71,8 +67,10 @@ FOREGROUND: #827082 #6B5C6B
 
 
 #logo {
-    background: #827082; 
-    color: #FDFDFD;
+    /* background: #827082;*/
+    background: @theme_bg_color;
+    /* color: #FDFDFD;*/
+    color: @theme_fg_color;
 }
 
 /********** BODY *************/
