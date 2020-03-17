@@ -140,7 +140,7 @@ class Plugin():
 		# check if the next char is normal text 
 		# if so, do not add the closing part
 		c = position.get_char()
-		if not c in (" ", "", "\n", "\r") \
+		if not c in (" ", "", "\t", "\n", "\r") \
 			and not c in list(self.close.values()):
 			return False
 		
