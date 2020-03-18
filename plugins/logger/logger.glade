@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.22.2 -->
 <interface>
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkWindow" id="log_window">
@@ -8,7 +8,8 @@
     <property name="title" translatable="yes">Gamma Log</property>
     <property name="default_width">600</property>
     <property name="default_height">300</property>
-    <child>
+    <signal name="destroy" handler="on_log_window_destroy" swapped="no"/>
+    <child type="titlebar">
       <placeholder/>
     </child>
     <child>
