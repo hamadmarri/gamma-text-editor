@@ -58,7 +58,7 @@ plugin_list = [
 	{"name": "codecomment.codecomment", "category": "codecommenter"},
 	{"name": "find_and_replace.find_and_replace", "category": "find_and_replace"},
 	{"name": "terminal.terminal", "category": "terminal"},
-	# {"name": "bottom_panel.bottom_panel", "category": ""},
+	{"name": "bottom_panel.bottom_panel", "category": "bottom_panel"},
 	{"name": "welcome.welcome", "category": "welcomer"},
 	{"name": "help.help", "category": "helper"},
 	{"name": "about.about", "category": "about"},
@@ -100,9 +100,6 @@ class PluginsManager():
 			# reference of app
 			module = plugin.Plugin(self.app)
 			
-			# activate plugins 
-			module.activate()
-			
 			# add a reference of the plugin 
 			# to plugins categories and array			
 			if p["category"]:
@@ -110,6 +107,10 @@ class PluginsManager():
 			
 			self.plugins_array.append(module)
 
+		
+		# activate plugins 
+		for p in self.plugins_array:
+			p.activate()
 		
 		# emitting startup where any plugin could connect to
 		# startup signal. It is save to reach other plugins 
@@ -136,10 +137,10 @@ class PluginsManager():
 					# DEBUG: print("property")
 					return callable_method
 			else:
-				self.app.signal_handler.emit("log-error", f'THE: ({plugin_category}): No method/property: {method}')
+				self.app.signal_handler.emit("log-warning", f'THE: ({plugin_category}): No method/property: {method}')
 				return None
 		else:
-			self.app.signal_handler.emit("log-error", f'THE: No plugin/category: {plugin_category}')
+			self.app.signal_handler.emit("log-warning", f'THE: No plugin/category: {plugin_category}')
 			return None
 		
 		
