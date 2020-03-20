@@ -51,10 +51,11 @@ class Plugin():
 		self.builder.connect_signals(self.signals)
 		
 		window = self.builder.get_object("window")
-		self.bottom_panel = self.builder.get_object("bottom_panel")
-		window.remove(self.bottom_panel)
+		self.bottom_panel_body = self.builder.get_object("bottom_panel_body")
+		self.notebook = self.builder.get_object("bottom_panel_notebook")
+		window.remove(self.bottom_panel_body)
 		
-		self.hide_image = self.builder.get_object("hide_image")
+		# self.hide_image = self.builder.get_object("hide_image")
 		self.close_button = self.builder.get_object("close_button")
 		
 		# get right side body
@@ -64,8 +65,9 @@ class Plugin():
 	
 	def set_handlers(self):
 		self.signals = {
-			"on_bottom_panel_switch_page": self.on_bottom_panel_switch_page,
+			"on_notebook_switch_page": self.on_notebook_switch_page,
 			"on_close_button_clicked": self.on_close_button_clicked,
+			"on_hide_button_clicked": self.on_hide_button_clicked
 		}
 		
 			
@@ -79,23 +81,28 @@ class Plugin():
 	
 	
 	
-	def on_bottom_panel_switch_page(self, notebook, page, page_num):
+	def on_notebook_switch_page(self, notebook, page, page_num):
 		self.set_current_page(page, page_num)
 		
 		
 	def set_current_page(self, page, page_num):
 		self.current_page = page
 		self.current_page_num = page_num
-		current_label = self.bottom_panel.get_tab_label_text(page)
+		current_label = self.notebook.get_tab_label_text(page)
 		self.close_button.set_tooltip_text(f"Remove {current_label}")
 		
 		
 	
 	def on_close_button_clicked(self, widget):
+	
+		# notify plugin that the page is closed/removed
+		if hasattr(self.current_page, "on_page_remove"):
+			self.current_page.on_page_remove(self.current_page)
+
 		del self.added_plugins[self.current_page.plugin]
-		self.bottom_panel.remove_page(self.current_page_num)
+		self.notebook.remove_page(self.current_page_num)
 		
-		if self.bottom_panel.get_n_pages() == 0:
+		if self.notebook.get_n_pages() == 0:
 			self.hide_panel()
 	
 	
@@ -121,7 +128,7 @@ class Plugin():
 			self.old_position = paned.get_position()
 		
 		paned.remove(self.scrolled_sourceview)
-		paned.remove(self.bottom_panel)
+		paned.remove(self.bottom_panel_body)
 		self.right_side_body.remove(paned)		
 		self.right_side_body.pack_start(self.scrolled_sourceview, True, True, 0)		
 		self.visible = False
@@ -133,7 +140,7 @@ class Plugin():
 			return
 		
 		# if not pages, then show logs as default
-		if self.bottom_panel.get_n_pages() == 0:
+		if self.notebook.get_n_pages() == 0:
 			self.THE("logger", "show_log", {})
 			return
 			
@@ -143,7 +150,7 @@ class Plugin():
 		# create paned
 		paned = Gtk.Paned.new(Gtk.Orientation.VERTICAL)
 		paned.pack1(self.scrolled_sourceview, True, False)
-		paned.pack2(self.bottom_panel, False, True)
+		paned.pack2(self.bottom_panel_body, False, True)
 		
 		if self.old_position == 0:
 			self.old_position = 500
@@ -154,8 +161,8 @@ class Plugin():
 		self.right_side_body.show_all()
 				
 		# set current page
-		page_num = self.bottom_panel.get_current_page()
-		page = self.bottom_panel.get_nth_page(page_num)
+		page_num = self.notebook.get_current_page()
+		page = self.notebook.get_nth_page(page_num)
 		self.set_current_page(page, page_num)
 		
 		self.visible = True
@@ -163,45 +170,42 @@ class Plugin():
 		
 		
 		
-	def add(self, plugin, label, widget):
+	def add(self, plugin, label, widget, on_page_remove=None):
 		# check if page is already added
 		added = self.added_plugins.get(plugin)
 		if added:
 			self.show_panel()
-			page_num = self.bottom_panel.page_num(plugin.bottom_panel_page)
-			self.bottom_panel.set_current_page(page_num)
-			self.bottom_panel.set_tab_label(plugin.bottom_panel_page, Gtk.Label.new(label))
+			page_num = self.notebook.page_num(plugin.bottom_panel_page)
 			
+			# switch to this page
+			self.notebook.set_current_page(page_num)
+			
+			# update label (sometimes it is needed)
+			self.notebook.set_tab_label(plugin.bottom_panel_page, Gtk.Label.new(label))
 			return True
 		
 		self.added_plugins[plugin] = plugin
 	
 		tab_label = Gtk.Label.new(label)
 
-		child = widget
+		page = widget
 		
-		hide_btn = Gtk.Button.new()
-		hide_image_copy = Gtk.Image.new()
-		hide_image_copy.set_from_stock(*(self.hide_image.get_stock()))
-		hide_btn.set_image(hide_image_copy)
-		hide_btn.set_valign(Gtk.Align.END)
-		hide_btn.set_halign(Gtk.Align.END)
-		hide_btn.set_tooltip_text("Hide bottm panel")
-		hide_btn.connect("clicked", self.on_hide_button_clicked)
+		# bind plugin to page
+		page.plugin = plugin
 		
-		box_child = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
-		box_child.pack_start(child, True, True, 0)
-		box_child.pack_end(hide_btn, False, False, 0)
-		box_child.plugin = plugin
+		# bind on_page_remove callback to box_child
+		if on_page_remove:
+			page.on_page_remove = on_page_remove
 		
-		self.bottom_panel.append_page(box_child, tab_label)
-		self.bottom_panel.show_all()
+		self.notebook.append_page(page, tab_label)
+		self.notebook.show_all()
 		
 		self.show_panel()
 		
+		# bind page to plugin
+		plugin.bottom_panel_page = page
 		
-		plugin.bottom_panel_page = box_child
-		page_num = self.bottom_panel.page_num(box_child)
-		self.bottom_panel.set_current_page(page_num)
+		page_num = self.notebook.page_num(page)
+		self.notebook.set_current_page(page_num)
 		return True
 		
