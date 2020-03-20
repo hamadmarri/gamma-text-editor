@@ -42,11 +42,12 @@ class Plugin(ColorsMixin, LoggerGUI):
 		self.signal_handler.connect("log-warning", self.log_warning)
 		self.signal_handler.connect("log-error", self.log_error)
 		self.log_array = []
-		self.log_scrolled = None
+		self.log_body = None
 		self.need_reload = True
 		self.warning_color = None
 		self.error_color = None
 		self.log_type = 0
+		self.original_results = ""
 	
 	
 
@@ -59,6 +60,7 @@ class Plugin(ColorsMixin, LoggerGUI):
 	def set_handlers(self):
 		self.signals = {
 			"on_log_window_destroy": self.on_log_window_destroy,
+			"on_log_search_search_changed": self.on_log_search_search_changed,
 		}
 		
 

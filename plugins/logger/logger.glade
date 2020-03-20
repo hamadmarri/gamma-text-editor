@@ -13,17 +13,40 @@
       <placeholder/>
     </child>
     <child>
-      <object class="GtkScrolledWindow" id="log_scrolled_window">
-        <property name="name">log_scrolled_window</property>
+      <object class="GtkOverlay" id="log_body">
         <property name="visible">True</property>
-        <property name="can_focus">True</property>
-        <property name="shadow_type">in</property>
+        <property name="can_focus">False</property>
         <child>
-          <object class="GtkTextView" id="log_textview">
-            <property name="name">log_textview</property>
+          <object class="GtkScrolledWindow" id="log_scrolled_window">
+            <property name="name">log_scrolled_window</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="wrap_mode">word</property>
+            <property name="shadow_type">in</property>
+            <child>
+              <object class="GtkTextView" id="log_textview">
+                <property name="name">log_textview</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="wrap_mode">word</property>
+                <property name="bottom_margin">20</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="index">-1</property>
+          </packing>
+        </child>
+        <child type="overlay">
+          <object class="GtkSearchEntry" id="log_search">
+            <property name="width_request">220</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="halign">start</property>
+            <property name="valign">end</property>
+            <property name="primary_icon_name">edit-find-symbolic</property>
+            <property name="primary_icon_activatable">False</property>
+            <property name="primary_icon_sensitive">False</property>
+            <signal name="search-changed" handler="on_log_search_search_changed" swapped="no"/>
           </object>
         </child>
       </object>
