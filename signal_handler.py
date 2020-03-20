@@ -115,13 +115,13 @@ class SignalHandler:
 	
 	
 	
-	def emit(self, event, data=None):
+	def emit(self, event, *args):
 		self.setup_event(event)
 		e = getattr(self, event)
 		
 		for c in e.connected:
-			if data:
-				c(data)
+			if args:
+				c(*args)
 			else:
 				c()
 	
