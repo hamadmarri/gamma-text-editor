@@ -26,6 +26,9 @@ FOREGROUND: #827082 #6B5C6B
 */
 @define-color gamma_bg_color #FDFDFD;
 @define-color gamma_fg_color #827082;
+@define-color gamma_warning_color #FF931F;
+@define-color gamma_error_color #FF1946;
+
 
 window * {
 	border:none;

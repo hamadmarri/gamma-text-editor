@@ -123,7 +123,7 @@ class Plugin():
 		# gets start,end iters or None if no match
 		# first search start from the beggining of the buffer
 		# i.e. start_iter
-		matches = start_iter.forward_search(search, search_flags, None)			
+		matches = start_iter.forward_search(search, search_flags, None)
 		
 		# loop while still have matches (occurrences)
 		while matches != None:

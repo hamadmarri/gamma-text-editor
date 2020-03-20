@@ -81,6 +81,7 @@ import importlib
 class PluginsManager():
 
 	def __init__(self, app):
+		self.name = "plugins_manager"
 		self.app = app
 		self.plugins_array = []
 		self.categories = {}
@@ -137,10 +138,10 @@ class PluginsManager():
 					# DEBUG: print("property")
 					return callable_method
 			else:
-				self.app.signal_handler.emit("log-warning", f'THE: ({plugin_category}): No method/property: {method}')
+				self.app.signal_handler.emit("log-warning", self, f'THE: ({plugin_category}): No method/property: {method}')
 				return None
 		else:
-			self.app.signal_handler.emit("log-warning", f'THE: No plugin/category: {plugin_category}')
+			self.app.signal_handler.emit("log-warning", self, f'THE: No plugin/category: {plugin_category}')
 			return None
 		
 		

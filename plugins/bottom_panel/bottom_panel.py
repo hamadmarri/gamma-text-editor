@@ -170,6 +170,8 @@ class Plugin():
 			self.show_panel()
 			page_num = self.bottom_panel.page_num(plugin.bottom_panel_page)
 			self.bottom_panel.set_current_page(page_num)
+			self.bottom_panel.set_tab_label(plugin.bottom_panel_page, Gtk.Label.new(label))
+			
 			return True
 		
 		self.added_plugins[plugin] = plugin

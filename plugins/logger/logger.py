@@ -21,14 +21,14 @@
 #
 #
 
-import os
-import gi
-gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk
+from datetime import datetime
 
 from . import commands
+from .colors_mixin import ColorsMixin
+from .log_entry import LogEntry
+from .logger_gui import LoggerGUI
 
-class Plugin():
+class Plugin(ColorsMixin, LoggerGUI):
 	
 	def __init__(self, app):
 		self.name = "logger"
@@ -41,11 +41,12 @@ class Plugin():
 		self.signal_handler.connect("log", self.log)
 		self.signal_handler.connect("log-warning", self.log_warning)
 		self.signal_handler.connect("log-error", self.log_error)
-		self.signal_handler.connect("append-to-log", self.append_to_log)
 		self.log_array = []
 		self.log_scrolled = None
 		self.need_reload = True
-
+		self.warning_color = None
+		self.error_color = None
+		self.log_type = 0
 	
 	
 
@@ -67,120 +68,59 @@ class Plugin():
 			self.show_log()
 	
 	
-	def on_log_window_destroy(self, w):
-		self.need_reload = True
-	
 	
 	def show_log(self, log_type=0):
+		self.log_type = log_type
+	
 		text = ""
 		print("\nlog:")
 		
 		if log_type == 0:
 			for l in self.log_array:
-				text += l + '\n'
+				text += str(l) + '\n'
 		elif log_type == 1:
 			for l in self.log_array:
-				if l.find("WARNING:") == 0:
-					text += l + '\n'
+				if l.level == "WARNING":
+					text += str(l) + '\n'
 		elif log_type == 2:
 			for l in self.log_array:
-				if l.find("ERROR:") == 0:
-					text += l + '\n'
+				if l.level == "ERROR":
+					text += str(l) + '\n'
 		
-		print(text)
+		print(self.colorize_terminal(text))
 		
-		self.load_from_builder()
-		self.textview.get_buffer().set_text(text)
-		self.show_log_in_bottom_panel()
+		self.show_log_gui(text)
+
 
 		
-		
-	def load_from_builder(self):
-		if not self.need_reload:
-			return
-				
-		dir_path = os.path.dirname(os.path.realpath(__file__))
-		builder = Gtk.Builder()
-		builder.add_from_file(f"{dir_path}/logger.glade")
-		builder.connect_signals(self.signals)
-		
-		self.window = builder.get_object("log_window")
-		self.log_scrolled = builder.get_object("log_scrolled_window")
-		self.textview = builder.get_object("log_textview")
-		
-		style_provider = Gtk.CssProvider()
-		style_provider.load_from_path(f"{dir_path}/logger.css")
-		self.log_scrolled.get_style_context().add_provider(
-			style_provider,
-			Gtk.STYLE_PROVIDER_PRIORITY_USER
-		)
-		
-		self.textview.get_style_context().add_provider(
-			style_provider,
-			Gtk.STYLE_PROVIDER_PRIORITY_USER
-		)
-		
-		
-	
-	
-	def show_log_window(self):
-		self.window.set_transient_for(self.app.window)
-		
-		if not self.window.get_visible():
-			self.need_reload = False
-			self.window.show_all()
-		
-		
-	def show_log_in_bottom_panel(self):
-		if self.window.get_child():
-			self.window.remove(self.log_scrolled)
-			
-		self.log_scrolled.show_all()
-		args = {
-			"plugin": self,
-			"label": "Log",
-			"widget": self.log_scrolled
-		}
-		
-		added = self.THE("bottom_panel", "add", args)
-		
-		if not added:
-			self.window.add(self.log_scrolled)
-			self.show_log_window()
-				
-		
-	
-	def log(self, message):
+	def log(self, plugin, message):
+		_time = datetime.now().strftime('%c').strip()
+		_level = "INFO"
+		message = LogEntry(f'<{_time}> <{plugin.name}> <{_level}>: {message.strip()}', _level)
 		print(message)
 		self.log_array.append(message)
-		self.signal_handler.emit("append-to-log", message)
+		self.append_to_log(message)
+		self.THE("message_notif", "show_message", {"m": message, "state": 3})
 		
 		
-		
-	def log_warning(self, message):
-		message = f'WARNING: {message}' 
-		print(message)
+	def log_warning(self, plugin, message):
+		_time = datetime.now().strftime('%c').strip()
+		_level = "WARNING"
+		message = LogEntry(f'<{_time}> <{plugin.name}> <{_level}>: {message.strip()}', _level)
+		print(self.colorize_terminal(message))
 		self.log_array.append(message)
-		self.signal_handler.emit("append-to-log", message)
+		self.append_to_log(message)
 		
 		
-	def log_error(self, message):
-		message = f'ERROR: {message}' 
-		print(message)
+	def log_error(self, plugin, message):
+		_time = datetime.now().strftime('%c').strip()
+		_level = "ERROR"
+		message = LogEntry(f'<{_time}> <{plugin.name}> <{_level}>: {message.strip()}', _level)
+		print(self.colorize_terminal(message))
 		self.log_array.append(message)
-		self.signal_handler.emit("append-to-log", message)
+		self.append_to_log(message)
+		self.THE("message_notifier", "show_message", {"m": str(message), "state": 3})
 		
-		self.THE("message_notifier", "show_message", {"m": message, "state": 3})
 		
-		
-	
-	def append_to_log(self, text):
-		if self.log_scrolled:
-			buffer = self.textview.get_buffer()
-			text = buffer.get_text(buffer.get_start_iter(), buffer.get_end_iter(), False) \
-						 + text + '\n' 
-			self.textview.get_buffer().set_text(text)
-		
-
-		
+					
 		

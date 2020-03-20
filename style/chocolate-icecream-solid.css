@@ -23,11 +23,13 @@ YELLOW: #FCE94F
 GREEN: #0DD100 C2FF8E
 pink: BEB0BE D33682
 purpul: CAC5FF
-BACKGROUND: #36292d #36292d
+BACKGROUND: #36292d
 FOREGROUND: #ffffda rgba(255, 255, 218, 0.86) 847479
 */
 @define-color gamma_bg_color #36292d;
 @define-color gamma_fg_color #ffffda;
+@define-color gamma_warning_color #FCE94F;
+@define-color gamma_error_color #FF749B;
 
 window * {
 	border:none;
