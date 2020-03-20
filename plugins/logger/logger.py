@@ -100,7 +100,6 @@ class Plugin(ColorsMixin, LoggerGUI):
 		print(message)
 		self.log_array.append(message)
 		self.append_to_log(message)
-		self.THE("message_notif", "show_message", {"m": message, "state": 3})
 		
 		
 	def log_warning(self, plugin, message):

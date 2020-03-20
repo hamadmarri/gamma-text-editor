@@ -43,10 +43,10 @@ class OpenFileMixin(object):
 			# with file data
 			text = f.read()
 			# DEBUG: print(bytes(text, "ascii"))
-		except OSError as err:
+		except PermissionError as err:
 			self.signal_handler.emit("log-error", self, f'Could not open {filename}: {err}')
 			return
-		except PermissionError as err:
+		except OSError as err:
 			self.signal_handler.emit("log-error", self, f'Could not open {filename}: {err}')
 			return
 
