@@ -44,6 +44,7 @@ class Plugin():
 	
 	def activate(self):
 		self.signal_handler.key_bindings_to_plugins.append(self)
+		commands.set_commands(self)
 		
 		dir_path = os.path.dirname(os.path.realpath(__file__))
 		self.builder = Gtk.Builder()
@@ -73,11 +74,16 @@ class Plugin():
 			
 	
 	def key_bindings(self, event, keyval_name, ctrl, alt, shift):
-		if shift and ctrl and keyval_name == "P":
-			if not self.visible:
-				self.show_panel()
-			else:
-				self.hide_panel()
+		if keyval_name == "F9":
+			self.toggle_bottom_panel()
+			
+			
+			
+	def toggle_bottom_panel(self):	
+		if not self.visible:
+			self.show_panel()
+		else:
+			self.hide_panel()
 	
 	
 	
