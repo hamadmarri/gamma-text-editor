@@ -56,7 +56,6 @@ class Plugin():
 		self.notebook = self.builder.get_object("bottom_panel_notebook")
 		window.remove(self.bottom_panel_body)
 		
-		# self.hide_image = self.builder.get_object("hide_image")
 		self.close_button = self.builder.get_object("close_button")
 		
 		# get right side body
@@ -95,7 +94,7 @@ class Plugin():
 		self.current_page = page
 		self.current_page_num = page_num
 		current_label = self.notebook.get_tab_label_text(page)
-		self.close_button.set_tooltip_text(f"Remove {current_label}")
+		self.close_button.set_tooltip_text(f"Close {current_label}")
 		
 		
 	

@@ -67,6 +67,7 @@ plugin_list = [
 	{"name": "logger.logger", "category": "logger"},
 	{"name": "toggle_files_list.toggle_files_list", "category": "files_toggler"},
 	{"name": "key_scroller.key_scroller", "category": ""},
+	{"name": "output.output", "category": "output"},
 
 
 	# special case for commander 
