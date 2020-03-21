@@ -44,6 +44,7 @@ class Plugin():
 		self.openfile = None
 		
 		self.auto_resize = True
+		self.is_fullscreen = False
 		
 	
 	
@@ -95,6 +96,14 @@ class Plugin():
 			self.toggle_maximize()
 		elif ctrl and keyval_name == "q":
 			self.quit()
+		elif keyval_name == "F11":
+			if not self.is_fullscreen:
+				self.window.fullscreen()
+			else:
+				self.window.unfullscreen()
+			
+			self.is_fullscreen = not self.is_fullscreen
+			
 			
 				
 	
@@ -135,7 +144,8 @@ class Plugin():
 		if self.window.is_maximized():
 			self.window.unmaximize()
 		else:
-			self.window.maximize()
+			self.window.maximize()		
+		
 			
 			
 	def quit(self):

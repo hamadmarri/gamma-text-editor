@@ -86,7 +86,11 @@ class SignalHandler:
 		# - pass only key bindings (i.e. when ctrl, alt)
 		# - or when "F" function keys pressed such F1, F2 ..
 		# this if is to condition the exit
-		if (not ctrl and not alt) and len(keyval_name) != 2: # not F1, ..:
+		# not F1, .. 
+		# and not F11, ...
+		if (not ctrl and not alt)\
+				and (len(keyval_name) != 2 and keyval_name[:1] == "F")\
+				and (len(keyval_name) != 3 and keyval_name[:2] == "F1"): 
 			for p in self.any_key_press_to_plugins:
 				return_value = p.key_bindings(event, keyval_name, ctrl, alt, shift)
 				if return_value:
