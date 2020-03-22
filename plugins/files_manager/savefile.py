@@ -1,4 +1,4 @@
-#  
+#
 #### Author: Hamad Al Marri <hamad.s.almarri@gmail.com>
 #### Date: Feb 11th, 2020
 # 
@@ -49,12 +49,45 @@ class Plugin():
 	# key_bindings is called by SignalHandler
 	def key_bindings(self, event, keyval_name, ctrl, alt, shift):
 		
-		# save is bound to "<Ctrl>+s"
-		if ctrl and keyval_name == "s":
-			self.save_current_file()
-		elif shift and ctrl and keyval_name == "S":
+		# save all is bound to "<Ctrl><Alt>+s"
+		if ctrl and alt and keyval_name == "s":
 			self.save_all()
+		
+		# save as is bound to "<Shift><Alt>+s"
+		elif shift and ctrl and keyval_name == "S":
+			self.save_as()
+		
+		# save is bound to "<Ctrl>+s"
+		elif ctrl and keyval_name == "s":
+			self.save_current_file()
+		
 	
+	
+	def save_as(self):
+		# show save dialog
+		new_filename = self.show_save_dialog()
+		
+		# if hit cancel, quit
+		if not new_filename:
+			return
+		
+		# get the current displayed file
+		current_file = self.THE("files_manager", "current_file", None)
+		
+		buffer = current_file.source_view.get_buffer()
+
+		# get all buffer text without the hidden markups
+		text = buffer.get_text(buffer.get_start_iter(), buffer.get_end_iter(), False)
+		
+		# write file
+		self.write_file(new_filename, text)
+		
+		# open the new saved as file
+		self.THE("files_manager", "open_files", {"filenames": (new_filename,)})
+		
+		
+		
+		
 	
 	
 	def save_all(self):
@@ -108,7 +141,6 @@ class Plugin():
 					
 				# TODO: if saved(overwrite) a file in Hard Drive, but that file 
 				# is already is open here! need to close old file 
-				# TODO: if user hit cancel on dialog, need to revert
 		else:
 			self.write_file(file_object.filename, text)
 			file_object.reset_editted()
