@@ -182,10 +182,10 @@ class Plugin():
 			f = open(filename, 'w')
 			f.write(text)
 		
-		except OSError as err:
-			print('Could not save %s: %s' % (filename, err))
 		except PermissionError as err:
-			print('Could not save %s: %s' % (filename, err))
+			self.signal_handler.emit("log-error", self, f'Could not save {filename}: {err}')
+		except OSError as err:
+			self.signal_handler.emit("log-error", self, f'Could not save {filename}: {err}')
 		else:
 			# when successfully wrote the file, show successful message
 			basename = os.path.basename(filename)
