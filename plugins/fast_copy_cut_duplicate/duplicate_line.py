@@ -34,18 +34,13 @@ class DuplicateLine(object):
 		line = buffer.get_text(start, end, False)
 		buffer.insert(end, f"\n{line}")
 		
-		
-		# get end iters position to replace the cursor
+		# get end iters position to re-place the cursor
 		current_cursor = buffer.get_insert()
 		c_iter = buffer.get_iter_at_mark(current_cursor)
 		
-		# if at the end of the line
-		# read gtk_text_iter_forward_line ()
-		if c_iter.ends_line():
-			# move to next line
-			c_iter.forward_line()
-			buffer.place_cursor(c_iter)
-		else:
+		# if at the end of the line, no need to move 
+		# the cursos, it moves automatically
+		if not c_iter.ends_line():
 			# count offset from start of line to current cursor
 			offset = c_iter.get_line_offset()
 			
