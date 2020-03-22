@@ -29,18 +29,20 @@ FOREGROUND: #827082 #6B5C6B
 @define-color gamma_error_color #FF1946;
 
 
- window * {
+#gamma_window * {
 	border:none;
 	box-shadow:none;
 }
-
+#gamma_window  {
+	background:transparent;
+}
 
 /* from theme */
 headerbar entry, headerbar button, headerbar separator {
   margin-top: 6px;
   margin-bottom: 6px;
  
-   }
+}
 
 headerbar {
 	box-shadow: none;

@@ -30,7 +30,7 @@ FOREGROUND: #827082 #6B5C6B
 @define-color gamma_error_color #FF1946;
 
 
-window * {
+#gamma_window decoration {
 	border:none;
 	box-shadow:none;
 }
@@ -43,9 +43,6 @@ headerbar entry, headerbar button, headerbar separator {
 
    }
 
-headerbar {
-	box-shadow: none;
-} 
 
 .openned_file button,
 .openned_file_editted button {
@@ -78,12 +75,14 @@ headerbar {
 #headerbarMain, #headerbarMain * {
 	background: #fdfdfd;
 	color: rgba(130, 112, 130, 0.77);
+	border:none;
 }
 
 #headerbarMain {
 	padding: 8px 0 8px 0;
-	border-style: solid none none none;
-	border-width: 1px;
+	border-style:solid solid none none;
+	border-width:1px;
+	border-color: rgba(130, 112, 130, 0.20);
 }
 
 #headerbarMain .title {
@@ -127,10 +126,6 @@ headerbar {
 
 
 
-
-
-
-
 #messageLbl {
 	font-family: monospace;
 	margin-right:21px;
@@ -141,6 +136,7 @@ headerbar {
 #headerbarSide {
 	background: #6B5C6B;
 	border:none;
+	box-shadow:none;
 }
 
 #headerbarSide * {
@@ -156,6 +152,19 @@ headerbar {
 /********** BODY *************/
 #bodyPaned > separator {
 	background:  #fdfdfd;
+}
+
+#bodyPaned {
+	border-style:none solid none none;
+	border-width:1px;
+	border-color: rgba(130, 112, 130, 0.20);
+}
+
+
+#source_scrolledwindow {
+	border-style:none none solid none;
+	border-width:1px;
+	border-color: rgba(130, 112, 130, 0.20);
 }
 
 #toolbar_side {

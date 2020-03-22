@@ -69,8 +69,8 @@ GREEN: #0DD100
 #logo {
     /* background: #827082;*/
     background: @theme_bg_color;
-    /* color: #FDFDFD;*/
-    color: @theme_fg_color;
+    color: #FF931F;
+    /* color: @theme_fg_color;*/
 }
 
 /********** BODY *************/

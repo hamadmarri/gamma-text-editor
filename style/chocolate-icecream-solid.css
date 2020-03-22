@@ -31,7 +31,7 @@ FOREGROUND: #ffffda rgba(255, 255, 218, 0.86) 847479
 @define-color gamma_warning_color #FCE94F;
 @define-color gamma_error_color #FF749B;
 
-window * {
+#gamma_window decoration, headerbar {
 	border:none;
 	box-shadow:none;
 }
@@ -41,12 +41,8 @@ window * {
 headerbar entry, headerbar button, headerbar separator {
   margin-top: 6px;
   margin-bottom: 6px;
+}
 
-   }
-
-headerbar {
-	box-shadow: none;
-} 
 
 .openned_file button,
 .openned_file_editted button {
