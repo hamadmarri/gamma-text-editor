@@ -28,6 +28,7 @@
 # which call activate for each plugin and store plugins references in
 # plugins_manager.plugins
 
+import sys
 
 import gi
 gi.require_version('Gtk', '3.0')
@@ -41,13 +42,14 @@ from plugins.plugins_manager import PluginsManager
 
 class Application(Gtk.Application):
 
-	def __init__(self, *args, **kwargs):	
-		
+	def __init__(self, *args, **kwargs):		
 		# make the package name as "io.gitlab.hamadmarri.gamma"
 		# FLAGS_NONE means no passing arguments from command line, this
 		# might be changed later to support new window, new file, or open a file
 		super().__init__(*args, application_id="io.gitlab.hamadmarri.gamma", 
-						flags=Gio.ApplicationFlags.FLAGS_NONE, **kwargs)
+						flags=Gio.ApplicationFlags.HANDLES_OPEN, **kwargs)
+						# Gio.ApplicationFlags.FLAGS_NONE |
+						# | Gio.ApplicationFlags.HANDLES_COMMAND_LINE
 		
 		# this line is important to mak gtk object(newer version of pygtk) to
 		# include gtk sourceview.
@@ -97,16 +99,29 @@ class Application(Gtk.Application):
 		Gtk.Application.do_startup(self)
 
 
-	def do_activate(self):
-		if not self.window:
-			# get id=window (ui element in .ui) from builder
-			self.window = self.builder.get_object("window")
+	def do_open(self, files, n_files, hint):
+		self.do_activate()
+		filenames = []
+		
+		for f in files:
+			filenames.append(f.get_path())
 			
-			# must set the parent application of 
-			# window to this app(self)
-			self.window.props.application = self
+		self.plugins_manager.THE("files_manager", "open_files", {"filenames": filenames})
+			
 		
+	def do_activate(self):
+	 	if not self.window:
+	 		self.show_first_window()
 		
+	
+	def show_first_window(self):
+		# get id=window (ui element in .ui) from builder
+		self.window = self.builder.get_object("window")
+		
+		# must set the parent application of 
+		# window to this app(self)
+		self.window.props.application = self
+	
 		# loading plugins calls their activate functions.
 		# in plugins_manager.py, you can comment out plugins in
 		# plugin_list array
@@ -120,5 +135,5 @@ class Application(Gtk.Application):
 
 if __name__ == "__main__":
 	app = Application()
-	app.run()
+	app.run(sys.argv)
 	

@@ -37,23 +37,11 @@ class Plugin(FilterMixin):
 		self.signal_handler = app.signal_handler
 		self.THE = app.plugins_manager.THE
 		self.commands = []
-		self.signal_handler.connect("startup", self.open_files_from_args)
 		
 		
 	def activate(self):
 		self.signal_handler.key_bindings_to_plugins.append(self)
 		commands.set_commands(self)
-		
-		
-	def open_files_from_args(self, args=None):
-		if not args:
-			args = os.getenv('GAMMA_OPEN_FILE')
-		
-		if args:
-			filenames = args.split()
-			self.THE("files_manager", "open_files", {"filenames": filenames})
-		else:
-			print("no GAMMA_OPEN_FILE")
 		
 		
 	
