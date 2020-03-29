@@ -16,7 +16,7 @@ class OpenFileMixin(object):
 	
 		# if many files are opened, then switch to last open	
 		if len(filenames) > 1:
-			self.switch_to_file(len(self.files) - 1)
+			self.switch_to_file(self.files_len() - 1)
 		else:
 			# find the file (maybe it is in the list already)
 			index = self.get_file_index(filenames[0])
@@ -33,7 +33,6 @@ class OpenFileMixin(object):
 			# if already open then just exit method
 			#self.switch_to_file(file_index)
 			return
-		
 		
 		try:
 			# open the file in reading mode
@@ -54,8 +53,7 @@ class OpenFileMixin(object):
 		# when successfully opened and read the file
 		else:
 			# get new sourceview from sourceview_manager
-			# TODO: must handled by ui manager
-			newsource = self.sourceview_manager.get_new_sourceview()
+			newsource = self.THE("sourceview_manager", "get_new_sourceview", {})
 			
 			# begin_not_undoable_action to prevent ctrl+z to empty the file
 			newsource.get_buffer().begin_not_undoable_action()
@@ -78,8 +76,11 @@ class OpenFileMixin(object):
 				
 		# set the language of just openned file 
 		# see sourceview_manager
-		buffer = newsource.get_buffer()
-		self.sourceview_manager.set_language(filename, buffer)
+		buffer = newsource.get_buffer()		
+		self.THE("sourceview_manager", "set_language", {
+					"filename": filename,
+					"buffer": buffer
+				})
 
 		self.THE("ui_manager", "add_filename_to_ui", {"newfile": newfile})
 		

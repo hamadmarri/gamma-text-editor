@@ -408,9 +408,9 @@ headerbar entry, headerbar button, headerbar separator {
 
 /******************* BOTTOM PANEL *********************/
 
-notebook tab label {
-	color: #827082;
-	font-size: 17px;
-}
+/* notebook tab label {*/
+/* 	color: #827082;*/
+/* 	font-size: 17px;*/
+/* }*/
 
 

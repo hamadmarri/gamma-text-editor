@@ -37,7 +37,6 @@ class Plugin():
 	def __init__(self, app):
 		self.name = "commander"
 		self.app = app
-		self.builder = app.builder
 		self.plugins_manager = app.plugins_manager
 		self.THE = app.plugins_manager.THE
 		self.signal_handler = app.signal_handler
@@ -62,10 +61,12 @@ class Plugin():
 		self.max_time = 0.2 # was 0.3 
 		self.cache_thread = None
 		
-		
-	def activate(self):
 		self.signal_handler.key_bindings_to_plugins.append(self)
 		self.signal_handler.any_key_press_to_plugins.append(self)
+		
+		
+	def activate(self):
+		self.app.window.commander_window = None
 		self.set_handlers()
 		
 

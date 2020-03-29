@@ -33,28 +33,32 @@ class Plugin(ColorsMixin, LoggerGUI):
 	def __init__(self, app):
 		self.name = "logger"
 		self.app = app
-		self.builder = app.builder
 		self.signal_handler = app.signal_handler
 		self.THE = app.plugins_manager.THE
-		self.set_handlers()
 		self.commands = []
 		self.signal_handler.connect("log", self.log)
 		self.signal_handler.connect("log-warning", self.log_warning)
 		self.signal_handler.connect("log-error", self.log_error)
+		
+		if app.is_debugging:
+			self.signal_handler.connect("debug", self.log_debug)
+		
+		self.window = None
 		self.log_array = []
-		self.log_body = None
-		self.need_reload = True
 		self.warning_color = None
 		self.error_color = None
-		self.log_type = 0
-		self.original_results = ""
-	
-	
 
-	def activate(self):
 		self.signal_handler.key_bindings_to_plugins.append(self)
 		commands.set_commands(self)
 		
+	
+
+	def activate(self):
+		self.app.window.logger_log_body = None
+		self.app.window.logger_need_reload = True
+		self.app.window.logger_log_type = 0
+		self.app.window.logger_original_results = ""
+		self.set_handlers()
 	
 	
 	def set_handlers(self):
@@ -72,7 +76,7 @@ class Plugin(ColorsMixin, LoggerGUI):
 	
 	
 	def show_log(self, log_type=0):
-		self.log_type = log_type
+		self.app.window.logger_log_type = log_type
 	
 		text = ""
 		print("\nlog:")
@@ -98,6 +102,15 @@ class Plugin(ColorsMixin, LoggerGUI):
 	def log(self, plugin, message):
 		_time = datetime.now().strftime('%c').strip()
 		_level = "INFO"
+		message = LogEntry(f'<{_time}> <{plugin.name}> <{_level}>: {message.strip()}', _level)
+		print(message)
+		self.log_array.append(message)
+		self.append_to_log(message)
+	
+	
+	def log_debug(self, plugin, message):
+		_time = datetime.now().strftime('%c').strip()
+		_level = "DEBUG"
 		message = LogEntry(f'<{_time}> <{plugin.name}> <{_level}>: {message.strip()}', _level)
 		print(message)
 		self.log_array.append(message)

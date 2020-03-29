@@ -34,33 +34,27 @@ class Plugin():
 	def __init__(self, app):
 		self.name = "toggle_files_list"
 		self.app = app
-		self.builder = app.builder
 		self.THE = app.plugins_manager.THE
 		self.signal_handler = app.signal_handler
 		self.commands = []
 		
-		# the state of current visibility
-		self.removed = False
-		
-		# previous size of the left side file list size
-		self.old_size = 0
-		
 		# the far left side size where menu is.
 		self.min_size = 0
+		
+		self.signal_handler.key_bindings_to_plugins.append(self)
+		commands.set_commands(self)
 		
 		
 		
 	def activate(self):
-		self.signal_handler.key_bindings_to_plugins.append(self)
-		commands.set_commands(self)
+		# the state of current visibility
+		self.app.window.toggle_files_removed = False
+		
+		# previous size of the left side file list size
+		self.app.window.toggle_files_old_size = 0
 		
 		# get widgets references from builder
-		toolbar_ctrls = self.builder.get_object("toolbar_ctrls")
-		self.bodyPaned = self.builder.get_object("bodyPaned")
-		self.toolbar_side = self.builder.get_object("toolbar_side")
-		self.headerPaned = self.builder.get_object("headerPaned")
-		self.header_left_side = self.builder.get_object("header_left_side")
-		self.scrolled_toolbar_files = self.builder.get_object("scrolled_toolbar_files")
+		toolbar_ctrls = self.app.builder.get_object("toolbar_ctrls")
 
 		# get the menu current size which is default 34px
 		self.min_size = toolbar_ctrls.get_allocated_width()
@@ -77,28 +71,30 @@ class Plugin():
 	# wrap logo_box and headerbarSide with eventboxs each
 	# to get events such as mouse click and hover
 	def setup_event_boxes(self):
-		self.headerbarSide = self.builder.get_object("headerbarSide")
-		self.logo_box = self.builder.get_object("logo_box")
-
-		self.header_left_side.remove(self.logo_box)
-		self.header_left_side.remove(self.headerbarSide)
-		self.eventBox = Gtk.EventBox.new()
-		self.eventBox.add(self.headerbarSide)
+		header_left_side = self.app.builder.get_object("header_left_side")
+		headerbarSide = self.app.builder.get_object("headerbarSide")
+		logo_box = self.app.builder.get_object("logo_box")
 		
-		self.eventBox.set_tooltip_text("Hide Files")
-		self.eventBox.connect("button-press-event", self.on_headerbarSide_button_press_event)
-		self.eventBox.connect("enter-notify-event", self.on_headerbarSide_enter_notify_event)
-		self.eventBox.connect("leave-notify-event", self.on_headerbarSide_leave_notify_event)
+		header_left_side.remove(logo_box)
+		header_left_side.remove(headerbarSide)
 		
-		self.logoEventBox = Gtk.EventBox.new()
-		self.logoEventBox.add(self.logo_box)
-		self.logoEventBox.set_tooltip_text("Hide Files")
-		self.logoEventBox.connect("button-press-event", self.on_headerbarSide_button_press_event)
-		self.logoEventBox.connect("enter-notify-event", self.on_headerbarSide_enter_notify_event)
-		self.logoEventBox.connect("leave-notify-event", self.on_headerbarSide_leave_notify_event)
+		self.app.window.toggle_files_eventBox = Gtk.EventBox.new()
+		self.app.window.toggle_files_eventBox.add(headerbarSide)
 		
-		self.header_left_side.pack_start(self.logoEventBox, False, True, 0)
-		self.header_left_side.pack_start(self.eventBox, True, True, 0)
+		self.app.window.toggle_files_eventBox.set_tooltip_text("Hide Files")
+		self.app.window.toggle_files_eventBox.connect("button-press-event", self.on_headerbarSide_button_press_event)
+		self.app.window.toggle_files_eventBox.connect("enter-notify-event", self.on_headerbarSide_enter_notify_event)
+		self.app.window.toggle_files_eventBox.connect("leave-notify-event", self.on_headerbarSide_leave_notify_event)
+		
+		self.app.window.toggle_files_logoEventBox = Gtk.EventBox.new()
+		self.app.window.toggle_files_logoEventBox.add(logo_box)
+		self.app.window.toggle_files_logoEventBox.set_tooltip_text("Hide Files")
+		self.app.window.toggle_files_logoEventBox.connect("button-press-event", self.on_headerbarSide_button_press_event)
+		self.app.window.toggle_files_logoEventBox.connect("enter-notify-event", self.on_headerbarSide_enter_notify_event)
+		self.app.window.toggle_files_logoEventBox.connect("leave-notify-event", self.on_headerbarSide_leave_notify_event)
+		
+		header_left_side.pack_start(self.app.window.toggle_files_logoEventBox, False, True, 0)
+		header_left_side.pack_start(self.app.window.toggle_files_eventBox, True, True, 0)
 		
 		
 		
@@ -122,35 +118,47 @@ class Plugin():
 	
 	
 	def toggle_files_list(self):
-		if not self.removed:
+		if not self.app.window.toggle_files_removed:
 			self.hide_files()
 		else:
 			self.show_files()
 	
 		
 	def hide_files(self):
-		self.old_size = self.bodyPaned.get_position()
+		bodyPaned = self.app.builder.get_object("bodyPaned")
+		toolbar_side = self.app.builder.get_object("toolbar_side")
+		headerPaned = self.app.builder.get_object("headerPaned")
+		header_left_side = self.app.builder.get_object("header_left_side")
+		scrolled_toolbar_files = self.app.builder.get_object("scrolled_toolbar_files")
+		
+		self.app.window.toggle_files_old_size = bodyPaned.get_position()
 		
 		# to avoid auto resizing when hiding files list
 		self.THE("window_controller", "set_auto_resize", {"auto_resize": False})
-		self.toolbar_side.remove(self.scrolled_toolbar_files)
-		self.bodyPaned.set_position(0)
+		toolbar_side.remove(scrolled_toolbar_files)
+		bodyPaned.set_position(0)
 		
-		self.header_left_side.remove(self.eventBox)
-		self.headerPaned.set_position(self.min_size)
+		header_left_side.remove(self.app.window.toggle_files_eventBox)
+		headerPaned.set_position(self.min_size)
 		
-		self.logoEventBox.set_tooltip_text("Show Files")
-		self.removed = True
+		self.app.window.toggle_files_logoEventBox.set_tooltip_text("Show Files")
+		self.app.window.toggle_files_removed = True
 		
 		
 		
 	def show_files(self):
-		self.THE("window_controller", "set_auto_resize", {"auto_resize": True})
-		self.header_left_side.pack_start(self.eventBox, True, True, 0)
-		self.toolbar_side.pack_start(self.scrolled_toolbar_files, True, True, 0)
+		bodyPaned = self.app.builder.get_object("bodyPaned")
+		toolbar_side = self.app.builder.get_object("toolbar_side")
+		headerPaned = self.app.builder.get_object("headerPaned")
+		header_left_side = self.app.builder.get_object("header_left_side")
+		scrolled_toolbar_files = self.app.builder.get_object("scrolled_toolbar_files")
 		
-		self.bodyPaned.set_position(self.old_size)
-		self.headerPaned.set_position(self.old_size)
+		self.THE("window_controller", "set_auto_resize", {"auto_resize": True})
+		header_left_side.pack_start(self.app.window.toggle_files_eventBox, True, True, 0)
+		toolbar_side.pack_start(scrolled_toolbar_files, True, True, 0)
+		
+		bodyPaned.set_position(self.app.window.toggle_files_old_size)
+		headerPaned.set_position(self.app.window.toggle_files_old_size)
 
-		self.logoEventBox.set_tooltip_text("Hide Files")
-		self.removed = False
+		self.app.window.toggle_files_logoEventBox.set_tooltip_text("Hide Files")
+		self.app.window.toggle_files_removed = False

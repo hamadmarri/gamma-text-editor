@@ -17,9 +17,13 @@ class OutputGUI(object):
 	
 	def clear_buffer(self, button, buffer):
 		buffer.delete(buffer.get_start_iter(), buffer.get_end_iter())
-		
 	
-	def instantiate_widgets(self):
+	
+	def window_close_event(self, w):
+		self.delete_copy(w.a_copy)
+	
+	
+	def instantiate_widgets(self):		
 		window = Gtk.Window.new(Gtk.WindowType.TOPLEVEL)
 		output_body = Gtk.Overlay.new()
 		output_scrolled_window = Gtk.ScrolledWindow.new(None, None)
@@ -27,6 +31,7 @@ class OutputGUI(object):
 		clear_btn = Gtk.Button.new()
 		
 		window.set_default_size(*(self.window.get_default_size()))
+		window.connect("destroy", self.window_close_event)
 		
 		textview.set_editable(False)
 		textview.set_bottom_margin(self.textview.get_bottom_margin())
@@ -50,7 +55,6 @@ class OutputGUI(object):
 			Gtk.STYLE_PROVIDER_PRIORITY_USER
 		)
 		
-		
 		output_body.add(output_scrolled_window)
 		output_body.add_overlay(clear_btn)
 		window.add(output_body)
@@ -65,6 +69,8 @@ class OutputGUI(object):
 			"buffer": buffer
 		}
 		
+		# bind a_copy to its window
+		window.a_copy = a_copy
 		return a_copy
 		
 		

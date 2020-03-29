@@ -1,4 +1,4 @@
-#  
+#
 #### Author: Hamad Al Marri <hamad.s.almarri@gmail.com>
 #### Date: Feb 11th, 2020
 #
@@ -44,30 +44,33 @@ class Plugin(CommandsCtrl, CreateFileMixin, CloseFileMixin, OpenFileMixin):
 		self.name = "files_manager"
 		self.app = app
 		self.signal_handler = app.signal_handler
-		self.builder = app.builder
 		self.THE = app.plugins_manager.THE
-		self.sourceview_manager = app.sourceview_manager
 		self.commands = []
-		self.files = []
-		self.current_file = None
 		self.current_directory = str(Path.home())
 		self.counter = 1
-		self.editted_counter = 0
-		
-	
-	def activate(self):
-		self.signal_handler.key_bindings_to_plugins.append(self)
-		
-		commands.set_commands(self)
-		
-		# default empty file when open editor with no opened files
-		self.current_file = File(self, "empty", self.builder.get_object("view"), new_file=True, init_file=True)
-
-		# add empty/current_file to files array
-		self.files.append(self.current_file)
-		
-		self.signal_handler.emit("file-switched", self.current_file.source_view)
 				
+		self.signal_handler.key_bindings_to_plugins.append(self)
+		commands.set_commands(self)
+	
+
+	def activate(self):		
+		# default empty file when open editor with no opened files
+		self.app.window.current_file = File(self, "empty",
+											self.app.builder.get_object("view"),
+											new_file=True, init_file=True)
+
+		# initialize files array and bind it to current window
+		self.app.window.files = []
+		
+		# initialize files editted counter and bind it to current window
+		self.app.window.editted_counter = 0
+		
+		# add empty/current_file to files array
+		self.app.window.files.append(self.app.window.current_file)
+		
+		self.signal_handler.emit("file-switched", self.app.window.current_file.source_view)
+		
+		
 	
 	# key_bindings is called by SignalHandler
 	def key_bindings(self, event, keyval_name, ctrl, alt, shift):		
@@ -80,13 +83,29 @@ class Plugin(CommandsCtrl, CreateFileMixin, CloseFileMixin, OpenFileMixin):
 		elif ctrl and keyval_name == "n":
 			self.create_new_file()
 		
-		# DEBUG: print files array
-		# elif shift and ctrl and keyval_name == "Z":
-		# 	print("files\n")
-		# 	for i, f in enumerate(self.files):
-		# 		print(i, f.filename)
 			
 	
+	def current_window_files(self):
+		return self.app.window.files
+	
+	
+	def files_len(self):
+		return len(self.app.window.files)
+	
+	
+	def current_window_editted_counter(self):
+		return self.app.window.editted_counter
+	
+		
+	def current_window_editted_counter_add(self, value):
+		self.app.window.editted_counter += value
+		
+	def get_current_file(self):
+		return self.app.window.current_file
+	
+	def set_current_file(self, file_object):
+		self.app.window.current_file = file_object
+		
 	
 	def rename_file(self, file_object, filename):
 		# check if it is the new init file, need to make new sourceview and be added to ui
@@ -117,7 +136,7 @@ class Plugin(CommandsCtrl, CreateFileMixin, CloseFileMixin, OpenFileMixin):
 		
 	
 	def duplicate_init_file(self, file_object, filename):
-		newsource = self.sourceview_manager.get_new_sourceview()
+		newsource = self.THE("sourceview_manager", "get_new_sourceview", {})
 			
 		# default empty file when open editor with no opened files
 		newfile = File(self, filename, newsource)
@@ -132,7 +151,7 @@ class Plugin(CommandsCtrl, CreateFileMixin, CloseFileMixin, OpenFileMixin):
 		self.add_file_to_list(newfile)
 		
 		self.THE("ui_manager", "add_filename_to_ui", {"newfile", newfile})
-		self.switch_to_file(len(self.files) - 1)		
+		self.switch_to_file(self.files_len() - 1)		
 				
 				
 	
@@ -156,22 +175,22 @@ class Plugin(CommandsCtrl, CreateFileMixin, CloseFileMixin, OpenFileMixin):
 			return
 	
 		# check if it is the current_file, then exit method 
-		if self.current_file == self.files[file_index]:
+		if self.app.window.current_file == self.app.window.files[file_index]:
 			return
 		
-		buffer = self.current_file.source_view.get_buffer()
+		buffer = self.app.window.current_file.source_view.get_buffer()
 		self.THE("highlighter", "remove_highlight", {"buffer": buffer})
 		
 		# get file object
-		f = self.files[file_index]
+		f = self.app.window.files[file_index]
 				
 		# replace the source view
 		self.THE("ui_manager", "replace_sourceview_widget", {"newsource": f.source_view})
 		
-		self.current_file = f
+		self.app.window.current_file = f
 		
 		# update ui, set selected
-		self.THE("ui_manager", "set_currently_displayed", {"box": self.current_file.ui_ref})
+		self.THE("ui_manager", "set_currently_displayed", {"box": self.app.window.current_file.ui_ref})
 		
 		# update headerbar to filename
 		self.THE("ui_manager", "update_header", {"filename": f.filename, "editted": f.editted})
@@ -182,7 +201,7 @@ class Plugin(CommandsCtrl, CreateFileMixin, CloseFileMixin, OpenFileMixin):
 		self.THE("message_notifier", "show_message", {"m": f.filename})
 		
 		
-		self.signal_handler.emit("file-switched", self.current_file.source_view)
+		self.signal_handler.emit("file-switched", self.app.window.current_file.source_view)
 
 		
 		
@@ -194,7 +213,7 @@ class Plugin(CommandsCtrl, CreateFileMixin, CloseFileMixin, OpenFileMixin):
 		
 		
 	def get_file_index(self, filename):
-		for i, f in enumerate(self.files):
+		for i, f in enumerate(self.app.window.files):
 			if filename == f.filename:
 				return i	
 		return -1
@@ -209,18 +228,18 @@ class Plugin(CommandsCtrl, CreateFileMixin, CloseFileMixin, OpenFileMixin):
 	
 	def add_file_to_list(self, newfile):
 		self.set_parent_dir(newfile)
-		self.files.append(newfile)
+		self.app.window.files.append(newfile)
 		self.update_commanders_add(newfile)
 		
 		
 	def remove_file_from_list(self, file_object, file_index):
 		self.update_commanders_remove(file_object)
-		del self.files[file_index]
+		del self.app.window.files[file_index]
 
 
 	def get_directory(self):
-		if self.current_file.parent_dir:
-			return self.current_file.parent_dir
+		if self.app.window.current_file.parent_dir:
+			return self.app.window.current_file.parent_dir
 		
 		return self.current_directory
 		

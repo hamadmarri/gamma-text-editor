@@ -36,11 +36,13 @@ class Plugin():
 		self.commands = []
 		self.signal_handler.connect("startup", self.open_for_first_time)
 		
-
-	def activate(self):
 		self.signal_handler.key_bindings_to_plugins.append(self)
 		commands.set_commands(self)
 		self.dir_path = os.path.dirname(os.path.realpath(__file__))
+
+
+	def activate(self):
+		pass
 
 		
 	def key_bindings(self, event, keyval_name, ctrl, alt, shift):
@@ -53,7 +55,7 @@ class Plugin():
 		welcome_file = f"{self.dir_path}/welcome"
 		
 		self.THE("files_manager", "open_files", {"filenames": (welcome_file, )})
-		current_file = self.THE("files_manager", "current_file", None)
+		current_file = self.THE("files_manager", "get_current_file", {})
 		
 		if not current_file:
 			return

@@ -31,16 +31,15 @@ from gi.repository import Gtk
 
 from . import commands
 from .find_and_replace_window import FindReplaceWindow
+from .debug import Debug
 
 
-class Plugin(FindReplaceWindow):
+class Plugin(Debug, FindReplaceWindow):
 	
 	def __init__(self, app):
 		self.name = "find_and_replace"
 		self.app = app
 		self.window = None
-		self.sourceview = None
-		self.buffer = None
 		self.signal_handler = app.signal_handler
 		self.handlers = app.signal_handler.handlers
 		self.THE = app.plugins_manager.THE
@@ -53,13 +52,15 @@ class Plugin(FindReplaceWindow):
 		self.match_case = True
 		self.whole_word = False
 		self.signal_handler.connect("file-switched", self.update_buffer)
+		self.signal_handler.connect("windo-focus-in", self.window_focus_in)
+		self.signal_handler.key_bindings_to_plugins.append(self)
 		
+		commands.set_commands(self)
+		self.set_handlers()
 	
  
 	def activate(self):
-		self.signal_handler.key_bindings_to_plugins.append(self)
-		commands.set_commands(self)
-		self.set_handlers()
+		pass
 
 
 	def key_bindings(self, event, keyval_name, ctrl, alt, shift):
@@ -70,9 +71,12 @@ class Plugin(FindReplaceWindow):
 
 
 	def update_buffer(self, new_source):
-		self.sourceview = new_source
-		self.buffer = self.sourceview.get_buffer()
-		self.buffer.connect("changed", self.set_new_search)
+		self.app.window.find_buffer = new_source.get_buffer()
+		self.app.window.find_buffer.connect("changed", self.set_new_search)
+		self.new_search = True
+		
+		
+	def window_focus_in(self, w):
 		self.new_search = True
 		
 	
@@ -82,11 +86,13 @@ class Plugin(FindReplaceWindow):
 	
 	def clear_highlights(self):
 		# to clear highlights
-		self.THE("file_searcher", "do_highlight", {"search": "", "buffer": self.buffer})
+		self.THE("file_searcher", "do_highlight", {"search": "", "buffer": self.app.window.find_buffer})
 		self.THE("file_searcher", "quit_search" , {})
 		
 	
-	def do_find(self, previous=False):
+	def do_find(self, previous=False):		
+		self.debug_do_find(previous)
+		
 		if self.new_search:
 			if self.match_case:
 				self.THE("file_searcher", "set_search_flags", {"search_flags": 0})
@@ -99,7 +105,7 @@ class Plugin(FindReplaceWindow):
 			buffer = self.find_text_view.get_buffer()
 			text = buffer.get_text(buffer.get_start_iter(), buffer.get_end_iter(), False)
 
-			self.THE("file_searcher", "do_highlight", {"search": text, "buffer": self.buffer})
+			self.THE("file_searcher", "do_highlight", {"search": text, "buffer": self.app.window.find_buffer})
 		elif not previous:
 			self.THE("file_searcher", "scroll_next", {})
 		else:
@@ -143,7 +149,7 @@ class Plugin(FindReplaceWindow):
 		# get current selected 
 		(s_iter, e_iter) = self.THE("file_searcher", "current_selection", None)
 	  
-		self.replace_in_buffer(self.buffer, s_iter, e_iter, text)
+		self.replace_in_buffer(self.app.window.find_buffer, s_iter, e_iter, text)
 		
 		self.THE("file_searcher", "delete_current_marks", {})
 		
@@ -167,7 +173,6 @@ class Plugin(FindReplaceWindow):
 	def do_replace_all(self):
 		if self.new_search:
 			self.do_find()
-			# return
 	
 		marks = self.THE("highlighter", "marks", None)
 		
@@ -184,13 +189,13 @@ class Plugin(FindReplaceWindow):
 		while marks:
 			s_mark = marks[i - 1]
 			e_mark = marks[i]
-			s_iter = self.buffer.get_iter_at_mark(s_mark)
-			e_iter = self.buffer.get_iter_at_mark(e_mark)
+			s_iter = self.app.window.find_buffer.get_iter_at_mark(s_mark)
+			e_iter = self.app.window.find_buffer.get_iter_at_mark(e_mark)
 			
-			self.replace_in_buffer(self.buffer, s_iter, e_iter, text)
+			self.replace_in_buffer(self.app.window.find_buffer, s_iter, e_iter, text)
 			
-			self.buffer.delete_mark(s_mark)
-			self.buffer.delete_mark(e_mark)
+			self.app.window.find_buffer.delete_mark(s_mark)
+			self.app.window.find_buffer.delete_mark(e_mark)
 			
 			del marks[i]
 			del marks[i - 1]

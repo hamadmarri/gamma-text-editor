@@ -29,15 +29,15 @@ class Plugin(OutputGUI):
 	def __init__(self, app):
 		self.name = "output"
 		self.app = app
-		self.builder = app.builder
 		self.THE = app.plugins_manager.THE
 		self.commands = []
 		self.copies = {}
+		self.load_from_builder()
 
 
 	def activate(self):
-		self.load_from_builder()
-			
+		pass
+		
 				
 	def print(self, plugin_name, label, text):
 		a_copy = self.show(plugin_name, label)
@@ -55,19 +55,33 @@ class Plugin(OutputGUI):
 	
 	def show(self, plugin_name, label):
 		# check if it is already shown
-		a_copy = self.copies.get(plugin_name + label)
+		a_copy = self.get_copy(plugin_name, label)
 		
 		# if no copy, create new one
 		if not a_copy:
+			print("not a_copy")
+			
 			a_copy = self.instantiate_widgets()
 			a_copy["window"].set_title(label)
-			self.copies[plugin_name + label] = a_copy
+			a_copy["parent_window"] = self.app.window
+			a_copy["plugin_name"] = plugin_name
+			a_copy["label"] = label
+			self.insert_copy(plugin_name, label, a_copy)
 			
 		self.show_output_gui(label, a_copy)
 		
 		return a_copy
 		
 		
+		
+	def insert_copy(self, plugin_name, label, a_copy):
+		self.copies[str(self.app.window) + plugin_name + label] = a_copy
 
-					
+
+	def get_copy(self, plugin_name, label):
+		return self.copies.get(str(self.app.window) + plugin_name + label)
+	
+	
+	def delete_copy(self, a_copy):
+		del self.copies[str(a_copy["parent_window"]) + a_copy["plugin_name"] + a_copy["label"]]
 		

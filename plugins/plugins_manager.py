@@ -43,6 +43,7 @@
 # deactivate plugin by removing or commenting out the plugin name
 # formate "[folder name].[python file]"
 plugin_list = [
+	{"name": "sourceview_manager.sourceview_manager","category": "sourceview_manager"},
 	{"name": "styles.style","category": ""},
 	{"name": "styles.source_style", "category": "source_styler"},
 	{"name": "window_ctrl.window_ctrl", "category": "window_controller"},
@@ -58,6 +59,7 @@ plugin_list = [
 	{"name": "codecomment.codecomment", "category": "codecommenter"},
 	{"name": "find_and_replace.find_and_replace", "category": "find_and_replace"},
 	{"name": "terminal.terminal", "category": "terminal"},
+	
 	{"name": "bottom_panel.bottom_panel", "category": "bottom_panel"},
 	{"name": "welcome.welcome", "category": "welcomer"},
 	{"name": "help.help", "category": "helper"},
@@ -93,7 +95,7 @@ class PluginsManager():
 	# these plugins are eagerly loaded
 	# the more plugins, and process in activate 
 	# method, the heavier startup time
-	def load_plugins(self):
+	def load_plugins(self):	
 		for p in plugin_list:
 			# plugins are in "plugins" folder/package
 			plugin = importlib.import_module('.' + p["name"], package='plugins')
@@ -114,12 +116,22 @@ class PluginsManager():
 		for p in self.plugins_array:
 			p.activate()
 		
+		self.app.signal_handler.emit("log", self, f"loaded {len(self.plugins_array)} plugins")
+		
 		# emitting startup where any plugin could connect to
 		# startup signal. It is save to reach other plugins 
 		# from startup signals since all have been activated 
 		self.app.signal_handler.emit("startup")
 					
-			
+	
+	
+	def activate_plugins(self):
+		# activate plugins 
+		for p in self.plugins_array:
+			p.activate()
+		
+		
+		
 	
 	# get plugin from categories dictionary that match same name
 	# if existed, find the method, if existed, do the call

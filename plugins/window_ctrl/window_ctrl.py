@@ -29,8 +29,6 @@ class Plugin():
 		self.name = "window_ctrl"
 		self.app = app
 		self.signal_handler = app.signal_handler
-		self.builder = app.builder
-		self.window = app.window
 		self.THE = app.plugins_manager.THE
 		self.handlers = app.signal_handler.handlers
 		self.is_maximized = None
@@ -46,23 +44,12 @@ class Plugin():
 		self.auto_resize = True
 		self.is_fullscreen = False
 		
+		self.signal_handler.key_bindings_to_plugins.append(self)
+		commands.set_commands(self)		
 	
 	
 	def activate(self):
-		self.signal_handler.key_bindings_to_plugins.append(self)
-		commands.set_commands(self)
-		
-		self.N = self.builder.get_object("new_menu")
-		self.O = self.builder.get_object("open_menu")
-		self.D = self.builder.get_object("project_menu")
-		self.S = self.builder.get_object("save_menu")
-		self.F = self.builder.get_object("find_menu")
-		self.R = self.builder.get_object("find_replace_menu")
-		self.W = self.builder.get_object("welcome_menu")
-		self.H = self.builder.get_object("help_menu")
-		self.A = self.builder.get_object("about_menu")
-		
-		
+		pass
 	
 	
 	# setting handlers, see SignalHandler
@@ -98,11 +85,14 @@ class Plugin():
 			self.quit()
 		elif keyval_name == "F11":
 			if not self.is_fullscreen:
-				self.window.fullscreen()
+				self.app.window.fullscreen()
 			else:
-				self.window.unfullscreen()
+				self.app.window.unfullscreen()
 			
 			self.is_fullscreen = not self.is_fullscreen
+		elif shift and ctrl and keyval_name == "N":
+			self.new_window()
+
 			
 			
 				
@@ -118,7 +108,7 @@ class Plugin():
 			headerPaned.set_position(34)
 			return
 		
-		bodyPaned = self.builder.get_object("bodyPaned")
+		bodyPaned = self.app.builder.get_object("bodyPaned")
 		bodyPaned.set_position(headerPaned.get_position())
 		
 		
@@ -129,22 +119,26 @@ class Plugin():
 			bodyPaned.set_position(34)
 			return
 		
-		headerPaned = self.builder.get_object("headerPaned")
+		headerPaned = self.app.builder.get_object("headerPaned")
 		headerPaned.set_position(bodyPaned.get_position())
 	
 	
 	
+	def new_window(self):
+		self.app.do_activate(new_window=True)
+	
+	
 	# iconify is the gtk method to minimize window
 	def minimize(self):
-		self.window.iconify()
+		self.app.window.iconify()
 		
 		
 		
 	def toggle_maximize(self):
-		if self.window.is_maximized():
-			self.window.unmaximize()
+		if self.app.window.is_maximized():
+			self.app.window.unmaximize()
 		else:
-			self.window.maximize()		
+			self.app.window.maximize()		
 		
 			
 			
@@ -158,10 +152,11 @@ class Plugin():
 		self.THE("files_manager", "close_all", {})
 		
 		# if all files are closed (user didn't click "don't close")
-		editted_counter = self.THE("files_manager", "editted_counter", None)
+		editted_counter = self.THE("files_manager", "current_window_editted_counter", {})
 		
 		if editted_counter == 0:
-			self.app.quit()
+			# self.app.quit()
+			self.app.window.close()
 		else:
 			print(f"!!!! edited {editted_counter}")
 		
@@ -217,20 +212,44 @@ class Plugin():
 	
 	
 	####################### css control #########################
+	def get_menu(self, menu):
+		if menu == "N":
+			return self.app.builder.get_object("new_menu")
+		if menu == "O":
+			return self.app.builder.get_object("open_menu")
+		if menu == "D":
+			return self.app.builder.get_object("project_menu")
+		if menu == "S":
+			return self.app.builder.get_object("save_menu")
+		if menu == "F":
+			return self.app.builder.get_object("find_menu")
+		if menu == "R":
+			return self.app.builder.get_object("find_replace_menu")
+		if menu == "W":
+			return self.app.builder.get_object("welcome_menu")
+		if menu == "H":
+			return self.app.builder.get_object("help_menu")
+		if menu == "A":
+			return self.app.builder.get_object("about_menu")
+	
+	
 	def grap_attention(self, menu=None):
-		if not menu:
-			menu = self.H
-			
-		# add "sourceviewclass" css class
-		menu.get_style_context().add_class("menu_attention")
+		if menu:
+			_menu = self.get_menu(menu)
+		else:
+			_menu = self.get_menu("H")
 		
+		# add "sourceviewclass" css class
+		_menu.get_style_context().add_class("menu_attention")
 		
 		
 	def remove_attention(self, menu=None):
-		if not menu:
-			menu = self.H
+		if menu:
+			_menu = self.get_menu(menu)
+		else:
+			_menu = self.get_menu("H")
 			
 		# add "sourceviewclass" css class
-		menu.get_style_context().remove_class("menu_attention")
+		_menu.get_style_context().remove_class("menu_attention")
 		
 		

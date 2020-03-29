@@ -4,7 +4,7 @@ class DuplicateLine(object):
 	
 	def duplicate_line(self):
 		# get current viewing file's buffer		
-		current_file = self.THE("files_manager", "current_file", None)
+		current_file = self.THE("files_manager", "get_current_file", {})
 		if not current_file:
 			return
 		

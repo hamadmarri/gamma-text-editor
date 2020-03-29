@@ -47,10 +47,12 @@ class Plugin(SpecialPaste, DuplicateLine, CutLine, CopyLine):
 		self.copied_line = ""
 		self.dont_propagate_paste = False
 		
-	
-	def activate(self):
 		self.signal_handler.key_bindings_to_plugins.append(self)
 		commands.set_commands(self)
+	
+
+	def activate(self):
+		pass
 
 	
 	def key_bindings(self, event, keyval_name, ctrl, alt, shift):

@@ -35,6 +35,10 @@ class Plugin():
 		self.THE = app.plugins_manager.THE
 		self.signal_handler = app.signal_handler 
 		self.commands = []
+		
+		self.signal_handler.any_key_press_to_plugins.append(self)
+		self.signal_handler.key_bindings_to_plugins.append(self)
+		
 		self.chars = {
 			"quotedbl": "\"", 
 			"apostrophe": "'",
@@ -56,8 +60,7 @@ class Plugin():
 
 
 	def activate(self):
-		self.signal_handler.any_key_press_to_plugins.append(self)
-		self.signal_handler.key_bindings_to_plugins.append(self)
+		pass
 
 	
 	def key_bindings(self, event, keyval_name, ctrl, alt, shift):
@@ -70,7 +73,7 @@ class Plugin():
 		
 	def move_to_next_line(self):		
 		# get current viewing file's buffer		
-		current_file = self.THE("files_manager", "current_file", None)
+		current_file = self.THE("files_manager", "get_current_file", {})
 		if not current_file:
 			return
 		
@@ -107,7 +110,7 @@ class Plugin():
 	def text_insert(self, text):
 	
 		# check if sourceview is in focus
-		current_file = self.THE("files_manager", "current_file", None)
+		current_file = self.THE("files_manager", "get_current_file", {})
 		if not current_file:
 			return
 		

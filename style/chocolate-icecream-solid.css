@@ -406,10 +406,11 @@ headerbar entry, headerbar button, headerbar separator {
 
 
 /******************* BOTTOM PANEL *********************/
-
 notebook tab label {
-	color: #ffffda;
-	font-size: 17px;
+	color: @gamma_fg_color;
 }
 
+notebook   {
+	background-color: #36292d;
+}
 

@@ -36,30 +36,34 @@ class Plugin():
 		self.THE = app.plugins_manager.THE
 		self.commands = []
 		self.set_handlers()
-		self.visible = False
-		self.added_plugins = {}
 		self.old_position = 0
 
+		self.signal_handler.key_bindings_to_plugins.append(self)
+		commands.set_commands(self)
+	
 
 	
 	def activate(self):
-		self.signal_handler.key_bindings_to_plugins.append(self)
-		commands.set_commands(self)
-		
+		self.app.window.bottom_panel_builder = None
+		self.app.window.bottom_panel_added_plugins = {}
+		self.app.window.bottom_panel_added_pages = {}
+		self.app.window.bottom_panel_visible = False
+
+	
+	def load_from_builder(self):
 		dir_path = os.path.dirname(os.path.realpath(__file__))
-		self.builder = Gtk.Builder()
-		self.builder.add_from_file(f"{dir_path}/bottom_panel.glade")
-		self.builder.connect_signals(self.signals)
+		self.app.window.bottom_panel_builder = Gtk.Builder()
+		builder = self.app.window.bottom_panel_builder
+		builder.add_from_file(f"{dir_path}/bottom_panel.glade")
+		builder.connect_signals(self.signals)
 		
-		window = self.builder.get_object("window")
-		self.bottom_panel_body = self.builder.get_object("bottom_panel_body")
-		self.notebook = self.builder.get_object("bottom_panel_notebook")
-		window.remove(self.bottom_panel_body)
+		window = builder.get_object("window")
+		self.app.window.bottom_panel_panel_body = builder.get_object("bottom_panel_body")
+		self.app.window.bottom_panel_notebook = builder.get_object("bottom_panel_notebook")
+		window.remove(self.app.window.bottom_panel_panel_body)
 		
-		self.close_button = self.builder.get_object("close_button")
+		self.app.window.bottom_panel_close_button = builder.get_object("close_button")
 		
-		# get right side body
-		self.right_side_body = self.app.builder.get_object("right_side_body")
 		
 	
 	
@@ -77,13 +81,20 @@ class Plugin():
 			self.toggle_bottom_panel()
 			
 			
-			
-	def toggle_bottom_panel(self):	
-		if not self.visible:
+	
+	def toggle_bottom_panel(self):
+		self.assert_widgets_loaded()
+		
+		if not self.app.window.bottom_panel_visible:
 			self.show_panel()
 		else:
 			self.hide_panel()
 	
+	
+	
+	def assert_widgets_loaded(self):
+		if not self.app.window.bottom_panel_builder:
+			self.load_from_builder()
 	
 	
 	def on_notebook_switch_page(self, notebook, page, page_num):
@@ -91,23 +102,22 @@ class Plugin():
 		
 		
 	def set_current_page(self, page, page_num):
-		self.current_page = page
-		self.current_page_num = page_num
-		current_label = self.notebook.get_tab_label_text(page)
-		self.close_button.set_tooltip_text(f"Close {current_label}")
+		self.app.window.bottom_panel_current_page = page
+		self.app.window.bottom_panel_current_page_num = page_num
+		current_label = self.app.window.bottom_panel_notebook.get_tab_label_text(page)
+		self.app.window.bottom_panel_close_button.set_tooltip_text(f"Close {current_label}")
 		
 		
 	
 	def on_close_button_clicked(self, widget):
-	
 		# notify plugin that the page is closed/removed
-		if hasattr(self.current_page, "on_page_remove"):
-			self.current_page.on_page_remove(self.current_page)
+		if hasattr(self.app.window.bottom_panel_current_page, "on_page_remove"):
+			self.app.window.bottom_panel_current_page.on_page_remove(self.app.window.bottom_panel_current_page)
 
-		del self.added_plugins[self.current_page.plugin]
-		self.notebook.remove_page(self.current_page_num)
+		del self.app.window.bottom_panel_added_plugins[str(self.app.window) + str(self.app.window.bottom_panel_current_page.plugin)]
+		self.app.window.bottom_panel_notebook.remove_page(self.app.window.bottom_panel_current_page_num)
 		
-		if self.notebook.get_n_pages() == 0:
+		if self.app.window.bottom_panel_notebook.get_n_pages() == 0:
 			self.hide_panel()
 	
 	
@@ -122,74 +132,83 @@ class Plugin():
 		
 	
 	def hide_panel(self):
-		if not self.visible:
+		if not self.app.window.bottom_panel_visible:
 			return
 	
-		paned = self.right_side_body.get_children()[0]
+		# get right side body
+		right_side_body = self.app.builder.get_object("right_side_body")
+		scrolled_sourceview = self.app.builder.get_object("scroll_and_source_and_map_box")
+		
+		paned = right_side_body.get_children()[0]
 		
 		if self.is_under_resized(paned):
 			self.old_position = 500
 		else:
 			self.old_position = paned.get_position()
 		
-		paned.remove(self.scrolled_sourceview)
-		paned.remove(self.bottom_panel_body)
-		self.right_side_body.remove(paned)		
-		self.right_side_body.pack_start(self.scrolled_sourceview, True, True, 0)		
-		self.visible = False
+		paned.remove(scrolled_sourceview)
+		paned.remove(self.app.window.bottom_panel_panel_body)
+		right_side_body.remove(paned)		
+		right_side_body.pack_start(scrolled_sourceview, True, True, 0)		
+		self.app.window.bottom_panel_visible = False
 			
 	
 	
-	def show_panel(self):
-		if self.visible:
+	def show_panel(self):		
+		if self.app.window.bottom_panel_visible:
 			return
 		
 		# if not pages, then show logs as default
-		if self.notebook.get_n_pages() == 0:
+		if self.app.window.bottom_panel_notebook.get_n_pages() == 0:
 			self.THE("logger", "show_log", {})
 			return
-			
-		self.scrolled_sourceview = self.right_side_body.get_children()[0]
-		self.right_side_body.remove(self.scrolled_sourceview)
+		
+		# get right side body
+		right_side_body = self.app.builder.get_object("right_side_body")
+		scrolled_sourceview = self.app.builder.get_object("scroll_and_source_and_map_box")
+		
+		right_side_body.remove(scrolled_sourceview)
 		
 		# create paned
 		paned = Gtk.Paned.new(Gtk.Orientation.VERTICAL)
-		paned.pack1(self.scrolled_sourceview, True, False)
-		paned.pack2(self.bottom_panel_body, False, True)
+		paned.pack1(scrolled_sourceview, True, False)
+		paned.pack2(self.app.window.bottom_panel_panel_body, False, True)
 		
 		if self.old_position == 0:
 			self.old_position = 500
 		
 		paned.set_position(self.old_position)
 		
-		self.right_side_body.pack_start(paned, True, True, 0)		
-		self.right_side_body.show_all()
+		right_side_body.pack_start(paned, True, True, 0)		
+		right_side_body.show_all()
 				
 		# set current page
-		page_num = self.notebook.get_current_page()
-		page = self.notebook.get_nth_page(page_num)
+		page_num = self.app.window.bottom_panel_notebook.get_current_page()
+		page = self.app.window.bottom_panel_notebook.get_nth_page(page_num)
 		self.set_current_page(page, page_num)
 		
-		self.visible = True
+		self.app.window.bottom_panel_visible = True
 		
 		
 		
 		
 	def add(self, plugin, label, widget, on_page_remove=None):
+		self.assert_widgets_loaded()
+		
 		# check if page is already added
-		added = self.added_plugins.get(plugin)
+		added = self.app.window.bottom_panel_added_plugins.get(str(self.app.window) + str(plugin))
 		if added:
 			self.show_panel()
-			page_num = self.notebook.page_num(plugin.bottom_panel_page)
+			page_num = self.app.window.bottom_panel_notebook.page_num(self.app.window.bottom_panel_added_pages[plugin])
 			
 			# switch to this page
-			self.notebook.set_current_page(page_num)
+			self.app.window.bottom_panel_notebook.set_current_page(page_num)
 			
 			# update label (sometimes it is needed)
-			self.notebook.set_tab_label(plugin.bottom_panel_page, Gtk.Label.new(label))
+			self.app.window.bottom_panel_notebook.set_tab_label(self.app.window.bottom_panel_added_pages[plugin], Gtk.Label.new(label))
 			return True
 		
-		self.added_plugins[plugin] = plugin
+		self.app.window.bottom_panel_added_plugins[str(self.app.window) + str(plugin)] = plugin
 	
 		tab_label = Gtk.Label.new(label)
 
@@ -202,15 +221,16 @@ class Plugin():
 		if on_page_remove:
 			page.on_page_remove = on_page_remove
 		
-		self.notebook.append_page(page, tab_label)
-		self.notebook.show_all()
+		self.app.window.bottom_panel_notebook.append_page(page, tab_label)
+		self.app.window.bottom_panel_notebook.show_all()
 		
 		self.show_panel()
 		
 		# bind page to plugin
-		plugin.bottom_panel_page = page
+		# plugin.bottom_panel_page = page
+		self.app.window.bottom_panel_added_pages[plugin] = page
 		
-		page_num = self.notebook.page_num(page)
-		self.notebook.set_current_page(page_num)
+		page_num = self.app.window.bottom_panel_notebook.page_num(page)
+		self.app.window.bottom_panel_notebook.set_current_page(page_num)
 		return True
 		

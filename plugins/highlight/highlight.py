@@ -19,7 +19,7 @@
 # 
 #	highlight: is responsible for highlighting the selected text by user. It
 #	highlights all occurrences of selected text. The highlight_signal functions
-#	is connected with mark-set signal in sourceview_manager.py
+#	is connected with mark-set signal in sourceview_manager
 #
 
 import re # for regex
@@ -34,7 +34,6 @@ class Plugin():
 	def __init__(self, app):
 		self.name = "highlight"
 		self.app = app
-		self.sourceview_manager = app.sourceview_manager
 		self.THE = app.plugins_manager.THE
 		self.commands = []
 		self.tag_name = "search-match"
@@ -43,12 +42,7 @@ class Plugin():
 
 		
 	def activate(self):
-		# connect signal mark-set event which is when user select text
-		# user clicks to unselect text is also connected
-		# see highlight.highlight_signal function for handling 
-		# mark-set event
-		self.sourceview_manager.source_view.get_buffer().connect("mark-set", self.highlight_signal)
-		
+		pass
 		
 	
 	def highlight_signal(self, buffer, location, mark):

@@ -23,7 +23,7 @@
 # config parameters and load the builder (UI structure of the main window).
 # This Application instance is the main root of gamma. It holds
 # references to everything needed for other plugins such as config, 
-# window, builder, sourceview_manager, and plugins_manager.
+# window, builder, and plugins_manager.
 # Also it loads the eager plugins in self.plugins_manager.load_plugins()
 # which call activate for each plugin and store plugins references in
 # plugins_manager.plugins
@@ -33,29 +33,32 @@ import sys
 import gi
 gi.require_version('Gtk', '3.0')
 gi.require_version('GtkSource', "4")
-from gi.repository import GLib, Gio, Gtk, Gdk, GtkSource, GObject
+from gi.repository import Gio, Gtk, Gdk, GtkSource, GObject
 
 import config
-import sourceview_manager
 import signal_handler
 from plugins.plugins_manager import PluginsManager
 
+
 class Application(Gtk.Application):
 
-	def __init__(self, *args, **kwargs):		
+	def __init__(self, *args, **kwargs):
+				
 		# make the package name as "io.gitlab.hamadmarri.gamma"
 		# FLAGS_NONE means no passing arguments from command line, this
 		# might be changed later to support new window, new file, or open a file
-		super().__init__(*args, application_id="io.gitlab.hamadmarri.gamma", 
-						flags=Gio.ApplicationFlags.HANDLES_OPEN, **kwargs)
-						# Gio.ApplicationFlags.FLAGS_NONE |
-						# | Gio.ApplicationFlags.HANDLES_COMMAND_LINE
+		super().__init__(*args, application_id=f"io.gitlab.hamadmarri.gamma", 
+						flags=Gio.ApplicationFlags.HANDLES_COMMAND_LINE, **kwargs)
+		
 		
 		# this line is important to mak gtk object(newer version of pygtk) to
 		# include gtk sourceview.
 		GObject.type_register(GtkSource.View)
 		
+		self.name = "GammaApplication"
 		self.window = None
+		self.builder = None
+		self.is_debugging = False
 		
 		# config contains important paths and settings for ui, styles, plugins
 		self.config = config.config_paths_and_settings
@@ -76,8 +79,6 @@ class Application(Gtk.Application):
 		# which is an easy design for plugins to set there key bindings
 		self.signal_handler = signal_handler.SignalHandler(self)
 		
-		# sourceview_manager for anything related to sourceview
-		self.sourceview_manager = sourceview_manager.SourceViewManager(self)
 
 
 	def load_builder(self):
@@ -98,39 +99,94 @@ class Application(Gtk.Application):
 	def do_startup(self):
 		Gtk.Application.do_startup(self)
 
-
-	def do_open(self, files, n_files, hint):
-		self.do_activate()
-		filenames = []
+	
+	def do_command_line(self, command_line):
+		args = command_line.get_arguments()
+		self.signal_handler.emit("log", self, "do_command_line:" + str(args))
 		
-		for f in files:
-			filenames.append(f.get_path())
+		if len(args) == 1:
+			self.do_activate()
+		elif args[1] == "--new-window":
+			self.do_activate(new_window=True)
+		elif args[1] == "--verbose":
+			self.is_debugging = True
 			
-		self.plugins_manager.THE("files_manager", "open_files", {"filenames": filenames})
+			# make sure at least the main window is open
+			self.do_activate()
+			
+			if len(args) > 2:
+				# open files
+				self.open_files(args[2:])
+		else:
+			# make sure at least the main window is open
+			self.do_activate()
+			
+			# open files
+			self.open_files(args[1:])
+			
+		return 0
+	
 			
 		
-	def do_activate(self):
+	def do_activate(self, new_window=False):
 	 	if not self.window:
 	 		self.show_first_window()
+	 	elif new_window:
+	 		self.show_new_window()
 		
 	
 	def show_first_window(self):
 		# get id=window (ui element in .ui) from builder
 		self.window = self.builder.get_object("window")
 		
-		# must set the parent application of 
-		# window to this app(self)
-		self.window.props.application = self
-	
+		# bind this builder to this window
+		self.window.builder = self.builder
+		
 		# loading plugins calls their activate functions.
 		# in plugins_manager.py, you can comment out plugins in
 		# plugin_list array
 		self.plugins_manager.load_plugins()
 		self.set_handlers()
-				
+		
+		# must set the parent application of 
+		# window to this app(self)
+		self.window.props.application = self
 		self.window.set_icon_name("io.gitlab.hamadmarri.gamma")
 		self.window.show_all()
+		self.window.connect("focus_in_event", self.window_event)
+		
 
+	def show_new_window(self):
+		self.load_builder()
+		
+		# get id=window (ui element in .ui) from builder
+		self.window = self.builder.get_object("window")
+		
+		# bind this builder to this window
+		self.window.builder = self.builder
+
+		self.plugins_manager.activate_plugins()
+		self.set_handlers()
+				
+		# must set the parent application of 
+		# window to this app(self)
+		self.window.props.application = self
+		self.window.set_icon_name("io.gitlab.hamadmarri.gamma")
+		self.window.show_all()
+		self.window.connect("focus_in_event", self.window_event)
+		
+
+	
+	def window_event(self, w, e=None):
+		self.window = w
+		self.builder = w.builder
+		self.signal_handler.emit("windo-focus-in", w)
+
+
+
+	def open_files(self, filenames):	
+		self.signal_handler.emit("log", self, "do_open:" + str(filenames))
+		self.plugins_manager.THE("files_manager", "open_files", {"filenames": filenames})
 
 
 if __name__ == "__main__":

@@ -27,8 +27,8 @@ import os
 gamma_path = os.path.dirname(os.path.realpath(__file__))
 
 
-# default .ui layout file
-ui_file = "builder.ui"
+# default .glade layout file
+ui_file = "gamma.glade"
 
 # default css style file
 # style_file = "default.css"
@@ -44,11 +44,11 @@ style_scheme = "chocolateicecream"
 # from config_paths_and_settings can get 
 # all important paths
 config_paths_and_settings = {
-	"ui-path":		gamma_path + "/ui/"		+ ui_file,
-	"style-path":	gamma_path + "/style/"	+ style_file,
-	"style-scheme":	style_scheme,
-	"show_grid": False,
-	"font-family": "Droid Sans Mono, Monospace",
-	"font-size": 18, # in px
+	"ui-path":			gamma_path + "/ui/"		+ ui_file,
+	"style-path":		gamma_path + "/style/"	+ style_file,
+	"style-scheme":		style_scheme,
+	"show_grid": 		False,
+	"font-family":		"Droid Sans Mono, Monospace",
+	"font-size": 		18, # in px
 }
 

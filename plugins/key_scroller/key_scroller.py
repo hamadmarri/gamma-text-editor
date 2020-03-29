@@ -34,10 +34,12 @@ class Plugin():
 		self.signal_handler = app.signal_handler
 		self.THE = app.plugins_manager.THE
 		self.commands = []
-	
-	def activate(self):
 		self.signal_handler.key_bindings_to_plugins.append(self)
 	
+	
+	def activate(self):
+		pass
+
 
 	def key_bindings(self, event, keyval_name, ctrl, alt, shift):
 		if ctrl and keyval_name == "Down":
@@ -47,7 +49,7 @@ class Plugin():
 
 	
 	def scroll(self, direction):
-		current_file = self.THE("files_manager", "current_file", None)
+		current_file = self.THE("files_manager", "get_current_file", {})
 		
 		if not current_file:
 			return

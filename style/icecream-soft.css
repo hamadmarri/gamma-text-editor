@@ -412,10 +412,7 @@ headerbar {
 
 
 /******************* BOTTOM PANEL *********************/
-
-notebook tab label {
-	color: #827082;
-	font-size: 17px;
+notebook {
+	background-color: @gamma_bg_color;
 }
-
 

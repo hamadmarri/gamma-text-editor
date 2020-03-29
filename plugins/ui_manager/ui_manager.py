@@ -36,34 +36,14 @@ class Plugin(FilesUI):
 	def __init__(self, app):
 		self.name = "ui_manager"
 		self.app = app
-		self.builder = app.builder
 		self.handlers = app.signal_handler.handlers
 		self.THE = app.plugins_manager.THE
-		self.sourceview_manager = app.sourceview_manager
 		self.commands = []
 		self.set_handlers()
-		
-		self.toolbar_files = None
-		self.headerbar = None
-		self.scrolledwindow = None		
-		
+				
 
 	def activate(self):
-		# scrolledwindow is object that contains sourceviews
-		# basically, a new opened file has its own sourceview 
-		# and got added to scrolledwindow
-		# previouse sourceview got removed from scrolledwindow
-		self.scrolledwindow = self.builder.get_object("source_scrolledwindow")
-		
-		# get toolbar_files Gtk widget from ui file
-		self.toolbar_files = self.builder.get_object("toolbar_files")
-
-		# get headerbar widget reference, to show current filename
-		# in headerbar label
-		self.headerbar = self.builder.get_object("headerbarMain")
-		
-		self.scroll_and_source_and_map_box = self.builder.get_object("scroll_and_source_and_map_box") 
-	
+		pass
 	
 	
 	

@@ -37,12 +37,8 @@ class Plugin():
 		self.app = app
 		self.signal_handler = app.signal_handler
 		self.handlers = app.signal_handler.handlers
-		self.builder = app.builder
 		self.THE = app.plugins_manager.THE
-		self.sourceview = None
-		self.buffer = None
 		self.commands = []
-		self.searchEntry = None
 		self.search = None
 		self.search_flags = 0
 		self.whole_word = False
@@ -54,7 +50,6 @@ class Plugin():
 		self.old_end_iter = None
 		self.current_selection = None
 		self.signal_handler.connect("file-switched", self.refresh_source)
-		self.searchEntry = self.builder.get_object("searchEntry")
 		
 		
 		# for highlight current match
@@ -62,17 +57,17 @@ class Plugin():
 			"weight": 1700,
 			"background": "#dddd77",
 		}
-		self.tag = None
+		self.app.window.search_tag = None
 		self.tag_name = "selected_search"
 		
+		self.signal_handler.key_bindings_to_plugins.append(self)
+		self.set_handlers()
+		commands.set_commands(self)
 				
 	
 	def activate(self):
-		self.signal_handler.key_bindings_to_plugins.append(self)
-		self.set_handlers()
-				
-		commands.set_commands(self)
-	
+		pass
+
 
 	def key_bindings(self, event, keyval_name, ctrl, alt, shift):
 		if ctrl and keyval_name == "f":
@@ -96,15 +91,15 @@ class Plugin():
 		
 	def refresh_source(self, new_source):
 		self.quit_search()
-		self.sourceview = new_source
-		self.buffer = self.sourceview.get_buffer()
+		self.app.window.search_sourceview = new_source
+		self.app.window.search_buffer = self.app.window.search_sourceview.get_buffer()
 		
 		args = {
-			"buffer": self.buffer,
+			"buffer": self.app.window.search_buffer,
 			"tag_name": self.tag_name,
 			"props": self.props
 		}
-		self.tag = self.THE("highlighter", "get_custom_tag", args)
+		self.app.window.search_tag = self.THE("highlighter", "get_custom_tag", args)
 		
 	
 	
@@ -121,26 +116,24 @@ class Plugin():
 			self.clear_search(widget)
 			
 			# set focus back to sourceview
-			current_file = self.THE("files_manager", "current_file", None)
+			current_file = self.THE("files_manager", "get_current_file", {})
 			if current_file:
 				current_file.source_view.grab_focus()
 			
-		elif (shift and keyval_name == "Return") or keyval_name == "Up":
-			# self.refresh_sources()
-			
+		elif (shift and keyval_name == "Return") or keyval_name == "Up":		
 			self.search_flags = 0
 			self.whole_word = False
 			if not self.is_highlight_done:
-				self.do_highlight(self.searchEntry.get_text(), self.buffer)
+				searchEntry = self.app.builder.get_object("searchEntry")
+				self.do_highlight(searchEntry.get_text(), self.app.window.search_buffer)
 			self.scroll_prev()	
 			
-		elif keyval_name == "Return" or keyval_name == "KP_Enter" or keyval_name == "Down":
-			# self.refresh_sources()
-			
+		elif keyval_name == "Return" or keyval_name == "KP_Enter" or keyval_name == "Down":			
 			self.search_flags = 0
 			self.whole_word = False
 			if not self.is_highlight_done:
-				self.do_highlight(self.searchEntry.get_text(), self.buffer)
+				searchEntry = self.app.builder.get_object("searchEntry")
+				self.do_highlight(searchEntry.get_text(), self.app.window.search_buffer)
 			else:
 				self.scroll_next()
 				
@@ -152,24 +145,25 @@ class Plugin():
 		
 	def place_cursor_to_selection(self):
 		if self.old_start_iter:
-			self.buffer.place_cursor(self.old_start_iter)
+			self.app.window.search_buffer.place_cursor(self.old_start_iter)
 		
 			
 	def quit_search(self):
 		self.is_highlight_done = False
-		if self.buffer:
-			self.THE("highlighter", "remove_highlight", {"buffer": self.buffer, "tag": self.tag})
+		if hasattr(self.app.window, "search_buffer"):
+			self.THE("highlighter", "remove_highlight", {"buffer": self.app.window.search_buffer, "tag": self.app.window.search_tag})
 		self.set_selected_iters(None, None)
-		if self.buffer:
-			self.THE("highlighter", "remove_highlight", {"buffer": self.buffer})
+		if hasattr(self.app.window, "search_buffer"):
+			self.THE("highlighter", "remove_highlight", {"buffer": self.app.window.search_buffer})
 		self.update_style(-1)
 	
 	
-	def get_focus(self):
-				
+	def get_focus(self):		
+		searchEntry = self.app.builder.get_object("searchEntry")
+		
 		# gets (start, end) iterators of 
 		# the selected text
-		iters = self.buffer.get_selection_bounds()
+		iters = self.app.window.search_buffer.get_selection_bounds()
 		if iters:
 			# when user selected some text
 			# get the start and end iters
@@ -178,42 +172,42 @@ class Plugin():
 			# get the text is being selected, False means without tags
 			# i.e. only appearing text without hidden tags set by sourceview
 			# (read: https://developer.gnome.org/gtk3/stable/GtkTextBuffer.html#gtk-text-buffer-get-text)
-			text = self.buffer.get_text(iter_start, iter_end, False)
+			text = self.app.window.search_buffer.get_text(iter_start, iter_end, False)
 			
-			self.searchEntry.set_text(text)
+			searchEntry.set_text(text)
 
 		# set cursor to searchEntry
-		self.searchEntry.grab_focus()
+		searchEntry.grab_focus()
 		self.update_style(0)
 				
 	
 	
 	
 	def update_style(self, state):
-		self.searchEntry.get_style_context().remove_class("searching")
-		self.searchEntry.get_style_context().remove_class("searchSuccess")
-		self.searchEntry.get_style_context().remove_class("searchFail")
+		searchEntry = self.app.builder.get_object("searchEntry")
+		
+		searchEntry.get_style_context().remove_class("searching")
+		searchEntry.get_style_context().remove_class("searchSuccess")
+		searchEntry.get_style_context().remove_class("searchFail")
 		
 		if state == 0:
 			# searching in blue
-			self.searchEntry.get_style_context().add_class("searching")
+			searchEntry.get_style_context().add_class("searching")
 		elif state == 1:
 			# search success in green
-			self.searchEntry.get_style_context().add_class("searchSuccess")
+			searchEntry.get_style_context().add_class("searchSuccess")
 		elif state == 2:
 			# no results in red 
-			self.searchEntry.get_style_context().add_class("searchFail")
+			searchEntry.get_style_context().add_class("searchFail")
 			
 			
 	
 	# (see https://developer.gnome.org/gtk3/stable/GtkSearchEntry.html)
 	# (https://developer.gnome.org/gtk3/stable/GtkEntry.html)
-	def on_search_field_changed(self, widget):
-		# self.refresh_sources()
-		
+	def on_search_field_changed(self, widget):		
 		self.search_flags = 0
 		self.whole_word = False
-		self.do_highlight(widget.get_text(), self.buffer)
+		self.do_highlight(widget.get_text(), self.app.window.search_buffer)
 		
 	
 	# (see https://developer.gnome.org/gtk3/stable/GtkSearchEntry.html)
@@ -221,10 +215,10 @@ class Plugin():
 	def do_highlight(self, search, buffer):
 		
 		if buffer:
-			self.buffer = buffer
+			self.app.window.search_buffer = buffer
 		
 		# remove selected tag (bold text)
-		self.THE("highlighter", "remove_highlight", {"buffer": self.buffer, "tag": self.tag})
+		self.THE("highlighter", "remove_highlight", {"buffer": self.app.window.search_buffer, "tag": self.app.window.search_tag})
 		self.set_selected_iters(None, None)
 		
 		# print(f"search.whole_word: {self.whole_word}")
@@ -289,10 +283,10 @@ class Plugin():
 		
 	def scroll(self, marks):
 		next_mark_pos = self.match_number * 2
-		match_start = self.buffer.get_iter_at_mark(marks[next_mark_pos])
-		match_end = self.buffer.get_iter_at_mark(marks[next_mark_pos + 1])
+		match_start = self.app.window.search_buffer.get_iter_at_mark(marks[next_mark_pos])
+		match_end = self.app.window.search_buffer.get_iter_at_mark(marks[next_mark_pos + 1])
 		
-		self.sourceview.scroll_to_mark(marks[self.match_number * 2], 0.20, False, 1.0, 0.5)
+		self.app.window.search_sourceview.scroll_to_mark(marks[self.match_number * 2], 0.20, False, 1.0, 0.5)
 		self.THE("message_notifier", "show_message", \
 						{"m": "Search Results | " + str(self.match_number + self.deleted_marks + 1) + "/" + str(self.count)})
 						
@@ -302,27 +296,27 @@ class Plugin():
 	
 	def highlight_scrolled(self, start_iter, end_iter):	
 		args = {
-			"buffer": self.buffer,
+			"buffer": self.app.window.search_buffer,
 			"tag_name": self.tag_name,
 			"props": self.props
 		}
-		self.tag = self.THE("highlighter", "get_custom_tag", args)
+		self.app.window.search_tag = self.THE("highlighter", "get_custom_tag", args)
 		
 		# remove old highlight
 		if self.old_start_iter:		
 			args = {
-				"buffer": self.buffer,
-				"tag": self.tag,
+				"buffer": self.app.window.search_buffer,
+				"tag": self.app.window.search_tag,
 				"start_iter": self.old_start_iter,
 				"end_iter": self.old_end_iter
 			}
 			self.THE("highlighter", "remove_highlight", args)
 		
 		args = {
-			"buffer": self.buffer,
+			"buffer": self.app.window.search_buffer,
 			"start_iter": start_iter,
 			"end_iter": end_iter,
-			"tag": self.tag
+			"tag": self.app.window.search_tag
 		}
 		self.THE("highlighter", "highlight_custom_tag", args)
 		self.set_selected_iters(start_iter, end_iter)
@@ -332,7 +326,7 @@ class Plugin():
 	def clear_search(self, widget):
 		self.search = ""
 		widget.set_text(self.search)
-		self.THE("highlighter", "remove_highlight", {"buffer": self.buffer, "tag": self.tag})
+		self.THE("highlighter", "remove_highlight", {"buffer": self.app.window.search_buffer, "tag": self.app.window.search_tag})
 		
 	
 	def set_selected_iters(self, s_iter, e_iter):
@@ -351,8 +345,8 @@ class Plugin():
 		s_mark = marks[self.match_number * 2]
 		e_mark = marks[(self.match_number * 2) + 1]
 		
-		self.buffer.delete_mark(s_mark)
-		self.buffer.delete_mark(e_mark)
+		self.app.window.search_buffer.delete_mark(s_mark)
+		self.app.window.search_buffer.delete_mark(e_mark)
 		
 		del marks[(self.match_number * 2) + 1]
 		del marks[self.match_number * 2]

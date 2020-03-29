@@ -35,16 +35,17 @@ class Plugin():
 	def __init__(self, app):
 		self.name = "savefile"
 		self.app = app
-		self.sourceview_manager = app.sourceview_manager
 		self.signal_handler = app.signal_handler
 		self.THE = app.plugins_manager.THE
 		self.commands = []
 
-		
-	def activate(self):
 		self.signal_handler.key_bindings_to_plugins.append(self)
 		commands.set_commands(self)
 		
+
+	def activate(self):
+		pass
+
 	
 	# key_bindings is called by SignalHandler
 	def key_bindings(self, event, keyval_name, ctrl, alt, shift):
@@ -72,7 +73,7 @@ class Plugin():
 			return
 		
 		# get the current displayed file
-		current_file = self.THE("files_manager", "current_file", None)
+		current_file = self.THE("files_manager", "get_current_file", {})
 		
 		buffer = current_file.source_view.get_buffer()
 
@@ -91,9 +92,11 @@ class Plugin():
 	
 	
 	def save_all(self):
-		editted_counter = self.THE("files_manager", "editted_counter", None)
+		editted_counter = self.THE("files_manager", "current_window_editted_counter", {})
+		
 		if editted_counter > 0:
-			files = self.THE("files_manager", "files", None)
+			files = self.THE("files_manager", "current_window_files", {})
+			
 			# loop through all files objects
 			# reversed so from user prespective "from top to bottom"
 			for f in reversed(files):
@@ -104,7 +107,7 @@ class Plugin():
 					
 	def save_current_file(self):
 		# get the current displayed file
-		current_file = self.THE("files_manager", "current_file", None)
+		current_file = self.THE("files_manager", "get_current_file", {})
 		self.save_file(current_file)
 		
 	
@@ -136,7 +139,10 @@ class Plugin():
 				# set the language of new created file 
 				# see sourceview_manager
 				buffer = file_object.source_view.get_buffer()
-				self.sourceview_manager.set_language(new_filename, buffer)
+				self.THE("sourceview_manager", "set_language", {
+							"filename": new_filename,
+							"buffer": buffer
+						})
 				
 					
 				# TODO: if saved(overwrite) a file in Hard Drive, but that file 

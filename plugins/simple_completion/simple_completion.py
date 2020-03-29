@@ -70,7 +70,8 @@ class Plugin():
 	def __init__(self, app):
 		self.name = "simple_completion"
 		self.app = app
-		self.commands = []
+		self.THE = app.plugins_manager.THE
+		self.commands = []		
 #		self.keywords = """ 
 #			Hamad
 #			AlMarri
@@ -81,10 +82,12 @@ class Plugin():
 #		1)
 #		Set up a provider that get words from what has already been entered
 #		in the gtkSource.Buffer that is tied to the GtkSourceView
-		self.view_completion = self.app.sourceview_manager.source_view.get_completion()						
+		source_view = self.THE("sourceview_manager", "source_view", None)
+		self.view_completion = source_view.get_completion()
 		self.view_autocomplete = GtkSource.CompletionWords.new('main')
-		self.view_autocomplete.register(self.app.sourceview_manager.source_view.get_buffer())
+		self.view_autocomplete.register(source_view.get_buffer())
 		self.view_completion.add_provider(self.view_autocomplete)
+		
 		
 		# 2) Make a new buffer, add a str to it, make a provider, add it to the view_autocomplete
 #		self.keybuff = GtkSource.Buffer()
@@ -99,7 +102,7 @@ class Plugin():
 #		custom_completion_provider = CustomCompletionProvider()
 #		self.view_completion.add_provider(custom_completion_provider)
 #		self.custom_completion_provider = custom_completion_provider
-		
+
 	
 	
 	

@@ -42,6 +42,7 @@ class WindowEvents(object):
 		self.close()
 		
 
-	# use hide to not lose the widgets from builder		
+	# use hide to not lose the widgets from builder
 	def close(self):
-		self.window.hide()
+		if hasattr(self.app.window.commander_window, "hide"):
+			self.app.window.commander_window.hide()

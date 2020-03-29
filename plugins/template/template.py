@@ -61,10 +61,12 @@ class Plugin():
 		self.handlers = app.signal_handler.handlers # optional
 		self.commands = []
 	
-	# do not remove 
-	def activate(self):
 		# self.signal_handler.key_bindings_to_plugins.append(self) <-- if need key_bindings
 		commands.set_commands(self)
+
+
+	# do not remove 
+	def activate(self):
 		self.set_handlers() # optional
 		pass
 	

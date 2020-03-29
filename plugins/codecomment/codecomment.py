@@ -42,17 +42,18 @@ class Plugin(AddCommentMixin, RemoveCommentMixin, CodeCommentTags):
 	
 
 	def __init__(self, app):
-		self.name = "codecomment.codecomment"
+		self.name = "codecomment"
 		self.app = app
 		self.THE = app.plugins_manager.THE
 		self.signal_handler = app.signal_handler
 		self.commands = []
 		
-	
-	def activate(self):
 		self.signal_handler.key_bindings_to_plugins.append(self)
 		commands.set_commands(self)
-		
+	
+	
+	def activate(self):
+		pass
 		
 
 	def key_bindings(self, event, keyval_name, ctrl, alt, shift):		
@@ -62,7 +63,7 @@ class Plugin(AddCommentMixin, RemoveCommentMixin, CodeCommentTags):
 			
 
 	def do_comment(self):
-		current_file = self.THE("files_manager", "current_file", None)
+		current_file = self.THE("files_manager", "get_current_file", {})
 		if not current_file:
 			return
 

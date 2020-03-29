@@ -42,15 +42,15 @@ class Plugin():
 		self.current_size = app.config['font-size']
 		self.default_font = app.config['font-family']
 	
-	
-	def activate(self):
 		self.signal_handler.key_bindings_to_plugins.append(self)
-		
+		source_style_commands.set_commands(self)
+	
+
+	def activate(self):		
 		# the style is applied on the buffer
-		source_view = self.app.sourceview_manager.source_view
+		source_view = self.THE("sourceview_manager", "source_view", None)
 		buffer = source_view.get_buffer()
 		self.set_source_style(source_view)
-		source_style_commands.set_commands(self)
 		
 		self.set_handlers()
 		
@@ -92,13 +92,12 @@ class Plugin():
 		
 		self.current_size += increment
 		size = str(self.current_size) + "px"
-		files = self.THE("files_manager", "files", None)
+		files = self.THE("files_manager", "current_window_files", {})
 		for f in files:		
 			self.update_style(f.source_view, size=size)
 		
 		
 	def update_style(self, source_view, font=None, size=None):
-	
 		if not font:
 			font = self.default_font
 		

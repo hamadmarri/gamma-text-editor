@@ -11,7 +11,7 @@ class SpecialPaste(object):
 		clipboard = Gtk.Clipboard.get_default(Gdk.Display.get_default())
 		
 		# get current viewing file's buffer		
-		current_file = self.THE("files_manager", "current_file", None)
+		current_file = self.THE("files_manager", "get_current_file", {})
 		if not current_file:
 			return
 		
@@ -47,7 +47,7 @@ class SpecialPaste(object):
 			
 	def do_special_paste(self, text):
 		# get current viewing file's buffer		
-		current_file = self.THE("files_manager", "current_file", None)
+		current_file = self.THE("files_manager", "get_current_file", {})
 		if not current_file:
 			return
 		

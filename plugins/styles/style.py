@@ -32,12 +32,15 @@ class Plugin():
 		self.app = app
 		self.commands = []
 		
-	
-	def activate(self):
 		style_provider = Gtk.CssProvider()
 		style_provider.load_from_path(self.app.config["style-path"])
 		Gtk.StyleContext.add_provider_for_screen(
 			Gdk.Screen.get_default(), style_provider,
 			Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
 		)
+
+	
+	def activate(self):
+		pass
+		
 		
