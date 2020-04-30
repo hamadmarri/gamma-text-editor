@@ -32,14 +32,14 @@ class Plugin():
 	def __init__(self, app):
 		self.name = "help"
 		self.app = app
-		self.plugins = app.plugins_manager.plugins
 		self.signal_handler = app.signal_handler
 		self.commands = []
 		
-
-	def activate(self):
 		self.signal_handler.key_bindings_to_plugins.append(self)
 		commands.set_commands(self)
+
+	def activate(self):
+		pass
 
 		
 	def key_bindings(self, event, keyval_name, ctrl, alt, shift):

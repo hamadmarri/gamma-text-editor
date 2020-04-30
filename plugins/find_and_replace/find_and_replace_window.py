@@ -56,16 +56,14 @@ class FindReplaceWindow(object):
 		self.find_status_lbl = self.builder.get_object("find_status_lbl")
 				
 		self.window = self.builder.get_object("find_replace_window")
-		self.window.set_transient_for(self.app.window)
 		
 		
 	
 	def hide(self):
 		self.window.hide()
-		# remove color from "F and R" menu
-		window_ctrl = self.plugins["window_ctrl.window_ctrl"]
-		window_ctrl.remove_attention(window_ctrl.F)
-		window_ctrl.remove_attention(window_ctrl.R)
+		# remove color from "F and R" menu		
+		self.THE("window_controller", "remove_attention", {"menu": "F"})
+		self.THE("window_controller", "remove_attention", {"menu": "R"})
 		
 		self.new_search = True
 		self.clear_highlights()
@@ -75,7 +73,9 @@ class FindReplaceWindow(object):
 	def show_window(self, show_replace=False):
 		self.show_replace = show_replace
 		if not self.window:
-			self.load_ui()	
+			self.load_ui()
+		
+		self.window.set_transient_for(self.app.window)
 		
 		replace_expander = self.builder.get_object("replace_expander")
 		replace_expander.set_expanded(self.show_replace)
@@ -86,18 +86,17 @@ class FindReplaceWindow(object):
 			self.hide()
 		else:
 			self.window.show_all()
-			# show color for "F and R" menu
-			window_ctrl = self.plugins["window_ctrl.window_ctrl"]
-			window_ctrl.grap_attention(window_ctrl.F)
+			# show color for "F and R" menu			
+			self.THE("window_controller", "grap_attention", {"menu": "F"})
 			if self.show_replace:
-				window_ctrl.grap_attention(window_ctrl.R)
+				self.THE("window_controller", "grap_attention", {"menu": "R"})
 
 
 
 	def fill_findtext(self):
 		# gets (start, end) iterators of 
 		# the selected text
-		iters = self.buffer.get_selection_bounds()
+		iters = self.app.window.find_buffer.get_selection_bounds()
 		if iters:
 			# when user selected some text
 			# get the start and end iters
@@ -106,7 +105,7 @@ class FindReplaceWindow(object):
 			# get the text is being selected, False means without tags
 			# i.e. only appearing text without hidden tags set by sourceview
 			# (read: https://developer.gnome.org/gtk3/stable/GtkTextBuffer.html#gtk-text-buffer-get-text)
-			text = self.buffer.get_text(iter_start, iter_end, False)
+			text = self.app.window.find_buffer.get_text(iter_start, iter_end, False)
 			
 			self.find_text_view.get_buffer().set_text(text)
 		
@@ -167,11 +166,9 @@ class FindReplaceWindow(object):
 		self.new_search = True
 
 
-	def on_replace_expander_button_press_event(self, w, e):
-		window_ctrl = self.plugins["window_ctrl.window_ctrl"]
-		
+	def on_replace_expander_button_press_event(self, w, e):		
 		if w.get_expanded():
 			# remove color from "F and R" menu
-			window_ctrl.remove_attention(window_ctrl.R)
+			self.THE("window_controller", "remove_attention", {"menu": "R"})
 		else:
-			window_ctrl.grap_attention(window_ctrl.R)
+			self.THE("window_controller", "grap_attention", {"menu": "R"})

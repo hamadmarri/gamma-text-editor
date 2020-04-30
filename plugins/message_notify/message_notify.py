@@ -37,15 +37,12 @@ class Plugin():
 	def __init__(self, app):
 		self.name = "message_notify"
 		self.app = app
-		self.builder = app.builder
 		self.commands = []
-		self.messageLbl = None
 		self.message_time = 7.5 # seconds
 		self.timer = None
 		
 	
 	def activate(self):
-		self.messageLbl = self.builder.get_object("messageLbl")
 		self.clear_message()
 			
 	
@@ -55,7 +52,8 @@ class Plugin():
 	def show_message(self, m, state=0):
 		self.cancel()
 		
-		self.messageLbl.set_text(m)
+		messageLbl = self.app.builder.get_object("messageLbl")
+		messageLbl.set_text(m)
 		self.update_style(state)
 		self.timer = threading.Timer(self.message_time, self.clear_message)
 		self.timer.start()
@@ -64,25 +62,27 @@ class Plugin():
 	
 	
 	def update_style(self, state):
-		self.messageLbl.get_style_context().remove_class("messageImportant")
-		self.messageLbl.get_style_context().remove_class("messageSuccess")
-		self.messageLbl.get_style_context().remove_class("messageFail")
+		messageLbl = self.app.builder.get_object("messageLbl")
+		messageLbl.get_style_context().remove_class("messageImportant")
+		messageLbl.get_style_context().remove_class("messageSuccess")
+		messageLbl.get_style_context().remove_class("messageFail")
 		
 		#if state == 0:
 			# do nothing just remove all css classes	
 		if state == 1:
-			self.messageLbl.get_style_context().add_class("messageImportant")
+			messageLbl.get_style_context().add_class("messageImportant")
 		elif state == 2:
-			self.messageLbl.get_style_context().add_class("messageSuccess")
+			messageLbl.get_style_context().add_class("messageSuccess")
 		elif state == 3: 
-			self.messageLbl.get_style_context().add_class("messageFail")
+			messageLbl.get_style_context().add_class("messageFail")
 			
 	
 	
 	# removes any text in messageLbl
 	def clear_message(self):
+		messageLbl = self.app.builder.get_object("messageLbl")
 		self.timer = None
-		self.messageLbl.set_text("")
+		messageLbl.set_text("")
 	
 	
 	# cancel the timer thread and clear messageLbl

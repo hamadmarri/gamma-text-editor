@@ -1,4 +1,3 @@
-#
 
 import os
 
@@ -23,7 +22,9 @@ class FilesUI(object):
 		btnName.get_children()[0].set_xalign(0)
 				
 		# set headerbar text to the filename
-		self.update_header(self.plugins["files_manager.files_manager"].current_file.filename)
+		current_file = self.THE("files_manager", "get_current_file", {})
+		if current_file:
+			self.update_header(current_file.filename)
 		
 		
 
@@ -60,14 +61,17 @@ class FilesUI(object):
 		
 		# add close btn to the right
 		box.pack_end(btnClose, False, False, 0)
-				
+		
+		# get toolbar_files Gtk widget from ui file
+		toolbar_files = self.app.builder.get_object("toolbar_files")
+		
 		# add button to toolbar_files
 		# (read: https://developer.gnome.org/gtk3/stable/GtkBox.html#gtk-box-pack-start)
-		self.toolbar_files.pack_start(box, False, False, 0)
+		toolbar_files.pack_start(box, False, False, 0)
 		
 		# position new opened file's button to top of toolbar_files
 		# (read: https://developer.gnome.org/gtk3/unstable/GtkBox.html#gtk-box-reorder-child)
-		self.toolbar_files.reorder_child(box, 0)
+		toolbar_files.reorder_child(box, 0)
 		
 		# add css styling classes
 		self.add_css_classes(box, btnName, btnClose)
@@ -115,17 +119,20 @@ class FilesUI(object):
 	# handler of "clicked" event
 	# it switch the view to the filename in clicked button
 	def side_file_clicked(self, btn, box, newfile):
-		self.plugins["files_manager.files_manager"].side_file_clicked(newfile.filename)
+		self.THE("files_manager", "side_file_clicked", {"filename": newfile.filename})
 		
 		
 		
 	def close_file_clicked(self, btn, box, newfile):		
-		self.plugins["files_manager.files_manager"].close_file(newfile.filename)
+		self.THE("files_manager", "close_file", {"filename": newfile.filename})
 		
 				
 		
 		
 	def set_currently_displayed(self, box):
+		# get toolbar_files Gtk widget from ui file
+		self.toolbar_files = self.app.builder.get_object("toolbar_files")
+		
 		boxes = self.toolbar_files.get_children()
 		
 		# if only one file, dont highlight
@@ -141,50 +148,67 @@ class FilesUI(object):
 		
 	
 	# updates the headerbar by filename
-	def update_header(self, filename, editted=False):		
+	def update_header(self, filename, editted=False):
+		# get headerbar widget reference, to show current filename
+		# in headerbar label
+		headerbar = self.app.builder.get_object("headerbarMain")
+		
 		# gets basename of the file, not the full path
 		basename = os.path.basename(filename)
 		
 		if editted:
-			self.headerbar.get_style_context().add_class("openned_file_editted")
+			headerbar.get_style_context().add_class("openned_file_editted")
 			# set the edited title of headerbar
-			self.headerbar.set_title("*" + basename)
+			headerbar.set_title("*" + basename)
 		else:
-			self.headerbar.get_style_context().remove_class("openned_file_editted")
+			headerbar.get_style_context().remove_class("openned_file_editted")
 			# set the title of headerbar
-			self.headerbar.set_title(basename)
+			headerbar.set_title(basename)
 		
 
 	
 	
 	# updates the headerbar by filename
 	def set_header(self, text):
+		# get headerbar widget reference, to show current filename
+		# in headerbar label
+		headerbar = self.app.builder.get_object("headerbarMain")
+		
 		# set the title of headerbar
-		self.headerbar.set_title(text)
+		headerbar.set_title(text)
 
 
 
 
 	def replace_sourceview_widget(self, newsource):
+	
+		# scrolledwindow is object that contains sourceviews
+		# basically, a new opened file has its own sourceview 
+		# and got added to scrolledwindow
+		# previouse sourceview got removed from scrolledwindow
+		scrolledwindow = self.app.builder.get_object("source_scrolledwindow")
+		scroll_and_source_and_map_box = self.app.builder.get_object("scroll_and_source_and_map_box")
+		
+	
 		# remove old source map
-		old_sourcemap = self.scroll_and_source_and_map_box.get_children()[1]
+		old_sourcemap = scroll_and_source_and_map_box.get_children()[1]
 		if old_sourcemap:
-			self.scroll_and_source_and_map_box.remove(old_sourcemap)
+			scroll_and_source_and_map_box.remove(old_sourcemap)
 		
 		# remove previously displayed sourceview
-		prev_child = self.scrolledwindow.get_child()
+		prev_child = scrolledwindow.get_child()
 		if prev_child:
-			self.scrolledwindow.remove(prev_child)
+			scrolledwindow.remove(prev_child)
 		
 		# add the newsource view
-		self.scrolledwindow.add(newsource)
+		scrolledwindow.add(newsource)
 		
 		# the order of set_view for sourcemap is very important
 		# when move this line below/after pack_start, sometimes 
 		# it crashes when open files which have no \n at the end!!
 		newsource.sourcemap.set_view(newsource)
 
-		self.scroll_and_source_and_map_box.pack_start(newsource.sourcemap, False, True, 0)
+		scroll_and_source_and_map_box.pack_start(newsource.sourcemap, False, True, 0)
 			
 		# place the cursor in it
 		newsource.grab_focus()		
@@ -194,12 +218,20 @@ class FilesUI(object):
 
 
 	def set_editted(self, box):
+		# get headerbar widget reference, to show current filename
+		# in headerbar label
+		headerbar = self.app.builder.get_object("headerbarMain")
+		
 		box.get_style_context().add_class("openned_file_editted")
-		self.headerbar.get_style_context().add_class("openned_file_editted")
-		self.headerbar.set_title("*" + self.headerbar.get_title())
+		headerbar.get_style_context().add_class("openned_file_editted")
+		headerbar.set_title("*" + headerbar.get_title())
 	
 	
 	def reset_editted(self, box):
+		# get headerbar widget reference, to show current filename
+		# in headerbar label
+		headerbar = self.app.builder.get_object("headerbarMain")
+		
 		box.get_style_context().remove_class("openned_file_editted")
-		self.headerbar.get_style_context().remove_class("openned_file_editted")
+		headerbar.get_style_context().remove_class("openned_file_editted")
 		self.update_header(box.file.filename)

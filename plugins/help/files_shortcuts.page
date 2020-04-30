@@ -20,10 +20,19 @@
     <td><p>Save File</p></td> <td><code>Ctrl + S</code></td>
   </tr>
   <tr>
-    <td><p>Save All Files</p></td> <td><code>Shift + Ctrl + S</code></td>
+    <td><p>Save All Files</p></td> <td><code>Ctrl + Alt + S</code></td>
+  </tr>
+  <tr>
+    <td><p>Save As</p></td> <td><code>Shift + Ctrl + S</code></td>
   </tr>
   <tr>
     <td><p>New File</p></td> <td><code>Ctrl + N</code></td>
+  </tr>
+  <tr>
+    <td><p>Close File</p></td> <td><code>Ctrl + W</code></td>
+  </tr>
+  <tr>
+    <td><p>Close All Files</p></td> <td><code>Shift + Ctrl + W</code></td>
   </tr>
 </table>
 <p>Plugin: <code>files_manager</code></p>

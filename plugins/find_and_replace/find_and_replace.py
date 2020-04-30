@@ -31,20 +31,18 @@ from gi.repository import Gtk
 
 from . import commands
 from .find_and_replace_window import FindReplaceWindow
+from .debug import Debug
 
 
-class Plugin(FindReplaceWindow):
+class Plugin(Debug, FindReplaceWindow):
 	
 	def __init__(self, app):
 		self.name = "find_and_replace"
 		self.app = app
-		# self.plugins = app.plugins_manager
 		self.window = None
-		self.sourceview = None
-		self.buffer = None
 		self.signal_handler = app.signal_handler
 		self.handlers = app.signal_handler.handlers
-		self.plugins = app.plugins_manager.plugins
+		self.THE = app.plugins_manager.THE
 		self.commands = []
 		self.show_replace = False
 		self.find_text_view = None
@@ -54,13 +52,15 @@ class Plugin(FindReplaceWindow):
 		self.match_case = True
 		self.whole_word = False
 		self.signal_handler.connect("file-switched", self.update_buffer)
+		self.signal_handler.connect("windo-focus-in", self.window_focus_in)
+		self.signal_handler.key_bindings_to_plugins.append(self)
 		
+		commands.set_commands(self)
+		self.set_handlers()
 	
  
 	def activate(self):
-		self.signal_handler.key_bindings_to_plugins.append(self)
-		commands.set_commands(self)
-		self.set_handlers()
+		pass
 
 
 	def key_bindings(self, event, keyval_name, ctrl, alt, shift):
@@ -71,46 +71,62 @@ class Plugin(FindReplaceWindow):
 
 
 	def update_buffer(self, new_source):
-		self.sourceview = new_source
-		self.buffer = self.sourceview.get_buffer()
+		self.app.window.find_buffer = new_source.get_buffer()
+		self.app.window.find_buffer.connect("changed", self.set_new_search)
+		self.new_search = True
+		
+		
+	def window_focus_in(self, w):
+		self.new_search = True
+		
+	
+	def set_new_search(self, buffer):
 		self.new_search = True
 		
 	
 	def clear_highlights(self):
 		# to clear highlights
-		self.plugins["search.search_in_file"].do_highlight("", self.buffer)
-		self.plugins["search.search_in_file"].quit_search()
+		self.THE("file_searcher", "do_highlight", {"search": "", "buffer": self.app.window.find_buffer})
+		self.THE("file_searcher", "quit_search" , {})
 		
 	
-	def do_find(self, previous=False):
-		search = self.plugins["search.search_in_file"]
+	def do_find(self, previous=False):		
+		self.debug_do_find(previous)
+		
 		if self.new_search:
 			if self.match_case:
-				search.search_flags = 0
+				self.THE("file_searcher", "set_search_flags", {"search_flags": 0})
 			else:
-				search.search_flags = Gtk.TextSearchFlags.CASE_INSENSITIVE
+				self.THE("file_searcher", "set_search_flags", {"search_flags": Gtk.TextSearchFlags.CASE_INSENSITIVE})
 			
-			search.whole_word = self.whole_word
+			self.THE("file_searcher", "set_whole_word", {"whole_word": self.whole_word})
 			
 			self.new_search = False
 			buffer = self.find_text_view.get_buffer()
 			text = buffer.get_text(buffer.get_start_iter(), buffer.get_end_iter(), False)
 
-			search.do_highlight(text, self.buffer)
+			self.THE("file_searcher", "do_highlight", {"search": text, "buffer": self.app.window.find_buffer})
 		elif not previous:
-			search.scroll_next()
+			self.THE("file_searcher", "scroll_next", {})
 		else:
-			search.scroll_prev()
+			self.THE("file_searcher", "scroll_prev", {})
 		
-		self.update_status(search)
+		self.update_status()
 	
 	
 	
-	def update_status(self, search):
-		if search.count > 0:
+	def update_status(self):
+		count = self.THE("file_searcher", "count", None)
+		match_number = self.THE("file_searcher", "match_number", None)
+		deleted_marks = self.THE("file_searcher", "deleted_marks", None)
+		
+		if count == None or match_number == None or deleted_marks == None:
+			return
+			
+		if count > 0:
 			self.find_status_lbl.set_text( \
-				str(search.match_number + search.deleted_marks + 1) \
-				+ "/" + str(search.count))
+				str(match_number + deleted_marks + 1) \
+				+ "/" + str(count))
 		else:
 			self.find_status_lbl.set_text("No results")
 		
@@ -121,11 +137,9 @@ class Plugin(FindReplaceWindow):
 		if self.new_search:
 			self.do_find()
 			return
-		
-		search = self.plugins["search.search_in_file"]
-		
+				
 		# if no current selection (end of replace)
-		if not search.current_selection:
+		if not self.THE("file_searcher", "current_selection", None):
 			return
 		
 		# get replace text 
@@ -133,13 +147,14 @@ class Plugin(FindReplaceWindow):
 		text = replace_buffer.get_text(replace_buffer.get_start_iter(), replace_buffer.get_end_iter(), False)
 		
 		# get current selected 
-		(s_iter, e_iter) = search.current_selection
+		(s_iter, e_iter) = self.THE("file_searcher", "current_selection", None)
 	  
-		self.replace_in_buffer(self.buffer, s_iter, e_iter, text)
+		self.replace_in_buffer(self.app.window.find_buffer, s_iter, e_iter, text)
 		
-		search.delete_current_marks()
+		self.THE("file_searcher", "delete_current_marks", {})
+		
 		# reset iters after buffer manipulation
-		search.set_selected_iters(None, None)
+		self.THE("file_searcher", "set_selected_iters", {"s_iter": None, "e_iter": None})
 		
 		self.do_find()
 		
@@ -158,14 +173,11 @@ class Plugin(FindReplaceWindow):
 	def do_replace_all(self):
 		if self.new_search:
 			self.do_find()
-			return
 	
-		highlight = self.plugins["highlight.highlight"]
-		search = self.plugins["search.search_in_file"]
-		marks = highlight.marks
+		marks = self.THE("highlighter", "marks", None)
 		
 		# if no current selection (end of replace)
-		if not search.current_selection:
+		if not self.THE("file_searcher", "current_selection", None):
 			return
 			
 		# get replace text 
@@ -177,13 +189,13 @@ class Plugin(FindReplaceWindow):
 		while marks:
 			s_mark = marks[i - 1]
 			e_mark = marks[i]
-			s_iter = self.buffer.get_iter_at_mark(s_mark)
-			e_iter = self.buffer.get_iter_at_mark(e_mark)
+			s_iter = self.app.window.find_buffer.get_iter_at_mark(s_mark)
+			e_iter = self.app.window.find_buffer.get_iter_at_mark(e_mark)
 			
-			self.replace_in_buffer(self.buffer, s_iter, e_iter, text)
+			self.replace_in_buffer(self.app.window.find_buffer, s_iter, e_iter, text)
 			
-			self.buffer.delete_mark(s_mark)
-			self.buffer.delete_mark(e_mark)
+			self.app.window.find_buffer.delete_mark(s_mark)
+			self.app.window.find_buffer.delete_mark(e_mark)
 			
 			del marks[i]
 			del marks[i - 1]
@@ -191,7 +203,7 @@ class Plugin(FindReplaceWindow):
 		# end while
 			
 		# reset iters after buffer manipulation
-		search.set_selected_iters(None, None)
+		self.THE("file_searcher", "set_selected_iters", {"s_iter": None, "e_iter": None})
 		
 		self.find_status_lbl.set_text("Done")
 		

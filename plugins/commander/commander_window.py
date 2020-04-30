@@ -33,13 +33,7 @@ class CommanderWindow(WindowEvents, ListEvents, SearchEvents):
 
 	def __init__(self, app, commander):
 		self.app = app
-		self.builder = app.builder
 		self.commander = commander
-		self.window = None
-		self.listbox = None
-		self.window = self.builder.get_object("commanderWindow")
-		self.commanderSearchEntry = self.builder.get_object("commanderSearchEntry")
-		self.listbox = self.builder.get_object("commanderList")
 
 		self.previous_search = ""
 				
@@ -54,23 +48,31 @@ class CommanderWindow(WindowEvents, ListEvents, SearchEvents):
 		self.scroll_in = ContinueResultType.STRICT
 
 
+	def load_from_builder(self):
+		self.app.window.commander_window = self.app.builder.get_object("commanderWindow")
+		self.app.window.commander_searchEntry = self.app.builder.get_object("commanderSearchEntry")
+		self.app.window.commander_listbox = self.app.builder.get_object("commanderList")
+	
 	
 	def show_commander_window(self):
+		if not self.app.window.commander_window:
+			self.load_from_builder()
+		
 		self.remove_all_commands()
 	
 		self.add_commands()
 
 		# must empty search every time showing commander
 		self.previous_search = ""
-		self.commanderSearchEntry.set_text("")
+		self.app.window.commander_searchEntry.set_text("")
 		
 		# get the focus to search to let user type right away
-		self.commanderSearchEntry.grab_focus()
+		self.app.window.commander_searchEntry.grab_focus()
 				
 		# unselect_all previously selected row
-		self.listbox.unselect_all()
-			
-		self.window.show()
+		self.app.window.commander_listbox.unselect_all()
+		
+		self.app.window.commander_window.show()
 		
 		# unhighlight first row when show commander
 		self.selected_first_row = None
@@ -78,9 +80,9 @@ class CommanderWindow(WindowEvents, ListEvents, SearchEvents):
 		
 	
 	def remove_all_commands(self):
-		rows = self.listbox.get_children()
+		rows = self.app.window.commander_listbox.get_children()
 		for r in rows:
-			self.listbox.remove(r)
+			self.app.window.commander_listbox.remove(r)
 		
 		
 		
@@ -93,7 +95,7 @@ class CommanderWindow(WindowEvents, ListEvents, SearchEvents):
 		for c in first:
 			self.add_command(c)
 		
-		self.listbox.show_all()
+		self.app.window.commander_listbox.show_all()
 			
 			
 	def add_command(self, c):
@@ -117,11 +119,13 @@ class CommanderWindow(WindowEvents, ListEvents, SearchEvents):
 		lblShortcut.get_style_context().add_class("commanderCommanShortcut")
 		
 		# add to listbox
-		self.listbox.insert(box, -1)
-				
+		self.app.window.commander_listbox.insert(box, -1)
+		
 	
 
 	def run_command(self, command):
+		self.close()
+		
 		if "parameters" in command:
 			p = command["parameters"]
 			command["ref"](p)
@@ -130,6 +134,4 @@ class CommanderWindow(WindowEvents, ListEvents, SearchEvents):
 			
 		# splay command
 		self.commander.commands_tree.splay(command["node"])
-		#self.commander.commands_tree.traverse(0)
 			
-		self.close()

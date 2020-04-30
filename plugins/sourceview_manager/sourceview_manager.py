@@ -21,25 +21,36 @@
 # - get new source view
 # - detect the language of the just openned file and set the langauge (i.e. C,Python,C++ ..)
 # - update source map (mini map) to connect to a sourceview
-#
+#	sourceview_manager for anything related to sourceview
+# 
 
 import gi
 gi.require_version('GtkSource', '4')
 from gi.repository import GtkSource
 
-class SourceViewManager():
+
+class Plugin():
 	def __init__(self, app):
+		self.name = "sourceview_manager"
 		self.app = app
-		self.plugins = app.plugins_manager.plugins
 		self.signal_handler = app.signal_handler
-		self.source_view = app.builder.get_object("view")
+		self.THE = app.plugins_manager.THE
+		self.commands = []
+	
+
+	def activate(self):
+		self.source_view = self.app.builder.get_object("view")
+		self.sourcemap = self.app.builder.get_object("sourcemap")
+		
 		self.source_view.grab_focus()
-		self.sourcemap = app.builder.get_object("sourcemap")
 		self.sourcemap.set_view(self.source_view)
 		self.source_view.sourcemap = self.sourcemap
-		self.source_view.set_background_pattern(app.config['show_grid'])
-
-		
+		self.source_view.set_background_pattern(self.app.config['show_grid'])
+	
+	
+	def key_bindings(self, event, keyval_name, ctrl, alt, shift):
+		pass
+	
 	
 	# opening new file needs new sourceview object
 	#  here where the new sourceview object is created
@@ -71,9 +82,8 @@ class SourceViewManager():
 		newsource.set_background_pattern(self.source_view.get_background_pattern())
 		newsource.set_smart_home_end(self.source_view.get_smart_home_end())
 	
-		
 		# set the source style
-		self.plugins["styles.source_style"].set_source_style(newsource)
+		self.THE("source_styler", "set_source_style", {"sourceview": newsource})
 		
 		# add "sourceviewclass" css class
 		newsource.get_style_context().add_class("sourceviewclass")
@@ -85,7 +95,7 @@ class SourceViewManager():
 		# user clicks to unselect text is also connected
 		# see highlight.highlight_signal function for handling 
 		# mark-set event
-		newsource.get_buffer().connect("mark-set", self.plugins["highlight.highlight"].highlight_signal)
+		newsource.get_buffer().connect("mark-set", self.buffer_mark_set)
 		
 		# when creating new buffer,
 		# share this buffer to whom need it
@@ -98,13 +108,22 @@ class SourceViewManager():
 		# TODO: move to files_manager, sometimes we don't need to 
 		# update completion based on file type and size!
 		# update the world completion to include new source buffer
-		self.plugins["simple_completion.simple_completion"].update_completion(newsource)
+		self.THE("code_completer", "update_completion", {"source_view": newsource})
 		
 		return newsource
 		
 	
 	
 	
+	def buffer_mark_set(self, buffer, location, mark):
+		args = {
+			"buffer": buffer,
+			"location": location,
+			"mark": mark
+		}
+		self.THE("highlighter", "highlight_signal", args)
+		
+		
 	
 	# detect the language of the just openned file 
 	# and set the langauge (i.e. C,Python,C++ ..)
@@ -122,4 +141,3 @@ class SourceViewManager():
 			buffer.set_highlight_syntax(False)
 			
 			
-

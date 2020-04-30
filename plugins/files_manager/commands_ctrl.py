@@ -6,8 +6,7 @@ class CommandsCtrl(object):
 
 	def update_commanders_remove(self, newfile):
 		commander_ref = newfile.commander_ref
-		# print(f"removing {commander_ref}")
-		self.plugins["commander.commander"].remove_command(commander_ref)
+		self.THE("commander", "remove_command", {"node": commander_ref})
 
 
 
@@ -20,9 +19,10 @@ class CommandsCtrl(object):
 			"parameters": newfile.filename,
 			"shortcut": "",
 		}
-		commander_ref = self.plugins["commander.commander"].add_command(c)
+
+		commander_ref = self.THE("commander", "add_command", {"c": c})
 		newfile.commander_ref = commander_ref
-		# print(f"added {commander_ref}")
+
 		
 
 	

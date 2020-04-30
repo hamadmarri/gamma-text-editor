@@ -1,4 +1,4 @@
-#
+# 
 #### Author: Hamad Al Marri <hamad.s.almarri@gmail.com>
 #### Date: Feb 11th, 2020
 #
@@ -43,35 +43,39 @@
 # deactivate plugin by removing or commenting out the plugin name
 # formate "[folder name].[python file]"
 plugin_list = [
-	"styles.style",
-	"styles.source_style", 
-	"window_ctrl.window_ctrl",
-	"files_manager.files_manager",
-	"files_manager.openfile",
-	"files_manager.savefile",
-	"simple_completion.simple_completion",
-	"highlight.highlight",
-	"message_notify.message_notify",
-	"search.search_in_file",
-	"ui_manager.ui_manager",
-	"files_manager.opendir",
-	"codecomment.codecomment",
-	"find_and_replace.find_and_replace",
-	"terminal.terminal",
-	# "bottom_panel.bottom_panel",
-	"welcome.welcome",
-	"help.help",
-	"about.about",
-	"fast_copy_cut_duplicate.fast_copy_cut_duplicate",
-	"typing_assistant.typing_assistant",
-	"logger.logger",
+	{"name": "sourceview_manager.sourceview_manager","category": "sourceview_manager"},
+	{"name": "styles.style","category": ""},
+	{"name": "styles.source_style", "category": "source_styler"},
+	{"name": "window_ctrl.window_ctrl", "category": "window_controller"},
+	{"name": "files_manager.files_manager", "category": "files_manager"},
+	{"name": "files_manager.openfile", "category": "files_opener"},
+	{"name": "files_manager.savefile", "category": "files_saver"},
+	{"name": "files_manager.opendir", "category": "directory_opener"},
+	{"name": "simple_completion.simple_completion", "category": "code_completer"},
+	{"name": "highlight.highlight", "category": "highlighter"},
+	{"name": "message_notify.message_notify", "category": "message_notifier"},
+	{"name": "search.search_in_file", "category": "file_searcher"},
+	{"name": "ui_manager.ui_manager", "category": "ui_manager"},
+	{"name": "codecomment.codecomment", "category": "codecommenter"},
+	{"name": "find_and_replace.find_and_replace", "category": "find_and_replace"},
+	{"name": "terminal.terminal", "category": "terminal"},
 	
+	{"name": "bottom_panel.bottom_panel", "category": "bottom_panel"},
+	{"name": "welcome.welcome", "category": "welcomer"},
+	{"name": "help.help", "category": "helper"},
+	{"name": "about.about", "category": "about"},
+	{"name": "fast_copy_cut_duplicate.fast_copy_cut_duplicate", "category": ""},
+	{"name": "typing_assistant.typing_assistant", "category": ""},
+	{"name": "logger.logger", "category": "logger"},
+	{"name": "toggle_files_list.toggle_files_list", "category": "files_toggler"},
+	{"name": "key_scroller.key_scroller", "category": ""},
+	{"name": "output.output", "category": "output"},
 
 
 	# special case for commander 
 	# must be last because the activate method 
 	# of commands need to cache other plugins commands 
-	"commander.commander",
+	{"name": "commander.commander", "category": "commander"},
 ]
 
 
@@ -80,9 +84,10 @@ import importlib
 class PluginsManager():
 
 	def __init__(self, app):
+		self.name = "plugins_manager"
 		self.app = app
-		self.plugins = {}
 		self.plugins_array = []
+		self.categories = {}
 
 
 	# importing all plugins in "plugin_list"
@@ -90,28 +95,66 @@ class PluginsManager():
 	# these plugins are eagerly loaded
 	# the more plugins, and process in activate 
 	# method, the heavier startup time
-	def load_plugins(self):
+	def load_plugins(self):	
 		for p in plugin_list:
 			# plugins are in "plugins" folder/package
-			plugin = importlib.import_module('.' + p, package='plugins')
+			plugin = importlib.import_module('.' + p["name"], package='plugins')
 			
 			# initializing plugin and passing the
 			# reference of app
 			module = plugin.Plugin(self.app)
-			# module.activate()
 			
 			# add a reference of the plugin 
-			# to plugins dictionary and array
-			self.plugins[p] = module
+			# to plugins categories and array			
+			if p["category"]:
+				self.categories[p["category"]] = module
+			
 			self.plugins_array.append(module)
+
 		
 		# activate plugins 
 		for p in self.plugins_array:
 			p.activate()
-			
-			
+		
+		self.app.signal_handler.emit("log", self, f"loaded {len(self.plugins_array)} plugins")
+		
+		# emitting startup where any plugin could connect to
+		# startup signal. It is save to reach other plugins 
+		# from startup signals since all have been activated 
+		self.app.signal_handler.emit("startup")
+					
 	
-	# get plugin from dictionary that match same name
-	def get(self, plugin_name):
-		return self.plugins[plugin_name]
-			
+	
+	def activate_plugins(self):
+		# activate plugins 
+		for p in self.plugins_array:
+			p.activate()
+		
+		
+		
+	
+	# get plugin from categories dictionary that match same name
+	# if existed, find the method, if existed, do the call
+	def THE(self, plugin_category, method, args):
+		# DEBUG: print(plugin_category, method, args)
+		
+		p = self.categories.get(plugin_category)
+		if p:
+			if hasattr(p, method):
+				callable_method = getattr(p, method)
+				# DEBUG: print(callable_method)
+				# DEBUG: print(args)
+				if args != None:
+					# DEBUG: print("args")
+					return callable_method(**args)
+				else:
+					# DEBUG: print("property")
+					return callable_method
+			else:
+				self.app.signal_handler.emit("log-warning", self, f'THE: ({plugin_category}): No method/property: {method}')
+				return None
+		else:
+			self.app.signal_handler.emit("log-warning", self, f'THE: No plugin/category: {plugin_category}')
+			return None
+		
+		

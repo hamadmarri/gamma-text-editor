@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.22.2 -->
 <!--
 #	This program is free software: you can redistribute it and/or modify
 #	it under the terms of the GNU General Public License as published by
@@ -19,12 +19,12 @@
   <requires lib="gtksourceview" version="4.0"/>
   <!-- interface-css-provider-path default.css -->
   <object class="GtkApplicationWindow" id="window">
-    <property name="name">window</property>
+    <property name="name">gamma_window</property>
     <property name="can_focus">False</property>
     <property name="window_position">center</property>
     <property name="default_width">1500</property>
     <property name="default_height">750</property>
-    <property name="startup_id">org.gtk.example</property>
+    <property name="startup_id">io.gitlab.hamadmarri.gamma</property>
     <property name="show_menubar">False</property>
     <signal name="key-press-event" handler="on_window_key_press_event" swapped="no"/>
     <signal name="key-release-event" handler="on_window_key_release_event" swapped="no"/>
@@ -36,7 +36,7 @@
         <property name="position">260</property>
         <signal name="notify::position" handler="resizeHeaderSide" swapped="no"/>
         <child>
-          <object class="GtkBox">
+          <object class="GtkBox" id="header_left_side">
             <property name="width_request">34</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
@@ -604,7 +604,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkScrolledWindow">
+              <object class="GtkScrolledWindow" id="scrolled_toolbar_files">
                 <property name="width_request">270</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -698,7 +698,7 @@
                 </child>
                 <child>
                   <object class="GtkSourceMap" id="sourcemap">
-                    <property name="name">sourcemap</property>
+                    <property name="name">sourceminimap</property>
                     <property name="width_request">100</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>

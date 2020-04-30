@@ -31,32 +31,20 @@ class Plugin():
 	def __init__(self, app):
 		self.name = "about"
 		self.app = app
-		self.plugins = app.plugins_manager.plugins
 		self.signal_handler = app.signal_handler
 		self.commands = []
 		
-
-	def activate(self):
 		self.signal_handler.key_bindings_to_plugins.append(self)
 		commands.set_commands(self)
+
+
+	def activate(self):
+		pass
 
 		
 	def key_bindings(self, event, keyval_name, ctrl, alt, shift):
 		if alt and keyval_name == "a":
 			self.show_about()
-	
-
-	# def show_about(self):
-	# 	w = WebKit2.WebView.new()
-	# 	w.load_uri("file:///home/hamad/Documents/homepage/home.html")
-	# 	#w.load_uri("https://lazka.github.io/pgi-docs/#WebKit2-4.0/classes/WebView.html#WebKit2.WebView.load_request")
-	# 	
-	# 	win = Gtk.Window.new(Gtk.WindowType.TOPLEVEL)
-	# 	
-	# 	win.add(w)
-	# 	win.show_all()
-		
-	
 	
 	
 	def show_about(self):
@@ -69,8 +57,8 @@ class Plugin():
 		
 		about.set_license_type(Gtk.License.GPL_3_0_ONLY)
 		
-		about.set_logo_icon_name("com.editor.gamma")
-		about.set_program_name("Gamma Editor")
+		about.set_logo_icon_name("io.gitlab.hamadmarri.gamma")
+		about.set_program_name("Gamma Text Editor")
 		about.set_version("0.0.1 Beta")
 
 		about.set_website("https://gitlab.com/hamadmarri/gamma-text-editor")

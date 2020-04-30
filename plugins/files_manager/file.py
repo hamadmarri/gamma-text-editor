@@ -1,4 +1,4 @@
-#
+# 
 # each openned file is set in File object and
 # appended to "files" array
 class File():
@@ -43,37 +43,31 @@ class File():
 		
 		# set itself editted
 		self.editted = True
-		self.files_manager.editted_counter += 1
-		
-		# print(f"editted {self.filename}")
-		
+		self.files_manager.current_window_editted_counter_add(1)
+				
 		# show save all "S" menu in color
-		window_ctrl = self.files_manager.plugins["window_ctrl.window_ctrl"]
-		window_ctrl.grap_attention(window_ctrl.S)
+		self.files_manager.THE("window_controller", "grap_attention", {"menu": "S"})
 		
 		# change ui file appearance
-		self.files_manager.plugins["ui_manager.ui_manager"].set_editted(self.ui_ref)
+		self.files_manager.THE("ui_manager", "set_editted", {"box": self.ui_ref})
 		
 
 	def reset_editted(self):		
 		# reset editted
 		self.editted = False
-		self.files_manager.editted_counter -= 1
-		
-		# print(f"reset editted {self.filename}")
-		
+		self.files_manager.current_window_editted_counter_add(-1)
+				
 		# change ui file appearance
-		self.files_manager.plugins["ui_manager.ui_manager"].reset_editted(self.ui_ref)
+		self.files_manager.THE("ui_manager", "reset_editted", {"box": self.ui_ref})
 		
 		# check if need to show save all "S" menu in color
-		window_ctrl = self.files_manager.plugins["window_ctrl.window_ctrl"]
-		files = self.files_manager.files
+		files = self.files_manager.app.window.files
 		for f in files:
 			if f.editted:
-				window_ctrl.grap_attention(window_ctrl.S)
+				self.files_manager.THE("window_controller", "grap_attention", {"menu": "S"})
 				return
 		
-		window_ctrl.remove_attention(window_ctrl.S)
+		self.files_manager.THE("window_controller", "remove_attention", {"menu": "S"})
 
 
 
@@ -87,7 +81,7 @@ class File():
 		
 		# move what is been writing to new file
 		text = buffer.get_text(buffer.get_start_iter(), buffer.get_end_iter(), True)
-		current_buffer = self.files_manager.current_file.source_view.get_buffer()
+		current_buffer = self.files_manager.get_current_file().source_view.get_buffer()
 		current_buffer.set_text(text)
 
 		

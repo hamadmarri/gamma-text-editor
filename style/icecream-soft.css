@@ -1,17 +1,48 @@
 /*
-You can type here any CSS rule recognized by GTK+.
-You can temporarily disable this custom CSS by clicking on the “Pause” button above.
-
-Changes are applied instantly and globally, for the whole application.
+#	This program is free software: you can redistribute it and/or modify
+#	it under the terms of the GNU General Public License as published by
+#	the Free Software Foundation, either version 3 of the License, or
+#	(at your option) any later version.
+#
+#	This program is distributed in the hope that it will be useful,
+#	but WITHOUT ANY WARRANTY; without even the implied warranty of
+#	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#	GNU General Public License for more details.
+# 
+#	You should have received a copy of the GNU General Public License
+#	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
- 
+
+/* 
+COLORS:
+RED: #FF1946
+BLUE: #00B5FF
+ORANGE: #FF931F
+YELLOW: #FCE94F
+GREEN: #0DD100
+WHITE: #FDFDFD
+FOREGROUND: #827082 #6B5C6B
+*/
+@define-color gamma_bg_color #FDFDFD;
+@define-color gamma_fg_color #827082;
+@define-color gamma_warning_color #FF931F;
+@define-color gamma_error_color #FF1946;
+
+
+#gamma_window * {
+	border:none;
+	box-shadow:none;
+}
+#gamma_window  {
+	background:transparent;
+}
 
 /* from theme */
 headerbar entry, headerbar button, headerbar separator {
   margin-top: 6px;
   margin-bottom: 6px;
  
-   }
+}
 
 headerbar {
 	box-shadow: none;
@@ -60,7 +91,7 @@ headerbar {
 }
 
 #headerbarMain {
-	padding: 8px 0 8px 0 ;
+	padding: 8px 0 8px 0;
 }
 
 #headerbarMain .title {
@@ -381,10 +412,7 @@ headerbar {
 
 
 /******************* BOTTOM PANEL *********************/
-
-notebook tab label {
-	color: #827082;
-	font-size: 17px;
+notebook {
+	background-color: @gamma_bg_color;
 }
-
 

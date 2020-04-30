@@ -1,4 +1,3 @@
-import os
 
 from .file import File
 
@@ -17,7 +16,7 @@ class OpenFileMixin(object):
 	
 		# if many files are opened, then switch to last open	
 		if len(filenames) > 1:
-			self.switch_to_file(len(self.files) - 1)
+			self.switch_to_file(self.files_len() - 1)
 		else:
 			# find the file (maybe it is in the list already)
 			index = self.get_file_index(filenames[0])
@@ -35,7 +34,6 @@ class OpenFileMixin(object):
 			#self.switch_to_file(file_index)
 			return
 		
-		
 		try:
 			# open the file in reading mode
 			f = open(filename, "r", encoding="utf-8", errors="replace")
@@ -44,19 +42,18 @@ class OpenFileMixin(object):
 			# with file data
 			text = f.read()
 			# DEBUG: print(bytes(text, "ascii"))
-		except OSError as err:
-			self.signal_handler.emit("log-error", f'Could not open {filename}: {err}')
-			return
 		except PermissionError as err:
-			self.signal_handler.emit("log-error", f'Could not open {filename}: {err}')
+			self.signal_handler.emit("log-error", self, f'Could not open {filename}: {err}')
+			return
+		except OSError as err:
+			self.signal_handler.emit("log-error", self, f'Could not open {filename}: {err}')
 			return
 
 		
 		# when successfully opened and read the file
 		else:
 			# get new sourceview from sourceview_manager
-			# TODO: must handled by ui manager
-			newsource = self.sourceview_manager.get_new_sourceview()
+			newsource = self.THE("sourceview_manager", "get_new_sourceview", {})
 			
 			# begin_not_undoable_action to prevent ctrl+z to empty the file
 			newsource.get_buffer().begin_not_undoable_action()
@@ -74,22 +71,20 @@ class OpenFileMixin(object):
 		# new File object
 		newfile = File(self, filename, newsource)
 		
-		# attach parent directory to file 
-		parent_dir = os.path.dirname(filename)
-		
-		newfile.parent_dir = parent_dir
-				
 		# add newfile object to "files" array
 		self.add_file_to_list(newfile)
 				
 		# set the language of just openned file 
 		# see sourceview_manager
-		buffer = newsource.get_buffer()
-		self.sourceview_manager.set_language(filename, buffer)
+		buffer = newsource.get_buffer()		
+		self.THE("sourceview_manager", "set_language", {
+					"filename": filename,
+					"buffer": buffer
+				})
 
-		self.plugins["ui_manager.ui_manager"].add_filename_to_ui(newfile)
+		self.THE("ui_manager", "add_filename_to_ui", {"newfile": newfile})
 		
-		self.signal_handler.emit("log", f"open {filename}")
+		self.signal_handler.emit("log", self, f"open {filename}")
 
 
 		

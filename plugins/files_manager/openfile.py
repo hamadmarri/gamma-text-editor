@@ -20,6 +20,7 @@
 #	to files_manager.open_files method
 #
 
+import os
 
 import gi
 gi.require_version('Gtk', '3.0')
@@ -34,23 +35,15 @@ class Plugin(FilterMixin):
 		self.name = "openfile"
 		self.app = app
 		self.signal_handler = app.signal_handler
-		self.plugins = app.plugins_manager.plugins
+		self.THE = app.plugins_manager.THE
 		self.commands = []
 		
-		
-	def activate(self):
 		self.signal_handler.key_bindings_to_plugins.append(self)
 		commands.set_commands(self)
 		
-		
-	def open_files_from_args(self, args):
-		if args:
-			filenames = args.split()
-#			print(filenames)
-			self.plugins["files_manager.files_manager"].open_files(filenames)				
-		else:
-			print("no GAMMA_OPEN_FILE")
-		
+
+	def activate(self):
+		pass
 		
 	
 	# key_bindings is called by SignalHandler
@@ -72,7 +65,7 @@ class Plugin(FilterMixin):
 		
 		# otherwise, let files_manager controll open, read files, and
 		# set new sourceviews to each file.  
-		self.plugins["files_manager.files_manager"].open_files(filenames)
+		self.THE("files_manager", "open_files", {"filenames": filenames})
 
 	
 	
@@ -92,7 +85,7 @@ class Plugin(FilterMixin):
 		# add files types filters
 		self.add_filters(dialog)
 		
-		dialog.set_current_folder(self.plugins["files_manager.files_manager"].get_directory())
+		dialog.set_current_folder(self.THE("files_manager", "get_directory", {}))
 		
 		# can select and open multiple files
 		dialog.set_select_multiple(True)

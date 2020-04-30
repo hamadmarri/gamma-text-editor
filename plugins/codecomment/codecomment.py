@@ -26,7 +26,7 @@
 #
 # Editted By: Hamad Al Marri <hamad.s.almarri@gmail.com>
 # Date: Feb 19th, 2020
-#
+# 
 #
 
 import gi
@@ -34,23 +34,26 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk
 
 from .codecomment_tags import CodeCommentTags
+from .remove_comment_mixin import RemoveCommentMixin
+from .add_comment_mixin import AddCommentMixin
 from . import commands
 
-class Plugin(CodeCommentTags):
+class Plugin(AddCommentMixin, RemoveCommentMixin, CodeCommentTags):
 	
 
 	def __init__(self, app):
-		self.name = "codecomment.codecomment2"
+		self.name = "codecomment"
 		self.app = app
-		self.plugins = app.plugins_manager.plugins
+		self.THE = app.plugins_manager.THE
 		self.signal_handler = app.signal_handler
 		self.commands = []
 		
-	
-	def activate(self):
 		self.signal_handler.key_bindings_to_plugins.append(self)
 		commands.set_commands(self)
-		
+	
+	
+	def activate(self):
+		pass
 		
 
 	def key_bindings(self, event, keyval_name, ctrl, alt, shift):		
@@ -58,11 +61,14 @@ class Plugin(CodeCommentTags):
 			self.do_comment()
 			return True
 			
-			
-
 
 	def do_comment(self):
-		sourceview = self.plugins["files_manager.files_manager"].current_file.source_view
+		current_file = self.THE("files_manager", "get_current_file", {})
+		if not current_file:
+			return
+
+		sourceview = current_file.source_view
+			
 		buffer = sourceview.get_buffer()
 		
 		lang = buffer.get_language()
@@ -101,9 +107,9 @@ class Plugin(CodeCommentTags):
 			if not end.ends_line():
 				end.forward_to_line_end()
 
-
-			
-				
+		
+		# DEBUG: print(start.get_offset(), end.get_offset())
+		
 		# if empty line (i.e. start == end)
 		if start.get_offset() == end.get_offset():
 			buffer.begin_user_action()
@@ -125,7 +131,7 @@ class Plugin(CodeCommentTags):
 			c = iter.get_char()
 			
 			# check if c is not white space
-			if c != " " and c != "\t":
+			if not c in (" ", "\t"):
 				return (iter, count)
 			
 			iter.forward_char()
@@ -143,78 +149,6 @@ class Plugin(CodeCommentTags):
 		
 		return False
 
-
-
-	def add_comment_characters(self, document, start_tag, end_tag, start, end, deselect, oldPos):
-		smark = document.create_mark("start", start, False)
-		imark = document.create_mark("iter", start, False)
-		emark = document.create_mark("end", end, False)
-		number_lines = end.get_line() - start.get_line() + 1
-		comment_pos_iter = None
-		count = 0
-		
-		document.begin_user_action()
-
-		for i in range(0, number_lines):
-			iter = document.get_iter_at_mark(imark)
-			if not iter.ends_line():
-				
-				if not comment_pos_iter:
-					(comment_pos_iter, count) = self.discard_white_spaces(iter)
-					
-					# check if already commented
-					if self.is_commented(comment_pos_iter, start_tag):
-						new_code = self.remove_comment_characters(document, start_tag, end_tag, start, end)
-						return
-						
-				else:
-					comment_pos_iter = iter
-					# move iter to match first alignment
-					for i in range(count):
-						iter.forward_char()
-					
-				document.insert(comment_pos_iter, start_tag)
-				
-				# also insert a space
-				document.insert(comment_pos_iter, " ")
-				
-				# if block tag (/*    */) style
-				if end_tag:
-					# if not the last selected line
-					if i != number_lines -1:
-						# place the end block tag (*/) to end of line
-						iter = document.get_iter_at_mark(imark)
-						iter.forward_to_line_end()
-						document.insert(iter, end_tag)
-					else:
-						# place the end block tag to end of selection
-						iter = document.get_iter_at_mark(emark)
-						document.insert(iter, end_tag)
-					
-						
-			iter = document.get_iter_at_mark(imark)
-			iter.forward_line()
-			document.delete_mark(imark)
-			imark = document.create_mark("iter", iter, True)
-
-		document.end_user_action()
-
-		document.delete_mark(imark)
-		new_start = document.get_iter_at_mark(smark)
-		new_end = document.get_iter_at_mark(emark)
-		# if not new_start.ends_line():
-		#	self.backward_tag(new_start, start_tag)
-		document.select_range(new_start, new_end)
-		document.delete_mark(smark)
-		document.delete_mark(emark)
-		
-		# place the cursor to its old position
-		if deselect:
-			oldPosIter = document.get_iter_at_offset(oldPos + 2)
-			document.place_cursor(oldPosIter)
-		
-	
-	
 	
 	
 	def forward_tag(self, iter, tag):
@@ -237,46 +171,4 @@ class Plugin(CodeCommentTags):
 		return False
 		
 		
-	def remove_comment_characters(self, document, start_tag, end_tag, start, end):
-		smark = document.create_mark("start", start, False)
-		emark = document.create_mark("end", end, False)
-		number_lines = end.get_line() - start.get_line() + 1
-		iter = start.copy()
-		head_iter = iter.copy()
-		self.forward_tag(head_iter, start_tag)
-
-		document.begin_user_action()
-
-		for i in range(0, number_lines):
-			# print(f"line {i}")
-			if self.get_tag_position_in_line(start_tag, head_iter, iter):
-				dmark = document.create_mark("delete", iter, False)
-				document.delete(iter, head_iter)
-				
-				# delete the extra space added
-				space_iter = head_iter.copy()
-				space_iter.forward_char()
-				s = head_iter.get_slice(space_iter)
-				if s == " ":
-					# remove 
-					document.delete(head_iter, space_iter)
-				
-				if end_tag:
-					iter = document.get_iter_at_mark(dmark)
-					head_iter = iter.copy()
-					self.forward_tag(head_iter, end_tag)
-					if self.get_tag_position_in_line(end_tag, head_iter, iter):
-						document.delete(iter, head_iter)
-				document.delete_mark(dmark)
-				
-			iter = document.get_iter_at_mark(smark)
-			iter.forward_line()
-			document.delete_mark(smark)
-			head_iter = iter.copy()
-			self.forward_tag(head_iter, start_tag)
-			smark = document.create_mark("iter", iter, True)
-
-		document.end_user_action()
-
-		document.delete_mark(smark)
-		document.delete_mark(emark)
+	

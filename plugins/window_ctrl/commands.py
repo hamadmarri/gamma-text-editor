@@ -40,3 +40,12 @@ def set_commands(plugin):
 			"shortcut": "<Ctrl> + q",
 		}
 	)
+	
+	plugin.commands.append( 
+		{
+			"plugin-name": plugin.name,
+			"name": "New Window",
+			"ref": plugin.new_window,
+			"shortcut": "<Shift><Ctrl> + N",
+		}
+	)

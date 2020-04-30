@@ -12,7 +12,8 @@ class SearchEvents(object):
 	# (see https://developer.gnome.org/gtk3/stable/GtkSearchEntry.html#GtkSearchEntry-search-changed) 
 	def on_commanderSearchEntry_changed(self, widget):
 		search_term = widget.get_text().lower()
-		commands = self.commander.commands_tree		
+		commands = self.commander.commands_tree
+		listbox = self.app.window.commander_listbox
 		
 		# reset first and second row refs
 		self.selected_first_row = None
@@ -48,7 +49,7 @@ class SearchEvents(object):
 			
 		# if no enough results from strict search, then
 		# do soft search 
-		added_commands = len(self.listbox.get_children())
+		added_commands = len(listbox.get_children())
 		to_add = 20 - added_commands
 		soft_s = commands.soft_search(search_term, max_result=to_add)
 		
@@ -61,28 +62,23 @@ class SearchEvents(object):
 				self.add_command(c)
 		
 		
-		self.listbox.unselect_all()
-		self.selected_first_row = self.listbox.get_row_at_index(0)
-		self.listbox.select_row(self.selected_first_row)
-		self.prepare_second_row = self.listbox.get_row_at_index(1)
-		self.listbox.show_all()
+		listbox.unselect_all()
+		self.selected_first_row = listbox.get_row_at_index(0)
+		listbox.select_row(self.selected_first_row)
+		self.prepare_second_row = listbox.get_row_at_index(1)
+		listbox.show_all()
 		
 	
-	
-	
-	
-	
-	
-	
+
 	
 	def on_commanderSearchEntry_key_press_event(self, widget, event):
 		keyval_name = Gdk.keyval_name(event.keyval)
+		listbox = self.app.window.commander_listbox
 				
 		# run the first result when hit enter, or right numpad enter
 		if keyval_name == "Return" or keyval_name == "KP_Enter":
-			
-			# get the selected row, it should be the first (filtered/sorted) row 
-			first_row = self.listbox.get_selected_row()
+			# get the selected row, it should be the first (filtered/sorted) row
+			first_row = listbox.get_selected_row()
 			
 			if first_row:
 				self.run_command(first_row.get_child().command)
@@ -90,7 +86,6 @@ class SearchEvents(object):
 				# if no rows, then show message no commands selected
 				self.app.plugins_manager.plugins["message_notify.message_notify"] \
 											.show_message("No commands selected!", 3)
-
 		
 		# move to next row when press down key from searchEntry
 		elif keyval_name == "Down":
@@ -100,14 +95,14 @@ class SearchEvents(object):
 			if not self.selected_first_row:
 				# passing None as row makes listbox to select
 				# the first row
-				# shortcut of self.listbox.select_row(self.listbox.get_row_at_index(0)) 
-				self.listbox.select_row(None)
+				# shortcut of listbox.select_row(listbox.get_row_at_index(0)) 
+				listbox.select_row(None)
 			else:	
 				# move to second row then focus
 				# without this, user need to press "down" key twice
 				# first to get listbox focus, second to move to second row
-				self.listbox.select_row(self.prepare_second_row)
+				listbox.select_row(self.prepare_second_row)
 			
 			# get the focus to listbox
-			self.listbox.grab_focus()
+			listbox.grab_focus()
 			

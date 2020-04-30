@@ -13,8 +13,12 @@ class CutLine(object):
 		# the line is already in clipboard
 		# delete line from buffer
 		
-		# get current viewing file' buffer
-		self.buffer = self.plugins["files_manager.files_manager"].current_file.source_view.get_buffer()
+		# get current viewing file's buffer		
+		current_file = self.THE("files_manager", "get_current_file", {})
+		if not current_file:
+			return
+		
+		self.buffer = current_file.source_view.get_buffer()
 		
 		# after discard_white_spaces, need to position start at line begining
 		start.set_line_offset(0)

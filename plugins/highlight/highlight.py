@@ -19,7 +19,7 @@
 # 
 #	highlight: is responsible for highlighting the selected text by user. It
 #	highlights all occurrences of selected text. The highlight_signal functions
-#	is connected with mark-set signal in sourceview_manager.py
+#	is connected with mark-set signal in sourceview_manager
 #
 
 import re # for regex
@@ -34,8 +34,7 @@ class Plugin():
 	def __init__(self, app):
 		self.name = "highlight"
 		self.app = app
-		self.sourceview_manager = app.sourceview_manager
-		self.plugins = app.plugins_manager.plugins
+		self.THE = app.plugins_manager.THE
 		self.commands = []
 		self.tag_name = "search-match"
 		self.spaces_pattern = re.compile("^\s+$")
@@ -43,12 +42,7 @@ class Plugin():
 
 		
 	def activate(self):
-		# connect signal mark-set event which is when user select text
-		# user clicks to unselect text is also connected
-		# see highlight.highlight_signal function for handling 
-		# mark-set event
-		self.sourceview_manager.source_view.get_buffer().connect("mark-set", self.highlight_signal)
-		
+		pass
 		
 	
 	def highlight_signal(self, buffer, location, mark):
@@ -93,7 +87,7 @@ class Plugin():
 				# which help to select any text string 
 				# by other plugins like find or search
 				counter = self.highlight(buffer, search)
-				self.plugins["message_notify.message_notify"].show_message(f"Highlighted | {counter}")
+				self.THE("message_notifier", "show_message", {"m": f"Highlighted | {counter}"})
 		
 	
 	# "search" is a string text
@@ -123,7 +117,7 @@ class Plugin():
 		# gets start,end iters or None if no match
 		# first search start from the beggining of the buffer
 		# i.e. start_iter
-		matches = start_iter.forward_search(search, search_flags, None)			
+		matches = start_iter.forward_search(search, search_flags, None)
 		
 		# loop while still have matches (occurrences)
 		while matches != None:

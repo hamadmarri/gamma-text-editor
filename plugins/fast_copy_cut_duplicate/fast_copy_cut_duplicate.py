@@ -41,16 +41,18 @@ class Plugin(SpecialPaste, DuplicateLine, CutLine, CopyLine):
 	def __init__(self, app):
 		self.name = "fast_copy_cut_duplicate"
 		self.app = app
-		self.plugins = app.plugins_manager.plugins
+		self.THE = app.plugins_manager.THE
 		self.signal_handler = app.signal_handler 
 		self.commands = []
 		self.copied_line = ""
 		self.dont_propagate_paste = False
 		
-	
-	def activate(self):
 		self.signal_handler.key_bindings_to_plugins.append(self)
 		commands.set_commands(self)
+	
+
+	def activate(self):
+		pass
 
 	
 	def key_bindings(self, event, keyval_name, ctrl, alt, shift):

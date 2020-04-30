@@ -1,0 +1,16 @@
+<page xmlns="http://projectmallard.org/1.0/"
+      type="topic"
+      id="bottom_panel_shortcut">
+<info>
+  <link type="guide" xref="shortcuts"/>
+  <link type="guide" xref="bottom_panel_plugin"/>
+</info>
+<title>Bottom Panel Shortcuts</title>
+
+<table shade="rows" frame="all" rules="rows cols">
+  <tr>
+    <td><p>Toggle Show/Hide Bottom Panel</p></td> <td><code>F9</code></td>
+  </tr>
+</table>
+<p>Plugin: <code>bottom_panel</code></p>
+</page>

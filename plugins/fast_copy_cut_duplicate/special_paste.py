@@ -10,8 +10,12 @@ class SpecialPaste(object):
 	def special_paste(self):
 		clipboard = Gtk.Clipboard.get_default(Gdk.Display.get_default())
 		
-		# get current viewing file' buffer
-		self.buffer = self.plugins["files_manager.files_manager"].current_file.source_view.get_buffer()
+		# get current viewing file's buffer		
+		current_file = self.THE("files_manager", "get_current_file", {})
+		if not current_file:
+			return
+		
+		self.buffer = current_file.source_view.get_buffer()
 		
 		# get selection bound
 		selection = self.buffer.get_selection_bounds()
@@ -40,9 +44,14 @@ class SpecialPaste(object):
 			self.copied_line = ""
 			
 			
+			
 	def do_special_paste(self, text):
-		# get current viewing file' buffer
-		self.buffer = self.plugins["files_manager.files_manager"].current_file.source_view.get_buffer()
+		# get current viewing file's buffer		
+		current_file = self.THE("files_manager", "get_current_file", {})
+		if not current_file:
+			return
+		
+		self.buffer = current_file.source_view.get_buffer()
 		
 		# get selection bound
 		selection = self.buffer.get_selection_bounds()

@@ -1,0 +1,19 @@
+<page xmlns="http://projectmallard.org/1.0/"
+      type="topic"
+      id="key_scroller_shortcut">
+<info>
+  <link type="guide" xref="shortcuts"/>
+  <link type="guide" xref="key_scroller_plugin"/>
+</info>
+<title>Key Scroller Shortcuts</title>
+
+<table shade="rows" frame="all" rules="rows cols">
+  <tr>
+    <td><p>Scroll Up</p></td> <td><code>Ctrl + Up</code></td>
+  </tr>
+  <tr>
+    <td><p>Scroll Down</p></td> <td><code>Ctrl + Down</code></td>
+  </tr>
+</table>
+<p>Plugin: <code>key_scroller</code></p>
+</page>

@@ -45,7 +45,6 @@ class SignalHandler:
 	def __init__(self, app):
 		self.app = app
 		self.builder = app.builder
-		self.plugins = app.plugins_manager.plugins
 		self.handlers = Handlers()
 		self.set_handlers()
 		self.key_bindings_to_plugins = []
@@ -55,8 +54,6 @@ class SignalHandler:
 	# SignalHandler sets the main signals such as key press 
 	def set_handlers(self):
 		self.handlers.on_window_key_press_event = self.on_window_key_press_event
-		self.handlers.resizeBodySide = self.resizeBodySide
-		self.handlers.resizeHeaderSide = self.resizeHeaderSide
 
 		
 	
@@ -89,7 +86,11 @@ class SignalHandler:
 		# - pass only key bindings (i.e. when ctrl, alt)
 		# - or when "F" function keys pressed such F1, F2 ..
 		# this if is to condition the exit
-		if (not ctrl and not alt) and len(keyval_name) != 2: # not F1, ..:
+		# not F1, .. 
+		# and not F11, ...
+		if (not ctrl and not alt)\
+				and (len(keyval_name) != 2 and keyval_name[:1] == "F")\
+				and (len(keyval_name) != 3 and keyval_name[:2] == "F1"): 
 			for p in self.any_key_press_to_plugins:
 				return_value = p.key_bindings(event, keyval_name, ctrl, alt, shift)
 				if return_value:
@@ -102,26 +103,10 @@ class SignalHandler:
 				if return_value:
 					stop_propagation = True
 		
-		# print("stop_propagation", stop_propagation)
+		# DEBUG: print("stop_propagation", stop_propagation)
 		return stop_propagation
 			
 
-	
-	# when resize the left panel of the files, need
-	# to resize the header too "Files"
-	def resizeBodySide(self, bodyPaned, param):
-		headerPaned = self.builder.get_object("headerPaned")
-		headerPaned.set_position(bodyPaned.get_position())
-		
-	# when resize the "Files" header, need
-	# to resize left panel of the files too 
-	def resizeHeaderSide(self, headerPaned, param):
-		bodyPaned = self.builder.get_object("bodyPaned")
-		bodyPaned.set_position(headerPaned.get_position())
-		
-		
-		
-		
 		
 	def setup_event(self, event):
 		if not hasattr(self, event):
@@ -134,12 +119,15 @@ class SignalHandler:
 	
 	
 	
-	def emit(self, event, data):
+	def emit(self, event, *args):
 		self.setup_event(event)
 		e = getattr(self, event)
 		
 		for c in e.connected:
-			c(data)
+			if args:
+				c(*args)
+			else:
+				c()
 	
 	
 	def connect(self, event, callback):

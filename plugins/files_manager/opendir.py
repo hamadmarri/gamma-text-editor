@@ -36,14 +36,15 @@ class Plugin():
 		self.name = "opendir"
 		self.app = app
 		self.signal_handler = app.signal_handler
-		self.plugins = app.plugins_manager.plugins
+		self.THE = app.plugins_manager.THE
 		self.commands = []
 		
-		
-	def activate(self):
 		self.signal_handler.key_bindings_to_plugins.append(self)
 		commands.set_commands(self)
 		
+
+	def activate(self):
+		pass
 			
 	
 	# key_bindings is called by SignalHandler
@@ -75,10 +76,8 @@ class Plugin():
 					filenames.append(os.path.join(root, filename))
 		    	
 		    
-		
-		
 		if filenames:
-			self.plugins["files_manager.files_manager"].open_files(filenames)
+			self.THE("files_manager", "open_files", {"filenames": filenames})
 		    
 
 	
@@ -96,7 +95,7 @@ class Plugin():
 										(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
 										Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
 		
-		dialog.set_current_folder(self.plugins["files_manager.files_manager"].get_directory())
+		dialog.set_current_folder(self.THE("files_manager", "get_directory", {}))
 		
 		# can select and open multiple files
 		# dialog.set_select_multiple(True)

@@ -1,4 +1,4 @@
-#  
+#
 #### Author: Hamad Al Marri <hamad.s.almarri@gmail.com>
 #### Date: Feb 11th, 2020
 # 
@@ -35,32 +35,68 @@ class Plugin():
 	def __init__(self, app):
 		self.name = "savefile"
 		self.app = app
-		self.sourceview_manager = app.sourceview_manager
 		self.signal_handler = app.signal_handler
-		self.plugins = app.plugins_manager.plugins
+		self.THE = app.plugins_manager.THE
 		self.commands = []
 
-		
-	def activate(self):
 		self.signal_handler.key_bindings_to_plugins.append(self)
 		commands.set_commands(self)
 		
+
+	def activate(self):
+		pass
+
 	
 	# key_bindings is called by SignalHandler
 	def key_bindings(self, event, keyval_name, ctrl, alt, shift):
 		
-		# save is bound to "<Ctrl>+s"
-		if ctrl and keyval_name == "s":
-			self.save_current_file()
-		elif shift and ctrl and keyval_name == "S":
+		# save all is bound to "<Ctrl><Alt>+s"
+		if ctrl and alt and keyval_name == "s":
 			self.save_all()
+		
+		# save as is bound to "<Shift><Alt>+s"
+		elif shift and ctrl and keyval_name == "S":
+			self.save_as()
+		
+		# save is bound to "<Ctrl>+s"
+		elif ctrl and keyval_name == "s":
+			self.save_current_file()
+		
 	
+	
+	def save_as(self):
+		# show save dialog
+		new_filename = self.show_save_dialog()
+		
+		# if hit cancel, quit
+		if not new_filename:
+			return
+		
+		# get the current displayed file
+		current_file = self.THE("files_manager", "get_current_file", {})
+		
+		buffer = current_file.source_view.get_buffer()
+
+		# get all buffer text without the hidden markups
+		text = buffer.get_text(buffer.get_start_iter(), buffer.get_end_iter(), False)
+		
+		# write file
+		self.write_file(new_filename, text)
+		
+		# open the new saved as file
+		self.THE("files_manager", "open_files", {"filenames": (new_filename,)})
+		
+		
+		
+		
 	
 	
 	def save_all(self):
-		editted_counter = self.plugins["files_manager.files_manager"].editted_counter
+		editted_counter = self.THE("files_manager", "current_window_editted_counter", {})
+		
 		if editted_counter > 0:
-			files = self.plugins["files_manager.files_manager"].files
+			files = self.THE("files_manager", "current_window_files", {})
+			
 			# loop through all files objects
 			# reversed so from user prespective "from top to bottom"
 			for f in reversed(files):
@@ -71,7 +107,7 @@ class Plugin():
 					
 	def save_current_file(self):
 		# get the current displayed file
-		current_file = self.plugins["files_manager.files_manager"].current_file
+		current_file = self.THE("files_manager", "get_current_file", {})
 		self.save_file(current_file)
 		
 	
@@ -90,26 +126,28 @@ class Plugin():
 		
 		# check if file is new
 		if file_object.new_file:
-			files_manager = self.plugins["files_manager.files_manager"]
 			# switch to file to let the user 
 			# know which file is it
-			files_manager.switch_to_file(files_manager.get_file_index(file_object.filename))
+			file_index = self.THE("files_manager", "get_file_index", {"filename": file_object.filename})
+			self.THE("files_manager", "switch_to_file", {"file_index": file_index})
 			new_filename = self.show_save_dialog()
 			if new_filename:
 				self.write_file(new_filename, text)
-				files_manager.rename_file(file_object, new_filename)
+				self.THE("files_manager", "rename_file", {"file_object": file_object, "filename": new_filename})
 				file_object.reset_editted()
 				
 				# set the language of new created file 
 				# see sourceview_manager
 				buffer = file_object.source_view.get_buffer()
-				self.sourceview_manager.set_language(new_filename, buffer)
+				self.THE("sourceview_manager", "set_language", {
+							"filename": new_filename,
+							"buffer": buffer
+						})
 				
-						
+					
 				# TODO: if saved(overwrite) a file in Hard Drive, but that file 
 				# is already is open here! need to close old file 
 		else:
-			# TODO: if user hit cancel on dialog, need to revert
 			self.write_file(file_object.filename, text)
 			file_object.reset_editted()
 		
@@ -124,7 +162,7 @@ class Plugin():
 				 						(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
 										Gtk.STOCK_SAVE, Gtk.ResponseType.ACCEPT))
 		
-		dialog.set_current_folder(self.plugins["files_manager.files_manager"].get_directory())
+		dialog.set_current_folder(self.THE("files_manager", "get_directory" , {}))
 		
 		dialog.set_do_overwrite_confirmation(True);
 		
@@ -150,14 +188,14 @@ class Plugin():
 			f = open(filename, 'w')
 			f.write(text)
 		
-		except OSError as err:
-			print('Could not save %s: %s' % (filename, err))
 		except PermissionError as err:
-			print('Could not save %s: %s' % (filename, err))
+			self.signal_handler.emit("log-error", self, f'Could not save {filename}: {err}')
+		except OSError as err:
+			self.signal_handler.emit("log-error", self, f'Could not save {filename}: {err}')
 		else:
 			# when successfully wrote the file, show successful message
 			basename = os.path.basename(filename)
-			self.plugins["message_notify.message_notify"].show_message(basename + " | Saved", 2)
+			self.THE("message_notifier", "show_message", {"m": f"{basename} | Saved", "state": 2})
 			f.close()
 
 			

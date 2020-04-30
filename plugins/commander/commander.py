@@ -37,9 +37,8 @@ class Plugin():
 	def __init__(self, app):
 		self.name = "commander"
 		self.app = app
-		self.builder = app.builder
 		self.plugins_manager = app.plugins_manager
-		self.plugins = app.plugins_manager.plugins
+		self.THE = app.plugins_manager.THE
 		self.signal_handler = app.signal_handler
 		self.handlers = app.signal_handler.handlers
 		self.commands_tree = CommandsTree()
@@ -62,10 +61,12 @@ class Plugin():
 		self.max_time = 0.2 # was 0.3 
 		self.cache_thread = None
 		
-		
-	def activate(self):
 		self.signal_handler.key_bindings_to_plugins.append(self)
 		self.signal_handler.any_key_press_to_plugins.append(self)
+		
+		
+	def activate(self):
+		self.app.window.commander_window = None
 		self.set_handlers()
 		
 
@@ -127,8 +128,7 @@ class Plugin():
 		for c in self.commands:
 			self.commands_tree.insert(c)
 			
-		self.plugins["message_notify.message_notify"] \
-							.show_message(f"{self.commands_tree.size} commands loaded")
+		self.THE("message_notifier", "show_message", {"m": f"{self.commands_tree.size} commands loaded"})
 	
 	
 	def add_command(self, c):

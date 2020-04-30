@@ -23,22 +23,26 @@ YELLOW: #FCE94F
 GREEN: #0DD100 C2FF8E
 pink: BEB0BE D33682
 purpul: CAC5FF
-BACKGROUND: #36292d #36292d
+BACKGROUND: #36292d
 FOREGROUND: #ffffda rgba(255, 255, 218, 0.86) 847479
 */
 @define-color gamma_bg_color #36292d;
 @define-color gamma_fg_color #ffffda;
+@define-color gamma_warning_color #FCE94F;
+@define-color gamma_error_color #FF749B;
+
+#gamma_window decoration, headerbar {
+	border:none;
+	box-shadow:none;
+}
+
 
 /* from theme */
 headerbar entry, headerbar button, headerbar separator {
   margin-top: 6px;
   margin-bottom: 6px;
+}
 
-   }
-
-headerbar {
-	box-shadow: none;
-} 
 
 .openned_file button,
 .openned_file_editted button {
@@ -77,11 +81,11 @@ headerbar {
 #headerbarMain, #headerbarMain * {
 	background: #36292d;
 	color: rgba(255, 255, 218, 0.86);
-	border:none; 
+	border:none;
 }
 
 #headerbarMain {
-	padding: 8px 0 8px 0 ;
+	padding: 8px 0 8px 0;
 }
 
 #headerbarMain .title {
@@ -402,10 +406,11 @@ headerbar {
 
 
 /******************* BOTTOM PANEL *********************/
-
 notebook tab label {
-	color: #ffffda;
-	font-size: 17px;
+	color: @gamma_fg_color;
 }
 
+notebook   {
+	background-color: #36292d;
+}
 

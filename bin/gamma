@@ -23,13 +23,9 @@
 #
 
 
-# if passed args
-export GAMMA_OPEN_FILE="$@"
-
-
 dir="$(dirname "$(dirname "$(realpath "$0")")")"
 # echo $dir
 
 # run gamma with python3
-python3 $dir/gamma.py
+python3 $dir/gamma.py $@
 

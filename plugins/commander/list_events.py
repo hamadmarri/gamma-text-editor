@@ -15,27 +15,32 @@ class ListEvents(object):
 	
 	def on_commanderList_key_press_event(self, widget, event):
 		keyval_name = Gdk.keyval_name(event.keyval)
+		commanderSearchEntry = self.app.window.commander_searchEntry
+		listbox = self.app.window.commander_listbox
 		
 		# go up back to searchEntry
 		if keyval_name == "Up":
-			first_row = self.listbox.get_row_at_y(1)
+			first_row = listbox.get_row_at_y(1)
 			if not first_row or first_row.is_selected():
-				self.commanderSearchEntry.grab_focus_without_selecting()
+				commanderSearchEntry.grab_focus_without_selecting()
 				
 		# if start typing again, back to searchEntry
 		# and insert that key to search 
 		elif keyval_name != "Return" and keyval_name != "Up" and keyval_name != "Down":
-			self.commanderSearchEntry.grab_focus_without_selecting()
+			commanderSearchEntry.grab_focus_without_selecting()
 			
 			# pass the key press to search entry
-			self.commanderSearchEntry.do_key_press_event(self.commanderSearchEntry, event)
+			commanderSearchEntry.do_key_press_event(commanderSearchEntry, event)
 
 
 
 	def on_commander_list_edge_reached(self, scrolled_window, pos):
 		if pos == Gtk.PositionType.BOTTOM:
+			commanderSearchEntry = self.app.window.commander_searchEntry
+			listbox = self.app.window.commander_listbox
+			
 			commands = self.commander.commands_tree
-			search_term = self.commanderSearchEntry.get_text()
+			search_term = commanderSearchEntry.get_text()
 			more = None
 			if self.scroll_in == ContinueResultType.NEXT:
 				more = commands.next(max_result=20)
@@ -47,6 +52,6 @@ class ListEvents(object):
 			for c in more:
 				self.add_command(c)
 				
-			self.listbox.show_all()
+			listbox.show_all()
 
 				

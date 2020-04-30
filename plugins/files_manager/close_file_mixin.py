@@ -10,7 +10,7 @@ class CloseFileMixin(object):
 	
 	def close_all(self):
 		# > 1 to not delete empty init file
-		num_files = len(self.files)
+		num_files = self.files_len()
 		counter = 1  # < don't close empty init
 		while counter < num_files:
 			self.switch_to_file(num_files - counter)
@@ -21,7 +21,7 @@ class CloseFileMixin(object):
 
 	def close_file(self, filename):
 		# check if the current file is being closed
-		if self.current_file.filename == filename:
+		if self.get_current_file().filename == filename:
 			self.close_current_file()
 			
 		else:
@@ -33,7 +33,7 @@ class CloseFileMixin(object):
 				return
 			
 			# switch to last file
-			self.switch_to_file(len(self.files) - 1)
+			self.switch_to_file(self.files_len() - 1)
 
 				
 	
@@ -41,20 +41,20 @@ class CloseFileMixin(object):
 	def close_current_file(self):	
 		# if length > 2, then close current and switch to previouse file 
 		# in "files" array
-		if len(self.files) > 2:
+		if self.files_len() > 2:
 			# get current file index
-			to_close_index = self.get_file_index(self.current_file.filename)
+			to_close_index = self.get_file_index(self.get_current_file().filename)
 					
 			# destroy file
 			if not self.destroy_file(to_close_index):
 				return
 			
 			# switch to last file
-			self.switch_to_file(len(self.files) - 1)
+			self.switch_to_file(self.files_len() - 1)
 
 		
 		# if empty file only there, do nothing
-		elif len(self.files) == 1 and self.files[0].init_file:
+		elif self.files_len() == 1 and self.app.window.files[0].init_file:
 			return
 			
 			
@@ -66,29 +66,32 @@ class CloseFileMixin(object):
 				return
 			
 			# make sure init file is empty
-			self.files[0].source_view.get_buffer().set_text("")
+			self.app.window.files[0].source_view.get_buffer().set_text("")
 			
 			# remove current sourceview and put the new empty sourceview
-			self.plugins["ui_manager.ui_manager"].replace_sourceview_widget(self.files[0].source_view)
+			self.THE("ui_manager", "replace_sourceview_widget", {
+						"newsource": self.app.window.files[0].source_view
+						})
+			
 			
 			# current file is now empty
-			self.current_file = self.files[0]
+			self.set_current_file(self.app.window.files[0])
 			
 						
 			# since it is an empty file, set the headerbar to "Gamma"
-			self.plugins["ui_manager.ui_manager"].set_header("Gamma")
+			self.THE("ui_manager", "set_header", {"text": "Gamma"})
 			
 			# cancel and clear message 
 			# why? sometimes user save a file and close it right after,
 			# so no need to keep showing that file is saved
-			self.plugins["message_notify.message_notify"].cancel()
+			self.THE("message_notifier", "cancel", {})
 		
 			
 		
 
 	def destroy_file(self, file_index):
 		# print(file_index)
-		file_object = self.files[file_index]
+		file_object = self.app.window.files[file_index]
 		close = True
 		
 		if file_object.editted:
@@ -101,7 +104,7 @@ class CloseFileMixin(object):
 			# if user clicked save
 			if response == 0:
 				# save does the reset_editted
-				self.plugins["files_manager.savefile"].save_file(file_object)
+				self.THE("files_saver", "save_file", {"file_object": file_object})
 			
 			# if user clicked no
 			elif response == 2:

@@ -32,16 +32,21 @@ class Plugin():
 		self.name = "typing_assistant"
 		
 		self.app = app
-		self.plugins = app.plugins_manager.plugins
+		self.THE = app.plugins_manager.THE
 		self.signal_handler = app.signal_handler 
 		self.commands = []
+		
+		self.signal_handler.any_key_press_to_plugins.append(self)
+		self.signal_handler.key_bindings_to_plugins.append(self)
+		
 		self.chars = {
 			"quotedbl": "\"", 
 			"apostrophe": "'",
 			"parenleft": "(",
 			"bracketleft": "[",
 			"braceleft": "{",
-			 "less": "<" 
+			 "less": "<", 
+			 "grave": "`", 
 		}
 		self.close = {
 			"\"": "\"",
@@ -50,12 +55,12 @@ class Plugin():
 			"[": "]",
 			"{": "}",
 			"<": ">",
+			"`": "`",
 		}
 
 
 	def activate(self):
-		self.signal_handler.any_key_press_to_plugins.append(self)
-		self.signal_handler.key_bindings_to_plugins.append(self)
+		pass
 
 	
 	def key_bindings(self, event, keyval_name, ctrl, alt, shift):
@@ -64,11 +69,16 @@ class Plugin():
 		elif ctrl and keyval_name == "Return":
 			self.move_to_next_line()
 		
-		
+
 		
 	def move_to_next_line(self):		
-		# get current viewing file' buffer
-		buffer = self.plugins["files_manager.files_manager"].current_file.source_view.get_buffer()
+		# get current viewing file's buffer		
+		current_file = self.THE("files_manager", "get_current_file", {})
+		if not current_file:
+			return
+		
+		buffer = current_file.source_view.get_buffer()
+		
 		
 		# get selection bound
 		selection = buffer.get_selection_bounds()
@@ -78,6 +88,11 @@ class Plugin():
 			return False
 		
 		position = buffer.get_iter_at_mark(buffer.get_insert())
+		
+		# check if iter is already at the end of the line
+		if position.ends_line():
+			return False
+		
 		position.forward_to_line_end()
 		buffer.place_cursor(position)
 		
@@ -95,7 +110,12 @@ class Plugin():
 	def text_insert(self, text):
 	
 		# check if sourceview is in focus
-		sourceview = self.plugins["files_manager.files_manager"].current_file.source_view
+		current_file = self.THE("files_manager", "get_current_file", {})
+		if not current_file:
+			return
+		
+		sourceview = current_file.source_view
+		
 		if not sourceview.is_focus():
 			return False
 		
@@ -119,6 +139,16 @@ class Plugin():
 		text += self.close[text]
 		
 		position = buffer.get_iter_at_mark(buffer.get_insert())
+		
+		# check if the next char is normal text 
+		# if so, do not add the closing part
+		c = position.get_char()
+		if not c in (" ", "", "\t", ",", ".", "\n", "\r") \
+			and not c in list(self.close.values()):
+			return False
+		
+		
+		
 		buffer.insert(position, text)
 		
 		# place cursor inbetween
@@ -143,9 +173,7 @@ class Plugin():
 		end = buffer.get_iter_at_mark(end_mark)
 		t = self.close[t]
 		buffer.insert(end, t)
-		
-		
-		
+				
 		start = buffer.get_iter_at_mark(start_mark)
 		end = buffer.get_iter_at_mark(end_mark)
 		end.backward_char()
@@ -155,5 +183,6 @@ class Plugin():
 		
 		# stop propagation
 		return True
+		
 	
 	
