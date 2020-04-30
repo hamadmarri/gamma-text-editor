@@ -14,6 +14,11 @@ class FilterMixin(object):
 		filter_text.add_mime_type("text/plain")
 		dialog.add_filter(filter_text)
 		
+		filter_any = Gtk.FileFilter()
+		filter_any.set_name("Any files")
+		filter_any.add_pattern("*")
+		dialog.add_filter(filter_any)
+		
 		filter_py = Gtk.FileFilter()
 		filter_py.set_name("Python files")
 		filter_py.add_mime_type("text/x-python")
@@ -140,10 +145,6 @@ class FilterMixin(object):
 		filter_glade.add_mime_type("application/x-glade")
 		dialog.add_filter(filter_glade)
 		
-		filter_any = Gtk.FileFilter()
-		filter_any.set_name("Any files")
-		filter_any.add_pattern("*")
-		dialog.add_filter(filter_any)
 		
 		
 		

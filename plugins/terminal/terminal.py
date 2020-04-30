@@ -145,7 +145,7 @@ class GeditTerminal(Vte.Terminal):
 		self.set_cursor_blink_mode(self.profile_settings.get_enum("cursor-blink-mode"))
 		self.set_cursor_shape(self.profile_settings.get_enum("cursor-shape"))
 		self.set_audible_bell(self.profile_settings.get_boolean("audible-bell"))
-		self.set_allow_bold(self.profile_settings.get_boolean("allow-bold"))
+		# self.set_allow_bold(self.profile_settings.get_boolean("allow-bold"))
 		self.set_scroll_on_keystroke(self.profile_settings.get_boolean("scroll-on-keystroke"))
 		self.set_scroll_on_output(self.profile_settings.get_boolean("scroll-on-output"))
 		self.set_audible_bell(self.defaults['audible_bell'])
