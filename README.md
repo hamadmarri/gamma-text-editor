@@ -70,12 +70,12 @@ chmod +x setup.sh
 
 
 ## Gamma Philosophy
-The philosophy of Gamma is to decouple all functionalities and features into seperate plugins.
-It is designed in a way that every featuer is a plugin, even for some basic and core functionalities
-such as open, save, and close files, they are made in a seperate plugins which located under 
+The philosophy of Gamma is to decouple all functionalities and features into separate plugins.
+It is designed in a way that every feature is a plugin, even for some basic and core functionalities
+such as open, save, and close files, they are made in a separate plugins which located under 
 `./plugins/files_manager` folder. However, these plugins (`openfile` and `savefile`) are highly coupled with
-`files_manager` plugin since they are working togather. But nothing prevent you from replacing any of these 
-coupled plugins with a different plugin with respect of taking care of integrating them togather with 
+`files_manager` plugin since they are working together. But nothing prevents you from replacing any of these 
+coupled plugins with a different plugin with respect of taking care of integrating them together with 
 the new/replacement plugin. That being said, it is a special case where they are core basic plugins for 
 Gamma to work as a text editor, therefore they are highly coupled with each other. For different types
 of plugins such as a plugin for showing the terminal at bottom panel, or a plugin opens a tree view of 
@@ -83,7 +83,7 @@ a directory, there is no dependencies on other plugins. For developers, see
 [For Developers](#for-developers) section.
 
 
-## Featuers and current available plugins
+## Features and current available plugins
 Here are brief descriptions about currently implemented plugins and features
 
 ### style
@@ -113,7 +113,7 @@ to files_manager.open_files method
 
 
 ### savefile
-Saves the current file opened or all editted files\
+Saves the current file opened or all edited files\
 it gets current_file from files_manager plugin\
 and saves it. Message notify is sent to tell the user\
 that the file is saved successfully
@@ -208,7 +208,7 @@ maximize window, find and replace ....\
 basically any plugin exported its commands, commander will show theirs commands. 
 
 Commander uses splay tree to store commands. It is a binary search tree\
-with splay featuer. Search in commands is fast. Also, recent used\
+with splay feature. Search in commands is fast. Also, recent used\
 commands are placed at top because of the splay operation.
   
 
@@ -234,7 +234,3 @@ commands are placed at top because of the splay operation.
 *	Find and replace on selected area
 
 For all issues/todos [Issues](https://gitlab.com/hamadmarri/gamma-text-editor/issues).
-
-
-
-
