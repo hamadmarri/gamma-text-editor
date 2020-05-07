@@ -8,7 +8,7 @@ Author: Hamad Al Marri
 -	[Dependencies](#dependencies)
 -	[Installation](#installation)
 -	[Gamma Philosophy](#gamma-philosophy)
--	[Featuers and current available plugins](#featuers-and-current-available-plugins)
+-	[Features and current available plugins](#features-and-current-available-plugins)
 -	[TODO](#todo)
 -	[For Developers](https://gitlab.com/hamadmarri/gamma-text-editor/-/wikis/For-Developers)
 -	[Wiki](https://gitlab.com/hamadmarri/gamma-text-editor/-/wikis/home)
