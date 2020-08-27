@@ -104,6 +104,7 @@ headerbar entry, headerbar button, headerbar separator {
 	background: #36292d;
 	font-family: monospace;
 	font-size: 20px;
+	caret-color: #ffc400;
 }
 #searchEntry:focus {
 	box-shadow: none;
