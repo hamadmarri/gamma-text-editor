@@ -8,13 +8,13 @@
 #	but WITHOUT ANY WARRANTY; without even the implied warranty of
 #	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #	GNU General Public License for more details.
-# 
+#
 #	You should have received a copy of the GNU General Public License
 #	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
- 
 
-/* 
+
+/*
 COLORS:
 RED: #FF1946 FF749B FF1846
 BLUE: #00B5FF 60DEDE
@@ -54,7 +54,7 @@ headerbar entry, headerbar button, headerbar separator {
 	-gtk-icon-shadow: none;
 }
 
- 
+
 
 #window {
     background-color: transparent;
@@ -68,7 +68,7 @@ headerbar entry, headerbar button, headerbar separator {
 }
 
 /********** HEADER *************/
-#headerPaned, #headerbarMain, #headerbarSide {    
+#headerPaned, #headerbarMain, #headerbarSide {
     border-top-left-radius: 0px;
     border-top-right-radius: 0px;
 }
@@ -76,7 +76,7 @@ headerbar entry, headerbar button, headerbar separator {
 #headerPaned > separator {
 	background: #36292d;
 }
- 
+
 
 #headerbarMain, #headerbarMain * {
 	background: #36292d;
@@ -91,11 +91,11 @@ headerbar entry, headerbar button, headerbar separator {
 #headerbarMain .title {
 	color: #ffffda;
 	font-size: 16px;
-} 
+}
 .openned_file_editted#headerbarMain .title {
 	color: #FCE94F;
 }
- 
+
 
 
 #searchEntry {
@@ -104,7 +104,7 @@ headerbar entry, headerbar button, headerbar separator {
 	background: #36292d;
 	font-family: monospace;
 	font-size: 20px;
-	caret-color: #ffc400;
+	caret-color: #ffffda;
 }
 #searchEntry:focus {
 	box-shadow: none;
@@ -119,14 +119,17 @@ headerbar entry, headerbar button, headerbar separator {
 #headerbarMain*.searching, #headerbarMain*.searching *,
 #headerbarMain*.messageImportant, #headerbarMain*.messageImportant * {
        color:#60DEDE;
+       caret-color:#60DEDE;
 }
 #headerbarMain*.searchSuccess, #headerbarMain*.searchSuccess *,
 #headerbarMain*.messageSuccess, #headerbarMain*.messageSuccess * {
 	color: #C2FF8E;
+	caret-color:#C2FF8E;
 }
 #headerbarMain*.searchFail, #headerbarMain*.searchFail * ,
 #headerbarMain*.messageFail, #headerbarMain*.messageFail * {
 	color: #FF749B;
+	caret-color:#FF749B;
 }
 
 
@@ -152,7 +155,7 @@ headerbar entry, headerbar button, headerbar separator {
 }
 
 #logo {
-    background: #36292d; 
+    background: #36292d;
     color: #FF931F;
 }
 
@@ -179,24 +182,24 @@ headerbar entry, headerbar button, headerbar separator {
     background:  #372a2e;
     padding-top: 16px;
     padding-bottom: 18px;
-} 
+}
 
 
 
 /********** FILES *************/
-.openned_file { 
+.openned_file {
 	background:transparent;
 	border:none;
 	margin: 0 0 0 0;
-	
+
 	border-style: dotted none none none;
 	border-width: 3px;
-	
+
 	border-color: rgba(255, 196, 255, 0.16);
 	font-size: 1.05em;
 }
 
-.openned_file button { 
+.openned_file button {
 	background:transparent;
 	border:none;
 	margin: 0;
@@ -204,7 +207,7 @@ headerbar entry, headerbar button, headerbar separator {
 	padding-bottom: 17px;
 	font-size: 1.05em;
 }
- 
+
 
 .openned_file_editted button label {
 	color: #FCE94F;
@@ -236,7 +239,7 @@ headerbar entry, headerbar button, headerbar separator {
 .openned_file_hover  {
 	background: rgba(253, 253, 253, 0.04);
 }
-.openned_file * {  
+.openned_file * {
 	color: #BEB0BE;
 }
 .openned_file_current_displayed {
@@ -245,7 +248,7 @@ headerbar entry, headerbar button, headerbar separator {
 .openned_file_current_displayed {
 	font-weight: bold;
 }
- 
+
 
 
 
@@ -253,7 +256,7 @@ headerbar entry, headerbar button, headerbar separator {
 .menu {
 	background:transparent;
 	border:none;
-	color: #BEB0BE; 
+	color: #BEB0BE;
 	margin-top: 0px;
 	padding: 6px 0 6px 0;
 	box-shadow:none;
@@ -273,7 +276,7 @@ headerbar entry, headerbar button, headerbar separator {
 	font-weight: bold;
 }
 
- 
+
 #find_menu.menu_attention {
 	color: #C2FF8E;
 	font-weight: bold;
@@ -321,7 +324,7 @@ headerbar entry, headerbar button, headerbar separator {
 
 #commanderSearchEntry, #commanderSearchEntry * {
 	color:#ffffda;
-	background: #36292d; 
+	background: #36292d;
 	font-family: monospace;
 	font-size: 22px;
 	min-height: 40px;
