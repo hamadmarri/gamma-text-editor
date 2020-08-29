@@ -66,6 +66,7 @@ typelib-1_0-GtkSource-4
 
 // for help pages
 typelib-1_0-WebKit2-4_0
+yelp
 
 // for terminal plugin
 typelib-1_0-Vte-2.91 
