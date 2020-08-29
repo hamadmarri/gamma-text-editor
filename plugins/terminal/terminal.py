@@ -186,7 +186,8 @@ class Plugin():
 	
 	def show_terminal(self):
 		vte = GeditTerminal()
-				
+		
+		# try to show in bottom panel 
 		args = {
 			"plugin": self,
 			"label": "Terminal",
@@ -194,11 +195,14 @@ class Plugin():
 		}
 		added = self.THE("bottom_panel", "add", args)
 		
+		# if no bottom panel, then show in separate window
 		if not added:
 			w = Gtk.Window.new(Gtk.WindowType.TOPLEVEL)
 			w.add(vte)
 			w.show_all()
 		
 		vte.grab_focus()
+		# vte.feed_child(b"cd ~/dev\n")
 		# vte.feed_child(b"grep -R \"TODO:\" . -ns\n")
+	
 	
