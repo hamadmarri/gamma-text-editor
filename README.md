@@ -56,7 +56,22 @@ WebKitGTK, GLib, GIO and many more.
 If you are using Linux with a Gnome desktop, you probably have those dependencies installed already. I
 am not sure if the libraries are installed for other desktops such as KDE, XFCE, or MATE. But if
 you have libgtk-3-0 and python3 installed, then Gamma is probably going to work.
- 
+
+You might need to install the following (in case of missing dependencies):
+```
+gobject-introspection
+python3-gobject
+typelib-1_0-Gtk-3_0
+typelib-1_0-GtkSource-4
+
+// for help pages
+typelib-1_0-WebKit2-4_0
+
+// for terminal plugin
+typelib-1_0-Vte-2.91 
+gedit-plugin-terminal
+```
+
 
 
 ## Installation

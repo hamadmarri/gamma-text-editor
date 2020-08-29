@@ -1,4 +1,4 @@
-#! /usr/bin/bash
+#!/usr/bin/env bash
 
 # copy icon to ~/.icons
 mkdir -p ~/.icons/ && cp ./bin/icon.svg ~/.icons/io.gitlab.hamadmarri.gamma.svg
