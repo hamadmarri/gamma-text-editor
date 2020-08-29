@@ -63,6 +63,8 @@ gobject-introspection
 python3-gobject
 typelib-1_0-Gtk-3_0
 typelib-1_0-GtkSource-4
+typelib-1_0-WebKit2-4_0 // for help pages
+typelib-1_0-Vte-2.91 // for terminal plugin
 ```
 
 
