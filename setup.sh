@@ -2,6 +2,7 @@
 
 # copy icon to ~/.icons
 mkdir -p ~/.icons/ && cp ./bin/icon.svg ~/.icons/io.gitlab.hamadmarri.gamma.svg
+mkdir -p ~/.local/share/icons/ && cp ./bin/icon.svg ~/.local/share/icons/io.gitlab.hamadmarri.gamma.svg
 
 
 # edit io.gitlab.hamadmarri.gamma.desktop put the path 
