@@ -29,11 +29,25 @@
 # plugins_manager.plugins
 
 import sys
+import os
 
 import gi
 gi.require_version('Gtk', '3.0')
 gi.require_version('GtkSource', "4")
 from gi.repository import Gio, Gtk, Gdk, GtkSource, GObject
+
+# While packaging this application, set packaged to True
+# If packaged is False, it means gamma was installed using setup.sh
+packaged = False
+if packaged == True:
+	if os.path.isfile(os.path.expanduser('~/.config/gamma-text-editor/config.py')) == False:
+		# If initial config is not present then execute
+		# script to copy it to user's .config directory
+		install_path = os.path.dirname(os.path.realpath(__file__))
+		import subprocess
+		subprocess.run([install_path + "/home_dir_init.sh", install_path])
+	# Allow gamma to read config/plugins from user's .config directory
+	sys.path.append(os.path.expanduser('~/.config/gamma-text-editor'))
 
 import config
 import signal_handler
