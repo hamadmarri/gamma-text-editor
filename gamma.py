@@ -40,12 +40,24 @@ from gi.repository import Gio, Gtk, Gdk, GtkSource, GObject
 # If packaged is False, it means gamma was installed using setup.sh
 packaged = False
 if packaged == True:
-	if os.path.isfile(os.path.expanduser('~/.config/gamma-text-editor/config.py')) == False:
+	# Packager should set package_date to the unix timestamp when packaging.
+	# Use shell command 'date +%s' to get timestamp.
+	package_date = 0000000000
+	install_path = os.path.dirname(os.path.realpath(__file__))
+	if os.path.isfile(os.path.expanduser('~/.config/gamma-text-editor/package_date')) == False:
 		# If initial config is not present then execute
 		# script to copy it to user's .config directory
-		install_path = os.path.dirname(os.path.realpath(__file__))
 		import subprocess
-		subprocess.run([install_path + "/home_dir_init.sh", install_path])
+		subprocess.run([install_path + "/home_dir_init.sh", install_path, "1"])
+	else:
+		# Files exist at user's .config directory
+		# Check if they are from an older build,
+		# if yes then copy the fresh files.
+		date_file = open(os.path.expanduser('~/.config/gamma-text-editor/package_date'))
+		existing_package_date = date_file.read()
+		if(int(package_date) > int(existing_package_date)):
+			import subprocess
+			subprocess.run([install_path + "/home_dir_init.sh", install_path, "0"])
 	# Allow gamma to read config/plugins from user's .config directory
 	sys.path.append(os.path.expanduser('~/.config/gamma-text-editor'))
 
