@@ -185,7 +185,7 @@ class Plugin():
 			# save the file, in other words, copy text 
 			# from buffer and write the file "current_file.filename"
 			# in permenant storage (disk)
-			f = open(filename, 'w', encoding='utf8')
+			f = open(filename, 'w', encoding='utf-16')
 			f.write(text)
 		
 		except PermissionError as err:

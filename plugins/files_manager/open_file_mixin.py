@@ -36,7 +36,7 @@ class OpenFileMixin(object):
 		
 		try:
 			# open the file in reading mode
-			f = open(filename, "r", encoding="utf-8", errors="replace")
+			f = open(filename, "r", encoding="utf-16", errors="replace")
 			#f = open(filename, "r")
 			# actual reading from the file and populate the new sourceview buffer
 			# with file data
