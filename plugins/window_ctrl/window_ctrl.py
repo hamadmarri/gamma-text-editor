@@ -148,6 +148,8 @@ class Plugin():
 		# must cancel the thread		
 		self.THE("message_notifier", "cancel", {})
 		
+		self.THE("recent_files_rememberer", "store_file_names", {})
+		
 		# close all files
 		self.THE("files_manager", "close_all", {})
 		

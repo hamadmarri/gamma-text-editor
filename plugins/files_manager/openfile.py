@@ -1,4 +1,4 @@
-## 
+##
 #### Author: Hamad Al Marri <hamad.s.almarri@gmail.com>
 #### Date: Feb 11th, 2020
 #
@@ -30,53 +30,53 @@ from .filters_mixin import FilterMixin
 from . import openfile_commands as commands
 
 class Plugin(FilterMixin):
-	
+
 	def __init__(self, app):
 		self.name = "openfile"
 		self.app = app
 		self.signal_handler = app.signal_handler
 		self.THE = app.plugins_manager.THE
 		self.commands = []
-		
+
 		self.signal_handler.key_bindings_to_plugins.append(self)
 		commands.set_commands(self)
-		
+
 
 	def activate(self):
 		pass
-		
-	
+
+
 	# key_bindings is called by SignalHandler
 	def key_bindings(self, event, keyval_name, ctrl, alt, shift):
 		# open is bound to "<Ctrl>+o"
 		if ctrl and keyval_name == "o":
 			self.openfile()
-			
-			
-			
-	def openfile(self):		
+
+
+
+	def openfile(self):
 		# choosefile will display the open dialog
 		filenames = self.choosefile()
 		# DEBUG: print(filenames)
-		
+
 		# if cancel button is pressed
 		if not filenames:
 			return
-		
+
 		# otherwise, let files_manager controll open, read files, and
-		# set new sourceviews to each file.  
+		# set new sourceviews to each file.
 		self.THE("files_manager", "open_files", {"filenames": filenames})
 
-	
-	
-	
+
+
+
 	# show open dialog
 	# (see: https://developer.gnome.org/gtk3/stable/GtkFileChooserDialog.html)
 	# (see: https://developer.gnome.org/gtk3/stable/GtkFileChooser.html#GtkFileChooserAction)
 	def choosefile(self):
 		filenames = None
-		
-		# initialize file chooser 
+
+		# initialize file chooser
 		dialog = Gtk.FileChooserDialog("Open File", None,
 										Gtk.FileChooserAction.OPEN,
 										(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
@@ -84,15 +84,15 @@ class Plugin(FilterMixin):
 
 		# add files types filters
 		self.add_filters(dialog)
-		
+
 		dialog.set_current_folder(self.THE("files_manager", "get_directory", {}))
-		
+
 		# can select and open multiple files
 		dialog.set_select_multiple(True)
 
-		# show the dialog		
+		# show the dialog
 		response = dialog.run()
-		
+
 		if response == Gtk.ResponseType.OK:
 			filenames = dialog.get_filenames()
 
@@ -102,5 +102,5 @@ class Plugin(FilterMixin):
 
 
 
-	
-		
+
+

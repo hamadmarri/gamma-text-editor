@@ -1,4 +1,4 @@
-# 
+#
 #### Author: Hamad Al Marri <hamad.s.almarri@gmail.com>
 #### Date: Feb 11th, 2020
 #
@@ -21,7 +21,7 @@
 #
 # - load_plugins:	by using "importlib" the plugins loaded and included
 # 					to Gamma. It goes through "plugin_list" to get exact name
-#					of the plugin package. For each plugin, plugin module is 
+#					of the plugin package. For each plugin, plugin module is
 #					included, the app reference is passed to plugin, and the
 #					"activate" method of a plugin is called. "activate" is plugin init,
 #					so do not use plugins' __init__ for complex operation. The
@@ -29,16 +29,16 @@
 #					(i.e. self.builder = app.builder). Other than these assignments,
 #					plugins activate must be your method for initializing you plugin.
 #					The reason for this design is to know which plugin must be eager
-#					and which must be lazy plugin. Simply, if your activate method 
-#					is not implemented (i.e. def activate(self): pass), then the plugin 
+#					and which must be lazy plugin. Simply, if your activate method
+#					is not implemented (i.e. def activate(self): pass), then the plugin
 #					is lazy plugin.
-#					 
+#
 # - get_plugin:		Used from plugins which need to get reference of other plugins.
-#					It is expensive process "O(n)", so better use it once and cache 
+#					It is expensive process "O(n)", so better use it once and cache
 #					the reference.
 #
 
- 
+
 # list of active plugins
 # deactivate plugin by removing or commenting out the plugin name
 # formate "[folder name].[python file]"
@@ -59,7 +59,7 @@ plugin_list = [
 	{"name": "codecomment.codecomment", "category": "codecommenter"},
 	{"name": "find_and_replace.find_and_replace", "category": "find_and_replace"},
 	{"name": "terminal.terminal", "category": "terminal"},
-	
+
 	{"name": "bottom_panel.bottom_panel", "category": "bottom_panel"},
 	{"name": "welcome.welcome", "category": "welcomer"},
 	{"name": "help.help", "category": "helper"},
@@ -70,11 +70,12 @@ plugin_list = [
 	{"name": "toggle_files_list.toggle_files_list", "category": "files_toggler"},
 	{"name": "key_scroller.key_scroller", "category": ""},
 	{"name": "output.output", "category": "output"},
+	{"name": "remember_recent_files.remember_recent_files", "category": "recent_files_rememberer"},
 
 
-	# special case for commander 
-	# must be last because the activate method 
-	# of commands need to cache other plugins commands 
+	# special case for commander
+	# must be last because the activate method
+	# of commands need to cache other plugins commands
 	{"name": "commander.commander", "category": "commander"},
 ]
 
@@ -93,51 +94,51 @@ class PluginsManager():
 	# importing all plugins in "plugin_list"
 	# notice that activate method is called
 	# these plugins are eagerly loaded
-	# the more plugins, and process in activate 
+	# the more plugins, and process in activate
 	# method, the heavier startup time
-	def load_plugins(self):	
+	def load_plugins(self):
 		for p in plugin_list:
 			# plugins are in "plugins" folder/package
 			plugin = importlib.import_module('.' + p["name"], package='plugins')
-			
+
 			# initializing plugin and passing the
 			# reference of app
 			module = plugin.Plugin(self.app)
-			
-			# add a reference of the plugin 
-			# to plugins categories and array			
+
+			# add a reference of the plugin
+			# to plugins categories and array
 			if p["category"]:
 				self.categories[p["category"]] = module
-			
+
 			self.plugins_array.append(module)
 
-		
-		# activate plugins 
+
+		# activate plugins
 		for p in self.plugins_array:
 			p.activate()
-		
+
 		self.app.signal_handler.emit("log", self, f"loaded {len(self.plugins_array)} plugins")
-		
+
 		# emitting startup where any plugin could connect to
-		# startup signal. It is save to reach other plugins 
-		# from startup signals since all have been activated 
+		# startup signal. It is save to reach other plugins
+		# from startup signals since all have been activated
 		self.app.signal_handler.emit("startup")
-					
-	
-	
+
+
+
 	def activate_plugins(self):
-		# activate plugins 
+		# activate plugins
 		for p in self.plugins_array:
 			p.activate()
-		
-		
-		
-	
+
+
+
+
 	# get plugin from categories dictionary that match same name
 	# if existed, find the method, if existed, do the call
 	def THE(self, plugin_category, method, args):
 		# DEBUG: print(plugin_category, method, args)
-		
+
 		p = self.categories.get(plugin_category)
 		if p:
 			if hasattr(p, method):
@@ -156,5 +157,5 @@ class PluginsManager():
 		else:
 			self.app.signal_handler.emit("log-warning", self, f'THE: No plugin/category: {plugin_category}')
 			return None
-		
-		
+
+
