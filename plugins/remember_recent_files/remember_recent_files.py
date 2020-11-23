@@ -18,18 +18,8 @@
 #
 
 import os
-import gi
-gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk
 
-# class name must be "Plugin". Do not change the name
 class Plugin():
-
-	# the plugins_manager will pass "app" reference
-	# to your plugin. "app" object is defined in gamma.py
-	# from "app" reference you can access pretty much
-	# everything related to Gamma (i.e. window, builder,
-	# sourceview, and other plugins)
 	def __init__(self, app):
 		self.name = "remember_recent_files"
 		self.app = app
@@ -46,7 +36,6 @@ class Plugin():
 
 
 
-	# optional
 	def store_file_names(self):
 		f = open(os.path.join(self.location, 'recent_files.txt'), 'w', encoding='utf-8')
 
@@ -58,7 +47,6 @@ class Plugin():
 
 
 
-	# optional
 	def get_stored_file_names(self):
 		filenames = []
 
