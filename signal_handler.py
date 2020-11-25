@@ -18,7 +18,7 @@
 #
 #
 # SignalHandler: is the class that manage signal handlers.
-# "Handlers" is an object for mapping signal names with 
+# "Handlers" is an object for mapping signal names with
 # callback methods references. "set_handlers" method is the convention
 # way when need to map ui signals to callback functions. It is
 # good to have the same method name in your plugin when need
@@ -34,12 +34,12 @@ class Event(object):
 	pass
 
 
-# "Handlers" is an object for mapping signal names with 
+# "Handlers" is an object for mapping signal names with
 # callback methods references. You can mapp ui signals by
 # simply handlers.on_some_ui_event = some_callback_method
 class Handlers(object):
 	pass
-	
+
 
 class SignalHandler:
 	def __init__(self, app):
@@ -49,18 +49,18 @@ class SignalHandler:
 		self.set_handlers()
 		self.key_bindings_to_plugins = []
 		self.any_key_press_to_plugins = []
-		
-	
-	# SignalHandler sets the main signals such as key press 
+
+
+	# SignalHandler sets the main signals such as key press
 	def set_handlers(self):
 		self.handlers.on_window_key_press_event = self.on_window_key_press_event
 
-		
-	
+
+
 	# you should not map "on_window_key_press_event" to your plugin.
 	# this function will help you by getting the keyval_name("e", "space", ..)
-	# and other modifiers like ctrl, alt, and shift 
-	# Simply uncomment: 
+	# and other modifiers like ctrl, alt, and shift
+	# Simply uncomment:
 	# 		self.signal_handler.key_bindings_to_plugins.append(self)   or
 	#		self.signal_handler.any_key_press_to_plugins.append(self)
 	# and then check what key binding you need such as
@@ -79,18 +79,18 @@ class SignalHandler:
 		ctrl = (event.state & Gdk.ModifierType.CONTROL_MASK)
 		alt = (event.state & Gdk.ModifierType.MOD1_MASK)
 		shift = (event.state & Gdk.ModifierType.SHIFT_MASK)
-		
+
 		stop_propagation = False
-		
+
 		# for performance reason:
 		# - pass only key bindings (i.e. when ctrl, alt)
 		# - or when "F" function keys pressed such F1, F2 ..
 		# this if is to condition the exit
-		# not F1, .. 
+		# not F1, ..
 		# and not F11, ...
 		if (not ctrl and not alt)\
 				and (len(keyval_name) != 2 and keyval_name[:1] == "F")\
-				and (len(keyval_name) != 3 and keyval_name[:2] == "F1"): 
+				and (len(keyval_name) != 3 and keyval_name[:2] == "F1"):
 			for p in self.any_key_press_to_plugins:
 				return_value = p.key_bindings(event, keyval_name, ctrl, alt, shift)
 				if return_value:
@@ -102,38 +102,38 @@ class SignalHandler:
 				return_value = p.key_bindings(event, keyval_name, ctrl, alt, shift)
 				if return_value:
 					stop_propagation = True
-		
+
 		# DEBUG: print("stop_propagation", stop_propagation)
 		return stop_propagation
-			
 
-		
+
+
 	def setup_event(self, event):
 		if not hasattr(self, event):
 			setattr(self, event, Event())
-		
+
 		e = getattr(self, event)
-		
+
 		if not hasattr(e, "connected"):
-			e.connected = [] 
-	
-	
-	
+			e.connected = []
+
+
+
 	def emit(self, event, *args):
 		self.setup_event(event)
 		e = getattr(self, event)
-		
+
 		for c in e.connected:
 			if args:
 				c(*args)
 			else:
 				c()
-	
-	
+
+
 	def connect(self, event, callback):
 		self.setup_event(event)
 		e = getattr(self, event)
 		e.connected.append(callback)
-	
+
 
 

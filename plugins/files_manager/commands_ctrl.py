@@ -23,9 +23,9 @@ class CommandsCtrl(object):
 		commander_ref = self.THE("commander", "add_command", {"c": c})
 		newfile.commander_ref = commander_ref
 
-		
 
-	
+
+
 	def switch_command(self, filename):
 		 index = self.get_file_index(filename)
 		 self.switch_to_file(index)

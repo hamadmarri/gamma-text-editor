@@ -71,6 +71,7 @@ plugin_list = [
 	{"name": "key_scroller.key_scroller", "category": ""},
 	{"name": "output.output", "category": "output"},
 	{"name": "remember_recent_files.remember_recent_files", "category": "recent_files_rememberer"},
+	{"name": "ctags.ctags", "category": "ctags_helper"},
 
 
 	# special case for commander

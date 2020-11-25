@@ -663,6 +663,7 @@
                     <property name="shadow_type">in</property>
                     <property name="kinetic_scrolling">False</property>
                     <signal name="scroll-event" handler="on_view_scroll_event" swapped="no"/>
+                    <signal name="button-press-event" handler="on_sourceview_button_press_event" swapped="no"/>
                     <child>
                       <object class="GtkSourceView" id="view">
                         <property name="name">view</property>

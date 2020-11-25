@@ -85,6 +85,7 @@ class OpenFileMixin(object):
 		self.THE("ui_manager", "add_filename_to_ui", {"newfile": newfile})
 
 		self.signal_handler.emit("log", self, f"open {filename}")
+		self.signal_handler.emit("file-opened", filename)
 
 
 
