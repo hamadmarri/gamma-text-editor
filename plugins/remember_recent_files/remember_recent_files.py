@@ -50,14 +50,17 @@ class Plugin():
 	def get_stored_file_names(self):
 		filenames = []
 
-		f = open(os.path.join(self.location, 'recent_files.txt'), 'r', encoding='utf-8')
+		try:
+			f = open(os.path.join(self.location, 'recent_files.txt'), 'r', encoding='utf-8')
 
-		lines = f.readlines()
+			lines = f.readlines()
 
-		for l in lines:
-			filenames.append(l.strip())
+			for l in lines:
+				filenames.append(l.strip())
 
-		f.close()
+			f.close()
+
+		except:
+			pass
 
 		return filenames
-
