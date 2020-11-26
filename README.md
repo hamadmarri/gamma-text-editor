@@ -251,3 +251,6 @@ commands are placed at top because of the splay operation.
 *	Find and replace on selected area
 
 For all issues/todos [Issues](https://gitlab.com/hamadmarri/gamma-text-editor/issues).
+
+## Contacts
+Telegram Channel: https://t.me/gamma_text_editor
