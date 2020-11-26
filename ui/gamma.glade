@@ -671,7 +671,7 @@
                         <property name="can_focus">True</property>
                         <property name="pixels_above_lines">4</property>
                         <property name="pixels_below_lines">4</property>
-                        <property name="left_margin">2</property>
+                        <property name="left_margin">6</property>
                         <property name="right_margin">2</property>
                         <property name="top_margin">2</property>
                         <property name="bottom_margin">800</property>
