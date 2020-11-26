@@ -33,6 +33,7 @@ WebKitGTK, GLib, GIO and many more.
 
 ![s3](https://gitlab.com/hamadmarri/gamma-text-editor/uploads/a3a9328a78918aa4415c9355274adb5a/Screenshot_from_2020-03-01_02-01-59.png)
 
+![Screenshot_from_2020-11-26_03-53-53](/uploads/6a14366e46305c4bb051c8a4ca6004b2/Screenshot_from_2020-11-26_03-53-53.png)
 
 [More Screenshots](https://gitlab.com/hamadmarri/gamma-text-editor/-/wikis/Screenshots)
 
