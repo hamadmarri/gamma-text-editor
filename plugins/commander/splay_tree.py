@@ -20,10 +20,10 @@
 
 class TreeNode():
 	def __init__(self, value, parent=None):
-		self.value = value
-		self.parent = parent
-		self.left = None
-		self.right = None
+		self.value	= value
+		self.parent	= parent
+		self.left	= None
+		self.right	= None
 
 	def __str__(self):
 		return str(self.value)
@@ -55,10 +55,12 @@ class SplayTree():
 				node = node.right
 
 		new_node = TreeNode(value, parent)
+
 		if new_node.value < parent.value:
 			parent.left = new_node
 		else:
 			parent.right = new_node
+
 		return new_node
 
 
@@ -102,13 +104,24 @@ class SplayTree():
 		elif node.left and node.right:
 			# need to get the right most node on the left child, or vise versa
 			successor = self.get_successor(node)
+			in_between_parent = successor.parent
 
-			# copy successor to node
-			node.value = successor.value
-			node.command = successor.command
-			node.command["node"] = node
+			# check if in_between_parent is not node
+			if in_between_parent != node:
+				# if in_between_parent is in between node and successor
+				# attach successor left to in_between_parent right
+				in_between_parent.right = successor.left
 
-			self.delete(successor)
+				successor.left = node.left
+				node.left.parent = successor
+
+
+			# replace node with successor
+			self.replace_node(node, successor)
+
+			# attach the right child of node to successor
+			successor.right = node.right
+			node.right.parent = successor
 
 
 		# case 3: one child
@@ -119,6 +132,8 @@ class SplayTree():
 		else:
 			print("SplayTree: delete error")
 			return False
+
+		node = None
 
 		return True
 
@@ -147,6 +162,7 @@ class SplayTree():
 			self.root = new_node
 
 
+
 	################################ SPLAY ###########################
 	def splay(self, node):
 
@@ -167,6 +183,7 @@ class SplayTree():
 		else:
 			parent = node.parent
 			grand_parent = node.parent.parent
+
 			# is it left left grandchild
 			if node == parent.left and parent == grand_parent.left:
 				# zig zig: right right rotation
@@ -197,8 +214,6 @@ class SplayTree():
 
 
 	def R_Rot(self, node):
-		#print(f"R:{node}")
-
 		parent = node.parent
 		grand_parent = node.parent.parent
 
