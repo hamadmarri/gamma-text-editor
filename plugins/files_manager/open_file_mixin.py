@@ -1,6 +1,4 @@
-
 from .file import File
-
 
 # TODO: scroll up the file when opened
 class OpenFileMixin(object):
@@ -37,11 +35,11 @@ class OpenFileMixin(object):
 		try:
 			# open the file in reading mode
 			f = open(filename, "r", encoding="utf-8", errors="replace")
-			#f = open(filename, "r")
+
 			# actual reading from the file and populate the new sourceview buffer
 			# with file data
 			text = f.read()
-			# DEBUG: print(bytes(text, "ascii"))
+
 		except PermissionError as err:
 			self.signal_handler.emit("log-error", self, f'Could not open {filename}: {err}')
 			return

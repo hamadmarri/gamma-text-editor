@@ -207,7 +207,6 @@ class FilesUI(object):
 		# when move this line below/after pack_start, sometimes
 		# it crashes when open files which have no \n at the end!!
 		newsource.sourcemap.set_view(newsource)
-
 		scroll_and_source_and_map_box.pack_start(newsource.sourcemap, False, True, 0)
 
 		# place the cursor in it

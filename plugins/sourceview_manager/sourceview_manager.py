@@ -41,17 +41,17 @@ class Plugin():
 	def activate(self):
 		self.source_view = self.app.builder.get_object("view")
 		self.sourcemap = self.app.builder.get_object("sourcemap")
-		
+
 		self.source_view.grab_focus()
 		self.sourcemap.set_view(self.source_view)
 		self.source_view.sourcemap = self.sourcemap
 		self.source_view.set_background_pattern(self.app.config['show_grid'])
-	
+
 	
 	def key_bindings(self, event, keyval_name, ctrl, alt, shift):
 		pass
-	
-	
+
+
 	# opening new file needs new sourceview object
 	#  here where the new sourceview object is created
 	# - it copies the default sourceview properties
@@ -81,16 +81,16 @@ class Plugin():
 		newsource.set_highlight_current_line(self.source_view.get_highlight_current_line())
 		newsource.set_background_pattern(self.source_view.get_background_pattern())
 		newsource.set_smart_home_end(self.source_view.get_smart_home_end())
-	
+
 		# set the source style
 		self.THE("source_styler", "set_source_style", {"sourceview": newsource})
-		
+
 		# add "sourceviewclass" css class
 		newsource.get_style_context().add_class("sourceviewclass")
-		
+
+		newsourcemap.set_visible(self.source_view.sourcemap.get_visible())
 		newsource.sourcemap = newsourcemap
-		
-		
+
 		# connect signal mark-set event which is when user select text
 		# user clicks to unselect text is also connected
 		# see highlight.highlight_signal function for handling 
@@ -103,7 +103,6 @@ class Plugin():
 		
 		# show the gtk widget
 		newsource.show()
-
 		
 		# TODO: move to files_manager, sometimes we don't need to 
 		# update completion based on file type and size!

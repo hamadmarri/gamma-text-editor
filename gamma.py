@@ -155,10 +155,17 @@ class Application(Gtk.Application):
 			
 		
 	def do_activate(self, new_window=False):
-	 	if not self.window:
-	 		self.show_first_window()
-	 	elif new_window:
-	 		self.show_new_window()
+		if not self.window:
+			self.show_first_window()
+		elif new_window:
+			self.show_new_window()
+
+		# I think there is a bug
+		# eventhough header_left_side is set to visible
+		# but it doesn't show up unless window.show_all() which
+		# it changed to show() to make sourcemap (mini source view)
+		# able to be invisible
+		self.builder.get_object("header_left_side").show_all()
 		
 	
 	def show_first_window(self):
@@ -173,12 +180,12 @@ class Application(Gtk.Application):
 		# plugin_list array
 		self.plugins_manager.load_plugins()
 		self.set_handlers()
-		
+
 		# must set the parent application of 
 		# window to this app(self)
 		self.window.props.application = self
 		self.window.set_icon_name("io.gitlab.hamadmarri.gamma")
-		self.window.show_all()
+		self.window.show()
 		self.window.connect("focus_in_event", self.window_event)
 		
 
@@ -198,7 +205,7 @@ class Application(Gtk.Application):
 		# window to this app(self)
 		self.window.props.application = self
 		self.window.set_icon_name("io.gitlab.hamadmarri.gamma")
-		self.window.show_all()
+		self.window.show()
 		self.window.connect("focus_in_event", self.window_event)
 		
 
