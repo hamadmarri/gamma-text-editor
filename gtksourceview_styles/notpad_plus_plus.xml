@@ -7,7 +7,7 @@
   <style name="cursor"	foreground="#8000ff" />
   <style name="secondary-cursor"	foreground="#fefcf5" />
   <style name="current-line"	background="#e8e8ff" />
-  <style name="line-numbers"	foreground="#808080" background="#e4e4e4" />
+  <style name="line-numbers"	foreground="#808080" background="#fefcf5" />
   <style name="background-pattern"	background="#3d3034" />
   <style name="bracket-match"	foreground="#f00" bold="true" />
   <style name="bracket-mismatch"	foreground="#f00" background="#fefcf5" bold="true" />

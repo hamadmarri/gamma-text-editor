@@ -103,7 +103,7 @@ headerbar entry, headerbar button, headerbar separator {
 	padding:0;
 	background: @gamma_bg_color;
 	color: #c0c0c0;
-	font-family: IBM Plex Mono;
+	font-family: monospace;
 	font-size: 20px;
 	caret-color: #8000ff;
 }
@@ -136,7 +136,7 @@ headerbar entry, headerbar button, headerbar separator {
 
 
 #messageLbl {
-	font-family: IBM Plex Mono;
+	font-family: monospace;
 	color: #808080;
 	margin-right:21px;
 }
@@ -291,19 +291,19 @@ headerbar entry, headerbar button, headerbar separator {
 
 /********** BUTTONS *************/
 #closeBtn {
-    background: #FF0000;
+    background: #2455E1;
     border-radius: 100%;
 }
 
 
 #maximizeBtn {
-    background: #00f000;
+    background: rgba(36, 85, 225, 0.6);
     border-radius: 100%;
 }
 
 
 #minimizeBtn {
-    background: #ffff00;
+    background: rgba(36, 85, 225, 0.3);
     border-radius: 100%;
 }
 
@@ -325,7 +325,7 @@ headerbar entry, headerbar button, headerbar separator {
 #commanderSearchEntry, #commanderSearchEntry * {
 	color:#303030;
 	background: #fefefe;
-	font-family: IBM Plex Mono;
+	font-family: monospace;
 	font-size: 22px;
 	min-height: 40px;
 }
@@ -349,7 +349,7 @@ headerbar entry, headerbar button, headerbar separator {
 
 .commanderRow {
 	color: #303030;
-	font-family: IBM Plex Mono;
+	font-family: monospace;
 	font-size: 18px;
 	padding: 10px 30px 10px 30px;
 	border:none;
