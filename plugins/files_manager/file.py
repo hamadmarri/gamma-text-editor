@@ -12,6 +12,7 @@ class File():
 		self.need_save = need_save
 		self.new_file = new_file
 		self.editted = False
+		self.loaded = False
 		self.parent_dir = None
 		
 		# if source_view is not empty,

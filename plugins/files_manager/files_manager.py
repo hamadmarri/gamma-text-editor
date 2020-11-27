@@ -201,9 +201,16 @@ class Plugin(CommandsCtrl, CreateFileMixin, CloseFileMixin, OpenFileMixin):
 		# different files with similar names in different paths
 		self.THE("message_notifier", "show_message", {"m": f.filename})
 
-
 		self.signal_handler.emit("file-switched", self.app.window.current_file.source_view)
 
+		f.loaded = True
+
+
+	def is_file_loaded(self, file_index):
+		if file_index < 0:
+			return False
+
+		return self.app.window.files[file_index].loaded == True
 
 
 	# returns file index if found or -1

@@ -21,7 +21,7 @@ import subprocess
 
 import gi
 gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk, Gdk
+from gi.repository import Gtk, Gdk, GLib
 
 from .commands_ctrl import CommandsCtrl
 
@@ -144,8 +144,14 @@ class Plugin(CommandsCtrl):
 					break
 
 
-		self.THE("files_manager", "switch_to_file_by_filename", \
+		file_index = self.THE("files_manager", "get_file_index", \
 					{"filename": _filename})
+
+		is_file_loaded = self.THE("files_manager", "is_file_loaded", \
+					{"file_index": file_index})
+
+		self.THE("files_manager", "switch_to_file", \
+					{"file_index": file_index})
 
 		sourceview	= self.app.window.current_file.source_view
 		buffer		= sourceview.get_buffer()
@@ -153,7 +159,10 @@ class Plugin(CommandsCtrl):
 		symbol_iter = buffer.get_iter_at_line(int(_line_number) - 1)
 		buffer.place_cursor(symbol_iter)
 
-		sourceview.scroll_to_mark(buffer.get_insert(), 0.20, False, 1.0, 0.5)
+		if is_file_loaded:
+			sourceview.scroll_to_mark(buffer.get_insert(), 0.20, False, 1.0, 0.5)
+		else:
+			GLib.idle_add(sourceview.scroll_to_mark, buffer.get_insert(), 0.20, False, 1.0, 0.5)
 
 
 
