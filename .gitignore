@@ -4,3 +4,5 @@
 flatpak/build/
 flatpak/.flatpak-builder/
 plugins/remember_recent_files/recent_files.txt
+plugins/welcome/not_first_time
+
