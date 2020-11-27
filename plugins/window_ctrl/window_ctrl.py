@@ -156,11 +156,9 @@ class Plugin():
 		# if all files are closed (user didn't click "don't close")
 		editted_counter = self.THE("files_manager", "current_window_editted_counter", {})
 		
+		# user could press (don't close for unsaved file/s)
 		if editted_counter == 0:
-			# self.app.quit()
 			self.app.window.close()
-		else:
-			print(f"!!!! edited {editted_counter}")
 		
 		
 	def on_closeBtn_release_event(self, widget, event):

@@ -40,7 +40,7 @@ class Plugin():
 		f = open(os.path.join(self.location, 'recent_files.txt'), 'w', encoding='utf-8')
 
 		for file_obj in self.window.files:
-			if file_obj.filename != "empty":
+			if not file_obj.new_file and file_obj.filename != "empty":
 				f.write(file_obj.filename + "\n")
 
 		f.close()
