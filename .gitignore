@@ -3,4 +3,4 @@
 .flatpak-builder
 flatpak/build/
 flatpak/.flatpak-builder/
-
+plugins/remember_recent_files/recent_files.txt
