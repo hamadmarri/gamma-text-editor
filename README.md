@@ -74,6 +74,7 @@ typelib-1_0-Vte-2.91
 gedit-plugin-terminal
 ```
 
+You might find this usefull: https://pygobject.readthedocs.io/en/latest/getting_started.html
 
 
 ## Installation
