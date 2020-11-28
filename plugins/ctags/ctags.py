@@ -41,6 +41,7 @@ class Plugin(CommandsCtrl):
 
 		self.signal_handler.connect("file-opened", self.file_opened)
 		self.signal_handler.connect("file-closed", self.file_closed)
+		self.signal_handler.connect("file-saved", self.file_saved)
 
 
 
@@ -54,6 +55,11 @@ class Plugin(CommandsCtrl):
 	def set_handlers(self):
 		self.handlers.on_sourceview_button_press_event = self.goto_symbol
 
+
+
+	def file_saved(self, filename):
+		self.file_closed(filename)
+		self.file_opened(filename)
 
 
 	def file_closed(self, filename):

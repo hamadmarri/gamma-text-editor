@@ -198,6 +198,8 @@ class Plugin():
 			self.THE("message_notifier", "show_message", {"m": f"{basename} | Saved", "state": 2})
 			f.close()
 
+			self.signal_handler.emit("file-saved", filename)
+
 			
 
 
