@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 
 # copy icon to ~/.icons
-mkdir -p ~/.icons/ && cp ./bin/icon.svg ~/.icons/io.gitlab.hamadmarri.gamma.svg
-mkdir -p ~/.local/share/icons/ && cp ./bin/icon.svg ~/.local/share/icons/io.gitlab.hamadmarri.gamma.svg
-
+mkdir -p ~/.icons/ && cp ./bin/io.gitlab.hamadmarri.gamma.svg ~/.icons/io.gitlab.hamadmarri.gamma.svg
+mkdir -p ~/.local/share/icons/ && cp ./bin/io.gitlab.hamadmarri.gamma.svg ~/.local/share/icons/io.gitlab.hamadmarri.gamma.svg
+mkdir -p ~/.icons/ && cp ./bin/io.gitlab.hamadmarri.gamma-symbolic.svg ~/.icons/io.gitlab.hamadmarri.gamma-symbolic.svg
+mkdir -p ~/.local/share/icons/ && cp ./bin/io.gitlab.hamadmarri.gamma-symbolic.svg ~/.local/share/icons/io.gitlab.hamadmarri.gamma-symbolic.svg
 
 # edit io.gitlab.hamadmarri.gamma.desktop put the path 
 cp ./bin/io.gitlab.hamadmarri.gamma.desktop.bak ./bin/io.gitlab.hamadmarri.gamma.desktop
