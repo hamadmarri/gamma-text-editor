@@ -85,6 +85,7 @@ class Plugin(CommandsCtrl, CreateFileMixin, CloseFileMixin, OpenFileMixin):
 			self.create_new_file()
 		elif ctrl and keyval_name == "Tab":
 			self.switch_to_previous_file()
+			return True
 
 
 	def current_window_files(self):
