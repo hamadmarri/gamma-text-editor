@@ -3,9 +3,10 @@
 # copy icon to ~/.icons
 install -d /app/share/icons/hicolor/128x128/apps/
 install -d /app/share/icons/hicolor/64x64/apps/
-install -D ./bin/icon.svg /app/share/icons/hicolor/128x128/apps/io.gitlab.hamadmarri.gamma.svg
-install -D ./bin/icon.svg /app/share/icons/hicolor/64x64/apps/io.gitlab.hamadmarri.gamma.svg
-
+install -d /app/share/icons/hicolor/symbolic/apps/
+install -D ./bin/io.gitlab.hamadmarri.gamman.svg /app/share/icons/hicolor/128x128/apps/io.gitlab.hamadmarri.gamma.svg
+install -D ./bin/io.gitlab.hamadmarri.gamma.svg /app/share/icons/hicolor/64x64/apps/io.gitlab.hamadmarri.gamma.svg
+install -D ./bin/io.gitlab.hamadmarri.gamma.svg /app/share/icons/hicolor/symbolic/apps/io.gitlab.hamadmarri.gamma-symbolic.svg
 
 # edit io.gitlab.hamadmarri.gamma.desktop put the path 
 cp ./bin/io.gitlab.hamadmarri.gamma.desktop.bak ./bin/io.gitlab.hamadmarri.gamma.desktop
