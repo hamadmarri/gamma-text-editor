@@ -26,6 +26,9 @@
     <td><p>Save As</p></td> <td><code>Shift + Ctrl + S</code></td>
   </tr>
   <tr>
+    <td><p>Switch To Previous File</p></td> <td><code>Ctrl + Tab</code></td>
+  </tr>
+  <tr>
     <td><p>New File</p></td> <td><code>Ctrl + N</code></td>
   </tr>
   <tr>

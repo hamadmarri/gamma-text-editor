@@ -28,3 +28,12 @@ def set_commands(plugin):
 			"shortcut": "<Ctrl> + n",
 		}
 	)
+
+	plugin.commands.append(
+		{
+			"plugin-name": plugin.name,
+			"name": "Switch To Previous File",
+			"ref": plugin.switch_to_previous_file,
+			"shortcut": "<Ctrl> + Tab",
+		}
+	)

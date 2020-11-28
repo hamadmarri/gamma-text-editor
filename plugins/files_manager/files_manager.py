@@ -48,6 +48,7 @@ class Plugin(CommandsCtrl, CreateFileMixin, CloseFileMixin, OpenFileMixin):
 		self.commands = []
 		self.current_directory = str(Path.home())
 		self.counter = 1
+		self.prev_file = None
 
 		self.signal_handler.key_bindings_to_plugins.append(self)
 		commands.set_commands(self)
@@ -82,7 +83,8 @@ class Plugin(CommandsCtrl, CreateFileMixin, CloseFileMixin, OpenFileMixin):
 			self.close_all()
 		elif ctrl and keyval_name == "n":
 			self.create_new_file()
-
+		elif ctrl and keyval_name == "Tab":
+			self.switch_to_previous_file()
 
 
 	def current_window_files(self):
@@ -188,6 +190,8 @@ class Plugin(CommandsCtrl, CreateFileMixin, CloseFileMixin, OpenFileMixin):
 		# replace the source view
 		self.THE("ui_manager", "replace_sourceview_widget", {"newsource": f.source_view})
 
+		self.prev_file = self.app.window.current_file
+
 		self.app.window.current_file = f
 
 		# update ui, set selected
@@ -204,6 +208,12 @@ class Plugin(CommandsCtrl, CreateFileMixin, CloseFileMixin, OpenFileMixin):
 		self.signal_handler.emit("file-switched", self.app.window.current_file.source_view)
 
 		f.loaded = True
+
+
+
+	def switch_to_previous_file(self):
+		if self.prev_file and not self.prev_file.init_file:
+			self.switch_to_file_by_filename(self.prev_file.filename)
 
 
 	def is_file_loaded(self, file_index):
