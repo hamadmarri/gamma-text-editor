@@ -1,0 +1,14 @@
+<page xmlns="http://projectmallard.org/1.0/"
+      type="guide"
+      id="bottom_panel_plugin">
+<info>
+  <link type="guide" xref="plugins"/>
+</info>
+<title>Bottom Panel Plugin</title>
+<p>Bottom panel takes care of displaying and managing the bottom panel. Other plugins such
+as <code>logger</code> are displayed in bottom panel. Note that disabling bottom paned plguin has no
+effect on other plugins using it, since they can display themselves in separate window if bottom panel
+is not available.</p>
+
+<p>Plugin: <code>bottom_panel</code></p>
+</page>

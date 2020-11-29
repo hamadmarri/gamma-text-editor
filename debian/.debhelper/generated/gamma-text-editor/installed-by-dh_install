@@ -1,0 +1,16 @@
+./__init__.py
+./config.py
+./gamma.py
+./signal_handler.py
+./plugins
+./style
+./ui
+./bin/gamma-editor
+./bin/io.gitlab.hamadmarri.gamma-symbolic.svg
+./bin/io.gitlab.hamadmarri.gamma.svg
+./bin/io.gitlab.hamadmarri.gamma.desktop
+./gtksourceview_styles/chocolateicecream.xml
+./gtksourceview_styles/covid19.xml
+./gtksourceview_styles/darkchocolateicecream.xml
+./gtksourceview_styles/icecream.xml
+./gtksourceview_styles/notepad_plus_plus.xml

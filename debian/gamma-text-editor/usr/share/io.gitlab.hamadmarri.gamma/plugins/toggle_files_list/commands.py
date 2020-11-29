@@ -1,9 +1,7 @@
-#! /usr/bin/bash
-
-
-#  
+#
 #### Author: Hamad Al Marri <hamad.s.almarri@gmail.com>
-#### Date: Feb 11th, 2020
+#### Date: Mar 10th, 2020
+#
 #
 #	This program is free software: you can redistribute it and/or modify
 #	it under the terms of the GNU General Public License as published by
@@ -20,12 +18,18 @@
 #
 #
 #
-#
+# 	plugin info: Toggle (hides/shows) the files list to make the text editing area wider
+# 
+# 
+# 
 
-
-dir="$(dirname "$(dirname "$(realpath "$0")")")"
-# echo $dir
-
-# run gamma with python3
-python3 $dir/gamma.py $@
-
+def set_commands(plugin):
+	plugin.commands.append( 
+		{
+			"plugin-name": plugin.name,
+			"name": "Toggle Show/Hide Files",
+			"ref": plugin.toggle_files_list,
+			"shortcut": "<Alt> + f",
+		}
+	)
+	

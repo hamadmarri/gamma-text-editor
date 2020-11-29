@@ -19,66 +19,37 @@
 
 
 import os
-from pathlib import Path
-
+import subprocess
 import gi
 gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk
+gi.require_version('WebKit2', '4.0')
+from gi.repository import Gtk #, WebKit2
 
 from . import commands
 
 class Plugin():
 	
 	def __init__(self, app):
-		self.name = "welcome"
+		self.name = "help"
 		self.app = app
-		self.THE = app.plugins_manager.THE
 		self.signal_handler = app.signal_handler
 		self.commands = []
-
+		
 		self.signal_handler.key_bindings_to_plugins.append(self)
 		commands.set_commands(self)
-
-		self.dir_path = os.path.dirname(os.path.realpath(__file__))
-		self.location = str(Path.home()) + "/.config/gamma-text-editor/"
-
-		self.signal_handler.connect("startup", self.open_for_first_time)
-
 
 	def activate(self):
 		pass
 
 		
 	def key_bindings(self, event, keyval_name, ctrl, alt, shift):
-		if alt and keyval_name == "w":
-			self.show_welcome()
+		if keyval_name == "F1":
+			self.show_help()
 	
 
-			
-	def show_welcome(self):
-		welcome_file = f"{self.dir_path}/welcome"
+	
+	
+	def show_help(self):
+		dir_path = os.path.dirname(os.path.realpath(__file__))
+		subprocess.Popen(["yelp", f"{dir_path}/index.page"])
 		
-		self.THE("files_manager", "open_files", {"filenames": (welcome_file, )})
-		current_file = self.THE("files_manager", "get_current_file", {})
-		
-		if not current_file:
-			return
-			
-		source_view = current_file.source_view
-		if source_view:
-			source_view.set_editable(False)
-
-
-	def open_for_first_time(self):
-		Path(self.location).mkdir(parents=True, exist_ok=True)
-
-		not_first_time_file = f"{self.location}/not_first_time"
-		if not os.path.isfile(not_first_time_file):
-			f = open(not_first_time_file, "w")
-			f.close()
-			self.show_welcome()
-
-
-
-
-

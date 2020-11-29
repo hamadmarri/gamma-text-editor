@@ -1,0 +1,9 @@
+*.py usr/share/io.gitlab.hamadmarri.gamma
+plugins usr/share/io.gitlab.hamadmarri.gamma
+style usr/share/io.gitlab.hamadmarri.gamma
+ui usr/share/io.gitlab.hamadmarri.gamma
+bin/gamma-editor usr/bin/
+bin/*.svg usr/share/icons
+bin/io.gitlab.hamadmarri.gamma.desktop usr/share/applications
+gtksourceview_styles/* usr/share/gtksourceview-4/styles
+

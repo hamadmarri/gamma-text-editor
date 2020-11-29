@@ -1,0 +1,16 @@
+<page xmlns="http://projectmallard.org/1.0/"
+      type="topic"
+      id="ctags_shortcut">
+<info>
+  <link type="guide" xref="shortcuts"/>
+  <link type="guide" xref="ctags_plugin"/>
+</info>
+<title>Ctags Shortcuts</title>
+<table shade="rows" frame="all" rules="rows cols">
+  <tr>
+    <td><p>Go To Symbol Definition</p></td> <td><code>Ctrl + Mouse left click</code></td>
+  </tr>
+</table>
+<p>Plugin: <code>ctags</code></p>
+</page>
+

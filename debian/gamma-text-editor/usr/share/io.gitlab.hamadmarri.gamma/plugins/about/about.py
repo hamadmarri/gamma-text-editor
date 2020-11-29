@@ -19,30 +19,23 @@
 
 
 import os
-from pathlib import Path
-
 import gi
 gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk
+gi.require_version('WebKit2', '4.0')
+from gi.repository import Gtk #, WebKit2
 
 from . import commands
 
 class Plugin():
 	
 	def __init__(self, app):
-		self.name = "welcome"
+		self.name = "about"
 		self.app = app
-		self.THE = app.plugins_manager.THE
 		self.signal_handler = app.signal_handler
 		self.commands = []
-
+		
 		self.signal_handler.key_bindings_to_plugins.append(self)
 		commands.set_commands(self)
-
-		self.dir_path = os.path.dirname(os.path.realpath(__file__))
-		self.location = str(Path.home()) + "/.config/gamma-text-editor/"
-
-		self.signal_handler.connect("startup", self.open_for_first_time)
 
 
 	def activate(self):
@@ -50,35 +43,29 @@ class Plugin():
 
 		
 	def key_bindings(self, event, keyval_name, ctrl, alt, shift):
-		if alt and keyval_name == "w":
-			self.show_welcome()
+		if alt and keyval_name == "a":
+			self.show_about()
 	
-
-			
-	def show_welcome(self):
-		welcome_file = f"{self.dir_path}/welcome"
+	
+	def show_about(self):
+		about = Gtk.AboutDialog.new()
+				       
+		about.set_authors(("Hamad Al Marri", ))
+		about.set_comments("lightweight text editor")
+		about.set_copyright("Copyright © 2020 - Hamad Al Marri")
+		about.set_documenters(("Hamad Al Marri", ))
 		
-		self.THE("files_manager", "open_files", {"filenames": (welcome_file, )})
-		current_file = self.THE("files_manager", "get_current_file", {})
+		about.set_license_type(Gtk.License.GPL_3_0_ONLY)
 		
-		if not current_file:
-			return
-			
-		source_view = current_file.source_view
-		if source_view:
-			source_view.set_editable(False)
+		about.set_logo_icon_name("io.gitlab.hamadmarri.gamma")
+		about.set_program_name("Gamma Text Editor")
+		about.set_version("0.0.1 Beta")
 
-
-	def open_for_first_time(self):
-		Path(self.location).mkdir(parents=True, exist_ok=True)
-
-		not_first_time_file = f"{self.location}/not_first_time"
-		if not os.path.isfile(not_first_time_file):
-			f = open(not_first_time_file, "w")
-			f.close()
-			self.show_welcome()
-
-
-
-
-
+		about.set_website("https://gitlab.com/hamadmarri/gamma-text-editor")
+		about.set_website_label("GitLab")
+				       
+		response = about.run()
+		
+		if response == Gtk.ResponseType.DELETE_EVENT:
+			about.destroy()
+		
