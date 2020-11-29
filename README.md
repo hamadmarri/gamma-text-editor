@@ -1,5 +1,5 @@
 # Gamma text editor
-Current version 0.0.1 Beta\
+Current version 0.0.3 \
 Author: Hamad Al Marri
 
 -	[Description](#description)
