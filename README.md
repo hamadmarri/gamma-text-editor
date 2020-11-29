@@ -78,12 +78,17 @@ You might find this usefull: https://pygobject.readthedocs.io/en/latest/getting_
 
 
 ## Installation
+
+### Git Installation (Recommended)
 ```
 git clone https://gitlab.com/hamadmarri/gamma-text-editor
 cd gamma-text-editor 
 chmod +x setup.sh
 ./setup.sh
 ```
+
+### Debian
+[Debian package (.deb)](https://gitlab.com/hamadmarri/gamma-text-editor/-/raw/debian/gamma-text-editor_0.0.3_amd64.deb?inline=false)
 
 
 
