@@ -91,6 +91,19 @@ chmod +x setup.sh
 [Debian package (.deb)](https://gitlab.com/hamadmarri/gamma-text-editor/-/raw/debian/gamma-text-editor_0.0.3_amd64.deb?inline=false)
 
 
+## Run Gamma
+Gamma will be visible in your applications list after installation (launcher) - click to open.
+If you need to run Gamma via terminal:
+```
+# run Gamma
+$ gamma-editor
+
+# edit file/s with Gamma
+$ gamma-editor /path/to/file1 ./file2
+
+# edit file/s with Root privilege (use EDITOR=gamma-editor sudoedit). Example:
+$ EDITOR=gamma-editor sudoedit /etc/X11/xorg.conf.d/70-synaptics.conf
+```
 
 
 ## Gamma Philosophy
