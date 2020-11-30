@@ -1,5 +1,5 @@
 # Gamma text editor
-Current version 0.0.3 \
+Current version 0.0.1 Beta\
 Author: Hamad Al Marri
 
 -	[Description](#description)
@@ -89,7 +89,6 @@ chmod +x setup.sh
 
 ### Debian
 [Debian package (.deb)](https://gitlab.com/hamadmarri/gamma-text-editor/-/raw/debian/gamma-text-editor_0.0.3_amd64.deb?inline=false)
-
 
 
 

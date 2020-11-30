@@ -17,7 +17,7 @@
 #	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-import os
+from pathlib import Path
 
 class Plugin():
 	def __init__(self, app):
@@ -26,8 +26,7 @@ class Plugin():
 		self.THE = app.plugins_manager.THE
 		self.window = self.app.window
 		self.commands = []
-
-		self.location = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
+		self.location = str(Path.home()) + "/.config/gamma-text-editor/"
 
 
 	def activate(self):
@@ -37,7 +36,8 @@ class Plugin():
 
 
 	def store_file_names(self):
-		f = open(os.path.join(self.location, 'recent_files.txt'), 'w', encoding='utf-8')
+		Path(self.location).mkdir(parents=True, exist_ok=True)
+		f = open(self.location + 'recent_files.txt', 'w', encoding='utf-8')
 
 		for file_obj in self.window.files:
 			if not file_obj.new_file and file_obj.filename != "empty":
@@ -51,7 +51,7 @@ class Plugin():
 		filenames = []
 
 		try:
-			f = open(os.path.join(self.location, 'recent_files.txt'), 'r', encoding='utf-8')
+			f = open(self.location + 'recent_files.txt', 'r', encoding='utf-8')
 
 			lines = f.readlines()
 
@@ -64,3 +64,5 @@ class Plugin():
 			pass
 
 		return filenames
+
+

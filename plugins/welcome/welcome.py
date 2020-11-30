@@ -19,6 +19,7 @@
 
 
 import os
+from pathlib import Path
 
 import gi
 gi.require_version('Gtk', '3.0')
@@ -34,11 +35,14 @@ class Plugin():
 		self.THE = app.plugins_manager.THE
 		self.signal_handler = app.signal_handler
 		self.commands = []
-		self.signal_handler.connect("startup", self.open_for_first_time)
-		
+
 		self.signal_handler.key_bindings_to_plugins.append(self)
 		commands.set_commands(self)
+
 		self.dir_path = os.path.dirname(os.path.realpath(__file__))
+		self.location = str(Path.home()) + "/.config/gamma-text-editor/"
+
+		self.signal_handler.connect("startup", self.open_for_first_time)
 
 
 	def activate(self):
@@ -63,11 +67,18 @@ class Plugin():
 		source_view = current_file.source_view
 		if source_view:
 			source_view.set_editable(False)
-		
+
 
 	def open_for_first_time(self):
-		first_time_file = f"{self.dir_path}/first_time"
-		not_first_time_file = f"{self.dir_path}/not_first_time"
-		if os.path.isfile(first_time_file):
-			os.rename(first_time_file, not_first_time_file)
+		Path(self.location).mkdir(parents=True, exist_ok=True)
+
+		not_first_time_file = f"{self.location}/not_first_time"
+		if not os.path.isfile(not_first_time_file):
+			f = open(not_first_time_file, "w")
+			f.close()
 			self.show_welcome()
+
+
+
+
+
