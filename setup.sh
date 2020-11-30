@@ -19,5 +19,5 @@ mkdir -p ~/.local/share/gtksourceview-4/styles/ && cp ./gtksourceview_styles/* ~
  
  
  # create a symbolic link to gamma sh file
-sudo ln -s $PWD/bin/gamma /usr/bin/gamma-editor
+sudo ln -s $PWD/bin/gamma-editor /usr/bin/gamma-editor
 
