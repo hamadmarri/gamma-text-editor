@@ -72,9 +72,30 @@ yelp
 // for terminal plugin
 typelib-1_0-Vte-2.91 
 gedit-plugin-terminal
+
+// for ctags plugin
+ctags
 ```
 
 You might find this usefull: https://pygobject.readthedocs.io/en/latest/getting_started.html
+
+### Install dependencies on OpenSuse
+Usually these dependencies are already installed in Opensuse, but in case you some are missing:
+```
+sudo zypper in libgtk-3-0 python3-gobject python3-gobject-Gdk python3-gobject-cairo typelib-1_0-Gtk-3_0 libgtksourceview-4-0 typelib-1_0-GtkSource-4 typelib-1_0-WebKit2-4_0 yelp libvte-2_91-0 vte-devel typelib-1_0-Vte-2.91 ctags
+```
+
+If no python3, try install the latest python3. In my case, python38 (i.e. 3.8)
+```
+sudo zypper in python38
+```
+
+
+### Install dependencies on Debian
+```
+sudo apt install python3 libgtk-3-0 gobject-introspection libgtksourceview-4-0 libgtksourceview-4-dev python3-gi (>= 3.0) python3-gi-cairo (>= 3.0) gir1.2-glib-2.0 gir1.2-gtk-3.0 gir1.2-gtksource-4 gir1.2-pango-1.0 gir1.2-vte-2.91 ctags gir1.2-webkit2-4.0 yelp
+
+```
 
 
 ## Installation
