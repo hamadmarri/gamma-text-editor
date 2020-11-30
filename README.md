@@ -80,7 +80,7 @@ ctags
 You might find this usefull: https://pygobject.readthedocs.io/en/latest/getting_started.html
 
 ### Install dependencies on OpenSuse
-Usually these dependencies are already installed in Opensuse, but in case you some are missing:
+Usually these dependencies are already installed on Opensuse, but in case some are missing:
 ```
 sudo zypper in libgtk-3-0 python3-gobject python3-gobject-Gdk python3-gobject-cairo typelib-1_0-Gtk-3_0 libgtksourceview-4-0 typelib-1_0-GtkSource-4 typelib-1_0-WebKit2-4_0 yelp libvte-2_91-0 vte-devel typelib-1_0-Vte-2.91 ctags
 ```
