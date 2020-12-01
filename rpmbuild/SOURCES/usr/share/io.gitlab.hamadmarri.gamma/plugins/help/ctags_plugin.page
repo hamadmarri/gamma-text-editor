@@ -1,0 +1,14 @@
+<page xmlns="http://projectmallard.org/1.0/"
+      type="guide"
+      id="ctags_plugin">
+<info>
+  <link type="guide" xref="plugins"/>
+</info>
+<title>Ctags Plugin</title>
+<p>Uses ctags tool to extract code symbols and help to navigate in code. This plugin allows user to 
+hold Ctrl and click on a function, variable, or symbol names and goes to the definition or declaration. It 
+also provides a list of symbols in the commander where symbols starts with "$:". By clicking on 
+a symbol in commander, gamma will navigate to the symbol definition.</p>
+
+<p>Plugin: <code>ctags</code></p>
+</page>

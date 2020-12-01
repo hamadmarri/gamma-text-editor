@@ -1,0 +1,39 @@
+	This is at least a partial credits-file of people that have
+	contributed to the Gamma Text Editor project.  It is sorted
+	by name and	formatted to allow easy grepping and beautification
+	by scripts.  The fields are: name (N), email (E), web-address
+	(W), PGP key ID and fingerprint (P), description (D), and
+	snail-mail address (S).
+	Thanks,
+
+			Hamad (copied it from Linus)
+
+----------
+N: eltonff
+E: eltonfabricio10@gmail.com
+W: https://gitlab.com/eltonfabricio10
+
+N: jannuary
+W: https://gitlab.com/jannuary
+
+N: karate
+W: https://gitlab.com/karate
+
+N: Hamad Al Marri
+E: hamad.s.almarri@gmail.com
+W: https://gitlab.com/hamadmarri
+W: https://github.com/hamadmarri
+S: Saudi Arabia
+
+N: Marcos Oliveira
+W: https://gitlab.com/terminalroot
+W: https://terminalroot.com.br/
+
+N: Snehit Sah
+W: https://gitlab.com/snehitsah
+W: https://aur.archlinux.org/packages/gamma-text-editor/
+
+
+# Don't add your name here, unless you really _are_ after
+# Snehit Sah alphabetically. (and this file really _is_
+# supposed to be in alphabetic order)

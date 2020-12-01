@@ -1,0 +1,11 @@
+<page xmlns="http://projectmallard.org/1.0/"
+      type="guide"
+      id="remember_recent_files_plugin">
+<info>
+  <link type="guide" xref="plugins"/>
+</info>
+<title>Remember Recent Files Plugin</title>
+<p>Restores the previous session and opens previous opned files.</p>
+
+<p>Plugin: <code>remember_recent_files</code></p>
+</page>

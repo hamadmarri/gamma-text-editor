@@ -1,0 +1,2 @@
+/var/tmp/70-synapticsXXEblfeo.conf
+/home/hamad/dev/gamma/gamma-text-editor/plugins/welcome/welcome

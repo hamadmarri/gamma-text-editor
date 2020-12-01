@@ -1,0 +1,12 @@
+<page xmlns="http://projectmallard.org/1.0/"
+      type="guide"
+      id="output_plugin">
+<info>
+  <link type="guide" xref="plugins"/>
+</info>
+<title>Output Plugin</title>
+<p>Output plugin is a helper plugin for other plugins to display their outputs. The outputs
+are displayed in the bottom panel (if available) or in a separate window.</p>
+
+<p>Plugin: <code>output</code></p>
+</page>

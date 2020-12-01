@@ -1,0 +1,12 @@
+<page xmlns="http://projectmallard.org/1.0/"
+      type="guide"
+      id="files_manager_plugin">
+<info>
+  <link type="guide" xref="plugins"/>
+</info>
+<title>Files Manager Plugin</title>
+<p>Is responsible to manage all files operations such as 
+open file, save file, switch to file, and close file.</p>
+
+<p>Plugin: <code>files_manager</code></p>
+</page>
