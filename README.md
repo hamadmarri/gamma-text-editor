@@ -108,6 +108,9 @@ chmod +x setup.sh
 ./setup.sh
 ```
 
+### OpenSUSE
+[OpenSUSE package (.rpm)](https://gitlab.com/hamadmarri/gamma-text-editor/-/raw/opensuse/rpmbuild/RPMS/x86_64/gamma-text-editor-0.0.3-0.x86_64.rpm?inline=false)
+
 ### Debian
 [Debian package (.deb)](https://gitlab.com/hamadmarri/gamma-text-editor/-/raw/debian/gamma-text-editor_0.0.3_amd64.deb?inline=false)
 
