@@ -132,7 +132,7 @@ class Plugin():
 			if not self.is_highlight_done:
 				searchEntry = self.app.builder.get_object("searchEntry")
 				self.search_text = searchEntry.get_text()
-				self.do_highlight()
+				self._do_highlight()
 			self.scroll_prev()
 
 		elif keyval_name == "Return" or keyval_name == "KP_Enter" or keyval_name == "Down":
@@ -140,9 +140,8 @@ class Plugin():
 			self.whole_word = False
 			if not self.is_highlight_done:
 				searchEntry = self.app.builder.get_object("searchEntry")
-				# self.do_highlight(searchEntry.get_text(), self.app.window.search_buffer)
 				self.search_text = searchEntry.get_text()
-				self.do_highlight()
+				self._do_highlight()
 			else:
 				self.scroll_next()
 
@@ -217,7 +216,7 @@ class Plugin():
 			GLib.idle_remove_by_data(None)
 
 	def delay_search_Glib(self):
-		GLib.idle_add(self.do_highlight)
+		GLib.idle_add(self._do_highlight)
 
 	def delay_search(self):
 		wait_time = self.search_time / len(self.search_text)
@@ -243,12 +242,16 @@ class Plugin():
 		if len(self.search_text) > 0 and len(self.search_text) < 5:
 			self.delay_search()
 		else:
-			self.do_highlight()
+			self._do_highlight()
 
 
 	# (see https://developer.gnome.org/gtk3/stable/GtkSearchEntry.html)
 	# (https://developer.gnome.org/gtk3/stable/GtkEntry.html)
-	def do_highlight(self):
+	def do_highlight(self, search, buffer):
+		self.search_text = search
+		self._do_highlight()
+	
+	def _do_highlight(self):
 
 		search = self.search_text
 		buffer = self.app.window.search_buffer
