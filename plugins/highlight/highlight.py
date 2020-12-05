@@ -252,7 +252,7 @@ class Plugin():
 		
 
 	
-	def remove_highlight(self, buffer, tag=None, start_iter=None, end_iter=None):		
+	def remove_highlight(self, buffer, tag=None, start_iter=None, end_iter=None):
 		# if not cleint tag, remove all highlights
 		if not tag:
 			# print("a marks: ", len(self.marks))

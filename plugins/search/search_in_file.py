@@ -84,7 +84,6 @@ class Plugin():
 	def set_handlers(self):
 		self.handlers.on_search_field_changed = self.on_search_field_changed
 		self.handlers.on_search_key_press_event = self.on_search_key_press_event
-		self.handlers.on_search_focus_out_event = self.on_search_focus_out_event
 
 
 	def set_search_flags(self, search_flags):
@@ -146,9 +145,22 @@ class Plugin():
 				self.scroll_next()
 
 
+	def mark_set_signal(self, buffer, location, mark):
+		# insert is the mark when user change
+		# the cursor or select text
+		if mark.get_name() != "insert":
+			return
 
-	def on_search_focus_out_event(self, widget, data):
-		self.quit_search()
+		# gets (start, end) iterators of
+		# the selected text
+		iters = buffer.get_selection_bounds()
+
+		# if user only clicked/placed the cursor
+		# without any selected chars, then remove
+		# previously highlighted texts
+		if not iters:
+			# remove highlight
+			self.quit_search()
 
 
 	def place_cursor_to_selection(self):
