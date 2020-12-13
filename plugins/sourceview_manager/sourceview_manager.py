@@ -121,6 +121,7 @@ class Plugin():
 			"mark": mark
 		}
 		self.THE("highlighter", "highlight_signal", args)
+		self.THE("file_searcher", "mark_set_signal", args)
 		
 		
 	

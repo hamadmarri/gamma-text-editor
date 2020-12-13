@@ -49,17 +49,17 @@ class Plugin():
 	
 	# key_bindings is called by SignalHandler
 	def key_bindings(self, event, keyval_name, ctrl, alt, shift):
-		
-		# save all is bound to "<Ctrl><Alt>+s"
-		if ctrl and alt and keyval_name == "s":
-			self.save_all()
-		
+
 		# save as is bound to "<Shift><Alt>+s"
-		elif shift and ctrl and keyval_name == "S":
+		if shift and ctrl and keyval_name == "S":
 			self.save_as()
-		
+
+		# save all is bound to "<Ctrl><Alt>+s"
+		elif ctrl and alt and (keyval_name == "s" or keyval_name == "S"):
+			self.save_all()
+
 		# save is bound to "<Ctrl>+s"
-		elif ctrl and keyval_name == "s":
+		elif ctrl and (keyval_name == "s" or keyval_name == "S"):
 			self.save_current_file()
 		
 	

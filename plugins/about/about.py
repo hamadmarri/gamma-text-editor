@@ -49,17 +49,28 @@ class Plugin():
 	
 	def show_about(self):
 		about = Gtk.AboutDialog.new()
-				       
+
 		about.set_authors(("Hamad Al Marri", ))
 		about.set_comments("lightweight text editor")
 		about.set_copyright("Copyright © 2020 - Hamad Al Marri")
 		about.set_documenters(("Hamad Al Marri", ))
-		
+
+		about.set_artists(("jannuary", ))
+
+		about.add_credit_section("Contributors", (
+													"eltonff",
+													"jannuary",
+													"karate",
+													"Hamad Al Marri",
+													"Marcos Oliveira",
+													"Snehit Sah",
+													))
+
 		about.set_license_type(Gtk.License.GPL_3_0_ONLY)
 		
 		about.set_logo_icon_name("io.gitlab.hamadmarri.gamma")
 		about.set_program_name("Gamma Text Editor")
-		about.set_version("0.0.1 Beta")
+		about.set_version("0.0.4 Beta")
 
 		about.set_website("https://gitlab.com/hamadmarri/gamma-text-editor")
 		about.set_website_label("GitLab")

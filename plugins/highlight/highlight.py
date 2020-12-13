@@ -22,11 +22,12 @@
 #	is connected with mark-set signal in sourceview_manager
 #
 
+import threading
 import re # for regex
 
 import gi
 gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk
+from gi.repository import Gtk, GLib
 
 
 class Plugin():
@@ -39,6 +40,8 @@ class Plugin():
 		self.tag_name = "search-match"
 		self.spaces_pattern = re.compile("^\s+$")
 		self.marks = []
+		self.timer = None
+		self.wait_time = 0.01
 
 		
 	def activate(self):
@@ -48,48 +51,68 @@ class Plugin():
 	def highlight_signal(self, buffer, location, mark):
 		# insert is the mark when user change
 		# the cursor or select text
-		if mark.get_name() == "insert":
-			# gets (start, end) iterators of 
-			# the selected text
-			iters = buffer.get_selection_bounds()
-			
-			# if user only clicked/placed the cursor
-			# without any selected chars, then remove
-			# previously highlighted texts
-			if not iters:
-				# remove highlight
-				self.remove_highlight(buffer)
-			else:
-				# when user selected some text
-				# get the start and end iters
-				(iter_start, iter_end) = iters
-				
-				# get the text is being selected, False means without tags
-				# i.e. only appearing text without hidden tags set by sourceview
-				# (read: https://developer.gnome.org/gtk3/stable/GtkTextBuffer.html#gtk-text-buffer-get-text)
-				search = buffer.get_text(iter_start, iter_end, False)
-				
-				
-				# if select only one letter
-				if len(search) == 1 and search.isalpha():
-					# remove highlight
-					self.remove_highlight(buffer)
-					return
-				
-				# if selected is only spaces
-				if self.spaces_pattern.match(search):
-					# remove highlight
-					self.remove_highlight(buffer)
-					return
+		if mark.get_name() != "insert":
+			return
 		
+		self.cancel_timer()
 		
-				# highlight text is in seperate method
-				# which help to select any text string 
-				# by other plugins like find or search
-				counter = self.highlight(buffer, search)
-				self.THE("message_notifier", "show_message", {"m": f"Highlighted | {counter}"})
+		# gets (start, end) iterators of
+		# the selected text
+		iters = buffer.get_selection_bounds()
 		
+		# if user only clicked/placed the cursor
+		# without any selected chars, then remove
+		# previously highlighted texts
+		if not iters:
+			# remove highlight
+			self.remove_highlight(buffer)
+			return
+
+		# when user selected some text
+		# get the start and end iters
+		(iter_start, iter_end) = iters
+
+		# get the text is being selected, False means without tags
+		# i.e. only appearing text without hidden tags set by sourceview
+		# (read: https://developer.gnome.org/gtk3/stable/GtkTextBuffer.html#gtk-text-buffer-get-text)
+		search = buffer.get_text(iter_start, iter_end, False)
+
+		# if select only one letter
+		if len(search) == 1 and search.isalpha():
+			# remove highlight
+			self.remove_highlight(buffer)
+			return
+
+		# if selected is only spaces
+		if self.spaces_pattern.match(search):
+			# remove highlight
+			self.remove_highlight(buffer)
+			return
+
+
+		# highlight text is in seperate method
+		# which help to select any text string
+		# by other plugins like find or search
+		self.timer = threading.Timer(self.wait_time, self.GLib_idle_highlight,
+										args=(buffer, search))
+		self.timer.daemon = True
+		self.timer.start()
+
+
+	def cancel_timer(self):
+		if self.timer:
+			self.timer.cancel()
+			GLib.idle_remove_by_data(None)
+
+	def _idle_highlight(self, buffer, search):
+		counter = self.highlight(buffer, search)
+		self.THE("message_notifier", "show_message", {"m": f"Highlighted | {counter}"})
+
 	
+	def GLib_idle_highlight(self, buffer, search):
+		GLib.idle_add(self._idle_highlight, buffer, search)
+
+
 	# "search" is a string text
 	# highlighting is done by adding tag(s) to
 	# the text you want to highlight. The tag 
@@ -229,7 +252,7 @@ class Plugin():
 		
 
 	
-	def remove_highlight(self, buffer, tag=None, start_iter=None, end_iter=None):		
+	def remove_highlight(self, buffer, tag=None, start_iter=None, end_iter=None):
 		# if not cleint tag, remove all highlights
 		if not tag:
 			# print("a marks: ", len(self.marks))
@@ -247,11 +270,3 @@ class Plugin():
 		else:			
 			# for performance when remove selected search
 			buffer.remove_tag(tag, start_iter, end_iter)
-				
-						
-		
-			
-		
-		
-	
-	

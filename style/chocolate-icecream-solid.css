@@ -31,6 +31,10 @@ FOREGROUND: #ffffda rgba(255, 255, 218, 0.86) 847479
 @define-color gamma_warning_color #FCE94F;
 @define-color gamma_error_color #FF749B;
 
+window :backdrop {
+	opacity: 1;
+}
+
 #gamma_window decoration, headerbar {
 	border:none;
 	box-shadow:none;
@@ -349,6 +353,7 @@ headerbar entry, headerbar button, headerbar separator {
 
 .commanderRow {
 	color:rgba(255, 255, 218, 0.86);
+	font-family: monospace;
 	font-size: 18px;
 	padding: 10px 30px 10px 30px;
 	border:none;

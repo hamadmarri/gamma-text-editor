@@ -26,10 +26,14 @@ purpul: CAC5FF
 BACKGROUND: #fefcf5
 FOREGROUND: #000080 rgba(255, 255, 218, 0.86) 847479
 */
-@define-color gamma_bg_color #fefcf5;
-@define-color gamma_fg_color #000080;
-@define-color gamma_warning_color #d97c5c;
-@define-color gamma_error_color #FF0000;
+@define-color gamma_bg_color #172601;
+@define-color gamma_fg_color #EDF2C2;
+@define-color gamma_warning_color #ECF22E;
+@define-color gamma_error_color #FF636E;
+
+window :backdrop {
+	opacity: 1;
+}
 
 #gamma_window decoration, headerbar {
 	border:none;
@@ -74,13 +78,13 @@ headerbar entry, headerbar button, headerbar separator {
 }
 
 #headerPaned > separator {
-	background: #efefef;
+	background: #172601;
 }
 
 
 #headerbarMain, #headerbarMain * {
 	background: @gamma_bg_color;
-	color: rgba(255, 255, 218, 0.86);
+	color: @gamma_fg_color;
 	border:none;
 }
 
@@ -89,7 +93,7 @@ headerbar entry, headerbar button, headerbar separator {
 }
 
 #headerbarMain .title {
-	color: #505050;
+	color: @gamma_fg_color;
 	font-size: 16px;
 }
 .openned_file_editted#headerbarMain .title {
@@ -98,14 +102,15 @@ headerbar entry, headerbar button, headerbar separator {
 
 
 
+/********** SEARCH AND MESSAGE *************/
 #searchEntry, #searchEntry* {
 	margin:0 0 0 10px;
 	padding:0;
 	background: @gamma_bg_color;
-	color: #c0c0c0;
+	color: #00DEA4;
 	font-family: monospace;
 	font-size: 20px;
-	caret-color: #8000ff;
+	caret-color: #00DEA4;
 }
 #searchEntry:focus {
 	box-shadow: none;
@@ -114,53 +119,56 @@ headerbar entry, headerbar button, headerbar separator {
 
 #headerbarMain*.searching, #headerbarMain*.searching *,
 #headerbarMain*.messageImportant, #headerbarMain*.messageImportant * {
-       color:#8000ff;
-       caret-color:#8000ff;
+       color: #C0BBC5;
+       caret-color: #C0BBC5;
 }
 #headerbarMain*.searchSuccess, #headerbarMain*.searchSuccess *,
 #headerbarMain*.messageSuccess, #headerbarMain*.messageSuccess * {
-	color: #008000;
-	caret-color:#008000;
+	color: #33DA7A;
+	caret-color:#33DA7A;
 }
+
 #headerbarMain*.searchFail, #headerbarMain*.searchFail * ,
 #headerbarMain*.messageFail, #headerbarMain*.messageFail * {
-	color: #FF0000;
-	caret-color:#FF0000;
+	color: @gamma_error_color;
+	caret-color: @gamma_error_color;
 }
 
+
+/* Need to be at the end to override */
 #headerbarMain entry selection {
-	background: #999999;
+	background: #B1F02A;
+	color: #000000;
 }
-
-
-
 
 #messageLbl {
 	font-family: monospace;
-	color: #808080;
+	color: #C0BBC5;
 	margin-right:21px;
 }
 
 
 /********** HEADER LEFT SIDE *************/
 #headerbarSide {
-	background: #efefef;
+	background-color: #162501;
+	background-size: 40px 40px;
+	background-image: repeating-linear-gradient(45deg, #163501 0, #162501 1px, #142200 0, #162501 40%);
 	border:none;
 }
 
 #headerbarSide * {
-	color: #808080;
+	color: @gamma_fg_color;
 	border: none;
 }
 
 #logo {
-    background: #e4e4e4;
-    color: #029012;
+    background: #162720;
+    color: #42E1E5;
 }
 
 /********** BODY *************/
 #bodyPaned > separator {
-	background: #efefef;
+	background: #162501;
 }
 
 #toolbar_side {
@@ -170,7 +178,9 @@ headerbar entry, headerbar button, headerbar separator {
 }
 
 #toolbar_files {
-    background: #efefef;
+	background-color: #162501;
+	background-image: url("images/1.jpg");
+	box-shadow:inset 0 0 0 2000px rgba(22, 37, 1, 0.45);
     padding-left:15px;
 	padding-right:15px;
     padding-top:0px;
@@ -178,7 +188,7 @@ headerbar entry, headerbar button, headerbar separator {
 
 
 #toolbar_ctrls {
-    background: #e4e4e4;
+    background: #14270f;
     padding-top: 16px;
     padding-bottom: 18px;
 }
@@ -194,7 +204,7 @@ headerbar entry, headerbar button, headerbar separator {
 	border-style: dotted none none none;
 	border-width: 3px;
 
-	border-color: rgba(255, 196, 255, 0.16);
+	border-color: #383838;
 	font-size: 1.05em;
 }
 
@@ -216,7 +226,8 @@ headerbar entry, headerbar button, headerbar separator {
 
 .openned_file_hover label  {
 	text-decoration: none;
-	color: #707070;
+	/* color: #33DA7A;*/
+	color: #46EBE3;
 }
 
 
@@ -230,7 +241,8 @@ headerbar entry, headerbar button, headerbar separator {
 	background: rgba(253, 253, 253, 0.04);
 }
 .openned_file * {
-	color: #808080;
+	/* color: #46EBE3;*/
+	color: @gamma_fg_color;
 }
 .openned_file_current_displayed {
 	background: rgba(253, 253, 253, 0.04);
@@ -239,11 +251,13 @@ headerbar entry, headerbar button, headerbar separator {
 	font-weight: bold;
 }
 
+
+/********** CLOSE CONTROLS *************/
 .close_btn label {
 	color: #5a5a5a;
 }
 .close_btn:hover {
-	background: #FF0000;
+	background: @gamma_error_color;
 	font-weight:bold;
 }
 
@@ -256,7 +270,7 @@ headerbar entry, headerbar button, headerbar separator {
 .menu {
 	background: transparent;
 	border:none;
-	color: #808080;
+	color: #94979f;
 	margin-top: 0px;
 	padding: 6px 0 6px 0;
 	box-shadow:none;
@@ -266,8 +280,8 @@ headerbar entry, headerbar button, headerbar separator {
 }
 
 .menu_hover {
-	color: #406060;
-	background: rgba(255, 255, 255, 0.55);
+
+	background: rgba(255, 255, 255, 0.1);
 }
 
 .menu_attention {
@@ -278,12 +292,12 @@ headerbar entry, headerbar button, headerbar separator {
 
 
 #find_menu.menu_attention {
-	color: #2455E1;
+	color: #46EBE3;
 	font-weight: bold;
 }
 
 #find_replace_menu.menu_attention {
-	color: #2455E1;
+	color: #30F077;
 	font-weight: bold;
 }
 
@@ -291,19 +305,19 @@ headerbar entry, headerbar button, headerbar separator {
 
 /********** BUTTONS *************/
 #closeBtn {
-    background: #2455E1;
+    background: #30F077;
     border-radius: 100%;
 }
 
 
 #maximizeBtn {
-    background: rgba(36, 85, 225, 0.6);
+    background: #608FC8;
     border-radius: 100%;
 }
 
 
 #minimizeBtn {
-    background: rgba(36, 85, 225, 0.3);
+    background: #5E5C64;
     border-radius: 100%;
 }
 
@@ -312,19 +326,13 @@ headerbar entry, headerbar button, headerbar separator {
 	border:none;
 }
 
-/*.sourceviewclass {*/
-/*	font-family: monospace;*/
-/*    font-size: 20px;*/
-    /* font-size: 10px;*/
-/*}*/
-
 
 
 /******************* COMMANDER WINDOW *********************/
-
 #commanderSearchEntry, #commanderSearchEntry * {
-	color:#303030;
-	background: #fefefe;
+	color: @gamma_bg_color;
+	caret-color: @gamma_bg_color;
+	background: #fafafa;
 	font-family: monospace;
 	font-size: 22px;
 	min-height: 40px;
@@ -335,7 +343,7 @@ headerbar entry, headerbar button, headerbar separator {
 }
 
 #commanderSearchEntry selection {
-	background: #000080;
+	background: #B1F02A;
 	color: @gamma_bg_color;
 }
 
@@ -343,12 +351,12 @@ headerbar entry, headerbar button, headerbar separator {
 	border: none;
 }
 #commanderList{
-	background: #f4f3f3;
+	background: #273611;
 	padding-top:4px;
 }
 
 .commanderRow {
-	color: #303030;
+	color: @gamma_fg_color;
 	font-family: monospace;
 	font-size: 18px;
 	padding: 10px 30px 10px 30px;
@@ -360,19 +368,18 @@ headerbar entry, headerbar button, headerbar separator {
 }
 
 #commanderList row:hover {
-	color: #000;
-	background:rgba(232, 232, 255, 0.45);
+	background: rgba(255, 255, 255, 0.1);
 	border:none;
 }
 
 #commanderList row:selected {
-	background:#e8e8ff;
+	background: rgba(255, 255, 255, 0.2);
 	font-weight:bold;
 	border:none;
 }
 
 #commanderList row:selected label {
-	color: #303030;
+	color: @gamma_fg_color;
 }
 
 
@@ -420,4 +427,5 @@ notebook tab label {
 notebook   {
 	background-color: @gamma_bg_color;
 }
+
 
