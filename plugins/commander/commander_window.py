@@ -125,13 +125,13 @@ class CommanderWindow(WindowEvents, ListEvents, SearchEvents):
 
 	def run_command(self, command):
 		self.close()
-		
+
 		if "parameters" in command:
 			p = command["parameters"]
 			command["ref"](p)
 		else:
 			command["ref"]()
-			
+
 		# splay command
 		self.commander.commands_tree.splay(command["node"])
-			
+

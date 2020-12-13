@@ -22,6 +22,10 @@ GREEN: #0DD100
 @define-color gamma_fg_color @theme_fg_color;
 
  
+ window :backdrop {
+	opacity: 1;
+}
+
 /********** HEADER *************/
 #headerbarSide {    
     border-top-right-radius: 0px;

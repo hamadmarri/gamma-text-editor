@@ -1,38 +1,37 @@
-<style-scheme name="Chocolate Ice Cream" id="chocolateicecream" version="1.0">
+<style-scheme name="Black Leaf" id="blackleaf" version="1.0">
   <author>Hamad Al Marri</author>
-  <description>Color scheme using Chocolate Ice Cream color palette</description>
+  <description>Color scheme using Black Leaf color palette</description>
 
 	<!-- Color Palette -->
-	<color name="background"	value="#36292d"/>
-	<color name="foreground"	value="#ffffda"/>
-	<color name="cursor"		value="#ffc400"/>
+	<color name="background"	value="#172601"/>
+	<color name="foreground"	value="#EDF2C2"/>
+	<color name="cursor"		value="#00DEA4"/>
 
 	<!-- Normal Colors-->
 	<color name="n_black"		value="#172601"/>
-	<color name="n_red"			value="#ff1846"/>
-	<color name="n_green"		value="#0DD100"/>
-	<color name="n_yellow"		value="#fef5d7"/>
-	<color name="n_blue"		value="#00b5ff"/>
-	<color name="n_magenta"		value="#ff749b"/>
-	<color name="n_cyan"		value="#60dede"/>
+	<color name="n_red"			value="#FF636E"/>
+	<color name="n_green"		value="#B1F02A"/>
+	<color name="n_yellow"		value="#ECF22E"/>
+	<color name="n_blue"		value="#46EBE3"/>
+	<color name="n_magenta"		value="#FFC800"/>
+	<color name="n_cyan"		value="#42E1E5"/>
 	<color name="n_white"		value="#7C7C7C"/>
 
 	<!-- Bright Colors-->
 	<!-- <color name="b_black"		value="#5E5C64"/>-->
 	<!-- <color name="b_red"			value="#FF636E"/>-->
-	<color name="b_green"		value="#c2ff8e"/>
-	<color name="b_yellow"		value="#eee5c7"/>
-	<color name="b_blue"		value="#cac5ff"/>
-	<color name="b_magenta"		value="#D33682"/>
-	<color name="b_cyan"		value="#00b5ff"/>
+	<color name="b_green"		value="#33DA7A"/>
+	<color name="b_yellow"		value="#30F077"/>
+	<color name="b_blue"		value="#608FC8"/>
+	<color name="b_magenta"		value="#FDA954"/>
+	<color name="b_cyan"		value="#C0BBC5"/>
 	<color name="b_white"		value="#FFFFFF"/>
 
 	<!-- Extra Colors -->
-	<color name="extra1"		value="#4d3436"/>
-	<color name="extra2"		value="#BEB0BE"/>
-	<color name="extra3"		value="#847479"/>
+	<color name="extra1"		value="#274611"/>
+	<color name="extra2"		value="#000000"/>
+	<color name="extra3"		value="#A09BA5"/>
 	<color name="extra4"		value="#839004"/>
-	<color name="extra5"		value="#827082"/>
 
 
 	<!-- Global Settings -->
@@ -41,34 +40,34 @@
 	<style name="current-line"				background="extra1" />
 	<style name="draw-spaces"				foreground="b_white"/>
 	<style name="background-pattern"		background="extra2" />
-	<style name="selection"					foreground="background"	background="b_yellow" />
+	<style name="selection"					foreground="extra2"		background="n_green" />
 	<style name="cursor"					foreground="cursor" />
 	<style name="secondary-cursor"			foreground="cursor" />
-	<style name="right-margin"				foreground="extra2"		background="extra5" />
+	<style name="right-margin"				foreground="extra2"		background="n_green" />
 
 	<!-- Bracket Matching -->
-	<style name="bracket-match"				foreground="b_green"	bold="true" />
-	<style name="bracket-mismatch"			foreground="b_green"	background="n_red" bold="true" />
+	<style name="bracket-match"				foreground="n_magenta"	bold="true" />
+	<style name="bracket-mismatch"			foreground="n_red"		background="background" bold="true" />
 
 	<!-- Search Matching -->
-	<style name="search-match"				foreground="background"	background="b_yellow" bold="true" />
+	<style name="search-match"				foreground="extra2"		background="n_green" bold="true" />
 
 	<!-- Comments -->
-	<style name="def:comment"				foreground="extra3" />
+	<style name="def:comment"				foreground="extra4" />
 	<style name="def:shebang"				bold="true" />
 	<style name="def:doc-comment-element"	italic="true" />
 
 	<!-- Constants -->
-	<style name="def:constant"				foreground="n_cyan" />
-	<style name="def:special-char"			foreground="n_blue" />
+	<style name="def:constant"				foreground="n_green" />
+	<style name="def:special-char"			foreground="b_green" />
 
 	<!-- Language Syntax -->
-	<style name="def:identifier"			foreground="b_blue" />
-	<style name="def:statement"				foreground="n_magenta" />
-	<style name="def:type"					foreground="b_blue" />
-	<style name="def:operator"				foreground="n_blue" />
-	<style name="def:arith-operator"		foreground="n_green" />
-	<style name="def:preprocessor"			foreground="n_blue" />
+	<style name="def:identifier"			foreground="b_yellow" />
+	<style name="def:statement"				foreground="n_blue" />
+	<style name="def:type"					foreground="b_green" />
+	<style name="def:operator"				foreground="b_magenta" />
+	<style name="def:arith-operator"		foreground="n_yellow" />
+	<style name="def:preprocessor"			foreground="n_magenta" />
 	<style name="def:error"					foreground="n_red"		bold="true" />
 	<style name="def:warning"				background="b_yellow"/>
 
@@ -79,7 +78,7 @@
 	<!-- Markup -->
 	<style name="def:emphasis"				italic="true"/>
 	<style name="def:strong-emphasis"		foreground="n_cyan" bold="true"/>
-	<style name="def:inline-code"			foreground="n_blue"/>
+	<style name="def:inline-code"			foreground="n_green"/>
 	<style name="def:insertion"				underline="single"/>
 	<style name="def:deletion"				strikethrough="true"/>
 	<style name="def:link-text"				foreground="n_blue"/>
@@ -87,21 +86,21 @@
 	<style name="def:link-destination"		italic="true" underline="single"/>
 	<style name="def:heading"				foreground="n_magenta" bold="true"/>
 	<style name="def:thematic-break"		foreground="b_magenta" bold="true"/>
-	<style name="def:preformatted-section"	foreground="b_blue"/>
-	<style name="def:list-marker"			foreground="n_green" bold="true"/>
+	<style name="def:preformatted-section"	foreground="b_yellow"/>
+	<style name="def:list-marker"			foreground="b_cyan" bold="true"/>
 
 	<!-- Language specific -->
 	<style name="diff:added-line"			foreground="n_green"/>
-	<style name="diff:removed-line"			foreground="n_magenta"/>
+	<style name="diff:removed-line"			foreground="n_red"/>
 	<style name="diff:changed-line"			use-style="def:preprocessor"/>
 	<style name="diff:diff-file"			use-style="def:type"/>
-	<style name="diff:location"				use-style="def:operator"/>
+	<style name="diff:location"				use-style="def:statement"/>
 	<style name="diff:special-case"			use-style="def:constant"/>
 
-	<style name="xml:tags"					foreground="n_magenta"/>
+	<style name="xml:tags"					foreground="n_green"/>
 	<style name="xml:namespace"				bold="true"/>
 
-	<style name="js:built-in-constructor"	foreground="n_magenta"/>
+	<style name="js:built-in-constructor"	foreground="n_green"/>
 
 	<style name="latex:display-math"		foreground="b_blue"/>
 	<style name="latex:command"				foreground="n_magenta" bold="true"/>
