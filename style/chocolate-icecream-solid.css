@@ -106,7 +106,7 @@ headerbar entry, headerbar button, headerbar separator {
 	margin:0 0 0 10px;
 	padding:0;
 	background: #36292d;
-	font-family: IBM Plex Mono;
+	font-family: monospace;
 	font-size: 20px;
 	caret-color: #ffffda;
 }
@@ -142,7 +142,7 @@ headerbar entry, headerbar button, headerbar separator {
 
 
 #messageLbl {
-	font-family: IBM Plex Mono;
+	font-family: monospace;
 	margin-right:21px;
 }
 
@@ -329,7 +329,7 @@ headerbar entry, headerbar button, headerbar separator {
 #commanderSearchEntry, #commanderSearchEntry * {
 	color:#ffffda;
 	background: #36292d;
-	font-family: IBM Plex Mono;
+	font-family: monospace;
 	font-size: 22px;
 	min-height: 40px;
 }
@@ -353,7 +353,7 @@ headerbar entry, headerbar button, headerbar separator {
 
 .commanderRow {
 	color:rgba(255, 255, 218, 0.86);
-	font-family: IBM Plex Mono;
+	font-family: monospace;
 	font-size: 18px;
 	padding: 10px 30px 10px 30px;
 	border:none;
