@@ -27,4 +27,40 @@
   <style name="def:underlined"	italic="true" underline="true" />
   <style name="def:identifier"	foreground="#8000ff" />
   <style name="def:type"	foreground="#00f" />
+  
+
+	<!-- Markup -->
+	<style name="def:emphasis"				italic="true"/>
+	<style name="def:strong-emphasis"		foreground="#8000ff" bold="true"/>
+	<style name="def:inline-code"			foreground="#ff8000"/>
+	<style name="def:insertion"				underline="single"/>
+	<style name="def:deletion"				strikethrough="true"/>
+	<style name="def:link-text"				foreground="#00f"/>
+	<style name="def:link-symbol"			foreground="#00f" bold="true"/>
+	<style name="def:link-destination"		italic="true" underline="single"/>
+	<style name="def:heading"				foreground="#00f" bold="true"/>
+	<style name="def:thematic-break"		foreground="#008000" bold="true"/>
+	<style name="def:preformatted-section"	foreground="#ff8000"/>
+	<style name="def:list-marker"			foreground="#00a000" bold="true"/>
+
+	<!-- Language specific -->
+	<style name="diff:added-line"			foreground="#00a000"/>
+	<style name="diff:removed-line"			foreground="#f00"/>
+	<style name="diff:changed-line"			use-style="def:preprocessor"/>
+	<style name="diff:diff-file"			use-style="def:type"/>
+	<style name="diff:location"				use-style="def:operator"/>
+	<style name="diff:special-case"			use-style="def:constant"/>
+
+	<style name="xml:tags"					foreground="#8000ff"/>
+	<style name="xml:namespace"				bold="true"/>
+
+	<style name="js:built-in-constructor"	foreground="#8000ff"/>
+
+	<style name="latex:display-math"		foreground="#00f"/>
+	<style name="latex:command"				foreground="#8000ff" bold="true"/>
+	<style name="latex:include"				use-style="def:preprocessor"/>
+	<style name="latex:special-char"		use-style="def:constant"/>
+
+	<style name="sh:variable"				foreground="#00f"/>
+	<style name="sh:variable-definition"	foreground="#8000ff"/>
 </style-scheme>
