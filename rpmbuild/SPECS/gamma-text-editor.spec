@@ -1,5 +1,5 @@
 Name:           gamma-text-editor
-Version:        0.0.3
+Version:        0.0.4
 Release:        0
 Summary:        Gamma is a lightweight text editor. It is meant to be an alternative to Gedit or Notepad++.
 License:        GPL-3

@@ -1,5 +1,5 @@
 # Gamma text editor
-Current version 0.0.3\
+Current version 0.0.4\
 Author: Hamad Al Marri
 
 -	[Description](#description)
@@ -33,7 +33,9 @@ WebKitGTK, GLib, GIO and many more.
 
 ![s3](https://gitlab.com/hamadmarri/gamma-text-editor/uploads/a3a9328a78918aa4415c9355274adb5a/Screenshot_from_2020-03-01_02-01-59.png)
 
-![Screenshot_from_2020-11-26_03-53-53](/uploads/6a14366e46305c4bb051c8a4ca6004b2/Screenshot_from_2020-11-26_03-53-53.png)
+![Screenshot_from_2020-11-26_03-53-53](https://gitlab.com/hamadmarri/gamma-text-editor/uploads/6a14366e46305c4bb051c8a4ca6004b2/Screenshot_from_2020-11-26_03-53-53.png)
+
+![blackleaf](https://gitlab.com/hamadmarri/gamma-text-editor/uploads/7d840c1177f05017bba5207d479fef8c/blackleaf-scrn.png)
 
 [More Screenshots](https://gitlab.com/hamadmarri/gamma-text-editor/-/wikis/Screenshots)
 
@@ -107,6 +109,9 @@ cd gamma-text-editor
 chmod +x setup.sh
 ./setup.sh
 ```
+
+### OpenSUSE
+[OpenSUSE package (.rpm)](https://gitlab.com/hamadmarri/gamma-text-editor/-/raw/opensuse/rpmbuild/RPMS/x86_64/gamma-text-editor-0.0.3-0.x86_64.rpm?inline=false)
 
 ### Debian
 [Debian package (.deb)](https://gitlab.com/hamadmarri/gamma-text-editor/-/raw/debian/gamma-text-editor_0.0.3_amd64.deb?inline=false)

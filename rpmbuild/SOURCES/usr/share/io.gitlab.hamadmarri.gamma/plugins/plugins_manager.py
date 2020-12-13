@@ -38,20 +38,23 @@
 #					the reference.
 #
 
-
 # list of active plugins
 # deactivate plugin by removing or commenting out the plugin name
 # formate "[folder name].[python file]"
 plugin_list = [
 	{"name": "sourceview_manager.sourceview_manager","category": "sourceview_manager"},
+	{"name": "simple_completion.simple_completion", "category": "code_completer"},
+	{"name": "python_support.python_support", "category": "python_supporter"},
+
 	{"name": "styles.style","category": ""},
 	{"name": "styles.source_style", "category": "source_styler"},
 	{"name": "window_ctrl.window_ctrl", "category": "window_controller"},
+
 	{"name": "files_manager.files_manager", "category": "files_manager"},
 	{"name": "files_manager.openfile", "category": "files_opener"},
 	{"name": "files_manager.savefile", "category": "files_saver"},
 	{"name": "files_manager.opendir", "category": "directory_opener"},
-	{"name": "simple_completion.simple_completion", "category": "code_completer"},
+
 	{"name": "highlight.highlight", "category": "highlighter"},
 	{"name": "message_notify.message_notify", "category": "message_notifier"},
 	{"name": "search.search_in_file", "category": "file_searcher"},

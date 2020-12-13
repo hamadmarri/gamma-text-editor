@@ -112,6 +112,9 @@ class SplayTree():
 				# attach successor left to in_between_parent right
 				in_between_parent.right = successor.left
 
+				if successor.left:
+					successor.left.parent = in_between_parent
+
 				successor.left = node.left
 				node.left.parent = successor
 
@@ -280,13 +283,14 @@ class SplayTree():
 
 
 
-	def inorder(self, root, tabs="", level=1):
+	def inorder(self, root, tabs="", level=0):
 		if not root:
 			return
 
-		spaces = "\t"
+		spaces = "    "
 		self.inorder(root.right, tabs + spaces, level + 1)
-		print(tabs + f"({level})" + str(root.value))
+		# print(tabs + f"({level})" + str(root.value))
+		print(tabs + str(root.value))
 		self.inorder(root.left, tabs + spaces, level + 1)
 
 

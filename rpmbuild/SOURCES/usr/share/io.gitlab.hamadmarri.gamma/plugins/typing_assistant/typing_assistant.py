@@ -61,7 +61,6 @@ class Plugin():
 
 	def activate(self):
 		pass
-
 	
 	def key_bindings(self, event, keyval_name, ctrl, alt, shift):
 		if keyval_name in self.chars:
@@ -106,7 +105,7 @@ class Plugin():
 		
 		
 	
-		
+	
 	def text_insert(self, text):
 	
 		# check if sourceview is in focus
@@ -143,10 +142,9 @@ class Plugin():
 		# check if the next char is normal text 
 		# if so, do not add the closing part
 		c = position.get_char()
-		if not c in (" ", "", "\t", ",", ".", "\n", "\r") \
+		if not c in (" ", "", ";", ":", "\t", ",", ".", "\n", "\r") \
 			and not c in list(self.close.values()):
 			return False
-		
 		
 		
 		buffer.insert(position, text)
@@ -163,24 +161,38 @@ class Plugin():
 	
 	def add_enclose(self, text, buffer, selection):
 		(start, end) = selection
+
+
+		# check if selected is one of the following:
+		selected = buffer.get_text(start, end, False)
+		if len(selected) <= 3 and selected in ("<", ">", ">>>"
+												"<<", ">>",
+												"\"", "'", "`",
+												"(", ")",
+												"[", "]",
+												"{", "}",
+												"=", "==",
+												"!=", "==="):
+			return False
+
 		start_mark = buffer.create_mark("startclose", start, False)
 		end_mark = buffer.create_mark("endclose", end, False)
-		
+
 		buffer.begin_user_action()
-		
+
 		t = self.chars[text]
 		buffer.insert(start, t)
 		end = buffer.get_iter_at_mark(end_mark)
 		t = self.close[t]
 		buffer.insert(end, t)
-				
+
 		start = buffer.get_iter_at_mark(start_mark)
 		end = buffer.get_iter_at_mark(end_mark)
 		end.backward_char()
 		buffer.select_range(start, end)
-		
+
 		buffer.end_user_action()
-		
+
 		# stop propagation
 		return True
 		
