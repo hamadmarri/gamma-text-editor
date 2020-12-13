@@ -16,20 +16,20 @@
 
 /*
 COLORS:
-RED: #FF1946 FF749B FF1846
+RED: #FF0000 FF0000 FF0000
 BLUE: #00B5FF 60DEDE
 ORANGE: #FF931F
 YELLOW: #FCE94F
-GREEN: #0DD100 C2FF8E
+GREEN: #008000 C2FF8E
 pink: BEB0BE D33682
 purpul: CAC5FF
-BACKGROUND: #36292d
-FOREGROUND: #ffffda rgba(255, 255, 218, 0.86) 847479
+BACKGROUND: #fefcf5
+FOREGROUND: #000080 rgba(255, 255, 218, 0.86) 847479
 */
-@define-color gamma_bg_color #36292d;
-@define-color gamma_fg_color #ffffda;
-@define-color gamma_warning_color #FCE94F;
-@define-color gamma_error_color #FF749B;
+@define-color gamma_bg_color #fefcf5;
+@define-color gamma_fg_color #000080;
+@define-color gamma_warning_color #d97c5c;
+@define-color gamma_error_color #FF0000;
 
 window :backdrop {
 	opacity: 1;
@@ -78,12 +78,12 @@ headerbar entry, headerbar button, headerbar separator {
 }
 
 #headerPaned > separator {
-	background: #36292d;
+	background: #efefef;
 }
 
 
 #headerbarMain, #headerbarMain * {
-	background: #36292d;
+	background: @gamma_bg_color;
 	color: rgba(255, 255, 218, 0.86);
 	border:none;
 }
@@ -93,79 +93,78 @@ headerbar entry, headerbar button, headerbar separator {
 }
 
 #headerbarMain .title {
-	color: #ffffda;
+	color: #505050;
 	font-size: 16px;
 }
 .openned_file_editted#headerbarMain .title {
-	color: #FCE94F;
+	color: @gamma_warning_color;
 }
 
 
 
-#searchEntry {
+#searchEntry, #searchEntry* {
 	margin:0 0 0 10px;
 	padding:0;
-	background: #36292d;
+	background: @gamma_bg_color;
+	color: #c0c0c0;
 	font-family: monospace;
 	font-size: 20px;
-	caret-color: #ffffda;
+	caret-color: #8000ff;
 }
 #searchEntry:focus {
 	box-shadow: none;
 }
 
 
-#headerbarMain entry selection {
-	background: #ffffda;
-	color:#36292d;
-}
-
 #headerbarMain*.searching, #headerbarMain*.searching *,
 #headerbarMain*.messageImportant, #headerbarMain*.messageImportant * {
-       color:#60DEDE;
-       caret-color:#60DEDE;
+       color:#8000ff;
+       caret-color:#8000ff;
 }
 #headerbarMain*.searchSuccess, #headerbarMain*.searchSuccess *,
 #headerbarMain*.messageSuccess, #headerbarMain*.messageSuccess * {
-	color: #C2FF8E;
-	caret-color:#C2FF8E;
+	color: #008000;
+	caret-color:#008000;
 }
 #headerbarMain*.searchFail, #headerbarMain*.searchFail * ,
 #headerbarMain*.messageFail, #headerbarMain*.messageFail * {
-	color: #FF749B;
-	caret-color:#FF749B;
+	color: #FF0000;
+	caret-color:#FF0000;
 }
 
-
+#headerbarMain entry selection {
+	background: #999999;
+}
 
 
 
 
 #messageLbl {
 	font-family: monospace;
+	color: #808080;
 	margin-right:21px;
 }
 
 
 /********** HEADER LEFT SIDE *************/
 #headerbarSide {
-	background: #36292d;
+	background: #efefef;
 	border:none;
 }
 
 #headerbarSide * {
-	color: rgba(255, 255, 218, 0.86);
+	color: #808080;
 	border: none;
 }
 
 #logo {
-    background: #36292d;
-    color: #FF931F;
+    background: #e4e4e4;
+    color: #029012;
 }
 
 /********** BODY *************/
 #bodyPaned > separator {
-	background:  #36292d;
+	background: #efefef;
 }
 
 #toolbar_side {
@@ -175,7 +174,7 @@ headerbar entry, headerbar button, headerbar separator {
 }
 
 #toolbar_files {
-    background:  #36292d;
+    background: #efefef;
     padding-left:15px;
 	padding-right:15px;
     padding-top:0px;
@@ -183,7 +182,7 @@ headerbar entry, headerbar button, headerbar separator {
 
 
 #toolbar_ctrls {
-    background:  #372a2e;
+    background: #e4e4e4;
     padding-top: 16px;
     padding-bottom: 18px;
 }
@@ -214,29 +213,20 @@ headerbar entry, headerbar button, headerbar separator {
 
 
 .openned_file_editted button label {
-	color: #FCE94F;
+	color: @gamma_warning_color;
 	font-style: italic;
 }
-.close_btn label {
-	color: transparent;
-}
-.close_btn:hover {
-	background: #FF1846;
-	font-weight:bold;
-	color: white;
-}
-
 
 
 .openned_file_hover label  {
 	text-decoration: none;
-	color: #fdfdfd;
+	color: #707070;
 }
 
 
 .openned_file_hover.openned_file_editted label  {
 	text-decoration: none;
-	color: #FCE94F;
+	color: @gamma_warning_color;
 }
 
 
@@ -244,7 +234,7 @@ headerbar entry, headerbar button, headerbar separator {
 	background: rgba(253, 253, 253, 0.04);
 }
 .openned_file * {
-	color: #BEB0BE;
+	color: #808080;
 }
 .openned_file_current_displayed {
 	background: rgba(253, 253, 253, 0.04);
@@ -253,14 +243,24 @@ headerbar entry, headerbar button, headerbar separator {
 	font-weight: bold;
 }
 
+.close_btn label {
+	color: #5a5a5a;
+}
+.close_btn:hover {
+	background: #FF0000;
+	font-weight:bold;
+}
 
+.close_btn:hover * {
+	color: #ffffff;
+}
 
 
 /********** MENUS *************/
 .menu {
-	background:transparent;
+	background: transparent;
 	border:none;
-	color: #BEB0BE;
+	color: #808080;
 	margin-top: 0px;
 	padding: 6px 0 6px 0;
 	box-shadow:none;
@@ -270,24 +270,24 @@ headerbar entry, headerbar button, headerbar separator {
 }
 
 .menu_hover {
-	color: #60DEDE;
-	background: rgba(255, 196, 255, 0.15);
+	color: #406060;
+	background: rgba(255, 255, 255, 0.55);
 }
 
 .menu_attention {
-	color: #FCE94F;
+	color: @gamma_warning_color;
 	font-style: italic;
 	font-weight: bold;
 }
 
 
 #find_menu.menu_attention {
-	color: #C2FF8E;
+	color: #2455E1;
 	font-weight: bold;
 }
 
 #find_replace_menu.menu_attention {
-	color: #C2FF8E;
+	color: #2455E1;
 	font-weight: bold;
 }
 
@@ -295,19 +295,19 @@ headerbar entry, headerbar button, headerbar separator {
 
 /********** BUTTONS *************/
 #closeBtn {
-    background: #FF1846;
+    background: #2455E1;
     border-radius: 100%;
 }
 
 
 #maximizeBtn {
-    background: #0DD100;
+    background: rgba(36, 85, 225, 0.6);
     border-radius: 100%;
 }
 
 
 #minimizeBtn {
-    background: #FCE94F;
+    background: rgba(36, 85, 225, 0.3);
     border-radius: 100%;
 }
 
@@ -327,8 +327,8 @@ headerbar entry, headerbar button, headerbar separator {
 /******************* COMMANDER WINDOW *********************/
 
 #commanderSearchEntry, #commanderSearchEntry * {
-	color:#ffffda;
-	background: #36292d;
+	color:#303030;
+	background: #fefefe;
 	font-family: monospace;
 	font-size: 22px;
 	min-height: 40px;
@@ -339,20 +339,20 @@ headerbar entry, headerbar button, headerbar separator {
 }
 
 #commanderSearchEntry selection {
-	background: #ffffda;
-	color:#36292d;
+	background: #000080;
+	color: @gamma_bg_color;
 }
 
 #commanderScrolled {
 	border: none;
 }
 #commanderList{
-	background: #392c2f;
+	background: #f4f3f3;
 	padding-top:4px;
 }
 
 .commanderRow {
-	color:rgba(255, 255, 218, 0.86);
+	color: #303030;
 	font-family: monospace;
 	font-size: 18px;
 	padding: 10px 30px 10px 30px;
@@ -364,18 +364,20 @@ headerbar entry, headerbar button, headerbar separator {
 }
 
 #commanderList row:hover {
-	color:rgba(255, 255, 218, 0.86);
-	background:rgba(211, 54, 130, 0.4);
+	color: #000;
+	background:rgba(232, 232, 255, 0.45);
 	border:none;
 }
 
 #commanderList row:selected {
-	background:#D33682;
-	color:#ffffda;
+	background:#e8e8ff;
 	font-weight:bold;
 	border:none;
 }
 
+#commanderList row:selected label {
+	color: #303030;
+}
 
 
 
@@ -397,7 +399,7 @@ headerbar entry, headerbar button, headerbar separator {
 }
 
 #find_replace_window #find_status_lbl {
-	color: #ffffda;
+	color: #000080;
 }
 
 #find_replace_window textview {
@@ -420,6 +422,6 @@ notebook tab label {
 }
 
 notebook   {
-	background-color: #36292d;
+	background-color: @gamma_bg_color;
 }
 

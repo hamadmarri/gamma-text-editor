@@ -1,9 +1,7 @@
-#! /usr/bin/bash
-
-
-#  
+#
 #### Author: Hamad Al Marri <hamad.s.almarri@gmail.com>
-#### Date: Feb 11th, 2020
+#### Date: Dec 2nd, 2020
+#
 #
 #	This program is free software: you can redistribute it and/or modify
 #	it under the terms of the GNU General Public License as published by
@@ -18,12 +16,24 @@
 #	You should have received a copy of the GNU General Public License
 #	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
-#
-#
-#
 
+import keyword
+import builtins
 
-# run gamma with python3
-python3 /usr/share/io.gitlab.hamadmarri.gamma/gamma.py $@
+import gi
+gi.require_version('Gtk', '3.0')
+from gi.repository import Gtk
 
+# from . import commands
 
+class Plugin():
+	def __init__(self, app):
+		self.name = "python_support"
+		self.app = app
+		self.THE = app.plugins_manager.THE
+		self.commands = []
+ 
+	def activate(self):
+		self.THE("code_completer", "add_completion", {
+										"header": "Python",
+										"words_arr": keyword.kwlist + dir(builtins)})

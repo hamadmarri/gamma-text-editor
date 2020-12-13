@@ -9,6 +9,7 @@
 ./bin/io.gitlab.hamadmarri.gamma-symbolic.svg
 ./bin/io.gitlab.hamadmarri.gamma.svg
 ./bin/io.gitlab.hamadmarri.gamma.desktop
+./gtksourceview_styles/blackleaf.xml
 ./gtksourceview_styles/chocolateicecream.xml
 ./gtksourceview_styles/covid19.xml
 ./gtksourceview_styles/darkchocolateicecream.xml

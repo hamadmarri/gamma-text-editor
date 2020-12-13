@@ -129,25 +129,31 @@ class Plugin(CommandsCtrl):
 
 		if word in self.symbols:
 			current_file = self.THE("files_manager", "get_current_file", {})
-			self._goto_symbol({"word": word, "filename": current_file.filename})
+			self._goto_symbol({"word": word, 
+								"filename": current_file.filename,
+								"line_number": -1})
 
 
 	def _goto_symbol(self, args):
 
-		word = args["word"]
-		filename = args["filename"]
+		word		= args["word"]
+		filename	= args["filename"]
+		line_number = args["line_number"]
 
 		symbol_data = self.symbols[word]
 
 		_line_number	= symbol_data["data"][0]
-		_filename	= symbol_data["data"][1]
+		_filename		= symbol_data["data"][1]
 
-		if filename and symbol_data["data"][1] != filename:
+		if symbol_data["data"][1] != filename:
 			for d in symbol_data["duplicate"]:
 				if d[1] == filename:
 					_line_number	= d[0]
-					_filename	= d[1]
+					_filename		= d[1]
 					break
+
+		if line_number != -1:
+			_line_number	= line_number
 
 
 		file_index = self.THE("files_manager", "get_file_index", \

@@ -1,0 +1,66 @@
+<style-scheme name="Notepad Plus Plus" id="notepad_plus_plus" version="1.0">
+  <author>Hamad Al Marri</author>
+  <description>Color scheme using Notpad++ palette</description>
+
+  <style name="text"	foreground="#000080" background="#fefcf5" />
+  <style name="selection"	foreground="#000080" background="#c0c0c0" />
+  <style name="cursor"	foreground="#8000ff" />
+  <style name="secondary-cursor"	foreground="#fefcf5" />
+  <style name="current-line"	background="#e8e8ff" />
+  <style name="line-numbers"	foreground="#808080" background="#fefcf5" />
+  <style name="background-pattern"	background="#3d3034" />
+  <style name="bracket-match"	foreground="#f00" bold="true" />
+  <style name="bracket-mismatch"	foreground="#f00" background="#fefcf5" bold="true" />
+  <style name="right-margin"	foreground="#BEB0BE" background="#827082" />
+  <style name="search-match"	foreground="#36292d" background="#99FFAA" bold="true" />
+  <style name="def:comment"	foreground="#008000" />
+  <style name="def:shebang"	bold="true" />
+  <style name="def:doc-comment-element"	italic="true" />
+  <style name="def:constant"	foreground="#ff8000" />
+  <style name="def:special-char"	foreground="#808080" />
+  <style name="def:statement"	foreground="#00f" />
+  <style name="def:operator"	foreground="#8000ff" />
+  <style name="def:arith-operator"	foreground="#fefcf5" />
+  <style name="def:preprocessor"	foreground="#900" />
+  <style name="def:error"	foreground="#f00" bold="true" />
+  <style name="def:note"	foreground="#c0c0c0" bold="true" />
+  <style name="def:underlined"	italic="true" underline="true" />
+  <style name="def:identifier"	foreground="#8000ff" />
+  <style name="def:type"	foreground="#00f" />
+
+	<!-- Markup -->
+	<style name="def:emphasis"				italic="true"/>
+	<style name="def:strong-emphasis"		foreground="#8000ff" bold="true"/>
+	<style name="def:inline-code"			foreground="#ff8000"/>
+	<style name="def:insertion"				underline="single"/>
+	<style name="def:deletion"				strikethrough="true"/>
+	<style name="def:link-text"				foreground="#00f"/>
+	<style name="def:link-symbol"			foreground="#00f" bold="true"/>
+	<style name="def:link-destination"		italic="true" underline="single"/>
+	<style name="def:heading"				foreground="#00f" bold="true"/>
+	<style name="def:thematic-break"		foreground="#008000" bold="true"/>
+	<style name="def:preformatted-section"	foreground="#ff8000"/>
+	<style name="def:list-marker"			foreground="#00a000" bold="true"/>
+
+	<!-- Language specific -->
+	<style name="diff:added-line"			foreground="#00a000"/>
+	<style name="diff:removed-line"			foreground="#f00"/>
+	<style name="diff:changed-line"			use-style="def:preprocessor"/>
+	<style name="diff:diff-file"			use-style="def:type"/>
+	<style name="diff:location"				use-style="def:operator"/>
+	<style name="diff:special-case"			use-style="def:constant"/>
+
+	<style name="xml:tags"					foreground="#8000ff"/>
+	<style name="xml:namespace"				bold="true"/>
+
+	<style name="js:built-in-constructor"	foreground="#8000ff"/>
+
+	<style name="latex:display-math"		foreground="#00f"/>
+	<style name="latex:command"				foreground="#8000ff" bold="true"/>
+	<style name="latex:include"				use-style="def:preprocessor"/>
+	<style name="latex:special-char"		use-style="def:constant"/>
+
+	<style name="sh:variable"				foreground="#00f"/>
+	<style name="sh:variable-definition"	foreground="#8000ff"/>
+
+</style-scheme>

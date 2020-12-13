@@ -22,7 +22,7 @@ class CommandsCtrl(object):
 			"plugin-name": self.name,
 			"name": f"$: {symbol}",
 			"ref": self._goto_symbol,
-			"parameters": {"word": symbol, "filename": filename},
+			"parameters": {"word": symbol, "filename": filename, "line_number": line_number},
 			"shortcut": f"{basename}/{line_number}",
 		}
 

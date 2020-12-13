@@ -29,6 +29,9 @@ FOREGROUND: #827082 #6B5C6B
 @define-color gamma_warning_color #FF931F;
 @define-color gamma_error_color #FF1946;
 
+window :backdrop {
+	opacity: 1;
+}
 
 #gamma_window decoration {
 	border:none;

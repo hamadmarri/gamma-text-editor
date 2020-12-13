@@ -2,7 +2,7 @@ Source: gamma-text-editor
 Priority: optional
 Maintainer: Hamad AlMarri <hamad.s.almarri@gmail.com>
 Build-Depends: debhelper (>=11)
-Standards-Version: 0.0.3
+Standards-Version: 0.0.4
 Homepage: https://gitlab.com/hamadmarri/gamma-text-editor
 
 Package: gamma-text-editor
