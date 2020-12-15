@@ -43,7 +43,8 @@ class Plugin(FilesUI):
 				
 
 	def activate(self):
-		pass
+		# get toolbar_files Gtk widget from ui file
+		self.toolbar_files = self.app.builder.get_object("toolbar_files")
 	
 	
 	
@@ -74,3 +75,5 @@ class Plugin(FilesUI):
 		self.app.window.get_window().set_cursor(cursor)
 
 	
+	def get_toolbar_files(self):
+		return self.toolbar_files

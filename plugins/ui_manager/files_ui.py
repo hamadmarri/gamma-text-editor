@@ -62,16 +62,13 @@ class FilesUI(object):
 		# add close btn to the right
 		box.pack_end(btnClose, False, False, 0)
 
-		# get toolbar_files Gtk widget from ui file
-		toolbar_files = self.app.builder.get_object("toolbar_files")
-
 		# add button to toolbar_files
 		# (read: https://developer.gnome.org/gtk3/stable/GtkBox.html#gtk-box-pack-start)
-		toolbar_files.pack_start(box, False, False, 0)
+		self.toolbar_files.pack_start(box, False, False, 0)
 
 		# position new opened file's button to top of toolbar_files
 		# (read: https://developer.gnome.org/gtk3/unstable/GtkBox.html#gtk-box-reorder-child)
-		toolbar_files.reorder_child(box, 0)
+		self.toolbar_files.reorder_child(box, 0)
 
 		# add css styling classes
 		self.add_css_classes(box, btnName, btnClose)
@@ -105,6 +102,39 @@ class FilesUI(object):
 		btnClose.connect("enter_notify_event", self.enter_notify_event)
 		btnClose.connect("leave_notify_event", self.leave_notify_event)
 
+		btnName.connect("motion_notify_event", self.mouse_move)
+		btnName.connect("button-press-event", self.drag_begin)
+		btnName.connect("button-release-event", self.drag_end)
+
+
+	# drag file to reorder
+	def mouse_move(self, w, e):
+		i = -1
+		w_height = w.get_parent().get_allocated_height()
+		top_level = w.get_toplevel()
+
+		(x, y) = w.translate_coordinates(top_level, 0 ,0 )
+		dragging_pos = y + e.y
+
+		children = self.toolbar_files.get_children()
+		for c in children:
+			i += 1
+
+			if c == w.get_parent():
+				continue
+
+			(x2, y2) = c.translate_coordinates(top_level, 0 ,0 )
+			if dragging_pos >= y2 and dragging_pos <= y2 + w_height:
+				self.toolbar_files.reorder_child(w.get_parent(), i)
+
+
+	def drag_begin(self, w, e):
+		cursor = Gdk.Cursor.new_from_name(Gdk.Display.get_default(), "grab")
+		self.app.window.get_window().set_cursor(cursor)
+
+	def drag_end(self, w, e):
+		cursor = Gdk.Cursor(Gdk.CursorType.ARROW)
+		self.app.window.get_window().set_cursor(cursor)
 
 
 	def enter_notify_event(self, widget, event):
@@ -130,9 +160,6 @@ class FilesUI(object):
 
 
 	def set_currently_displayed(self, box):
-		# get toolbar_files Gtk widget from ui file
-		self.toolbar_files = self.app.builder.get_object("toolbar_files")
-
 		boxes = self.toolbar_files.get_children()
 
 		# if only one file, dont highlight

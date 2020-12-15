@@ -23,10 +23,12 @@ class Plugin():
 	def __init__(self, app):
 		self.name = "remember_recent_files"
 		self.app = app
+		self.signal_handler = app.signal_handler
 		self.THE = app.plugins_manager.THE
 		self.window = self.app.window
 		self.commands = []
 		self.location = str(Path.home()) + "/.config/gamma-text-editor/"
+		self.signal_handler.connect("window-close", self.store_file_names)
 
 
 	def activate(self):
@@ -39,7 +41,11 @@ class Plugin():
 		Path(self.location).mkdir(parents=True, exist_ok=True)
 		f = open(self.location + 'recent_files.txt', 'w', encoding='utf-8')
 
-		for file_obj in self.window.files:
+		files_boxes = self.THE("ui_manager", "get_toolbar_files", {}).get_children()
+
+		for box in reversed(files_boxes):
+			file_obj = box.file
+
 			if not file_obj.new_file and file_obj.filename != "empty":
 				f.write(file_obj.filename + "\n")
 
