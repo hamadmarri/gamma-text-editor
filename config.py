@@ -36,7 +36,9 @@ style_file = "chocolate-icecream-solid.css"
 
 # style scheme for srource view style
 # usually sourceview style files are in 
-# ~/.local/share/gtksourceview-4/styles
+# ~/.local/share/gtksourceview-4/styles/
+# or /usr/share/gtksourceview-4/styles/
+# or /usr/share/gtksourceview-3.0/styles/
 style_scheme = "chocolateicecream"
 
 
