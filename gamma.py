@@ -102,6 +102,7 @@ class Application(Gtk.Application):
 	
 	def do_command_line(self, command_line):
 		args = command_line.get_arguments()
+
 		self.signal_handler.emit("log", self, "do_command_line:" + str(args))
 		
 		if len(args) == 1:
@@ -120,7 +121,7 @@ class Application(Gtk.Application):
 		else:
 			# make sure at least the main window is open
 			self.do_activate()
-			
+
 			# open files
 			self.open_files(args[1:])
 			
