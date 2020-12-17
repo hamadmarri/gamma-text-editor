@@ -299,3 +299,6 @@ For all issues/todos [Issues](https://gitlab.com/hamadmarri/gamma-text-editor/is
 
 ## Contacts
 Telegram Channel: https://t.me/gamma_text_editor
+
+## Donate
+* Paypal: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=8F7F4D8BKR8XC
